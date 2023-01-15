@@ -11,5 +11,8 @@
     "source.fixAll.eslint": true
   },
   "eslint.nodePath": ".yarn/sdks",
-  "prettier.prettierPath": ".yarn/sdks/prettier/index.js"
+  "prettier.prettierPath": ".yarn/sdks/prettier/index.js",
+  "deno.enable": true,
+  "deno.unstable": true,
+  "deno.enablePaths": ["./supabase/functions"]
 }

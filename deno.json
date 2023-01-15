@@ -1,0 +1,16 @@
+{
+  "fmt": {
+    "files": {
+      "include": [
+        "supabase/functions/"
+      ]
+    }
+  },
+  "lint": {
+    "files": {
+      "include": [
+        "supabase/functions/"
+      ]
+    }
+  }
+}

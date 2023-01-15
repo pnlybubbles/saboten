@@ -3,6 +3,7 @@
     "arcanis.vscode-zipfs",
     "esbenp.prettier-vscode",
     "dbaeumer.vscode-eslint",
-    "bradlc.vscode-tailwindcss"
+    "bradlc.vscode-tailwindcss",
+    "denoland.vscode-deno"
   ]
 }
