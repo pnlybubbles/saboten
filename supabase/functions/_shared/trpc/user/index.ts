@@ -1,6 +1,6 @@
 import { router } from '../server.ts'
-import name from './name.ts'
+import create from './create.ts'
 
 export default router({
-  name,
+  create,
 })

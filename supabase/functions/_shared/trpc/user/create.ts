@@ -3,10 +3,9 @@ import { supabase } from "../../supabase.ts";
 import { publicProcedure } from "../server.ts";
 import { TRPCError } from '@trpc/server'
 
-export default publicProcedure.input(z.object({ value: z.string() }))
-  .mutation(async ({ input: { value }}) => {
-    console.log(value)
-    const { data, error } = await supabase.from('User').insert({ name: value }).select()
+export default publicProcedure.input(z.object({ name: z.string() }))
+  .mutation(async ({ input: { name }}) => {
+    const { data, error } = await supabase.from('User').insert({ name }).select()
     if (error) {
       throw new TRPCError({ code: "BAD_REQUEST" })
     }
@@ -14,5 +13,5 @@ export default publicProcedure.input(z.object({ value: z.string() }))
     if (!item) {
       throw new TRPCError({ code: "BAD_REQUEST" })
     }
-    return { id: item.id }
+    return { id: item.id, name }
   })

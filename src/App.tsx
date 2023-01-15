@@ -1,21 +1,64 @@
+import useUser from './hooks/useUser'
+import Button from './components/Button'
+import Main from './scene/Main'
+import unreachable from './utils/basic/unreachable'
 import { useState } from 'react'
 import trpc from './utils/trpc'
 
 export default function App() {
-  const [name, setName] = useState('')
-  const [id, setId] = useState<string>()
+  const [user] = useUser()
 
-  const handleClick = async () => {
-    const data = await trpc.user.name.mutate({ value: name })
-    setId(data.id)
+  return (
+    <div className="p-4">
+      <h1 className="text-lime-600 font-bold text-6xl">SABOTEN</h1>
+      {user !== null && (
+        <div>
+          <div>
+            {user.name} ({user.id})
+          </div>
+        </div>
+      )}
+      {user === null ? <Landing></Landing> : <Main></Main>}
+    </div>
+  )
+}
+
+function Landing() {
+  const [stage, setStage] = useState<'start' | 'create' | 'restore'>('start')
+
+  return stage === 'start' ? (
+    <div>
+      <Button onClick={() => setStage('create')}>はじめる</Button>
+      <div>以前に利用したことがある場合は合言葉を使って復元できます</div>
+      <Button onClick={() => setStage('restore')}>合言葉を入力する</Button>
+    </div>
+  ) : stage === 'create' ? (
+    <Create></Create>
+  ) : stage === 'restore' ? (
+    <div>
+      <div>以前のスクショした合言葉を入力してください</div>
+      <input type="text" />
+    </div>
+  ) : (
+    unreachable(stage)
+  )
+}
+
+function Create() {
+  const [name, setName] = useState('')
+  const [, setUser] = useUser()
+
+  const create = async () => {
+    const user = await trpc.user.create.mutate({ name })
+    setUser(user)
   }
 
   return (
     <div>
-      <h1 className="text-lime-600 font-bold text-6xl">SABOTEN</h1>
+      <div>自分のニックネームを入力してください</div>
+      <div>※個人情報は入力しないでください</div>
       <input type="text" value={name} onChange={(e) => setName(e.currentTarget.value)} />
-      <button onClick={handleClick}>Create user</button>
-      <div>{id}</div>
+      <Button onClick={create}>設定</Button>
     </div>
   )
 }
