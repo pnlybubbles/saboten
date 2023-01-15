@@ -2,12 +2,13 @@
   "packageManager": "yarn@3.3.1",
   "dependencies": {
     "@trpc/client": "^10.9.0",
-    "@trpc/server": "10.9.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "zod": "3.20.2"
   },
   "devDependencies": {
+    "@supabase/supabase-js": "2.4.0",
+    "@trpc/server": "10.9.0",
     "@tsconfig/strictest": "^1.0.2",
     "@types/eslint": "^8.4.10",
     "@types/prettier": "^2.7.2",
@@ -30,6 +31,11 @@
   },
   "scripts": {
     "dev": "parcel src/index.html",
-    "fmt": "prettier . --write && eslint --fix ."
+    "fmt": "prettier . --write && eslint --fix .",
+    "generate:db": "supabase gen types typescript --local > supabase/functions/_shared/generated/database.types.ts"
+  },
+  "alias": {
+    "@/*": "./src/$1",
+    "@shared/*": "./supabase/functions/_shared/$1"
   }
 }

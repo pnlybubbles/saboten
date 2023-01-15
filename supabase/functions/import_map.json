@@ -2,6 +2,7 @@
   "imports": {
     "zod": "https://deno.land/x/zod@v3.20.2/mod.ts",
     "@trpc/server": "https://esm.sh/@trpc/server@10.9.0",
-    "@trpc/server/adapters/fetch": "https://esm.sh/@trpc/server@10.9.0/adapters/fetch"
+    "@trpc/server/adapters/fetch": "https://esm.sh/@trpc/server@10.9.0/adapters/fetch",
+    "@supabase/supabase-js": "https://esm.sh/@supabase/supabase-js@2.4.0"
   }
 }

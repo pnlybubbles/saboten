@@ -11,9 +11,7 @@
   },
   "deno.enable": true,
   "deno.unstable": true,
-  "deno.enablePaths": [
-    "./supabase/functions"
-  ],
+  "deno.enablePaths": ["./supabase/functions"],
   "deno.importMap": "./supabase/functions/import_map.json",
   "typescript.tsdk": "node_modules/typescript/lib"
 }
