@@ -5,6 +5,8 @@
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+# for nodeLinker: pnpm
+node_modules
 
 .DS_Store
 .parcel-cache
