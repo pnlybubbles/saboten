@@ -10,12 +10,6 @@ const trpc = createTRPCProxyClient<AppRouter>({
       headers() {
         return { Authorization: affixBearerToken(ANON_JWT) }
       },
-      fetch(url, options) {
-        return fetch(url, {
-          ...options,
-          credentials: 'include',
-        })
-      },
     }),
   ],
 })

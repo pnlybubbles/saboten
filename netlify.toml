@@ -11,4 +11,4 @@ deno_import_map = "./netlify/edge-functions/import_map.json"
 
 [[redirects]]
   from = "/*"
-  to = "/index.html"
+  to = "/"
