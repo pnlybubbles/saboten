@@ -1,0 +1,56 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["deno"]
+  output          = "../netlify/edge-functions/_shared/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Event {
+  id        String         @id @default(uuid()) @db.Uuid
+  createdAt DateTime       @default(now()) @db.Timestamptz(3)
+  roomId    String         @db.Uuid
+  label     String         @default("")
+  room      Room           @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  balances  EventBalance[]
+}
+
+model EventBalance {
+  id           String     @id @default(uuid()) @db.Uuid
+  createdAt    DateTime   @default(now()) @db.Timestamptz(3)
+  amount       BigInt
+  byMemberId   String     @db.Uuid
+  forMemberIds String[]   @db.Uuid
+  eventId      String     @db.Uuid
+  byMember     RoomMember @relation(fields: [byMemberId], references: [id], onDelete: NoAction)
+  event        Event      @relation(fields: [eventId], references: [id], onDelete: Cascade)
+}
+
+model Room {
+  id        String       @id @default(uuid()) @db.Uuid
+  createdAt DateTime     @default(now()) @db.Timestamptz(3)
+  title     String       @default("")
+  events    Event[]
+  members   RoomMember[]
+}
+
+model RoomMember {
+  id            String         @id @default(uuid()) @db.Uuid
+  createdAt     DateTime       @default(now()) @db.Timestamptz(3)
+  roomId        String         @db.Uuid
+  name          String         @default("")
+  userId        String?        @db.Uuid
+  eventBalances EventBalance[]
+  room          Room           @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  user          User?          @relation(fields: [userId], references: [id], onDelete: SetNull)
+}
+
+model User {
+  id          String       @id @default(uuid()) @db.Uuid
+  createdAt   DateTime     @default(now()) @db.Timestamptz(3)
+  name        String       @default("")
+  roomMembers RoomMember[]
+}

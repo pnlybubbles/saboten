@@ -9,7 +9,6 @@
     "zod": "3.20.2"
   },
   "devDependencies": {
-    "@supabase/supabase-js": "2.4.0",
     "@trpc/server": "10.9.0",
     "@tsconfig/strictest": "^1.0.2",
     "@types/eslint": "^8.4.10",
@@ -37,10 +36,10 @@
   "scripts": {
     "dev": "netlify dev",
     "fmt": "prettier . --write && eslint --fix .",
-    "generate:db": "supabase gen types typescript --local > netlify/edge-functions/_shared/generated/database.types.ts"
+    "db:push": "deno run -A --unstable npm:prisma db push",
+    "db:generate": "deno run -A --unstable npm:prisma generate --data-proxy"
   },
   "alias": {
-    "@/*": "./src/$1",
-    "@shared/*": "./netlify/edge-functions/_shared/$1"
+    "@/*": "./src/$1"
   }
 }

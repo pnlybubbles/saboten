@@ -4,6 +4,7 @@
     "esbenp.prettier-vscode",
     "dbaeumer.vscode-eslint",
     "bradlc.vscode-tailwindcss",
-    "denoland.vscode-deno"
+    "denoland.vscode-deno",
+    "prisma.prisma"
   ]
 }

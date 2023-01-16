@@ -14,9 +14,6 @@ export const createContext = (opts: FetchCreateContextFnOptions) => {
     opts.resHeaders.append('Set-Cookie', serialize(name, '', { path: '/', ...option, maxAge: -1 }))
   }
 
-  const cookie = opts.req.headers.get('cookie')
-  console.log(cookie)
-
   return {
     setCookie,
     removeCookie,

@@ -1,12 +1,12 @@
 import { publicProcedure } from '../server.ts'
 import { z } from 'zod'
-import { supabase } from '../../supabase.ts'
 import { TRPCError } from '@trpc/server'
+import prisma from '../../prisma.ts'
 
 export default publicProcedure.input(z.object({ id: z.string().uuid() })).query(async ({ input: { id } }) => {
-  const { data, error } = await supabase.from('room').select().eq('id', id).single()
-  if (error) {
+  const room = await prisma.room.findUnique({ where: { id } })
+  if (!room) {
     throw new TRPCError({ code: 'BAD_REQUEST' })
   }
-  return data
+  return room
 })

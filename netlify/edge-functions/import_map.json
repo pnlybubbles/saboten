@@ -3,7 +3,7 @@
     "zod": "https://deno.land/x/zod@v3.20.2/mod.ts",
     "@trpc/server": "https://esm.sh/@trpc/server@10.9.0",
     "@trpc/server/adapters/fetch": "https://esm.sh/@trpc/server@10.9.0/adapters/fetch",
-    "@supabase/supabase-js": "https://esm.sh/@supabase/supabase-js@2.4.0",
+    "@prisma/client": "./_shared/generated/prisma/deno/edge.ts",
     "cookie": "https://esm.sh/cookie@0.5.0"
   }
 }
