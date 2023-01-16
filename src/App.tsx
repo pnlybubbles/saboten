@@ -4,13 +4,21 @@ import Main from './scene/Main'
 import unreachable from './utils/basic/unreachable'
 import { useState } from 'react'
 import trpc from './utils/trpc'
+import { RouterProvider, createBrowserRouter } from 'react-router-dom'
+
+const router = createBrowserRouter([
+  {
+    path: '/:roomId?',
+    element: <Main></Main>,
+  },
+])
 
 export default function App() {
   const [user] = useUser()
 
   return (
     <div className="p-4">
-      <h1 className="text-lime-600 font-bold text-6xl">SABOTEN</h1>
+      <h1 className="text-lime-600 font-bold text-xl">SABOTEN</h1>
       {user !== null && (
         <div>
           <div>
@@ -18,7 +26,7 @@ export default function App() {
           </div>
         </div>
       )}
-      {user === null ? <Landing></Landing> : <Main></Main>}
+      {user === null ? <Landing></Landing> : <RouterProvider router={router} />}
     </div>
   )
 }
@@ -58,7 +66,7 @@ function Create() {
       <div>自分のニックネームを入力してください</div>
       <div>※個人情報は入力しないでください</div>
       <input type="text" value={name} onChange={(e) => setName(e.currentTarget.value)} />
-      <Button onClick={create}>設定</Button>
+      <Button onClick={create}>旅をはじめる</Button>
     </div>
   )
 }
