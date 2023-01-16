@@ -11,19 +11,5 @@
     "noUncheckedIndexedAccess": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true
-  },
-  "fmt": {
-    "files": {
-      "include": [
-        "supabase/functions/"
-      ]
-    }
-  },
-  "lint": {
-    "files": {
-      "include": [
-        "supabase/functions/"
-      ]
-    }
   }
 }

@@ -1,3 +1,3 @@
 dist
 # TODO: 型情報を利用しないlintだけは有効化してもよさそう
-supabase
+netlify/edge-functions

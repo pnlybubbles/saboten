@@ -23,6 +23,7 @@
     "eslint-config-prettier": "^8.6.0",
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-tailwindcss": "^3.8.0",
+    "netlify-cli": "^12.7.2",
     "parcel": "^2.8.2",
     "postcss": "^8.4.21",
     "prettier": "^2.8.3",
@@ -34,12 +35,12 @@
     "typescript": "5.0.0-dev.20230112"
   },
   "scripts": {
-    "dev": "parcel src/index.html",
+    "dev": "netlify dev",
     "fmt": "prettier . --write && eslint --fix .",
-    "generate:db": "supabase gen types typescript --local > supabase/functions/_shared/generated/database.types.ts"
+    "generate:db": "supabase gen types typescript --local > netlify/edge-functions/_shared/generated/database.types.ts"
   },
   "alias": {
     "@/*": "./src/$1",
-    "@shared/*": "./supabase/functions/_shared/$1"
+    "@shared/*": "./netlify/edge-functions/_shared/$1"
   }
 }

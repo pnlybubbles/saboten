@@ -2,13 +2,12 @@
 // https://deno.land/manual/getting_started/setup_your_environment
 // This enables autocomplete, go to definition, etc.
 
-import { serve } from 'https://deno.land/std@0.172.0/http/server.ts'
-import { corsHeaders } from '../_shared/cors.ts'
+import { corsHeaders } from './_shared/cors.ts'
 import { fetchRequestHandler } from '@trpc/server/adapters/fetch'
-import { appRouter } from '../_shared/trpc/router.ts'
-import { createContext } from '../_shared/trpc/server.ts'
+import { appRouter } from './_shared/trpc/router.ts'
+import { createContext } from './_shared/trpc/server.ts'
 
-serve((req) => {
+export default function handler(req: Request) {
   if (req.method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders })
   }
@@ -20,4 +19,4 @@ serve((req) => {
     createContext,
     responseMeta: () => ({ headers: corsHeaders }),
   })
-})
+}

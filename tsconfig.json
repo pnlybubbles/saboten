@@ -14,7 +14,7 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"],
-      "@shared/*": ["./supabase/functions/_shared/*"]
+      "@shared/*": ["./netlify/edge-functions/_shared/*"]
     }
   },
   "files": [".eslintrc.js"],
