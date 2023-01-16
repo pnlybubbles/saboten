@@ -10,17 +10,20 @@
     "noPropertyAccessFromIndexSignature": true,
     "noUncheckedIndexedAccess": true,
     "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "forceConsistentCasingInFileNames": true
+    "noUnusedParameters": true
   },
   "fmt": {
     "files": {
-      "include": ["supabase/functions/"]
+      "include": [
+        "supabase/functions/"
+      ]
     }
   },
   "lint": {
     "files": {
-      "include": ["supabase/functions/"]
+      "include": [
+        "supabase/functions/"
+      ]
     }
   }
 }
