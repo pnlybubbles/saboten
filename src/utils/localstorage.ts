@@ -3,15 +3,26 @@ import type { ZodType } from 'zod'
 export type LocalStorageDescriptor<T> = ReturnType<typeof createLocalStorageDescriptor<T>>
 
 export const createLocalStorageDescriptor = <T>(key: string, schema: ZodType<T>, defaultValue?: T) => {
+  const cache = new Map<string, T>()
+
   const naiveGet = () => {
     const raw = localStorage.getItem(key)
     // 存在しない時は null
     if (raw === null) {
       return null
     }
+    // キャッシュをチェックして参照を維持
+    const cached = cache.get(raw)
+    if (cached) {
+      return cached
+    }
     const value = schema.safeParse(deserialize(raw))
     // スキーマに合致しない時も null
-    return value.success ? value.data : null
+    if (!value.success) {
+      return null
+    }
+    cache.set(raw, value.data)
+    return value.data
   }
 
   const get = () => {
