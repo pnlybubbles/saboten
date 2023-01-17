@@ -3,23 +3,19 @@ import Sheet from '@/components/Sheet'
 import usePresent from '@/hooks/usePresent'
 import useRoom from '@/hooks/useRoom'
 import { useEffect, useRef, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
+import EditMember from './EditMember'
 
 export default function Main() {
   const createEventSheet = usePresent()
-  const navigate = useNavigate()
   const { roomId } = useParams()
   const [room, { setTitle }] = useRoom(roomId ?? null)
 
-  const updateTitle = async (title: string) => {
-    const { id } = await setTitle(title)
-    navigate(`/${id}`)
-  }
-
   return (
-    <div>
+    <div className="grid gap-4">
       <div>{roomId ?? 'id-not-created'}</div>
-      <TitleInput defaultValue={room?.title} onChange={updateTitle}></TitleInput>
+      <TitleInput defaultValue={room?.title} onChange={setTitle}></TitleInput>
+      <EditMember roomId={roomId ?? null}></EditMember>
       <Button onClick={createEventSheet.open}>イベントを追加</Button>
       <Sheet {...createEventSheet}>
         <CreateEvent></CreateEvent>

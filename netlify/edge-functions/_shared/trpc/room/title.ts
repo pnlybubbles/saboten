@@ -10,14 +10,19 @@ export default sessionProcedure
       const room = await prisma.room.update({
         data: { title },
         where: { id },
-        select: ROOM_SELECT,
       })
-      return room
+      return {
+        type: 'shallow-room' as const,
+        data: room,
+      }
     } else {
       const room = await prisma.room.create({
         data: { title, members: { create: { userId } } },
         select: ROOM_SELECT,
       })
-      return room
+      return {
+        type: 'room' as const,
+        data: room,
+      }
     }
   })
