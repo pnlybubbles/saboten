@@ -1,9 +1,9 @@
 import { z } from 'zod'
 import prisma from '../../../prisma.ts'
-import { publicProcedure } from '../../server.ts'
+import { sessionProcedure } from '../../server.ts'
 import { ROOM_SELECT } from '../_helper.ts'
 
-export default publicProcedure
+export default sessionProcedure
   .input(z.object({ roomId: z.string().uuid().nullable(), name: z.string() }))
   .mutation(async ({ input: { roomId, name }, ctx: { userId } }) => {
     if (roomId) {

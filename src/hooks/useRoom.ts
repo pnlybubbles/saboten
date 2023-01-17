@@ -66,7 +66,6 @@ export default function useRoom(roomId: string | null) {
       } else if (type === 'member') {
         const desc = roomStorageDescriptor(data.roomId)
         const room = desc.get()
-        console.log(room, data)
         if (room) {
           desc.set({ ...room, members: [...room.members, { ...data, user: null }] })
         } else {
@@ -77,6 +76,30 @@ export default function useRoom(roomId: string | null) {
       }
     },
     [enterNewRoom, roomId],
+  )
+
+  const removeMember = useCallback(
+    async (id: string) => {
+      if (roomId === null) {
+        // TODO: 部屋ができていないのにメンバーの削除は不可能
+        // だが通信中の場合はキューイングしても良い...?
+        return
+      }
+      await trpc.room.member.remove.mutate({ roomId, memberId: id })
+      const desc = roomStorageDescriptor(roomId)
+      const room = desc.get()
+      if (room === null) {
+        // 何かが整合していない。流石にエラー
+        throw new Error('No room cache')
+      }
+      const index = room.members.findIndex((v) => v.id === id)
+      if (index === -1) {
+        // 消そうと思ってたものが既に無い。なんもしない
+        return
+      }
+      desc.set({ ...room, members: [...room.members.slice(0, index), ...room.members.slice(index + 1)] })
+    },
+    [roomId],
   )
 
   useEffect(() => {
@@ -103,5 +126,5 @@ export default function useRoom(roomId: string | null) {
     })()
   }, [setRoomInStorage, room, roomId, ready])
 
-  return [room, { setTitle, addMember }] as const
+  return [room, { setTitle, addMember, removeMember }] as const
 }
