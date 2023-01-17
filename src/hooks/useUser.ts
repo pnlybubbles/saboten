@@ -23,6 +23,10 @@ export default function useUser() {
   }
 
   useEffect(() => {
+    // TODO: 一定時間でrevalidate
+    if (user) {
+      return
+    }
     void (async () => {
       if (task) {
         return
@@ -34,7 +38,7 @@ export default function useUser() {
         setUserInStorage(fetched)
       }
     })()
-  }, [])
+  }, [setUserInStorage, user])
 
   return [user, setUser] as const
 }

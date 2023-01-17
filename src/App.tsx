@@ -3,7 +3,6 @@ import Button from './components/Button'
 import Main from './scene/Main'
 import unreachable from './utils/basic/unreachable'
 import { useState } from 'react'
-import trpc from './utils/trpc'
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 
 const router = createBrowserRouter([
@@ -16,10 +15,6 @@ const router = createBrowserRouter([
 export default function App() {
   const [user] = useUser()
 
-  const refresh = () => {
-    void trpc.user.refresh.mutate()
-  }
-
   return (
     <div className="p-4">
       <h1 className="text-lime-600 font-bold text-xl">SABOTEN</h1>
@@ -31,7 +26,6 @@ export default function App() {
         </div>
       )}
       {user === null ? <Landing></Landing> : <RouterProvider router={router} />}
-      <Button onClick={refresh}>refresh</Button>
     </div>
   )
 }

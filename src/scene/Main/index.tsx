@@ -1,4 +1,6 @@
 import Button from '@/components/Button'
+import Sheet from '@/components/Sheet'
+import usePresent from '@/hooks/usePresent'
 import trpc from '@/utils/trpc'
 import { useRef, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -7,7 +9,7 @@ export default function Main() {
   const ref = useRef<HTMLInputElement>(null)
   const [editTitle, setEditTitle] = useState(false)
   const [title, setTitle] = useState('')
-  const [presentCreateEventSheet, setPresentCreateEventSheet] = useState(false)
+  const createEventSheet = usePresent()
   const navigate = useNavigate()
   const { roomId } = useParams()
 
@@ -38,24 +40,26 @@ export default function Main() {
           ref={ref}
         />
       )}
-      <Button onClick={() => setPresentCreateEventSheet(true)}>イベントを追加</Button>
-      {presentCreateEventSheet && <CreateEventSheet></CreateEventSheet>}
+      <Button onClick={createEventSheet.open}>イベントを追加</Button>
+      <Sheet {...createEventSheet}>
+        <CreateEvent></CreateEvent>
+      </Sheet>
     </div>
   )
 }
 
 type Balance = {
   amount: number
-  fromMemberId: string | null
-  participatingMemberIds: string[]
+  byMemberId: string | null
+  forMemberIds: string[]
 }
 
-function CreateEventSheet() {
+function CreateEvent() {
   const [label, setLabel] = useState('')
   const [balance, setBalance] = useState<Balance>({
     amount: 0,
-    fromMemberId: null,
-    participatingMemberIds: [],
+    byMemberId: null,
+    forMemberIds: [],
   })
 
   return (
