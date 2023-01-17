@@ -1,6 +1,8 @@
 import { createLocalStorageDescriptor } from '@/utils/localstorage'
 import { z } from 'zod'
 import { useLocalStorage } from './useLocalStorage'
+import { useEffect } from 'react'
+import trpc from '@/utils/trpc'
 
 const USER_STORAGE_DESCRIPTOR = createLocalStorageDescriptor(
   'user_id',
@@ -10,6 +12,29 @@ const USER_STORAGE_DESCRIPTOR = createLocalStorageDescriptor(
   }),
 )
 
+let task: null | ReturnType<typeof trpc.user.refresh.mutate> = null
+
 export default function useUser() {
-  return useLocalStorage(USER_STORAGE_DESCRIPTOR)
+  const [user, setUserInStorage] = useLocalStorage(USER_STORAGE_DESCRIPTOR)
+
+  const setUser = async (props: { name: string }) => {
+    const fetched = await trpc.user.item.mutate({ id: user?.id, ...props })
+    setUserInStorage(fetched)
+  }
+
+  useEffect(() => {
+    void (async () => {
+      if (task) {
+        return
+      }
+      task = trpc.user.refresh.mutate()
+      const fetched = await task
+
+      if (fetched) {
+        setUserInStorage(fetched)
+      }
+    })()
+  }, [])
+
+  return [user, setUser] as const
 }

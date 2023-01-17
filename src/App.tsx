@@ -61,9 +61,8 @@ function Create() {
   const [name, setName] = useState('')
   const [, setUser] = useUser()
 
-  const create = async () => {
-    const user = await trpc.user.create.mutate({ name })
-    setUser(user)
+  const create = () => {
+    void setUser({ name })
   }
 
   return (

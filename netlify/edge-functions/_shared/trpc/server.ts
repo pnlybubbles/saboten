@@ -1,9 +1,22 @@
-import { serialize } from 'cookie'
+import { serialize, parse } from 'cookie'
 import { initTRPC } from '@trpc/server'
 import { FetchCreateContextFnOptions } from '@trpc/server/adapters/fetch'
 import { inferAsyncReturnType } from '@trpc/server'
 
-const COOKIE_DEFAULT_OPTION = { path: '/', httpOnly: true, sameSite: 'none', secure: true } as const
+function getSession(headers: Headers) {
+  const cookieHeader = headers.get('cookie')
+  if (!cookieHeader) {
+    return null
+  }
+  const cookies = parse(cookieHeader)
+  const id = cookies['id']
+  if (!id) {
+    return null
+  }
+  return { userId: id }
+}
+
+const COOKIE_DEFAULT_OPTION = { path: '/', httpOnly: true, sameSite: 'lax', secure: true } as const
 
 export const createContext = (opts: FetchCreateContextFnOptions) => {
   const setCookie = (...args: Parameters<typeof serialize>) => {
@@ -17,6 +30,7 @@ export const createContext = (opts: FetchCreateContextFnOptions) => {
   return {
     setCookie,
     removeCookie,
+    session: getSession(opts.req.headers),
   }
 }
 
