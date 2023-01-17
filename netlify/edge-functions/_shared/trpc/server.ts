@@ -1,9 +1,9 @@
 import { serialize, parse } from 'cookie'
 import { initTRPC } from '@trpc/server'
 import { FetchCreateContextFnOptions } from '@trpc/server/adapters/fetch'
-import { inferAsyncReturnType } from '@trpc/server'
+import { inferAsyncReturnType, TRPCError } from '@trpc/server'
 
-function getSession(headers: Headers) {
+function getUserId(headers: Headers) {
   const cookieHeader = headers.get('cookie')
   if (!cookieHeader) {
     return null
@@ -13,7 +13,7 @@ function getSession(headers: Headers) {
   if (!id) {
     return null
   }
-  return { userId: id }
+  return id
 }
 
 const COOKIE_DEFAULT_OPTION = { path: '/', httpOnly: true, sameSite: 'lax', secure: true } as const
@@ -30,7 +30,7 @@ export const createContext = (opts: FetchCreateContextFnOptions) => {
   return {
     setCookie,
     removeCookie,
-    session: getSession(opts.req.headers),
+    userId: getUserId(opts.req.headers),
   }
 }
 
@@ -41,3 +41,17 @@ const t = initTRPC.context<Context>().create()
 export const router = t.router
 export const middleware = t.middleware
 export const publicProcedure = t.procedure
+
+const withSession = t.middleware(({ next, ctx: { userId } }) => {
+  if (userId === null) {
+    throw new TRPCError({ code: 'UNAUTHORIZED' })
+  }
+
+  return next({
+    ctx: {
+      userId,
+    },
+  })
+})
+
+export const sessionProcedure = t.procedure.use(withSession)

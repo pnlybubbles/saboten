@@ -16,5 +16,8 @@
   "deno.unstable": true,
   "deno.enablePaths": ["./netlify/edge-functions"],
   "deno.importMap": "./netlify/edge-functions/import_map.json",
-  "typescript.tsdk": "node_modules/typescript/lib"
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "deno.inlayHints.functionLikeReturnTypes.enabled": false,
+  "deno.inlayHints.variableTypes.enabled": false,
+  "deno.inlayHints.parameterTypes.enabled": false
 }
