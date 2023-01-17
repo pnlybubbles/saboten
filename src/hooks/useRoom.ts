@@ -8,7 +8,11 @@ const ROOM_SCHEMA = z.object({
   id: z.string(),
   title: z.string(),
   members: z.array(
-    z.object({ id: z.string().uuid(), name: z.string().nullable(), userId: z.string().uuid().nullable() }),
+    z.object({
+      id: z.string().uuid(),
+      name: z.string().nullable(),
+      user: z.object({ id: z.string().uuid(), name: z.string() }).nullable(),
+    }),
   ),
 })
 
