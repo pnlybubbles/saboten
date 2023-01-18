@@ -13,6 +13,14 @@ const ROOM_SCHEMA = z.object({
       user: z.object({ id: z.string().uuid(), name: z.string() }).nullable(),
     }),
   ),
+  events: z.array(
+    z.object({
+      id: z.string().uuid(),
+      label: z.string(),
+      members: z.array(z.object({ memberId: z.string().uuid() })),
+      payments: z.array(z.object({ id: z.string().uuid(), amount: z.string(), paidByMemberId: z.string().uuid() })),
+    }),
+  ),
 })
 
 export const ROOM_LOCAL_STORAGE_KEY = (roomId: string) => `room_${roomId}`

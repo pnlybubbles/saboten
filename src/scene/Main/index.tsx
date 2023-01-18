@@ -3,6 +3,7 @@ import EditMember from './EditMember'
 import useRoomTitle from '@/hooks/useRoomTitle'
 import TitleInput from './TitleInput'
 import CreateEvent from './CreateEvent'
+import Events from './Events'
 
 export default function Main() {
   const { roomId = null } = useParams()
@@ -14,6 +15,7 @@ export default function Main() {
       <TitleInput defaultValue={title} onChange={setTitle}></TitleInput>
       <EditMember roomId={roomId}></EditMember>
       <CreateEvent roomId={roomId}></CreateEvent>
+      <Events roomId={roomId}></Events>
     </div>
   )
 }

@@ -10,12 +10,16 @@ export default sessionProcedure
       roomId: z.string().uuid().nullable(),
       label: z.string(),
       amount: z.number(),
-      paidByMemberId: z.string().uuid(),
-      eventMemberIds: z.array(z.string().uuid()),
+      paidByMemberId: z.string().uuid().nullable(),
+      eventMemberIds: z.array(z.string().uuid()).nullable(),
     }),
   )
   .mutation(async ({ input: { roomId, label, paidByMemberId, eventMemberIds, amount }, ctx: { userId } }) => {
     if (roomId) {
+      if (paidByMemberId === null || eventMemberIds === null) {
+        // すでにルームがある場合にはmemberIdの指定は必須
+        throw new TRPCError({ code: 'BAD_REQUEST' })
+      }
       const event = await prisma.event.create({
         data: {
           room: { connect: { id: roomId } },

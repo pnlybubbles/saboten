@@ -80,5 +80,11 @@ export default function useRoomMember(roomId: string | null) {
     [roomId, setState],
   )
 
-  return [state, { addMember, removeMember }] as const
+  const getMember = (memberId: string) => state?.find((v) => v.id === memberId)
+  const getMemberName = (memberId: string) => {
+    const member = getMember(memberId)
+    return member?.user?.name ?? member?.name ?? undefined
+  }
+
+  return [state, { addMember, removeMember, getMemberName, getMember }] as const
 }
