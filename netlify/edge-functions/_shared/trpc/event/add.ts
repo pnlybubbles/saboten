@@ -21,7 +21,7 @@ export default sessionProcedure
         // すでにルームがある場合にはmemberIdの指定は必須
         throw new TRPCError({ code: 'BAD_REQUEST' })
       }
-      const event = await prisma.event.create({
+      await prisma.event.create({
         data: {
           room: { connect: { id: roomId } },
           label,
@@ -30,10 +30,11 @@ export default sessionProcedure
         },
         include: { payments: true, members: true },
       })
+      const events = await prisma.event.findMany({ where: { roomId }, include: { payments: true, members: true } })
       return {
         room: null,
         roomId,
-        event,
+        events,
       }
     } else {
       const room = await prisma.room.create({
@@ -55,7 +56,7 @@ export default sessionProcedure
       return {
         room,
         roomId: room.id,
-        event,
+        events: [...room.events, event],
       }
     }
   })

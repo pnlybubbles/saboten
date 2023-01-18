@@ -53,8 +53,9 @@ export default function useEvents(roomId: string | null) {
               // この時点でデータがキャッシュサれていないのは流石にエラー
               throw new Error('No cache')
             }
-            desc.set({ ...current, events: [data.event] })
+            desc.set({ ...current, events: data.events })
           }
+          return data.events.map((v) => ({ ...v, tmpId: genTmpId() }))
         },
       ),
     [enterNewRoom, roomId, setState],
