@@ -10,6 +10,8 @@ export default function TitleInput({
   defaultValue: string | undefined
   onChange: (title: string) => void
 }) {
+  const ref = useRef<HTMLInputElement>(null)
+  const [edit, setEdit] = useState(false)
   const [title, setTitle] = useState(defaultValue ?? '')
 
   const isDirty = useRef(false)
@@ -21,22 +23,35 @@ export default function TitleInput({
     setTitle(defaultValue ?? '')
   }, [defaultValue])
 
+  useEffect(() => {
+    if (edit) {
+      ref.current?.focus()
+    }
+  }, [edit])
+
   return (
-    <TextField
-      value={title}
-      onChange={setTitle}
-      onFocus={() => {
+    <button
+      onClick={() => {
+        setEdit(true)
         isDirty.current = true
       }}
-      onBlur={() => {
-        if (title === defaultValue) {
-          return
-        }
-        onChange(title)
-      }}
-      className="bg-transparent focus:bg-zinc-100 px-0 active:scale-95 focus:px-5 transition-[padding,background-color,border-color,transform] text-2xl h-16"
-      placeholder={PLACEHOLDER_STRING}
-      autoFocus
-    />
+    >
+      <TextField
+        ref={ref}
+        value={title}
+        onChange={setTitle}
+        onBlur={() => {
+          setEdit(false)
+          if (title === defaultValue) {
+            return
+          }
+          onChange(title)
+        }}
+        disabled={!edit}
+        className="bg-transparent active:scale-95 focus:bg-zinc-100 px-0 focus:px-5 transition-[padding,background-color,border-color,transform] text-2xl h-16"
+        placeholder={PLACEHOLDER_STRING}
+        autoFocus
+      />
+    </button>
   )
 }
