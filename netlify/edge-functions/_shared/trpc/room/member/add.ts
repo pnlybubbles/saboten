@@ -7,10 +7,12 @@ export default sessionProcedure
   .input(z.object({ roomId: z.string().uuid().nullable(), name: z.string() }))
   .mutation(async ({ input: { roomId, name }, ctx: { userId } }) => {
     if (roomId) {
-      const member = await prisma.roomMember.create({ data: { name, room: { connect: { id: roomId } } } })
+      await prisma.roomMember.create({ data: { name, room: { connect: { id: roomId } } } })
+      const members = await prisma.roomMember.findMany({ where: { roomId }, include: { user: true } })
       return {
-        type: 'member' as const,
-        data: member,
+        roomId,
+        members,
+        room: null,
       }
     } else {
       const room = await prisma.room.create({
@@ -18,8 +20,9 @@ export default sessionProcedure
         select: ROOM_SELECT,
       })
       return {
-        type: 'room' as const,
-        data: room,
+        roomId: room.id,
+        members: room.members,
+        room,
       }
     }
   })

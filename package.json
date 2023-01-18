@@ -7,6 +7,7 @@
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.6.2",
     "react-spring-bottom-sheet": "3.5.0-alpha.0",
+    "uuid": "^9.0.0",
     "zod": "3.20.2"
   },
   "devDependencies": {
@@ -16,6 +17,7 @@
     "@types/prettier": "^2.7.2",
     "@types/react": "^18.0.26",
     "@types/react-dom": "^18.0.10",
+    "@types/uuid": "^9.0.0",
     "@typescript-eslint/eslint-plugin": "^5.48.1",
     "@typescript-eslint/parser": "^5.48.1",
     "autoprefixer": "^10.4.13",

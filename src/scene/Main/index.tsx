@@ -3,7 +3,7 @@ import Sheet from '@/components/Sheet'
 import usePresent from '@/hooks/usePresent'
 import { useEffect, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
-// import EditMember from './EditMember'
+import EditMember from './EditMember'
 import useRoomTitle from '@/hooks/useRoomTitle'
 
 export default function Main() {
@@ -15,7 +15,7 @@ export default function Main() {
     <div className="grid gap-4">
       <div>{roomId ?? 'id-not-created'}</div>
       <TitleInput defaultValue={title} onChange={setTitle}></TitleInput>
-      {/* <EditMember roomId={roomId}></EditMember> */}
+      <EditMember roomId={roomId}></EditMember>
       <Button onClick={createEventSheet.open}>イベントを追加</Button>
       <Sheet {...createEventSheet}>
         <CreateEvent></CreateEvent>

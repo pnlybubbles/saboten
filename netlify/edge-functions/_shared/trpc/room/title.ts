@@ -4,15 +4,15 @@ import prisma from '../../prisma.ts'
 import { ROOM_SELECT } from './_helper.ts'
 
 export default sessionProcedure
-  .input(z.object({ id: z.string().uuid().nullable(), value: z.string().max(20) }))
-  .mutation(async ({ input: { id, value: title }, ctx: { userId } }) => {
-    if (id) {
+  .input(z.object({ roomId: z.string().uuid().nullable(), value: z.string().max(20) }))
+  .mutation(async ({ input: { roomId, value: title }, ctx: { userId } }) => {
+    if (roomId) {
       const room = await prisma.room.update({
         data: { title },
-        where: { id },
+        where: { id: roomId },
       })
       return {
-        id,
+        roomId,
         title: room.title,
         room: null,
       }
@@ -22,7 +22,7 @@ export default sessionProcedure
         select: ROOM_SELECT,
       })
       return {
-        id: room.id,
+        roomId: room.id,
         title: room.title,
         room,
       }

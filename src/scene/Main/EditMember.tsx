@@ -1,7 +1,7 @@
 import Button from '@/components/Button'
 import Sheet from '@/components/Sheet'
 import usePresent from '@/hooks/usePresent'
-import useRoom from '@/hooks/useRoom'
+import useRoomMember from '@/hooks/useRoomMember'
 import useUser from '@/hooks/useUser'
 import { useState } from 'react'
 
@@ -11,7 +11,7 @@ interface Props {
 
 export default function EditMember({ roomId }: Props) {
   const sheet = usePresent(false)
-  const [room, { addMember, removeMember }] = useRoom(roomId)
+  const [members, { addMember, removeMember }] = useRoomMember(roomId)
   const [name, setName] = useState('')
   const [user] = useUser()
 
@@ -20,7 +20,7 @@ export default function EditMember({ roomId }: Props) {
       <Button onClick={sheet.open}>メンバー</Button>
       <Sheet {...sheet}>
         <ul className="grid gap-2">
-          {room?.members.map((v) => (
+          {members?.map((v) => (
             <li key={v.id} className="grid grid-flow-col grid-cols-[1fr_auto]">
               <div>{v.user?.name ?? v.name ?? `名無し (${v.id.slice(0, 2)})`}</div>
               {user && v.user?.id !== user.id && <button onClick={() => removeMember(v.id)}>Kick</button>}

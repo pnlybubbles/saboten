@@ -21,8 +21,12 @@ class Store<T> {
     return this.cache
   }
 
-  public set(mutation: T | ((current: T | undefined) => T), action?: (next: T) => Promise<void>) {
-    const next = typeof mutation === 'function' ? (mutation as (current: T | undefined) => T)(this.cache) : mutation
+  public set(mutation: T | ((current: T | undefined) => T | undefined), action?: (next: T) => Promise<void>) {
+    const next =
+      typeof mutation === 'function' ? (mutation as (current: T | undefined) => T | undefined)(this.cache) : mutation
+    if (next === undefined) {
+      return
+    }
     this.updateCache(next)
     if (!action) {
       return

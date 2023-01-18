@@ -3,7 +3,7 @@ import trpc from './trpc'
 
 const taskMap = new Map<string, ReturnType<typeof trpc.room.item.query>>()
 
-export const fetchRoom = (roomId: string) => {
+export default function fetchRoom(roomId: string) {
   const desc = roomLocalStorageDescriptor(roomId)
   const cache = desc.get()
 

@@ -3,7 +3,7 @@ import { useCallback } from 'react'
 import useStore, { createStore } from './useStore'
 import { ROOM_LOCAL_STORAGE_KEY, roomLocalStorageDescriptor } from './useRoomLocalStorage'
 import useEnterNewRoom from './useEnterNewRoom'
-import { fetchRoom } from '@/utils/room'
+import fetchRoom from '@/utils/fetchRoom'
 
 const roomTitleStore = createStore(
   (roomId: string | null) => ROOM_LOCAL_STORAGE_KEY(roomId ?? 'tmp'),
@@ -15,30 +15,29 @@ const roomTitleStore = createStore(
   },
 )
 
-export default function useRoomTitle(roomId: string | null) {
-  const [state, setState] = useStore(roomTitleStore, roomId)
+export default function useRoomTitle(roomIdOrNull: string | null) {
+  const [state, setState] = useStore(roomTitleStore, roomIdOrNull)
 
   const enterNewRoom = useEnterNewRoom()
 
   const setTitle = useCallback(
-    (value: string) => {
-      void setState(value, async (value) => {
-        const { id, title, room } = await trpc.room.title.mutate({ id: roomId, value })
-        const desc = roomLocalStorageDescriptor(id)
+    (value: string) =>
+      setState(value, async () => {
+        const { roomId, room, ...rest } = await trpc.room.title.mutate({ roomId: roomIdOrNull, value })
+        const desc = roomLocalStorageDescriptor(roomId)
         if (room) {
           desc.set(room)
-          enterNewRoom(id)
+          enterNewRoom(roomId)
         } else {
           const current = desc.get()
           if (current === null) {
             // この時点でデータがキャッシュサれていないのは流石にエラー
             throw new Error('No cache')
           }
-          desc.set({ ...current, title })
+          desc.set({ ...current, title: rest.title })
         }
-      })
-    },
-    [enterNewRoom, roomId, setState],
+      }),
+    [enterNewRoom, roomIdOrNull, setState],
   )
 
   return [state, setTitle] as const
