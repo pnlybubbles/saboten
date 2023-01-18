@@ -4,6 +4,7 @@ import Main from './scene/Main'
 import unreachable from './utils/basic/unreachable'
 import { useState } from 'react'
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
+import TextField from './components/TextField'
 
 const router = createBrowserRouter([
   {
@@ -34,8 +35,10 @@ function Landing() {
   const [stage, setStage] = useState<'start' | 'create' | 'restore'>('start')
 
   return stage === 'start' ? (
-    <div>
-      <Button onClick={() => setStage('create')}>はじめる</Button>
+    <div className="grid gap-4">
+      <Button onClick={() => setStage('create')} primary>
+        はじめる
+      </Button>
       <div>以前に利用したことがある場合は合言葉を使って復元できます</div>
       <Button onClick={() => setStage('restore')}>合言葉を入力する</Button>
     </div>
@@ -44,7 +47,7 @@ function Landing() {
   ) : stage === 'restore' ? (
     <div>
       <div>以前のスクショした合言葉を入力してください</div>
-      <input type="text" />
+      <TextField onChange={() => void 0} />
     </div>
   ) : (
     unreachable(stage)
@@ -54,17 +57,27 @@ function Landing() {
 function Create() {
   const [name, setName] = useState('')
   const [, setUser] = useUser()
+  const [busy, setBusy] = useState(false)
 
-  const create = () => {
-    void setUser({ name })
+  const create = async () => {
+    setBusy(true)
+    try {
+      await setUser({ name })
+    } finally {
+      setBusy(false)
+    }
   }
 
   return (
-    <div>
-      <div>自分のニックネームを入力してください</div>
-      <div>※個人情報は入力しないでください</div>
-      <input type="text" value={name} onChange={(e) => setName(e.currentTarget.value)} />
-      <Button onClick={create}>旅をはじめる</Button>
+    <div className="grid gap-4">
+      <div className="grid gap-2">
+        <div>自分のニックネームを入力してください</div>
+        <div>※個人情報は入力しないでください</div>
+      </div>
+      <TextField value={name} onChange={setName} disabled={busy} />
+      <Button onClick={create} disabled={busy}>
+        旅をはじめる
+      </Button>
     </div>
   )
 }

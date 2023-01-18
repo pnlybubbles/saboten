@@ -24,7 +24,7 @@ export default function CreateEvent({ roomId }: Props) {
           <TextField value={label} onChange={setLabel} className="border" placeholder="ラベル" />
           <TextField type="number" value={amount} onChange={setAmount} className="border" />
           <div>{members?.map((v) => v.user?.name ?? v.name).join(',')}</div>
-          <Button>追加</Button>
+          <Button primary>追加</Button>
         </div>
       </Sheet>
     </>
