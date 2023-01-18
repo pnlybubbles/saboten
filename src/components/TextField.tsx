@@ -1,12 +1,14 @@
 import clsx from 'clsx'
+import { forwardRef } from 'react'
 
 type Props = Omit<React.ComponentPropsWithoutRef<'input'>, 'onChange'> & {
   onChange: (value: string) => void
 }
 
-export default function TextField({ onChange, className, ...rest }: Props) {
+export default forwardRef<HTMLInputElement, Props>(function TextField({ onChange, className, ...rest }, ref) {
   return (
     <input
+      ref={ref}
       type="text"
       className={clsx(
         'bg-zinc-200 border-2 border-transparent focus:border-zinc-900 focus:bg-zinc-100 w-full h-12 rounded-xl px-5 outline-none text-base transition font-bold',
@@ -16,4 +18,4 @@ export default function TextField({ onChange, className, ...rest }: Props) {
       {...rest}
     />
   )
-}
+})
