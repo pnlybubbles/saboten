@@ -12,6 +12,5 @@ export default publicProcedure.input(z.object({ id: z.string().uuid() })).query(
   if (!room) {
     throw new TRPCError({ code: 'BAD_REQUEST' })
   }
-  console.log(room)
   return room
 })

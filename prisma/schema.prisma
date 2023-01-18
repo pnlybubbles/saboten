@@ -15,18 +15,29 @@ model Event {
   roomId    String         @db.Uuid
   label     String         @default("")
   room      Room           @relation(fields: [roomId], references: [id], onDelete: Cascade)
-  balances  EventBalance[]
+  payments  EventPayment[]
+  members   EventMember[]
 }
 
-model EventBalance {
-  id           String     @id @default(uuid()) @db.Uuid
-  createdAt    DateTime   @default(now()) @db.Timestamptz(3)
-  amount       BigInt
-  byMemberId   String     @db.Uuid
-  forMemberIds String[]   @db.Uuid
-  eventId      String     @db.Uuid
-  byMember     RoomMember @relation(fields: [byMemberId], references: [id], onDelete: NoAction)
-  event        Event      @relation(fields: [eventId], references: [id], onDelete: Cascade)
+model EventMember {
+  createdAt DateTime   @default(now()) @db.Timestamptz(3)
+  eventId   String     @db.Uuid
+  event     Event      @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  memberId  String     @db.Uuid
+  member    RoomMember @relation(fields: [memberId], references: [id], onDelete: Cascade)
+
+  @@id([eventId, memberId])
+}
+
+model EventPayment {
+  id             String      @id @default(uuid()) @db.Uuid
+  createdAt      DateTime    @default(now()) @db.Timestamptz(3)
+  amount         Decimal     @db.Money
+  currency       String?
+  paidByMemberId String      @db.Uuid
+  eventId        String      @db.Uuid
+  paiedByMember  RoomMember? @relation(fields: [paidByMemberId], references: [id], onDelete: SetNull)
+  event          Event       @relation(fields: [eventId], references: [id], onDelete: Cascade)
 }
 
 model Room {
@@ -38,14 +49,15 @@ model Room {
 }
 
 model RoomMember {
-  id            String         @id @default(uuid()) @db.Uuid
-  createdAt     DateTime       @default(now()) @db.Timestamptz(3)
-  roomId        String         @db.Uuid
-  name          String         @default("")
-  userId        String?        @db.Uuid
-  eventBalances EventBalance[]
-  room          Room           @relation(fields: [roomId], references: [id], onDelete: Cascade)
-  user          User?          @relation(fields: [userId], references: [id], onDelete: SetNull)
+  id          String         @id @default(uuid()) @db.Uuid
+  createdAt   DateTime       @default(now()) @db.Timestamptz(3)
+  roomId      String         @db.Uuid
+  name        String         @default("")
+  userId      String?        @db.Uuid
+  payments    EventPayment[]
+  room        Room           @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  user        User?          @relation(fields: [userId], references: [id], onDelete: SetNull)
+  EventMember EventMember[]
 }
 
 model User {
