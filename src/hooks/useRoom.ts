@@ -36,27 +36,6 @@ export default function useRoom(roomId: string | null) {
     [navigate],
   )
 
-  const setTitle = useCallback(
-    async (value: string) => {
-      const { type, data } = await trpc.room.title.mutate({ id: roomId, value })
-      if (type === 'room') {
-        roomStorageDescriptor(data.id).set(data)
-        enterNewRoom(data.id)
-      } else if (type === 'shallow-room') {
-        const desc = roomStorageDescriptor(data.id)
-        const room = desc.get()
-        if (room) {
-          desc.set({ ...room, ...data })
-        } else {
-          // TODO: revalidate
-        }
-      } else {
-        unreachable(type)
-      }
-    },
-    [enterNewRoom, roomId],
-  )
-
   const addMember = useCallback(
     async (name: string) => {
       const { type, data } = await trpc.room.member.add.mutate({ roomId, name })
@@ -126,5 +105,5 @@ export default function useRoom(roomId: string | null) {
     })()
   }, [setRoomInStorage, room, roomId, ready])
 
-  return [room, { setTitle, addMember, removeMember }] as const
+  return [room, { addMember, removeMember }] as const
 }

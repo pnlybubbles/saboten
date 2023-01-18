@@ -12,8 +12,9 @@ export default sessionProcedure
         where: { id },
       })
       return {
-        type: 'shallow-room' as const,
-        data: room,
+        id,
+        title: room.title,
+        room: null,
       }
     } else {
       const room = await prisma.room.create({
@@ -21,8 +22,9 @@ export default sessionProcedure
         select: ROOM_SELECT,
       })
       return {
-        type: 'room' as const,
-        data: room,
+        id: room.id,
+        title: room.title,
+        room,
       }
     }
   })
