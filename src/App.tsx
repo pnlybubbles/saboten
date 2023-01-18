@@ -16,7 +16,7 @@ export default function App() {
   const [user] = useUser()
 
   return (
-    <div className="p-4 text-zinc-900 text-base">
+    <div className="p-8 text-zinc-900 text-base">
       <h1 className="text-lime-600 font-bold text-xl">SABOTEN</h1>
       {user !== null && (
         <div>

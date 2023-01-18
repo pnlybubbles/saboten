@@ -1,10 +1,11 @@
 import Button from '@/components/Button'
 import Sheet from '@/components/Sheet'
 import usePresent from '@/hooks/usePresent'
-import { useEffect, useRef, useState } from 'react'
+import { useState } from 'react'
 import { useParams } from 'react-router-dom'
 import EditMember from './EditMember'
 import useRoomTitle from '@/hooks/useRoomTitle'
+import TitleInput from './TitleInput'
 
 export default function Main() {
   const createEventSheet = usePresent()
@@ -21,53 +22,6 @@ export default function Main() {
         <CreateEvent></CreateEvent>
       </Sheet>
     </div>
-  )
-}
-
-const PLACEHOLDER_STRING = '無名の旅'
-
-function TitleInput({
-  defaultValue,
-  onChange,
-}: {
-  defaultValue: string | undefined
-  onChange: (title: string) => void
-}) {
-  const [edit, setEdit] = useState(false)
-  const [title, setTitle] = useState(defaultValue ?? '')
-
-  const isDirty = useRef(false)
-
-  useEffect(() => {
-    if (isDirty.current) {
-      return
-    }
-    setTitle(defaultValue ?? '')
-  }, [defaultValue, edit])
-
-  return edit ? (
-    <input
-      type="text"
-      value={title}
-      onChange={(e) => setTitle(e.currentTarget.value)}
-      onBlur={() => {
-        onChange(title)
-        setEdit(false)
-      }}
-      className="border"
-      placeholder={PLACEHOLDER_STRING}
-      autoFocus
-    />
-  ) : (
-    <button
-      className={title === '' ? 'text-gray-500' : ''}
-      onClick={() => {
-        setEdit(true)
-        isDirty.current = true
-      }}
-    >
-      {title !== '' ? title : PLACEHOLDER_STRING}
-    </button>
   )
 }
 

@@ -9,7 +9,7 @@ export default function TextField({ onChange, className, ...rest }: Props) {
     <input
       type="text"
       className={clsx(
-        'bg-zinc-200 border-2 border-transparent focus:border-zinc-900 focus:bg-zinc-100 w-full h-12 rounded-xl px-5 outline-none text-base transition',
+        'bg-zinc-200 border-2 border-transparent focus:border-zinc-900 focus:bg-zinc-100 w-full h-12 rounded-xl px-5 outline-none text-base transition font-bold',
         className,
       )}
       onChange={(e) => onChange(e.currentTarget.value)}
