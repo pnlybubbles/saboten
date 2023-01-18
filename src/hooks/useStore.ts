@@ -101,7 +101,7 @@ export default function useStore<T, Args extends unknown[]>(
     cachedRecord ??
     new Store(
       () => store.fetcher(...args),
-      (value, label) => log(`store-${label}`, value),
+      (value, label) => log(`store-${label} [${cacheKey.slice(0, 10)}]`, value),
     )
 
   if (cachedRecord === undefined) {

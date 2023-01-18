@@ -15,7 +15,7 @@ export default function Button({ primary = false, className, ...props }: Props) 
       {...props}
       className={clsx(
         className,
-        'h-12 px-5 rounded-full font-bold w-full active:scale-95 transition text-base disabled:opacity-30',
+        'h-12 px-5 rounded-full font-bold w-full active:scale-95 transition text-base disabled:opacity-30 select-none',
         backgroundColor,
         foregroundColor,
       )}

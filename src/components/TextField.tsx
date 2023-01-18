@@ -11,7 +11,7 @@ export default forwardRef<HTMLInputElement, Props>(function TextField({ onChange
       ref={ref}
       type="text"
       className={clsx(
-        'bg-zinc-200 border-2 border-transparent focus:border-zinc-900 focus:bg-zinc-100 w-full h-12 rounded-xl px-5 outline-none text-base transition font-bold placeholder:text-zinc-400',
+        'bg-zinc-200 border-2 border-transparent focus:border-zinc-900 focus:bg-zinc-100 w-full h-12 rounded-xl px-5 outline-none text-base transition font-bold placeholder:text-zinc-400 disabled:opacity-30 active:scale-95 focus:active:scale-100',
         className,
       )}
       onChange={(e) => onChange(e.currentTarget.value)}

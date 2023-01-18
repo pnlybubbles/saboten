@@ -31,6 +31,7 @@ export default function TitleInput({
 
   return (
     <button
+      className="active:scale-95 transition active:focus-within:scale-100"
       onClick={() => {
         setEdit(true)
         isDirty.current = true
@@ -48,7 +49,9 @@ export default function TitleInput({
           onChange(title)
         }}
         disabled={!edit}
-        className="bg-transparent active:scale-95 focus:bg-zinc-100 px-0 focus:px-5 transition-[padding,background-color,border-color,transform] text-2xl h-16"
+        className={
+          'bg-transparent focus:bg-zinc-100 px-0 focus:px-5 transition-[padding,background-color,border-color] text-2xl h-16 pointer-events-none focus:pointer-events-auto disabled:opacity-100 active:scale-100'
+        }
         placeholder={PLACEHOLDER_STRING}
         autoFocus
       />
