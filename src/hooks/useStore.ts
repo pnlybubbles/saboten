@@ -1,11 +1,13 @@
+import { log } from '@/utils/basic/log'
 import { useCallback, useSyncExternalStore } from 'react'
 
 class Store<T> {
   private cache: T | undefined
   private listeners: (() => void)[] = []
   private promise: Promise<void> = Promise.resolve()
+  private counter = 0
 
-  constructor(private fetcher: () => Promise<T>) {}
+  constructor(private fetcher: () => Promise<T>, private onUpdate?: (value: unknown, label: string) => void) {}
 
   private updateCache(value: T) {
     this.cache = value
@@ -15,23 +17,47 @@ class Store<T> {
   public get() {
     if (this.cache === undefined) {
       this.promise = this.fetcher()
-        .then((value) => this.updateCache(value))
+        .then((value) => {
+          this.updateCache(value)
+          this.onUpdate?.(value, 'fetch')
+        })
         .catch((e) => console.error('Fetch', e))
     }
     return this.cache
   }
 
-  public set(mutation: T | ((current: T | undefined) => T | undefined), action?: (next: T) => Promise<void>) {
+  /**
+   * 値を更新する
+   * @param mutation Tまたは、前のTから新しいTを生成する関数
+   * @param action 値を更新する非同期の関数。戻り値を指定すると、キューが捌けたタイミングでその値を用いてキャッシュの更新を行う。
+   * @returns
+   */
+  public set(mutation: T | ((current: T | undefined) => T | undefined), action?: () => Promise<T | void>) {
     const next =
       typeof mutation === 'function' ? (mutation as (current: T | undefined) => T | undefined)(this.cache) : mutation
     if (next === undefined) {
       return
     }
     this.updateCache(next)
+    this.onUpdate?.(next, 'set')
     if (!action) {
       return
     }
-    this.promise = this.promise.then(() => action(next)).catch((e) => console.error('Action', e))
+    this.counter++
+    this.promise = this.promise
+      .then(() => action())
+      .then((value) => {
+        this.counter--
+        // すべてのpromiseが解決しきっている場合に限って非同期でキャッシュを更新する
+        // 通常はキャッシュと値は一致しているはずなので、不整合は起きない。しかし場合によっては別のリクエストによって値が変更されている可能性がある。
+        // ユーザーが何らかの更新処理を行っている最中にキャッシュを補正してしまうと意図しない挙動になる可能性があるので、
+        // 更新処理のキューがすべて捌けきったタイミングでのみキャッシュを補正する。
+        if (value !== undefined && this.counter === 0) {
+          this.updateCache(value)
+          this.onUpdate?.(next, 'fixed')
+        }
+      })
+      .catch((e) => console.error('Action', e))
     return this.promise
   }
 
@@ -71,7 +97,12 @@ export default function useStore<T, Args extends unknown[]>(
   const cacheKey = store.cacheKey(...args)
   const cachedRecord = store.cache.get(cacheKey)
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  const record = cachedRecord ?? new Store(() => store.fetcher(...args))
+  const record =
+    cachedRecord ??
+    new Store(
+      () => store.fetcher(...args),
+      (value, label) => log(`store-${label}`, value),
+    )
 
   if (cachedRecord === undefined) {
     store.cache.set(cacheKey, record)

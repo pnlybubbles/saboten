@@ -4,7 +4,8 @@ import useStore, { createStore } from './useStore'
 import { ROOM_LOCAL_STORAGE_KEY, roomLocalStorageDescriptor } from './useRoomLocalStorage'
 import useEnterNewRoom from './useEnterNewRoom'
 import fetchRoom from '@/utils/fetchRoom'
-import tmpId from '@/utils/basic/tmpId'
+import genTmpId from '@/utils/basic/genTmpId'
+import unreachable from '@/utils/basic/unreachable'
 
 const roomMemberStore = createStore(
   (roomId: string | null) => ROOM_LOCAL_STORAGE_KEY(roomId ?? 'tmp'),
@@ -12,7 +13,7 @@ const roomMemberStore = createStore(
     if (roomId === null) {
       return Promise.resolve([])
     }
-    return fetchRoom(roomId).then((v) => v.members)
+    return fetchRoom(roomId).then((v) => v.members.map((v) => ({ ...v, id: v.id as string | null, tmpId: genTmpId() })))
   },
 )
 
@@ -24,7 +25,7 @@ export default function useRoomMember(roomId: string | null) {
   const addMember = useCallback(
     (name: string) =>
       setState(
-        (current) => [...(current ?? []), { name: name, user: null, id: tmpId() }],
+        (current) => [...(current ?? []), { name: name, user: null, id: null, tmpId: genTmpId() }],
         async () => {
           const data = await trpc.room.member.add.mutate({ roomId, name })
           const desc = roomLocalStorageDescriptor(data.roomId)
@@ -39,6 +40,7 @@ export default function useRoomMember(roomId: string | null) {
             }
             desc.set({ ...current, members: data.members })
           }
+          return data.members.map((v) => ({ ...v, tmpId: genTmpId() }))
         },
       ),
     [enterNewRoom, roomId, setState],
@@ -61,8 +63,8 @@ export default function useRoomMember(roomId: string | null) {
         async () => {
           if (roomId === null) {
             // TODO: 部屋ができていないのにメンバーの削除は不可能
-            // だが通信中の場合はキューイングしても良い...?
-            return
+            // メンバー追加&部屋作成はキューイングされるので、roomId=nullのクロージャに入ってる間にキューに入った場合はエラーになる
+            unreachable()
           }
           const members = await trpc.room.member.remove.mutate({ roomId: roomId, memberId })
           const desc = roomLocalStorageDescriptor(roomId)
@@ -72,6 +74,7 @@ export default function useRoomMember(roomId: string | null) {
             throw new Error('No cache')
           }
           desc.set({ ...current, members })
+          return members.map((v) => ({ ...v, tmpId: genTmpId() }))
         },
       ),
     [roomId, setState],

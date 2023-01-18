@@ -22,8 +22,16 @@ export default function EditMember({ roomId }: Props) {
         <ul className="grid gap-2">
           {members?.map((v) => (
             <li key={v.id} className="grid grid-flow-col grid-cols-[1fr_auto]">
-              <div>{v.user?.name ?? v.name ?? `名無し (${v.id.slice(0, 2)})`}</div>
-              {user && v.user?.id !== user.id && <button onClick={() => removeMember(v.id)}>Kick</button>}
+              <div>{v.user?.name ?? v.name ?? `名無し (${v.tmpId.slice(0, 2)})`}</div>
+              {user && v.user?.id !== user.id && (
+                <button
+                  disabled={v.id === null}
+                  onClick={() => v.id && removeMember(v.id)}
+                  className="disabled:opacity-25"
+                >
+                  Kick
+                </button>
+              )}
             </li>
           ))}
         </ul>
