@@ -3,20 +3,21 @@ import { sessionProcedure } from '../server.ts'
 import { z } from 'zod'
 import prisma from '../../prisma.ts'
 import { ROOM_SELECT } from '../room/_helper.ts'
+import { DECIMAL_SCHEMA } from '../../utils/decimal.ts'
 
 export default sessionProcedure
   .input(
     z.object({
       roomId: z.string().uuid().nullable(),
       label: z.string(),
-      amount: z.number(),
+      amount: DECIMAL_SCHEMA,
       paidByMemberId: z.string().uuid().nullable(),
-      eventMemberIds: z.array(z.string().uuid()).nullable(),
+      memberIds: z.array(z.string().uuid()).nullable(),
     }),
   )
-  .mutation(async ({ input: { roomId, label, paidByMemberId, eventMemberIds, amount }, ctx: { userId } }) => {
+  .mutation(async ({ input: { roomId, label, paidByMemberId, memberIds, amount }, ctx: { userId } }) => {
     if (roomId) {
-      if (paidByMemberId === null || eventMemberIds === null) {
+      if (paidByMemberId === null || memberIds === null) {
         // すでにルームがある場合にはmemberIdの指定は必須
         throw new TRPCError({ code: 'BAD_REQUEST' })
       }
@@ -25,11 +26,15 @@ export default sessionProcedure
           room: { connect: { id: roomId } },
           label,
           payments: { create: { paiedByMember: { connect: { id: paidByMemberId } }, amount } },
-          members: { createMany: { data: eventMemberIds.map((memberId) => ({ memberId })) } },
+          members: { createMany: { data: memberIds.map((memberId) => ({ memberId })) } },
         },
-        include: { payments: true },
+        include: { payments: true, members: true },
       })
-      return event
+      return {
+        room: null,
+        roomId,
+        event,
+      }
     } else {
       const room = await prisma.room.create({
         data: { members: { createMany: { data: [{ userId }] } } },
@@ -45,7 +50,12 @@ export default sessionProcedure
           payments: { create: { paiedByMember: { connect: { id: memberId } }, amount } },
           members: { create: { member: { connect: { id: memberId } } } },
         },
+        include: { payments: true, members: true },
       })
-      return event
+      return {
+        room,
+        roomId: room.id,
+        event,
+      }
     }
   })
