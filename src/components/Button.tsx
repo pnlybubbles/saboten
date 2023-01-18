@@ -13,10 +13,15 @@ export default function Button({ primary = false, className, ...props }: Props) 
   return (
     <button
       {...props}
-      className={clsx(className, 'py-3 px-5 rounded-full border border-black w-full', backgroundColor, foregroundColor)}
+      className={clsx(
+        className,
+        'h-12 px-5 rounded-full font-bold w-full active:scale-95 transition text-base disabled:opacity-30',
+        backgroundColor,
+        foregroundColor,
+      )}
     ></button>
   )
 }
 
-const toBackgroundColor = (primary: boolean) => (primary ? 'bg-black' : 'bg-white')
-const toForegroundColor = (primary: boolean) => (primary ? 'text-white' : 'text-black')
+const toBackgroundColor = (primary: boolean) => (primary ? 'bg-zinc-900' : 'bg-white border-zinc-900 border-2')
+const toForegroundColor = (primary: boolean) => (primary ? 'text-zinc-50' : 'text-zinc-900')

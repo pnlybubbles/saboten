@@ -1,5 +1,6 @@
 import Button from '@/components/Button'
 import Sheet from '@/components/Sheet'
+import TextField from '@/components/TextField'
 import usePresent from '@/hooks/usePresent'
 import useRoomMember from '@/hooks/useRoomMember'
 import useUser from '@/hooks/useUser'
@@ -19,31 +20,35 @@ export default function EditMember({ roomId }: Props) {
     <>
       <Button onClick={sheet.open}>メンバー</Button>
       <Sheet {...sheet}>
-        <ul className="grid gap-2">
-          {members?.map((v) => (
-            <li key={v.id} className="grid grid-flow-col grid-cols-[1fr_auto]">
-              <div>{v.user?.name ?? v.name ?? `名無し (${v.tmpId.slice(0, 2)})`}</div>
-              {user && v.user?.id !== user.id && (
-                <button
-                  disabled={v.id === null}
-                  onClick={() => v.id && removeMember(v.id)}
-                  className="disabled:opacity-25"
-                >
-                  Kick
-                </button>
-              )}
-            </li>
-          ))}
-        </ul>
-        <input type="text" value={name} onChange={(e) => setName(e.currentTarget.value)} />
-        <Button
-          onClick={() => {
-            setName('')
-            void addMember(name)
-          }}
-        >
-          追加
-        </Button>
+        <div className="grid gap-6">
+          <ul className="grid gap-2">
+            {members?.map((v) => (
+              <li key={v.id} className="grid grid-flow-col grid-cols-[1fr_auto]">
+                <div>{v.user?.name ?? v.name ?? `名無し (${v.tmpId.slice(0, 2)})`}</div>
+                {user && v.user?.id !== user.id && (
+                  <button
+                    disabled={v.id === null}
+                    onClick={() => v.id && removeMember(v.id)}
+                    className="disabled:opacity-30"
+                  >
+                    Kick
+                  </button>
+                )}
+              </li>
+            ))}
+          </ul>
+          <TextField value={name} onChange={setName} placeholder="ニックネームを入力する" />
+          <Button
+            onClick={() => {
+              setName('')
+              void addMember(name)
+            }}
+            disabled={name === ''}
+            primary
+          >
+            追加
+          </Button>
+        </div>
       </Sheet>
     </>
   )
