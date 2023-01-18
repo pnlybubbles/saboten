@@ -44,6 +44,7 @@
   "scripts": {
     "dev": "netlify dev",
     "deploy": "dotenv -- sh -c 'netlify build && netlify deploy'",
+    "deploy:prod": "dotenv -- netlify deploy --prod",
     "fmt": "prettier . --write && eslint --fix .",
     "db:push": "deno run -A --unstable npm:prisma db push",
     "db:generate": "deno run -A --unstable npm:prisma generate --data-proxy"
