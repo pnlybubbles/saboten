@@ -101,5 +101,18 @@
     "https://esm.sh/v102/@trpc/server@10.9.0/dist/types.d.ts": "7fcd437415621d1c3830b99885c45015dabae679d77adb9cef1dfaf678cc4cfd",
     "https://esm.sh/v102/@types/cookie@0.5.1/index.d.ts": "4a547783c826c1dec10d96734687ae4db2e89d40261e91b5c327b60748315dc1",
     "https://esm.sh/v102/cookie@0.5.0/deno/cookie.js": "4de6eef676abb1b431660d6f20a030351ed7459fb471e7d6711dfd4a13d41b40"
+  },
+  "npm": {
+    "specifiers": { "prisma": "prisma@4.8.1" },
+    "packages": {
+      "@prisma/engines@4.8.1": {
+        "integrity": "sha512-93tctjNXcIS+i/e552IO6tqw17sX8liivv8WX9lDMCpEEe3ci+nT9F+1oHtAafqruXLepKF80i/D20Mm+ESlOw==",
+        "dependencies": {}
+      },
+      "prisma@4.8.1": {
+        "integrity": "sha512-ZMLnSjwulIeYfaU1O6/LF6PEJzxN5par5weykxMykS9Z6ara/j76JH3Yo2AH3bgJbPN4Z6NeCK9s5fDkzf33cg==",
+        "dependencies": { "@prisma/engines": "@prisma/engines@4.8.1" }
+      }
+    }
   }
 }

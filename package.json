@@ -1,6 +1,7 @@
 {
   "packageManager": "yarn@3.3.1",
   "dependencies": {
+    "@prisma/client": "4.8.1",
     "@trpc/client": "^10.9.0",
     "clsx": "^1.2.1",
     "react": "^18.2.0",
@@ -33,6 +34,7 @@
     "postcss": "^8.4.21",
     "prettier": "^2.8.3",
     "prettier-plugin-tailwindcss": "^0.2.1",
+    "prisma": "4.8.1",
     "process": "^0.11.10",
     "simple-path-router": "^1.1.0",
     "simple-reverse-proxy": "^1.0.2",

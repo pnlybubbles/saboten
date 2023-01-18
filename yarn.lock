@@ -2032,6 +2032,34 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@prisma/client@npm:4.8.1":
+  version: 4.8.1
+  resolution: "@prisma/client@npm:4.8.1"
+  dependencies:
+    "@prisma/engines-version": 4.8.0-61.d6e67a83f971b175a593ccc12e15c4a757f93ffe
+  peerDependencies:
+    prisma: "*"
+  peerDependenciesMeta:
+    prisma:
+      optional: true
+  checksum: 93dc263e56f473478c8b7e051b7bad09893eac4fe0e2ba93af56e8394fb21e7e23a8fff0fde39f4aaaf85c3bfb0b51f3f50cc1cab3a585fdb94687f08e1c385a
+  languageName: node
+  linkType: hard
+
+"@prisma/engines-version@npm:4.8.0-61.d6e67a83f971b175a593ccc12e15c4a757f93ffe":
+  version: 4.8.0-61.d6e67a83f971b175a593ccc12e15c4a757f93ffe
+  resolution: "@prisma/engines-version@npm:4.8.0-61.d6e67a83f971b175a593ccc12e15c4a757f93ffe"
+  checksum: 839c9ecaad0b3b64bf0a641c3cb4103237b8e0e1f23c5ba47fdabaab853590f765e5323fb664588f954be56cd6c1a19c1a01617cd826c48a5e9221f3e82b2a28
+  languageName: node
+  linkType: hard
+
+"@prisma/engines@npm:4.8.1":
+  version: 4.8.1
+  resolution: "@prisma/engines@npm:4.8.1"
+  checksum: 7ddddf5dcecbf2dd74e061fcf60c4ceef8a1c18e55aec3773ebcefb0edf0f8cf3b3e62eb7ad46fb82a85546ace5c626e1cc29b5d600ddf51989c8f07140600ca
+  languageName: node
+  linkType: hard
+
 "@reach/portal@npm:^0.13.0":
   version: 0.13.2
   resolution: "@reach/portal@npm:0.13.2"
@@ -11398,6 +11426,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"prisma@npm:4.8.1":
+  version: 4.8.1
+  resolution: "prisma@npm:4.8.1"
+  dependencies:
+    "@prisma/engines": 4.8.1
+  bin:
+    prisma: build/index.js
+    prisma2: build/index.js
+  checksum: 6f09e9add231c1f38cc01051037c0abb5ff4db6773d5543ce8917beee76b15351474e97b0c06eaa25267f0a65e7596a8428292317c53d1868e9aaa09cd6e0705
+  languageName: node
+  linkType: hard
+
 "process-nextick-args@npm:~2.0.0":
   version: 2.0.1
   resolution: "process-nextick-args@npm:2.0.1"
@@ -12185,6 +12225,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "root-workspace-0b6124@workspace:."
   dependencies:
+    "@prisma/client": 4.8.1
     "@trpc/client": ^10.9.0
     "@trpc/server": 10.9.0
     "@tsconfig/strictest": ^1.0.2
@@ -12209,6 +12250,7 @@ __metadata:
     postcss: ^8.4.21
     prettier: ^2.8.3
     prettier-plugin-tailwindcss: ^0.2.1
+    prisma: 4.8.1
     process: ^0.11.10
     react: ^18.2.0
     react-dom: ^18.2.0
