@@ -43,9 +43,18 @@ export default function CreateEvent({ roomId }: Props) {
       <Button onClick={createEventSheet.open}>イベントを追加</Button>
       <Sheet {...createEventSheet}>
         <div className="grid gap-4">
-          <TextField value={label} onChange={setLabel} className="border" placeholder="ラベル" />
-          <TextField type="number" value={amount} onChange={setAmount} className="border" />
-          <div>{members?.map((v) => v.user?.name ?? v.name).join(',')}</div>
+          <div className="grid gap-2">
+            <div className="text-sm font-bold">イベントの名前</div>
+            <TextField value={label} onChange={setLabel} placeholder="お昼のカオマンガイ" />
+          </div>
+          <div className="grid gap-2">
+            <div className="text-sm font-bold">支払ったお金</div>
+            <TextField type="number" value={amount} onChange={setAmount} />
+          </div>
+          <div className="grid gap-2">
+            <div className="text-sm font-bold">割り勘するメンバー</div>
+            <div>{members?.map((v) => v.user?.name ?? v.name).join(', ')}</div>
+          </div>
           <Button onClick={handleCreate} primary disabled={label === '' || amount === '' || amount === '0'}>
             追加
           </Button>
