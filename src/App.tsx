@@ -5,6 +5,7 @@ import unreachable from './utils/basic/unreachable'
 import { useState } from 'react'
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import TextField from './components/TextField'
+import { uuidToCompressedPrintableString } from './utils/basic/uuidToCompressedPrintableString'
 
 const router = createBrowserRouter([
   {
@@ -23,6 +24,7 @@ export default function App() {
         <div>
           <div>{user.name}</div>
           <div className="text-xs text-zinc-400">user: {user.id}</div>
+          <div className="text-xs text-zinc-400">compress: {uuidToCompressedPrintableString(user.id)}</div>
         </div>
       )}
       {user === null ? <Landing></Landing> : <RouterProvider router={router} />}
