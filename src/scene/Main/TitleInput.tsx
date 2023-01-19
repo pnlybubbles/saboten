@@ -35,8 +35,9 @@ export default function TitleInput({
           isDirty.current = true
         }}
         className={
-          'font-bold bg-transparent rounded-xl w-full focus:bg-secondary outline-none px-0 focus:px-5 transition-[padding,background-color,border-color] text-2xl h-16 active:scale-100'
+          'font-bold bg-transparent rounded-xl w-full focus:bg-surface outline-none px-0 focus:px-5 transition-[padding,background-color,border-color] text-2xl h-16 active:scale-100'
         }
+        placeholder="No title"
         name="title"
       />
     </div>

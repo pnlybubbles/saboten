@@ -6,6 +6,7 @@ module.exports = {
       colors: {
         primary: '#ff7763',
         secondary: '#fbedeb',
+        surface: 'rgb(240 240 240 / 1)',
       },
     },
   },
