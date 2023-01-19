@@ -1,4 +1,4 @@
-import { createLocalStorageDescriptor } from '@/utils/localstorage'
+import { createLocalStorageDescriptor } from '@/utils/basic/createLocalStorageDescriptor'
 import { z } from 'zod'
 import { useLocalStorage } from './useLocalStorage'
 import { useEffect } from 'react'

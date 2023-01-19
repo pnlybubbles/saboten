@@ -1,5 +1,5 @@
 import { useLocalStorage } from '@/hooks/useLocalStorage'
-import { createLocalStorageDescriptor } from '@/utils/localstorage'
+import { createLocalStorageDescriptor } from '@/utils/basic/createLocalStorageDescriptor'
 import { useMemo } from 'react'
 import { z } from 'zod'
 
