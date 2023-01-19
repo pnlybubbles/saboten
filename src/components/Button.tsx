@@ -16,7 +16,7 @@ export default function Button({ primary = false, className, onClick, disabled, 
     <button
       className={clsx(
         className,
-        'h-12 px-5 rounded-full font-bold w-full active:scale-95 transition text-base disabled:opacity-30 select-none',
+        'h-12 px-6 rounded-full font-bold w-full active:scale-95 transition text-base disabled:opacity-30 select-none',
         backgroundColor,
         foregroundColor,
       )}

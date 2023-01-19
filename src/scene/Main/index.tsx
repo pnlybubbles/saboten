@@ -4,12 +4,12 @@ import useRoomTitle from '@/hooks/useRoomTitle'
 import TitleInput from './TitleInput'
 import EventSheet from './EventSheet'
 import Events from './Events'
-import Button from '@/components/Button'
 import usePresent from '@/hooks/usePresent'
 import useEvents from '@/hooks/useEvents'
 import Balance from './Balance'
 import Avatar from '@/components/Avatar'
 import useUser from '@/hooks/useUser'
+import Icon from '@/components/Icon'
 
 export default function Main() {
   const createEventSheet = usePresent()
@@ -26,11 +26,16 @@ export default function Main() {
       <TitleInput defaultValue={title} onChange={setTitle}></TitleInput>
       <Balance roomId={roomId}></Balance>
       <EditMember roomId={roomId}></EditMember>
-      <Button primary onClick={createEventSheet.open}>
-        イベントを追加
-      </Button>
       <EventSheet {...createEventSheet} roomId={roomId} onSubmit={addEvent} submitLabel="追加"></EventSheet>
       <Events roomId={roomId}></Events>
+      <div className="fixed bottom-8 left-0 w-full grid grid-cols-[max-content] justify-center">
+        <button
+          className="grid grid-flow-col gap-1 items-center justify-items-center h-16 w-16 rounded-full bg-primary text-white shadow-primary shadow-2xl active:scale-90 select-none transition"
+          onClick={createEventSheet.open}
+        >
+          <Icon name="add" size={24}></Icon>
+        </button>
+      </div>
     </div>
   )
 }
