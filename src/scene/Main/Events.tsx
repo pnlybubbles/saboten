@@ -28,7 +28,7 @@ function Item({ id, label, payments, members, roomId }: Event & Props) {
   const [, { updateEvent }] = useEvents(roomId)
 
   return (
-    <button className="text-left disabled:opacity-30" onClick={sheet.open} disabled={!id}>
+    <button className="text-left disabled:opacity-30 active:scale-95 transition" onClick={sheet.open} disabled={!id}>
       <div className="text-xs text-zinc-400">{id}</div>
       <div className="text-lg font-bold">{label}</div>
       <div>
