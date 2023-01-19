@@ -47,16 +47,18 @@ export default function Balance({ roomId }: Props) {
       <div className="font-bold text-3xl">{formatCurrencyNumber(total ?? BigInt(0), 'JPY')}</div>
       {balanceByMemberId && (
         <div className="grid grid-cols-[1fr_auto_auto] gap-x-2 gap-y-1">
-          {Object.entries(balanceByMemberId).map(([memberId, balance]) => (
-            <React.Fragment key={memberId}>
-              <div className="font-bold">{getMemberName(memberId)}</div>
-              <div>{formatCurrencyNumber(balance.paid, 'JPY')}</div>
-              <div className={clsx('font-bold', balance.assets > 0 ? 'text-rose-800' : 'text-lime-800')}>
-                {balance.assets > 0 ? '-' : '+'}
-                {formatCurrencyNumber(balance.assets > 0 ? balance.assets : -balance.assets, 'JPY')}
-              </div>
-            </React.Fragment>
-          ))}
+          {Object.entries(balanceByMemberId)
+            .filter(([, balance]) => balance.assets !== BigInt(0) && balance.paid !== BigInt(0))
+            .map(([memberId, balance]) => (
+              <React.Fragment key={memberId}>
+                <div className="font-bold">{getMemberName(memberId)}</div>
+                <div>{formatCurrencyNumber(balance.paid, 'JPY')}</div>
+                <div className={clsx('font-bold', balance.assets > 0 ? 'text-rose-800' : 'text-lime-800')}>
+                  {balance.assets > 0 ? '-' : '+'}
+                  {formatCurrencyNumber(balance.assets > 0 ? balance.assets : -balance.assets, 'JPY')}
+                </div>
+              </React.Fragment>
+            ))}
         </div>
       )}
     </div>

@@ -1,7 +1,4 @@
-import TextField from '@/components/TextField'
 import { useEffect, useRef, useState } from 'react'
-
-const PLACEHOLDER_STRING = '無名の旅'
 
 export default function TitleInput({
   defaultValue,
@@ -24,10 +21,10 @@ export default function TitleInput({
 
   return (
     <div className="active:scale-95 transition active:focus-within:scale-100">
-      <TextField
+      <input
         ref={ref}
         value={title}
-        onChange={setTitle}
+        onChange={(e) => setTitle(e.currentTarget.value)}
         onBlur={() => {
           if (title === defaultValue) {
             return
@@ -38,9 +35,8 @@ export default function TitleInput({
           isDirty.current = true
         }}
         className={
-          'bg-transparent focus:bg-zinc-100 px-0 focus:px-5 transition-[padding,background-color,border-color] text-2xl h-16 active:scale-100'
+          'font-bold bg-transparent rounded-xl w-full focus:bg-secondary outline-none px-0 focus:px-5 transition-[padding,background-color,border-color] text-2xl h-16 active:scale-100'
         }
-        placeholder={PLACEHOLDER_STRING}
         name="title"
       />
     </div>

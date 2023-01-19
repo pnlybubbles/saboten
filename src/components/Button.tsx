@@ -27,5 +27,5 @@ export default function Button({ primary = false, className, onClick, disabled, 
   )
 }
 
-const toBackgroundColor = (primary: boolean) => (primary ? 'bg-zinc-900' : 'bg-white border-zinc-900 border-2')
-const toForegroundColor = (primary: boolean) => (primary ? 'text-zinc-50' : 'text-zinc-900')
+const toBackgroundColor = (primary: boolean) => (primary ? 'bg-primary' : 'bg-zinc-900')
+const toForegroundColor = (primary: boolean) => (primary ? 'text-white' : 'text-zinc-50')
