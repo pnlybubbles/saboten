@@ -73,7 +73,7 @@ function Create() {
         <div>自分のニックネームを入力してください</div>
         <div>※個人情報は入力しないでください</div>
       </div>
-      <TextField value={name} onChange={setName} disabled={busy} />
+      <TextField name="name" value={name} onChange={setName} disabled={busy} />
       <Button onClick={create} disabled={busy}>
         旅をはじめる
       </Button>

@@ -37,7 +37,7 @@ export default function EditMember({ roomId }: Props) {
               </li>
             ))}
           </ul>
-          <TextField value={name} onChange={setName} placeholder="ニックネームを入力する" />
+          <TextField name="nickname" value={name} onChange={setName} placeholder="ニックネームを入力する" />
           <Button
             onClick={() => {
               setName('')

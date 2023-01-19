@@ -43,11 +43,11 @@ export default function EventSheet({ roomId, defaultValue, onSubmit, submitLabel
       <div className="grid gap-4">
         <div className="grid gap-2">
           <div className="text-sm font-bold">イベントの名前</div>
-          <TextField value={label} onChange={setLabel} placeholder="お昼のカオマンガイ" />
+          <TextField name="label" value={label} onChange={setLabel} placeholder="お昼のカオマンガイ" />
         </div>
         <div className="grid gap-2">
           <div className="text-sm font-bold">支払ったお金</div>
-          <TextField type="number" value={amount} onChange={setAmount} />
+          <TextField name="amount" type="number" value={amount} onChange={setAmount} />
         </div>
         <div className="grid gap-2">
           <div className="text-sm font-bold">割り勘するメンバー</div>
