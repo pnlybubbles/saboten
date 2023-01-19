@@ -3,12 +3,12 @@ import { useRef } from 'react'
 import type { BottomSheetRef } from 'react-spring-bottom-sheet'
 import { BottomSheet } from 'react-spring-bottom-sheet'
 
-type Props = {
+export type SheetProps = {
   isPresent: boolean
   onPresent: (value: boolean) => void
 }
 
-export default function Sheet({ isPresent, onPresent, children }: PropsWithChildren<Props>) {
+export default function Sheet({ isPresent, onPresent, children }: PropsWithChildren<SheetProps>) {
   const ref = useRef<BottomSheetRef>(null)
 
   return (

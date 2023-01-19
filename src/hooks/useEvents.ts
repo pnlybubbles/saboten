@@ -17,11 +17,17 @@ const eventsStore = createStore(
         ...v,
         id: v.id as string | null,
         tmpId: genTmpId(),
-        payments: v.payments.map((w) => ({ ...w, id: w.id as string | null })),
       })),
     )
   },
 )
+
+export type EventPayload = {
+  label: string
+  amount: string
+  paidByMemberId: string
+  memberIds: string[]
+}
 
 export default function useEvents(roomId: string | null) {
   const [state, setState] = useStore(eventsStore, roomId)
@@ -29,7 +35,7 @@ export default function useEvents(roomId: string | null) {
   const enterNewRoom = useEnterNewRoom()
 
   const addEvent = useCallback(
-    (event: { label: string; paidByMemberId: string; memberIds: string[]; amount: string }) =>
+    (event: EventPayload) =>
       setState(
         (current) => [
           ...(current ?? []),
@@ -61,5 +67,53 @@ export default function useEvents(roomId: string | null) {
     [enterNewRoom, roomId, setState],
   )
 
-  return [state, { addEvent }] as const
+  const updateEvent = useCallback(
+    (event: EventPayload & { id: string }) =>
+      setState(
+        (current) => {
+          if (current === undefined) {
+            return current
+          }
+          const index = current.findIndex((v) => v.id === event.id)
+          if (index === -1) {
+            return current
+          }
+          return [
+            ...current.slice(0, index),
+            {
+              id: event.id,
+              label: event.label,
+              tmpId: genTmpId(),
+              members: event.memberIds.map((memberId) => ({ memberId })),
+              payments: [{ id: null, amount: event.amount, paidByMemberId: event.paidByMemberId }],
+            },
+            ...current.slice(index + 1),
+          ]
+        },
+        async () => {
+          const data = await trpc.event.update.mutate({ ...event, eventId: event.id })
+          const desc = roomLocalStorageDescriptor(data.roomId)
+          const current = desc.get()
+          if (current === null) {
+            // この時点でデータがキャッシュサれていないのは流石にエラー
+            throw new Error('No cache')
+          }
+          const index = current.events.findIndex((v) => v.id === data.id)
+          if (index === -1) {
+            return
+          }
+          const events = [...current.events.slice(0, index), data, ...current.events.slice(index + 1)]
+          desc.set({
+            ...current,
+            events: events,
+          })
+          return events.map((v) => ({ ...v, tmpId: genTmpId() }))
+        },
+      ),
+    [setState],
+  )
+
+  return [state, { addEvent, updateEvent }] as const
 }
+
+export type Event = NonNullable<ReturnType<typeof useEvents>[0]>[number]

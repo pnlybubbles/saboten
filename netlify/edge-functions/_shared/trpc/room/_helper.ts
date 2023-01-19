@@ -7,7 +7,7 @@ export const ROOM_SELECT = {
       id: true,
       label: true,
       members: { select: { memberId: true } },
-      payments: { select: { id: true, amount: true, paidByMemberId: true } },
+      payments: { select: { amount: true, paidByMemberId: true } },
     },
   },
 } as const

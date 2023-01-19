@@ -21,9 +21,8 @@ export default function App() {
       <h1 className="text-lime-600 font-bold text-xl">SABOTEN</h1>
       {user !== null && (
         <div>
-          <div>
-            {user.name} ({user.id})
-          </div>
+          <div>{user.name}</div>
+          <div className="text-xs text-zinc-400">user: {user.id}</div>
         </div>
       )}
       {user === null ? <Landing></Landing> : <RouterProvider router={router} />}
