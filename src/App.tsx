@@ -17,7 +17,7 @@ export default function App() {
   const [user] = useUser()
 
   return (
-    <div className="p-8 text-zinc-900 text-base min-h-screen">
+    <div className="min-h-screen p-8 text-base text-zinc-900">
       {user === null ? <Landing></Landing> : <RouterProvider router={router} />}
     </div>
   )

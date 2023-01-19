@@ -44,7 +44,7 @@ export default function Balance({ roomId }: Props) {
 
   return (
     <div className="grid gap-2">
-      <div className="font-bold text-3xl">{formatCurrencyNumber(total ?? BigInt(0), 'JPY')}</div>
+      <div className="text-3xl font-bold">{formatCurrencyNumber(total ?? BigInt(0), 'JPY')}</div>
       {balanceByMemberId && (
         <div className="grid grid-cols-[1fr_auto_auto] gap-x-2 gap-y-1">
           {Object.entries(balanceByMemberId)

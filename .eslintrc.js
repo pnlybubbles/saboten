@@ -1,3 +1,5 @@
+/* eslint-env node */
+
 /** @type { import('eslint').Linter.Config } */
 module.exports = {
   parser: '@typescript-eslint/parser',
@@ -28,8 +30,5 @@ module.exports = {
         checksVoidReturn: { attributes: false },
       },
     ],
-  },
-  env: {
-    node: true,
   },
 }

@@ -28,9 +28,9 @@ export default function Main() {
       <EditMember roomId={roomId}></EditMember>
       <EventSheet {...createEventSheet} roomId={roomId} onSubmit={addEvent} submitLabel="追加"></EventSheet>
       <Events roomId={roomId}></Events>
-      <div className="fixed bottom-8 left-0 w-full grid grid-cols-[max-content] justify-center">
+      <div className="fixed bottom-8 left-0 grid w-full grid-cols-[max-content] justify-center">
         <button
-          className="grid grid-flow-col gap-1 items-center justify-items-center h-16 w-16 rounded-full bg-primary text-white shadow-primary shadow-2xl active:scale-90 select-none transition"
+          className="grid h-16 w-16 select-none grid-flow-col items-center justify-items-center gap-1 rounded-full bg-primary text-white shadow-2xl shadow-primary transition active:scale-90"
           onClick={createEventSheet.open}
         >
           <Icon name="add" size={24}></Icon>

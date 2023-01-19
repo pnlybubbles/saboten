@@ -20,7 +20,7 @@ export default function TitleInput({
   }, [defaultValue])
 
   return (
-    <div className="active:scale-95 transition active:focus-within:scale-100">
+    <div className="transition active:scale-95 active:focus-within:scale-100">
       <input
         ref={ref}
         value={title}
@@ -35,7 +35,7 @@ export default function TitleInput({
           isDirty.current = true
         }}
         className={
-          'font-bold bg-transparent rounded-xl w-full focus:bg-surface outline-none px-0 focus:px-5 transition-[padding,background-color,border-color] text-2xl h-16 active:scale-100'
+          'h-16 w-full rounded-xl bg-transparent px-0 text-2xl font-bold outline-none transition-[padding,background-color,border-color] focus:bg-surface focus:px-5 active:scale-100'
         }
         placeholder="No title"
         name="title"
