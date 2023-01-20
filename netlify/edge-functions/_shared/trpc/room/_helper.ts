@@ -8,6 +8,7 @@ export const ROOM_SELECT = {
       label: true,
       members: { select: { memberId: true } },
       payments: { select: { amount: true, paidByMemberId: true } },
+      createdAt: true,
     },
   },
 } as const

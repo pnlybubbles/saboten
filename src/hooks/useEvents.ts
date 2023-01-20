@@ -5,6 +5,7 @@ import genTmpId from '@/utils/basic/genTmpId'
 import { useCallback } from 'react'
 import trpc from '@/utils/trpc'
 import useEnterNewRoom from './useEnterNewRoom'
+import { parseISO } from 'date-fns'
 
 const eventsStore = createStore(
   (roomId: string | null) => ROOM_LOCAL_STORAGE_KEY(roomId ?? 'tmp'),
@@ -17,6 +18,7 @@ const eventsStore = createStore(
         ...v,
         id: v.id as string | null,
         tmpId: genTmpId(),
+        createdAt: parseISO(v.createdAt),
       })),
     )
   },
@@ -45,6 +47,7 @@ export default function useEvents(roomId: string | null) {
             tmpId: genTmpId(),
             members: event.memberIds.map((memberId) => ({ memberId })),
             payments: [{ id: null, amount: event.amount, paidByMemberId: event.paidByMemberId }],
+            createdAt: new Date(),
           },
         ],
         async () => {
@@ -61,7 +64,7 @@ export default function useEvents(roomId: string | null) {
             }
             desc.set({ ...current, events: data.events })
           }
-          return data.events.map((v) => ({ ...v, tmpId: genTmpId() }))
+          return data.events.map((v) => ({ ...v, tmpId: genTmpId(), createdAt: parseISO(v.createdAt) }))
         },
       ),
     [enterNewRoom, roomId, setState],
@@ -86,6 +89,7 @@ export default function useEvents(roomId: string | null) {
               tmpId: genTmpId(),
               members: event.memberIds.map((memberId) => ({ memberId })),
               payments: [{ id: null, amount: event.amount, paidByMemberId: event.paidByMemberId }],
+              createdAt: new Date(),
             },
             ...current.slice(index + 1),
           ]
@@ -107,7 +111,7 @@ export default function useEvents(roomId: string | null) {
             ...current,
             events: events,
           })
-          return events.map((v) => ({ ...v, tmpId: genTmpId() }))
+          return events.map((v) => ({ ...v, tmpId: genTmpId(), createdAt: parseISO(v.createdAt) }))
         },
       ),
     [setState],

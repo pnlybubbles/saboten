@@ -31,7 +31,6 @@ export default function EventSheet({ roomId, defaultValue, onSubmit, submitLabel
   const [eventMembers, setEventMembers] = useState(
     defaultValue?.memberIds ?? (members?.map((v) => v.id) ?? [userMemberId]).filter(isNonNullable),
   )
-  console.log(defaultValue)
 
   const { dirty } = useDirty(
     useCallback(() => {

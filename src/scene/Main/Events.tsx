@@ -2,9 +2,10 @@ import type { Event } from '@/hooks/useEvents'
 import useEvents from '@/hooks/useEvents'
 import useRoomMember from '@/hooks/useRoomMember'
 import formatCurrencyNumber from '@/utils/basic/formatCurrencyNumber'
-import isNonNullable from '@/utils/basic/isNonNullable'
 import EventSheet from './EventSheet'
 import usePresent from '@/hooks/usePresent'
+import Avatar from '@/components/Avatar'
+import formatDate from '@/utils/basic/formatDate'
 
 interface Props {
   roomId: string | null
@@ -22,26 +23,26 @@ export default function Events({ roomId }: Props) {
   )
 }
 
-function Item({ id, label, payments, members, roomId }: Event & Props) {
+function Item({ id, label, payments, members, roomId, createdAt }: Event & Props) {
   const sheet = usePresent()
   const [, { getMemberName }] = useRoomMember(roomId)
   const [, { updateEvent }] = useEvents(roomId)
 
   return (
-    <button className="text-left transition active:scale-95 disabled:opacity-30" onClick={sheet.open} disabled={!id}>
-      <div className="text-xs text-zinc-400">{id}</div>
-      <div className="text-lg font-bold">{label}</div>
-      <div>
-        {payments.map(
-          (v) =>
-            `${formatCurrencyNumber(BigInt(v.amount), 'JPY')} (by ${getMemberName(v.paidByMemberId) ?? 'unknown'})`,
-        )}
+    <button
+      className="grid grid-cols-[auto_1fr_auto] items-center gap-4 text-left transition active:scale-95 disabled:opacity-30"
+      onClick={sheet.open}
+      disabled={!id}
+    >
+      <Avatar mini name={payments[0] ? getMemberName(payments[0].paidByMemberId) ?? null : null}></Avatar>
+      <div className="grid grid-flow-row">
+        <div className="text-lg font-bold">{label}</div>
+        <div className="text-zinc-400">{formatDate(createdAt)}</div>
       </div>
-      <div className="text-zinc-500">
-        {members
-          .map(({ memberId }) => getMemberName(memberId))
-          .filter(isNonNullable)
-          .join(', ')}
+      <div>
+        <span className="text-xl">{formatCurrencyNumber(BigInt(payments[0]?.amount ?? 0), 'JPY')}</span>
+        <span className="text-lg text-zinc-400"> / </span>
+        <span className="text-base text-zinc-400">{members.length}人</span>
       </div>
       {id && (
         <EventSheet

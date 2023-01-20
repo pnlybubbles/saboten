@@ -19,6 +19,7 @@ const ROOM_SCHEMA = z.object({
       label: z.string(),
       members: z.array(z.object({ memberId: z.string().uuid() })),
       payments: z.array(z.object({ amount: z.string(), paidByMemberId: z.string().uuid() })),
+      createdAt: z.string().datetime(),
     }),
   ),
 })
