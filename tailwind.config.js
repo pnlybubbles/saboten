@@ -10,6 +10,9 @@ module.exports = {
         secondary: '#fbedeb',
         surface: 'rgb(240 240 240 / 1)',
       },
+      spacing: {
+        18: '4.5rem',
+      },
     },
   },
   plugins: [],

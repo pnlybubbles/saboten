@@ -9,14 +9,14 @@ type Props = Omit<React.ComponentPropsWithoutRef<'input'>, 'onChange' | 'onClick
 }
 
 export default forwardRef<HTMLInputElement, Props>(function TextField(
-  { onChange, className, onClick, disabled, label, ...props },
+  { onChange, className, onClick, disabled, label, children, ...props },
   ref,
 ) {
   return (
     <label
       className={clsx(
         'relative grid items-end rounded-xl border-2 border-transparent bg-surface transition focus-within:border-zinc-900 disabled:opacity-30',
-        label ? 'h-[4.5em]' : 'h-14',
+        label ? 'h-18' : 'h-14',
       )}
       aria-disabled={disabled}
     >
@@ -39,6 +39,7 @@ export default forwardRef<HTMLInputElement, Props>(function TextField(
           {label}
         </div>
       )}
+      <div className="absolute right-4 grid h-full items-center">{children}</div>
     </label>
   )
 })
