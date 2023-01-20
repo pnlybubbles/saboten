@@ -12221,6 +12221,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"rimraf@npm:^4.1.1":
+  version: 4.1.1
+  resolution: "rimraf@npm:4.1.1"
+  bin:
+    rimraf: dist/cjs/src/bin.js
+  checksum: f52d46f59c1a532b3d0f73cb5228ff8f7df4ee87b9df95cf655788ea186c935b5c6ab4c45b66f8de5ed1e3690f58ff83f9a5b0ba1ae2e76a9bf36415f37732f7
+  languageName: node
+  linkType: hard
+
 "root-workspace-0b6124@workspace:.":
   version: 0.0.0-use.local
   resolution: "root-workspace-0b6124@workspace:."
@@ -12256,6 +12265,7 @@ __metadata:
     react-dom: ^18.2.0
     react-router-dom: ^6.6.2
     react-spring-bottom-sheet: 3.5.0-alpha.0
+    rimraf: ^4.1.1
     simple-path-router: ^1.1.0
     simple-reverse-proxy: ^1.0.2
     tailwindcss: ^3.2.4
