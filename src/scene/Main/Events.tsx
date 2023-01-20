@@ -51,7 +51,7 @@ function Item({ id, label, payments, members, roomId }: Event & Props) {
               ? {
                   label,
                   amount: payments[0].amount,
-                  memberIds: [],
+                  memberIds: members.map((v) => v.memberId),
                   paidByMemberId: payments[0].paidByMemberId,
                 }
               : undefined

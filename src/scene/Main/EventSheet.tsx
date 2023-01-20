@@ -10,6 +10,7 @@ import type { EventPayload } from '@/hooks/useEvents'
 import Avatar from '@/components/Avatar'
 import clsx from 'clsx'
 import useDirty from '@/hooks/useDirty'
+import isUnique from '@/utils/basic/isUnique'
 
 interface Props extends SheetProps {
   roomId: string | null
@@ -27,17 +28,25 @@ export default function EventSheet({ roomId, defaultValue, onSubmit, submitLabel
   const [amount, setAmount] = useState(defaultValue?.amount ?? '0')
   const [paidByMember, setPaidByMember] = useState(defaultValue?.paidByMemberId ?? userMemberId)
   const [paidByMemberEditMode, setPaidByMemberEditMode] = useState(false)
+  const [eventMembers, setEventMembers] = useState(
+    defaultValue?.memberIds ?? (members?.map((v) => v.id) ?? [userMemberId]).filter(isNonNullable),
+  )
+  console.log(defaultValue)
 
   const { dirty } = useDirty(
     useCallback(() => {
-      if (defaultValue) {
-        setLabel(defaultValue.label)
-        setAmount(defaultValue.amount)
-      }
-      if (defaultValue || userMemberId) {
-        setPaidByMember(defaultValue?.paidByMemberId ?? userMemberId)
-      }
-    }, [defaultValue, userMemberId]),
+      setLabel(defaultValue?.label ?? '')
+      setAmount(defaultValue?.amount ?? '0')
+      setPaidByMember(defaultValue?.paidByMemberId ?? userMemberId)
+      setEventMembers(defaultValue?.memberIds ?? (members?.map((v) => v.id) ?? [userMemberId]).filter(isNonNullable))
+    }, [
+      defaultValue?.amount,
+      defaultValue?.label,
+      defaultValue?.memberIds,
+      defaultValue?.paidByMemberId,
+      members,
+      userMemberId,
+    ]),
   )
 
   const handleCreate = () => {
@@ -50,7 +59,7 @@ export default function EventSheet({ roomId, defaultValue, onSubmit, submitLabel
       label,
       amount,
       paidByMemberId: paidByMember ?? userMemberId,
-      memberIds: members?.map((v) => v.id).filter(isNonNullable) ?? [],
+      memberIds: eventMembers,
     })
     sheet.onPresent(false)
   }
@@ -78,16 +87,18 @@ export default function EventSheet({ roomId, defaultValue, onSubmit, submitLabel
                       setPaidByMemberEditMode(true)
                     }
                   }}
+                  disabled={member.id === null}
                   className={clsx(
-                    'transition-[margin,opacity,width]',
+                    'transition-[margin,opacity,width] disabled:opacity-30',
                     !paidByMemberEditMode && member.id !== paidByMember
                       ? 'pointer-events-none ml-0 w-0 opacity-0'
-                      : 'ml-2 w-10 opacity-100',
+                      : 'ml-3 w-10 opacity-100',
                   )}
                 >
                   <Avatar
                     mini
                     className={clsx(
+                      'transition',
                       member.id === paidByMember && paidByMemberEditMode && 'ring-2 ring-zinc-900 ring-offset-2',
                     )}
                     name={member.user?.name ?? member.name}
@@ -97,9 +108,36 @@ export default function EventSheet({ roomId, defaultValue, onSubmit, submitLabel
             </div>
           </TextField>
         </div>
-        <div className="grid gap-2">
-          <div className="text-sm font-bold">割り勘するメンバー</div>
-          <div>{members?.map((v) => v.user?.name ?? v.name).join(', ')}</div>
+        <div className="grid gap-3 rounded-xl bg-surface px-5 py-4">
+          <div className="text-xs font-bold text-zinc-400">割り勘するメンバー</div>
+          <div className="grid grid-flow-col justify-start gap-3">
+            {members?.map((member) => (
+              <button
+                key={member.tmpId}
+                disabled={member.id === null}
+                className="disabled:opacity-30"
+                onClick={() => {
+                  if (member.id === null) {
+                    return
+                  }
+                  if (eventMembers.includes(member.id)) {
+                    setEventMembers((v) => v.filter((w) => w !== member.id))
+                  } else {
+                    setEventMembers((v) => [...v, member.id].filter(isNonNullable).filter(isUnique))
+                  }
+                }}
+              >
+                <Avatar
+                  mini
+                  className={clsx(
+                    'transition',
+                    member.id && eventMembers.includes(member.id) && 'ring-2 ring-zinc-900 ring-offset-2',
+                  )}
+                  name={member.user?.name ?? member.name}
+                ></Avatar>
+              </button>
+            ))}
+          </div>
         </div>
         <Button onClick={handleCreate} primary disabled={label === '' || amount === '' || amount === '0'}>
           {submitLabel}
