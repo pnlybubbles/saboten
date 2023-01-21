@@ -73,18 +73,11 @@ export default function EventSheet({ roomId, defaultValue, onSubmit, submitLabel
       <div className="grid gap-4">
         <TextField label="イベントの名前" name="label" value={label} onChange={dirty(setLabel)} />
         <div className="grid grid-cols-[1fr_auto] gap-1">
-          <TextField
-            label="支払った金額"
-            name="amount"
-            type="number"
-            value={amount}
-            onChange={dirty(setAmount)}
-            className="group"
-          >
-            <div className="grid grid-flow-col">
+          <TextField label="支払った金額" name="amount" type="number" value={amount} onChange={dirty(setAmount)}>
+            <div className="mr-[-4px] flex justify-end">
               {members?.map((member) => (
                 <button
-                  key={member.tmpId}
+                  key={member.id ?? member.tmpId}
                   onClick={() => {
                     if (paidByMemberEditMode) {
                       setPaidByMember(member.id)
@@ -95,9 +88,11 @@ export default function EventSheet({ roomId, defaultValue, onSubmit, submitLabel
                   }}
                   disabled={member.id === null}
                   className={clsx(
-                    'box-content rounded-full border-2 border-transparent p-[2px] transition-[margin,opacity,width,shadow] disabled:opacity-30',
-                    paidByMemberEditMode || member.id === paidByMember ? 'ml-1 w-10 opacity-100' : 'ml-0 w-0 opacity-0',
-                    member.id === paidByMember && 'group-focus-within:border-zinc-900',
+                    'box-content rounded-full border-2 border-transparent p-[2px] transition-[margin,opacity,border-color] disabled:opacity-30',
+                    paidByMemberEditMode || member.id === paidByMember
+                      ? 'ml-1 w-10 opacity-100'
+                      : 'ml-[calc(-2.5rem-8px)] opacity-0',
+                    member.id === paidByMember && 'border-zinc-900',
                   )}
                 >
                   <Avatar mini name={member.user?.name ?? member.name}></Avatar>
@@ -108,10 +103,10 @@ export default function EventSheet({ roomId, defaultValue, onSubmit, submitLabel
         </div>
         <div className="grid gap-3 rounded-xl bg-surface px-5 py-4">
           <div className="text-xs font-bold text-zinc-400">割り勘するメンバー</div>
-          <div className="grid grid-flow-col justify-start gap-1">
+          <div className="ml-[-4px] grid grid-flow-col justify-start gap-1">
             {members?.map((member) => (
               <button
-                key={member.tmpId}
+                key={member.id ?? member.tmpId}
                 disabled={member.id === null}
                 className={clsx(
                   'rounded-full border-2 border-transparent p-[2px] transition disabled:opacity-30',

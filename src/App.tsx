@@ -108,7 +108,7 @@ function Join({ roomId }: { roomId: string }) {
         {members?.map((member) => (
           <button
             onClick={() => member.id && setSelectedMember(member.id)}
-            key={member.tmpId}
+            key={member.id ?? member.tmpId}
             className={clsx(
               'm-[-0.5rem] grid grid-flow-col items-center justify-start gap-2 rounded-lg border-2 border-transparent p-2 text-left transition',
               selectedMember === member.id && 'border-zinc-900',
