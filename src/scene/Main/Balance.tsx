@@ -48,7 +48,7 @@ export default function Balance({ roomId }: Props) {
       {balanceByMemberId && (
         <div className="grid grid-cols-[1fr_auto_auto] gap-x-2 gap-y-1">
           {Object.entries(balanceByMemberId)
-            .filter(([, balance]) => balance.assets !== BigInt(0) && balance.paid !== BigInt(0))
+            .filter(([, balance]) => balance.assets !== BigInt(0) || balance.paid !== BigInt(0))
             .map(([memberId, balance]) => (
               <React.Fragment key={memberId}>
                 <div className="font-bold">{getMemberName(memberId)}</div>
