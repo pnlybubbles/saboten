@@ -1,4 +1,5 @@
 import Avatar from '@/components/Avatar'
+import Badge from '@/components/Badge'
 import Button from '@/components/Button'
 import Icon from '@/components/Icon'
 import type { SheetProps } from '@/components/Sheet'
@@ -37,11 +38,7 @@ export default function EditMember({ roomId, ...sheet }: Props) {
               <Avatar mini name={getMemberName(v)}></Avatar>
               <div className="grid grid-flow-col items-center justify-start gap-2">
                 <div className="font-bold">{getMemberName(v)}</div>
-                {v.user && (
-                  <div className="rounded-md border border-zinc-400 px-1 text-xs text-zinc-400">
-                    {v.user.id === user?.id ? '自分' : '参加済み'}
-                  </div>
-                )}
+                {v.user && <Badge>{v.user.id === user?.id ? '自分' : '参加済み'}</Badge>}
               </div>
               {user && v.user?.id !== user.id && (
                 <button

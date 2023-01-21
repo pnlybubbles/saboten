@@ -10,6 +10,7 @@ import useRoomTitle from './hooks/useRoomTitle'
 import useRoomMember from './hooks/useRoomMember'
 import Avatar from './components/Avatar'
 import clsx from 'clsx'
+import Badge from './components/Badge'
 
 const router = createBrowserRouter([
   {
@@ -122,9 +123,7 @@ function Join({ roomId }: { roomId: string }) {
           >
             <Avatar mini name={member.user?.name ?? member.name}></Avatar>
             <div className="font-bold">{member.user?.name ?? member.name}</div>
-            {member.user && (
-              <div className="rounded-md border border-zinc-400 px-1 text-xs text-zinc-400">参加済み</div>
-            )}
+            {member.user && <Badge>参加済み</Badge>}
           </button>
         ))}
         <button
