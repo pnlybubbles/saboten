@@ -46,7 +46,7 @@ export default function Main() {
       </div>
       <div className="fixed bottom-8 left-0 grid w-full grid-cols-[max-content] justify-center">
         <button
-          className="grid h-16 w-16 select-none grid-flow-col items-center justify-items-center gap-1 rounded-full bg-primary text-white shadow-2xl shadow-primary transition active:scale-90"
+          className="grid h-16 w-16 select-none grid-flow-col items-center justify-items-center gap-1 rounded-full bg-zinc-900 text-white shadow-xl transition active:scale-90"
           onClick={createEventSheet.open}
         >
           <Icon name="add" size={24}></Icon>

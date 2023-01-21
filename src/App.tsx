@@ -121,8 +121,8 @@ function Join({ roomId }: { roomId: string }) {
               selectedMember === member.id && 'border-zinc-900',
             )}
           >
-            <Avatar mini name={member.user?.name ?? member.name}></Avatar>
-            <div className="font-bold">{member.user?.name ?? member.name}</div>
+            <Avatar mini name={getMemberName(member)}></Avatar>
+            <div className="font-bold">{getMemberName(member)}</div>
             {member.user && <Badge>参加済み</Badge>}
           </button>
         ))}
