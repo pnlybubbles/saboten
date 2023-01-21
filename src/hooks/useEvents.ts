@@ -46,7 +46,7 @@ export default function useEvents(roomId: string | null) {
             label: event.label,
             tmpId: genTmpId(),
             members: event.memberIds.map((memberId) => ({ memberId })),
-            payments: [{ id: null, amount: event.amount, paidByMemberId: event.paidByMemberId }],
+            payments: [{ amount: event.amount, paidByMemberId: event.paidByMemberId }],
             createdAt: new Date(),
           },
         ],
@@ -84,12 +84,12 @@ export default function useEvents(roomId: string | null) {
           return [
             ...current.slice(0, index),
             {
+              // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+              ...current[index]!,
               id: event.id,
               label: event.label,
-              tmpId: genTmpId(),
               members: event.memberIds.map((memberId) => ({ memberId })),
-              payments: [{ id: null, amount: event.amount, paidByMemberId: event.paidByMemberId }],
-              createdAt: new Date(),
+              payments: [{ amount: event.amount, paidByMemberId: event.paidByMemberId }],
             },
             ...current.slice(index + 1),
           ]

@@ -32,7 +32,7 @@ export default function EventSheet({ roomId, defaultValue, onSubmit, submitLabel
     defaultValue?.memberIds ?? (members?.map((v) => v.id) ?? [userMemberId]).filter(isNonNullable),
   )
 
-  const { dirty } = useDirty(
+  const { dirty, clearDirty } = useDirty(
     useCallback(() => {
       setLabel(defaultValue?.label ?? '')
       setAmount(defaultValue?.amount ?? '0')
@@ -52,14 +52,13 @@ export default function EventSheet({ roomId, defaultValue, onSubmit, submitLabel
     if (roomId === null || userMemberId === null) {
       throw new Error('Not implemented')
     }
-    setLabel('')
-    setAmount('0')
     onSubmit({
       label,
       amount,
       paidByMemberId: paidByMember ?? userMemberId,
       memberIds: eventMembers,
     })
+    clearDirty()
     sheet.onPresent(false)
   }
 
