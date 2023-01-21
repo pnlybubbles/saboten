@@ -54,7 +54,7 @@ class Store<T> {
         // 更新処理のキューがすべて捌けきったタイミングでのみキャッシュを補正する。
         if (value !== undefined && this.counter === 0) {
           this.updateCache(value)
-          this.onUpdate?.(next, 'fixed')
+          this.onUpdate?.(value, 'fixed')
         }
       })
       .catch((e) => console.error('Action', e))

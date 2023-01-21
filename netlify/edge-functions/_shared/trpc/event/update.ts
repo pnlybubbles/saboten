@@ -20,7 +20,10 @@ export default sessionProcedure
         label,
         // TODO: paymentsはいったん1件までしか入らないはずなので、全件updateする
         payments: { updateMany: { where: {}, data: { paidByMemberId, amount } } },
-        members: { createMany: { data: memberIds.map((memberId) => ({ memberId })), skipDuplicates: true } },
+        members: {
+          deleteMany: {},
+          createMany: { data: memberIds.map((memberId) => ({ memberId })) },
+        },
       },
       include: { payments: true, members: true },
     })

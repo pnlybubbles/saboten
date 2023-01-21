@@ -40,7 +40,6 @@ export default function useEvents(roomId: string | null) {
     (event: EventPayload) =>
       setState(
         (current) => [
-          ...(current ?? []),
           {
             id: null,
             label: event.label,
@@ -49,6 +48,7 @@ export default function useEvents(roomId: string | null) {
             payments: [{ amount: event.amount, paidByMemberId: event.paidByMemberId }],
             createdAt: new Date(),
           },
+          ...(current ?? []),
         ],
         async () => {
           const data = await trpc.event.add.mutate({ ...event, roomId })
