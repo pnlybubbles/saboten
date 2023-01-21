@@ -13,7 +13,7 @@ export default sessionProcedure
       })
       const members = await prisma.roomMember.findMany({
         where: { roomId },
-        select: ROOM_SELECT.members.select,
+        ...ROOM_SELECT.members,
       })
       return members
     } else {
@@ -22,7 +22,7 @@ export default sessionProcedure
       })
       const members = await prisma.roomMember.findMany({
         where: { roomId },
-        select: ROOM_SELECT.members.select,
+        ...ROOM_SELECT.members,
       })
       return members
     }

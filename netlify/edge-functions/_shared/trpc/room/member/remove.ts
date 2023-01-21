@@ -9,7 +9,7 @@ export default sessionProcedure
     await prisma.roomMember.delete({ where: { id: memberId } })
     const members = await prisma.roomMember.findMany({
       where: { roomId },
-      select: ROOM_SELECT.members.select,
+      ...ROOM_SELECT.members,
     })
     return members
   })

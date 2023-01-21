@@ -28,9 +28,8 @@ export default sessionProcedure
           payments: { create: { paiedByMember: { connect: { id: paidByMemberId } }, amount } },
           members: { createMany: { data: memberIds.map((memberId) => ({ memberId })) } },
         },
-        include: { payments: true, members: true },
       })
-      const events = await prisma.event.findMany({ where: { roomId }, include: { payments: true, members: true } })
+      const events = await prisma.event.findMany({ where: { roomId }, ...ROOM_SELECT.events })
       return {
         room: null,
         roomId,
