@@ -73,7 +73,14 @@ export default function EventSheet({ roomId, defaultValue, onSubmit, submitLabel
       <div className="grid gap-4">
         <TextField label="イベントの名前" name="label" value={label} onChange={dirty(setLabel)} />
         <div className="grid grid-cols-[1fr_auto] gap-1">
-          <TextField label="支払った金額" name="amount" type="number" value={amount} onChange={dirty(setAmount)}>
+          <TextField
+            label="支払った金額"
+            name="amount"
+            type="number"
+            value={amount}
+            onChange={dirty(setAmount)}
+            className="group"
+          >
             <div className="grid grid-flow-col">
               {members?.map((member) => (
                 <button
@@ -88,20 +95,12 @@ export default function EventSheet({ roomId, defaultValue, onSubmit, submitLabel
                   }}
                   disabled={member.id === null}
                   className={clsx(
-                    'transition-[margin,opacity,width] disabled:opacity-30',
-                    !paidByMemberEditMode && member.id !== paidByMember
-                      ? 'pointer-events-none ml-0 w-0 opacity-0'
-                      : 'ml-3 w-10 opacity-100',
+                    'box-content rounded-full border-2 border-transparent p-[2px] transition-[margin,opacity,width,shadow] disabled:opacity-30',
+                    paidByMemberEditMode || member.id === paidByMember ? 'ml-1 w-10 opacity-100' : 'ml-0 w-0 opacity-0',
+                    member.id === paidByMember && 'group-focus-within:border-zinc-900',
                   )}
                 >
-                  <Avatar
-                    mini
-                    className={clsx(
-                      'transition',
-                      member.id === paidByMember && paidByMemberEditMode && 'ring-2 ring-zinc-900 ring-offset-2',
-                    )}
-                    name={member.user?.name ?? member.name}
-                  ></Avatar>
+                  <Avatar mini name={member.user?.name ?? member.name}></Avatar>
                 </button>
               )) ?? <Avatar mini name={user.name}></Avatar>}
             </div>
@@ -109,12 +108,15 @@ export default function EventSheet({ roomId, defaultValue, onSubmit, submitLabel
         </div>
         <div className="grid gap-3 rounded-xl bg-surface px-5 py-4">
           <div className="text-xs font-bold text-zinc-400">割り勘するメンバー</div>
-          <div className="grid grid-flow-col justify-start gap-3">
+          <div className="grid grid-flow-col justify-start gap-1">
             {members?.map((member) => (
               <button
                 key={member.tmpId}
                 disabled={member.id === null}
-                className="disabled:opacity-30"
+                className={clsx(
+                  'rounded-full border-2 border-transparent p-[2px] transition disabled:opacity-30',
+                  member.id && eventMembers.includes(member.id) && 'border-zinc-900',
+                )}
                 onClick={() => {
                   if (member.id === null) {
                     return
@@ -126,14 +128,7 @@ export default function EventSheet({ roomId, defaultValue, onSubmit, submitLabel
                   }
                 }}
               >
-                <Avatar
-                  mini
-                  className={clsx(
-                    'transition',
-                    member.id && eventMembers.includes(member.id) && 'ring-2 ring-zinc-900 ring-offset-2',
-                  )}
-                  name={member.user?.name ?? member.name}
-                ></Avatar>
+                <Avatar mini name={member.user?.name ?? member.name}></Avatar>
               </button>
             ))}
           </div>

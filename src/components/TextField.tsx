@@ -17,6 +17,7 @@ export default forwardRef<HTMLInputElement, Props>(function TextField(
       className={clsx(
         'relative grid items-end rounded-xl border-2 border-transparent bg-surface transition focus-within:border-zinc-900 disabled:opacity-30',
         label ? 'h-18' : 'h-14',
+        className,
       )}
       aria-disabled={disabled}
     >
@@ -26,7 +27,6 @@ export default forwardRef<HTMLInputElement, Props>(function TextField(
         className={clsx(
           'peer w-full bg-transparent px-5 text-base text-zinc-900 outline-none',
           label ? 'h-[2.75rem]' : 'h-full',
-          className,
         )}
         placeholder=" "
         disabled={disabled}
