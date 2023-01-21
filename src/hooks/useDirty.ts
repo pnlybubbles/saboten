@@ -1,14 +1,14 @@
 import { useCallback, useEffect, useRef } from 'react'
 
-export default function useDirty(setter: () => void) {
+export default function useDirty(reset: () => void) {
   const isDirty = useRef(false)
 
   useEffect(() => {
     if (isDirty.current) {
       return
     }
-    setter()
-  }, [setter])
+    reset()
+  }, [reset])
 
   const setDirty = useCallback(() => {
     isDirty.current = true
@@ -22,7 +22,7 @@ export default function useDirty(setter: () => void) {
   }, [])
 
   const clearDirty = useCallback(() => {
-    isDirty.current = true
+    isDirty.current = false
   }, [])
 
   return { isDirty, setDirty, clearDirty, dirty } as const

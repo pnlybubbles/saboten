@@ -34,6 +34,9 @@ export default function EventSheet({ roomId, defaultValue, onSubmit, submitLabel
 
   const { dirty, clearDirty } = useDirty(
     useCallback(() => {
+      if (!sheet.isPresent) {
+        return
+      }
       setLabel(defaultValue?.label ?? '')
       setAmount(defaultValue?.amount ?? '0')
       setPaidByMember(defaultValue?.paidByMemberId ?? userMemberId)
@@ -45,6 +48,7 @@ export default function EventSheet({ roomId, defaultValue, onSubmit, submitLabel
       defaultValue?.paidByMemberId,
       members,
       userMemberId,
+      sheet.isPresent,
     ]),
   )
 
