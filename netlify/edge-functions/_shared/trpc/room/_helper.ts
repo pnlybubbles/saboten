@@ -10,5 +10,6 @@ export const ROOM_SELECT = {
       payments: { select: { amount: true, paidByMemberId: true } },
       createdAt: true,
     },
+    orderBy: { createdAt: 'desc' },
   },
 } as const

@@ -18,7 +18,8 @@ export default sessionProcedure
       where: { id: eventId },
       data: {
         label,
-        payments: { update: { where: { eventId_paidByMemberId: { eventId, paidByMemberId } }, data: { amount } } },
+        // TODO: paymentsはいったん1件までしか入らないはずなので、全件updateする
+        payments: { updateMany: { where: {}, data: { paidByMemberId, amount } } },
         members: { createMany: { data: memberIds.map((memberId) => ({ memberId })), skipDuplicates: true } },
       },
       include: { payments: true, members: true },
