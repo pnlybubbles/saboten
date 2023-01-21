@@ -18,6 +18,9 @@ export default function useUser() {
   const [user, setUserInStorage, ready] = useLocalStorage(USER_STORAGE_DESCRIPTOR)
 
   const setUser = async (props: { name: string }) => {
+    if (user) {
+      setUserInStorage({ ...user, ...props })
+    }
     const fetched = await trpc.user.item.mutate({ id: user?.id, ...props })
     setUserInStorage(fetched)
     return fetched

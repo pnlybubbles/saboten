@@ -34,9 +34,9 @@ export default function EditMember({ roomId, ...sheet }: Props) {
         <ul className="grid gap-4">
           {members?.map((v) => (
             <li key={v.id} className="grid grid-flow-col grid-cols-[auto_1fr_auto] items-center gap-4">
-              <Avatar mini name={v.user?.name ?? v.name}></Avatar>
+              <Avatar mini name={getMemberName(v)}></Avatar>
               <div className="grid grid-flow-col items-center justify-start gap-2">
-                <div className="font-bold">{v.user?.name ?? v.name}</div>
+                <div className="font-bold">{getMemberName(v)}</div>
                 {v.user && (
                   <div className="rounded-md border border-zinc-400 px-1 text-xs text-zinc-400">
                     {v.user.id === user?.id ? '自分' : '参加済み'}

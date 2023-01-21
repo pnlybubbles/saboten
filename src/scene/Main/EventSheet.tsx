@@ -23,7 +23,7 @@ interface Props extends SheetProps {
 
 export default function EventSheet({ roomId, defaultValue, onSubmit, submitLabel, onRemove, ...sheet }: Props) {
   const [user] = useUser()
-  const [members] = useRoomMember(roomId)
+  const [members, { getMemberName }] = useRoomMember(roomId)
   const userMemberId = user ? members?.find((v) => v.user?.id === user.id)?.id ?? null : null
 
   const [label, setLabel] = useState(defaultValue?.label ?? '')
@@ -100,7 +100,7 @@ export default function EventSheet({ roomId, defaultValue, onSubmit, submitLabel
                     member.id === paidByMember && 'border-zinc-900',
                   )}
                 >
-                  <Avatar mini name={member.user?.name ?? member.name}></Avatar>
+                  <Avatar mini name={getMemberName(member)}></Avatar>
                 </button>
               )) ?? <Avatar mini name={user.name}></Avatar>}
             </div>
@@ -128,7 +128,7 @@ export default function EventSheet({ roomId, defaultValue, onSubmit, submitLabel
                   }
                 }}
               >
-                <Avatar mini name={member.user?.name ?? member.name}></Avatar>
+                <Avatar mini name={getMemberName(member)}></Avatar>
               </button>
             ))}
           </div>

@@ -6,6 +6,7 @@ import useEnterNewRoom from './useEnterNewRoom'
 import fetchRoom from '@/utils/fetchRoom'
 import genTmpId from '@/utils/basic/genTmpId'
 import type { User } from './useUser'
+import useUser from './useUser'
 
 const roomMemberStore = createStore(
   (roomId: string | null) => ROOM_LOCAL_STORAGE_KEY(roomId ?? 'tmp'),
@@ -119,10 +120,11 @@ export default function useRoomMember(roomId: string | null) {
     [roomId, setState],
   )
 
+  const [user] = useUser()
   const getMember = (memberId: string) => state?.find((v) => v.id === memberId)
-  const getMemberName = (memberId: string) => {
-    const member = getMember(memberId)
-    return member?.user?.name ?? member?.name ?? undefined
+  const getMemberName = (member: string | ReturnType<typeof getMember>) => {
+    const v = typeof member === 'string' ? getMember(member) : member
+    return (user && v?.user?.id === user.id ? user.name : undefined) ?? v?.user?.name ?? v?.name ?? null
   }
 
   return [state, { addMember, removeMember, getMemberName, getMember, joinMember }] as const
