@@ -11,15 +11,17 @@ import Avatar from '@/components/Avatar'
 import clsx from 'clsx'
 import useDirty from '@/hooks/useDirty'
 import isUnique from '@/utils/basic/isUnique'
+import Icon from '@/components/Icon'
 
 interface Props extends SheetProps {
   roomId: string | null
   defaultValue?: EventPayload | undefined
   onSubmit: (payload: EventPayload) => void
   submitLabel: string
+  onRemove?: () => void
 }
 
-export default function EventSheet({ roomId, defaultValue, onSubmit, submitLabel, ...sheet }: Props) {
+export default function EventSheet({ roomId, defaultValue, onSubmit, submitLabel, onRemove, ...sheet }: Props) {
   const [user] = useUser()
   const [members] = useRoomMember(roomId)
   const userMemberId = user ? members?.find((v) => v.user?.id === user.id)?.id ?? null : null
@@ -52,7 +54,7 @@ export default function EventSheet({ roomId, defaultValue, onSubmit, submitLabel
     ]),
   )
 
-  const handleCreate = () => {
+  const handleSubmit = () => {
     if (roomId === null || userMemberId === null) {
       throw new Error('Not implemented')
     }
@@ -131,9 +133,12 @@ export default function EventSheet({ roomId, defaultValue, onSubmit, submitLabel
             ))}
           </div>
         </div>
-        <Button onClick={handleCreate} disabled={label === '' || amount === '' || amount === '0'}>
-          {submitLabel}
-        </Button>
+        <div className={clsx('grid gap-2', onRemove && 'grid-cols-[auto_1fr]')}>
+          {onRemove && <Button onClick={onRemove} icon={<Icon name="delete" />} danger></Button>}
+          <Button onClick={handleSubmit} disabled={label === '' || amount === '' || amount === '0'}>
+            {submitLabel}
+          </Button>
+        </div>
       </div>
     </Sheet>
   )

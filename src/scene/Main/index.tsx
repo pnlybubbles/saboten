@@ -25,11 +25,8 @@ export default function Main() {
       <div className="z-[1] mb-[-1.5rem] grid gap-4 bg-white p-8 pb-0">
         <div className="grid grid-flow-col justify-start gap-4">
           <Avatar name={user?.name ?? null}></Avatar>
-          <Button onClick={editMemberSheet.open}>
-            <div className="grid grid-flow-col items-center gap-1">
-              <Icon name="group"></Icon>
-              <span>メンバー</span>
-            </div>
+          <Button onClick={editMemberSheet.open} icon={<Icon name="group"></Icon>}>
+            メンバー
           </Button>
         </div>
         <TitleInput defaultValue={title} onChange={setTitle}></TitleInput>

@@ -5,7 +5,6 @@ import { ROOM_LOCAL_STORAGE_KEY, roomLocalStorageDescriptor } from './useRoomLoc
 import useEnterNewRoom from './useEnterNewRoom'
 import fetchRoom from '@/utils/fetchRoom'
 import genTmpId from '@/utils/basic/genTmpId'
-import unreachable from '@/utils/basic/unreachable'
 import type { User } from './useUser'
 
 const roomMemberStore = createStore(
@@ -65,7 +64,7 @@ export default function useRoomMember(roomId: string | null) {
           if (roomId === null) {
             // TODO: 部屋ができていないのにメンバーの削除は不可能
             // メンバー追加&部屋作成はキューイングされるので、roomId=nullのクロージャに入ってる間にキューに入った場合はエラーになる
-            unreachable()
+            throw new Error('No room to remove member')
           }
           const members = await trpc.room.member.remove.mutate({ roomId: roomId, memberId })
           const desc = roomLocalStorageDescriptor(roomId)
@@ -104,7 +103,7 @@ export default function useRoomMember(roomId: string | null) {
         async () => {
           if (roomId === null) {
             // 部屋がないと参加はできない
-            unreachable()
+            throw new Error('No room to join')
           }
           const members = await trpc.room.member.join.mutate({ roomId, memberId })
           const desc = roomLocalStorageDescriptor(roomId)

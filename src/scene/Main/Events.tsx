@@ -26,7 +26,7 @@ export default function Events({ roomId }: Props) {
 function Item({ id, label, payments, members, roomId, createdAt }: Event & Props) {
   const sheet = usePresent()
   const [, { getMemberName }] = useRoomMember(roomId)
-  const [, { updateEvent }] = useEvents(roomId)
+  const [, { updateEvent, removeEvent }] = useEvents(roomId)
 
   return (
     <button
@@ -58,6 +58,7 @@ function Item({ id, label, payments, members, roomId, createdAt }: Event & Props
               : undefined
           }
           onSubmit={(v) => updateEvent({ ...v, id })}
+          onRemove={() => confirm('イベントを削除しますか？') && removeEvent(id)}
           submitLabel="保存"
           {...sheet}
         ></EventSheet>

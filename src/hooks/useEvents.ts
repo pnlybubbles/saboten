@@ -117,7 +117,40 @@ export default function useEvents(roomId: string | null) {
     [setState],
   )
 
-  return [state, { addEvent, updateEvent }] as const
+  const removeEvent = useCallback(
+    (eventId: string) =>
+      setState(
+        (current) => {
+          if (current === undefined) {
+            return current
+          }
+          const index = current.findIndex((v) => v.id === eventId)
+          if (index === -1) {
+            // 消すものがないので何もしない
+            return current
+          }
+          return [...current.slice(0, index), ...current.slice(index + 1)]
+        },
+        async () => {
+          if (roomId === null) {
+            // TODO: もしかしたらaddしたすぐ直後の場合はroomIdが確定していない可能性もある
+            throw new Error('No room to remove event')
+          }
+          const data = await trpc.event.remove.mutate({ eventId, roomId })
+          const desc = roomLocalStorageDescriptor(roomId)
+          const current = desc.get()
+          if (current === null) {
+            // この時点でデータがキャッシュサれていないのは流石にエラー
+            throw new Error('No cache')
+          }
+          desc.set({ ...current, events: data })
+          return data.map((v) => ({ ...v, tmpId: genTmpId(), createdAt: parseISO(v.createdAt) }))
+        },
+      ),
+    [roomId, setState],
+  )
+
+  return [state, { addEvent, updateEvent, removeEvent }] as const
 }
 
 export type Event = NonNullable<ReturnType<typeof useEvents>[0]>[number]
