@@ -20,7 +20,7 @@ const router = createBrowserRouter([
 
 export default function App() {
   return (
-    <div className="min-h-screen p-8 text-base text-zinc-700">
+    <div className="min-h-screen text-base text-zinc-700">
       <RouterProvider router={router} />
     </div>
   )
@@ -29,7 +29,13 @@ export default function App() {
 function Routing() {
   const [user] = useUser()
 
-  return user === null ? <Landing></Landing> : <Main></Main>
+  return user === null ? (
+    <div className="p-8">
+      <Landing></Landing>
+    </div>
+  ) : (
+    <Main></Main>
+  )
 }
 
 function Landing() {

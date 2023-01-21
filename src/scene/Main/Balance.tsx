@@ -52,8 +52,8 @@ export default function Balance({ roomId }: Props) {
             .map(([memberId, balance]) => (
               <React.Fragment key={memberId}>
                 <div className="font-bold">{getMemberName(memberId)}</div>
-                <div>{formatCurrencyNumber(balance.paid, 'JPY')}</div>
-                <div className={clsx('font-bold', balance.assets > 0 ? 'text-rose-800' : 'text-lime-800')}>
+                <div className="text-right">{formatCurrencyNumber(balance.paid, 'JPY')}</div>
+                <div className={clsx('text-right font-bold', balance.assets > 0 ? 'text-rose-800' : 'text-lime-800')}>
                   {balance.assets > 0 ? '-' : '+'}
                   {formatCurrencyNumber(balance.assets > 0 ? balance.assets : -balance.assets, 'JPY')}
                 </div>
