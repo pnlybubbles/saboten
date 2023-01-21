@@ -15,7 +15,7 @@ export default function Events({ roomId }: Props) {
   const [events] = useEvents(roomId)
 
   return (
-    <div className="grid gap-4 py-2">
+    <div className="grid gap-8 py-2">
       {events?.map((event) => (
         <Item key={event.tmpId} {...event} roomId={roomId}></Item>
       ))}
@@ -36,13 +36,13 @@ function Item({ id, label, payments, members, roomId, createdAt }: Event & Props
     >
       <Avatar mini name={payments[0] ? getMemberName(payments[0].paidByMemberId) ?? null : null}></Avatar>
       <div className="grid grid-flow-row">
-        <div className="text-lg font-bold">{label}</div>
-        <div className="text-zinc-400">{formatDate(createdAt)}</div>
+        <div className="font-bold">{label}</div>
+        <div className="text-xs text-zinc-400">{formatDate(createdAt)}</div>
       </div>
       <div>
-        <span className="text-xl">{formatCurrencyNumber(BigInt(payments[0]?.amount ?? 0), 'JPY')}</span>
-        <span className="text-lg text-zinc-400"> / </span>
-        <span className="text-base text-zinc-400">{members.length}人</span>
+        <span>{formatCurrencyNumber(BigInt(payments[0]?.amount ?? 0), 'JPY')}</span>
+        <span className="text-zinc-400"> / </span>
+        <span className="text-xs text-zinc-400">{members.length}人</span>
       </div>
       {id && (
         <EventSheet
