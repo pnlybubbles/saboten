@@ -9,7 +9,7 @@ export default sessionProcedure
   .mutation(async ({ input: { roomId, name }, ctx: { userId } }) => {
     if (roomId) {
       const { id: memberId } = await prisma.roomMember.create({ data: { name, room: { connect: { id: roomId } } } })
-      const members = await prisma.roomMember.findMany({ where: { roomId }, include: { user: true } })
+      const members = await prisma.roomMember.findMany({ where: { roomId }, select: ROOM_SELECT.members.select })
       return {
         roomId,
         memberId,

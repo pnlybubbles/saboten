@@ -35,7 +35,7 @@ function Item({ id, label, payments, members, roomId, createdAt }: Event & Props
       disabled={!id}
     >
       <Avatar mini name={payments[0] ? getMemberName(payments[0].paidByMemberId) ?? null : null}></Avatar>
-      <div className="grid grid-flow-row">
+      <div>
         <div className="font-bold">{label}</div>
         <div className="text-xs text-zinc-400">{formatDate(createdAt)}</div>
       </div>

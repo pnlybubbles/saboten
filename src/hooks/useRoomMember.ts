@@ -6,6 +6,7 @@ import useEnterNewRoom from './useEnterNewRoom'
 import fetchRoom from '@/utils/fetchRoom'
 import genTmpId from '@/utils/basic/genTmpId'
 import unreachable from '@/utils/basic/unreachable'
+import type { User } from './useUser'
 
 const roomMemberStore = createStore(
   (roomId: string | null) => ROOM_LOCAL_STORAGE_KEY(roomId ?? 'tmp'),
@@ -80,11 +81,50 @@ export default function useRoomMember(roomId: string | null) {
     [roomId, setState],
   )
 
+  const joinMember = useCallback(
+    (user: User, memberId: string | null) =>
+      setState(
+        (current) => {
+          if (current === undefined) {
+            // データが無いと参加は不可
+            return current
+          }
+          if (memberId) {
+            const index = current.findIndex((v) => v.id === memberId)
+            if (index === -1) {
+              // 存在しないメンバーIDの場合は参加不可
+              return current
+            }
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            return [...current.slice(0, index), { ...current[index]!, user }, ...current.slice(index)]
+          } else {
+            return [...current, { id: null, name: null, tmpId: genTmpId(), user }]
+          }
+        },
+        async () => {
+          if (roomId === null) {
+            // 部屋がないと参加はできない
+            unreachable()
+          }
+          const members = await trpc.room.member.join.mutate({ roomId, memberId })
+          const desc = roomLocalStorageDescriptor(roomId)
+          const current = desc.get()
+          if (current === null) {
+            // この時点でデータがキャッシュサれていないのは流石にエラー
+            throw new Error('No cache')
+          }
+          desc.set({ ...current, members })
+          return members.map((v) => ({ ...v, tmpId: genTmpId() }))
+        },
+      ),
+    [roomId, setState],
+  )
+
   const getMember = (memberId: string) => state?.find((v) => v.id === memberId)
   const getMemberName = (memberId: string) => {
     const member = getMember(memberId)
     return member?.user?.name ?? member?.name ?? undefined
   }
 
-  return [state, { addMember, removeMember, getMemberName, getMember }] as const
+  return [state, { addMember, removeMember, getMemberName, getMember, joinMember }] as const
 }

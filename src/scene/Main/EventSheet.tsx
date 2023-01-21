@@ -133,7 +133,7 @@ export default function EventSheet({ roomId, defaultValue, onSubmit, submitLabel
             ))}
           </div>
         </div>
-        <Button onClick={handleCreate} primary disabled={label === '' || amount === '' || amount === '0'}>
+        <Button onClick={handleCreate} disabled={label === '' || amount === '' || amount === '0'}>
           {submitLabel}
         </Button>
       </div>

@@ -20,6 +20,7 @@ export default function useUser() {
   const setUser = async (props: { name: string }) => {
     const fetched = await trpc.user.item.mutate({ id: user?.id, ...props })
     setUserInStorage(fetched)
+    return fetched
   }
 
   useEffect(() => {
@@ -45,3 +46,5 @@ export default function useUser() {
 
   return [user, setUser] as const
 }
+
+export type User = NonNullable<ReturnType<typeof useUser>[0]>
