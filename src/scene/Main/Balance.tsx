@@ -28,28 +28,36 @@ export default function Balance({ roomId }: Props) {
       : null) ?? 'JPY'
 
   const balanceByMemberId = (events ?? []).reduce((acc, v) => {
-    let sum = BigInt(0)
-    for (const payment of v.payments) {
-      const amount = payment.currency === primaryCurrency ? BigInt(payment.amount) : BigInt(0)
-      acc[payment.paidByMemberId] ??= { paid: BigInt(0), assets: BigInt(0) }
+    const sumByCurrency: { [code: string]: bigint } = {}
+    for (const { paidByMemberId, currency, amount } of v.payments) {
+      acc[paidByMemberId] ??= {}
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      acc[payment.paidByMemberId]!.paid += amount
+      acc[paidByMemberId]![currency] ??= { paid: BigInt(0), assets: BigInt(0) }
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      acc[payment.paidByMemberId]!.assets += amount
-      sum += amount
-    }
-    const div = sum / BigInt(v.members.length)
-    for (const member of v.members) {
-      acc[member.memberId] ??= { paid: BigInt(0), assets: BigInt(0) }
+      acc[paidByMemberId]![currency]!.paid += BigInt(amount)
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      acc[member.memberId]!.assets -= div
-    }
-    return acc
-  }, {} as { [memberId: string]: { paid: bigint; assets: bigint } })
+      acc[paidByMemberId]![currency]!.assets += BigInt(amount)
 
-  const visibleBalances = Object.entries(balanceByMemberId).filter(
-    ([, balance]) => balance.assets !== BigInt(0) || balance.paid !== BigInt(0),
-  )
+      sumByCurrency[currency] ??= BigInt(0)
+      sumByCurrency[currency] += BigInt(amount)
+    }
+
+    for (const [code, sum] of Object.entries(sumByCurrency)) {
+      const div = sum / BigInt(v.members.length)
+
+      for (const { memberId } of v.members) {
+        acc[memberId] ??= {}
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        acc[memberId]![code] ??= { paid: BigInt(0), assets: BigInt(0) }
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        acc[memberId]![code]!.assets -= div
+      }
+    }
+
+    return acc
+  }, {} as { [memberId: string]: { [code: string]: { paid: bigint; assets: bigint } } })
+
+  const balances = Object.entries(balanceByMemberId)
 
   return (
     <div className="grid gap-2">
@@ -68,32 +76,34 @@ export default function Balance({ roomId }: Props) {
             </span>
           ))}
       </div>
-      {visibleBalances.length > 0 && (
+      {balances.length > 0 && (
         <div className="grid grid-cols-[1fr_auto_auto] gap-x-2 gap-y-1">
-          {visibleBalances.map(([memberId, balance]) => (
-            <React.Fragment key={memberId}>
-              <div className="font-bold">{getMemberName(memberId)}</div>
-              <div className="text-right tabular-nums">
-                {displayCurrency({ amount: balance.paid, currency: primaryCurrency })}
-              </div>
-              <div
-                className={clsx(
-                  'flex items-center justify-end font-bold tabular-nums',
-                  balance.assets > 0 ? 'text-rose-500' : 'text-lime-600',
-                )}
-              >
-                {balance.assets > 0 ? (
-                  <Icon className="mt-[-2px]" name="remove" />
-                ) : (
-                  <Icon className="mt-[-2px]" name="add" />
-                )}
-                {displayCurrency({
-                  amount: balance.assets > 0 ? balance.assets : -balance.assets,
-                  currency: primaryCurrency,
-                })}
-              </div>
-            </React.Fragment>
-          ))}
+          {balances.map(([memberId, balanceByCurrency]) =>
+            Object.entries(balanceByCurrency)
+              .sort(([a], [b]) => (a === primaryCurrency ? -1 : b === primaryCurrency ? 1 : 0))
+              .map(([currency, balance]) => (
+                <React.Fragment key={`${memberId}_${currency}`}>
+                  <div className="font-bold">{getMemberName(memberId)}</div>
+                  <div className="text-right tabular-nums">{displayCurrency({ amount: balance.paid, currency })}</div>
+                  <div
+                    className={clsx(
+                      'flex items-center justify-end font-bold tabular-nums',
+                      balance.assets > 0 ? 'text-rose-500' : 'text-lime-600',
+                    )}
+                  >
+                    {balance.assets > 0 ? (
+                      <Icon className="mt-[-2px]" name="remove" />
+                    ) : (
+                      <Icon className="mt-[-2px]" name="add" />
+                    )}
+                    {displayCurrency({
+                      amount: balance.assets > 0 ? balance.assets : -balance.assets,
+                      currency,
+                    })}
+                  </div>
+                </React.Fragment>
+              )),
+          )}
         </div>
       )}
     </div>
