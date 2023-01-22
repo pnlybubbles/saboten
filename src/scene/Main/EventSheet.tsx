@@ -27,7 +27,7 @@ export default function EventSheet({ roomId, defaultValue, onSubmit, submitLabel
   const userMemberId = user ? members?.find((v) => v.user?.id === user.id)?.id ?? null : null
 
   const [label, setLabel] = useState(defaultValue?.label ?? '')
-  const [amount, setAmount] = useState(defaultValue?.amount ?? '0')
+  const [amount, setAmount] = useState(defaultValue?.amount ?? '')
   const [paidByMember, setPaidByMember] = useState(defaultValue?.paidByMemberId ?? userMemberId)
   const [paidByMemberEditMode, setPaidByMemberEditMode] = useState(false)
   const [eventMembers, setEventMembers] = useState(
@@ -40,7 +40,7 @@ export default function EventSheet({ roomId, defaultValue, onSubmit, submitLabel
         return
       }
       setLabel(defaultValue?.label ?? '')
-      setAmount(defaultValue?.amount ?? '0')
+      setAmount(defaultValue?.amount ?? '')
       setPaidByMember(defaultValue?.paidByMemberId ?? userMemberId)
       setEventMembers(defaultValue?.memberIds ?? (members?.map((v) => v.id) ?? [userMemberId]).filter(isNonNullable))
     }, [
@@ -78,7 +78,7 @@ export default function EventSheet({ roomId, defaultValue, onSubmit, submitLabel
       <div className="grid gap-4">
         <TextField label="イベントの名前" name="label" value={label} onChange={dirty(setLabel)} />
         <div className="grid grid-cols-[1fr_auto] gap-1">
-          <TextField label="支払った金額" name="amount" type="number" value={amount} onChange={dirty(setAmount)}>
+          <TextField label="支払った金額" name="amount" inputMode="decimal" value={amount} onChange={dirty(setAmount)}>
             <div className="mr-[-4px] flex justify-end">
               {members?.map((member) => (
                 <button
