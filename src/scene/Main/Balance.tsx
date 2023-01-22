@@ -1,7 +1,7 @@
 import Icon from '@/components/Icon'
 import useEvents from '@/hooks/useEvents'
+import useRoomCurrencyRate from '@/hooks/useRoomCurrencyRate'
 import useRoomMember from '@/hooks/useRoomMember'
-import formatCurrencyNumber from '@/utils/basic/formatCurrencyNumber'
 import clsx from 'clsx'
 import React from 'react'
 
@@ -12,6 +12,7 @@ interface Props {
 export default function Balance({ roomId }: Props) {
   const [, { getMemberName }] = useRoomMember(roomId)
   const [events] = useEvents(roomId)
+  const [, { displayCurrency }] = useRoomCurrencyRate(roomId)
 
   const totalByCurrency = (events ?? []).reduce((acc, v) => {
     for (const payment of v.payments) {
@@ -22,9 +23,9 @@ export default function Balance({ roomId }: Props) {
   }, {} as { [code: string]: bigint })
 
   const primaryCurrency =
-    totalByCurrency['JPY'] === undefined || totalByCurrency['JPY'] === BigInt(0)
+    (totalByCurrency['JPY'] === undefined || totalByCurrency['JPY'] === BigInt(0)
       ? Object.keys(totalByCurrency)[0]
-      : 'JPY'
+      : null) ?? 'JPY'
 
   const balanceByMemberId = (events ?? []).reduce((acc, v) => {
     let sum = BigInt(0)
@@ -54,16 +55,16 @@ export default function Balance({ roomId }: Props) {
     <div className="grid gap-2">
       <div>
         <span className="text-3xl font-bold tabular-nums">
-          {formatCurrencyNumber(
-            (primaryCurrency ? totalByCurrency[primaryCurrency] : null) ?? BigInt(0),
-            primaryCurrency ?? 'JPY',
-          )}
+          {displayCurrency({
+            amount: totalByCurrency[primaryCurrency] ?? BigInt(0),
+            currency: primaryCurrency,
+          })}
         </span>
         {Object.entries(totalByCurrency)
           .filter(([code]) => code !== primaryCurrency)
           .map(([code, total]) => (
             <span key={code} className="ml-2 tabular-nums">
-              {formatCurrencyNumber(total, code)}
+              {displayCurrency({ amount: total, currency: code })}
             </span>
           ))}
       </div>
@@ -73,7 +74,7 @@ export default function Balance({ roomId }: Props) {
             <React.Fragment key={memberId}>
               <div className="font-bold">{getMemberName(memberId)}</div>
               <div className="text-right tabular-nums">
-                {formatCurrencyNumber(balance.paid, primaryCurrency ?? 'JPY')}
+                {displayCurrency({ amount: balance.paid, currency: primaryCurrency })}
               </div>
               <div
                 className={clsx(
@@ -86,7 +87,10 @@ export default function Balance({ roomId }: Props) {
                 ) : (
                   <Icon className="mt-[-2px]" name="add" />
                 )}
-                {formatCurrencyNumber(balance.assets > 0 ? balance.assets : -balance.assets, primaryCurrency ?? 'JPY')}
+                {displayCurrency({
+                  amount: balance.assets > 0 ? balance.assets : -balance.assets,
+                  currency: primaryCurrency,
+                })}
               </div>
             </React.Fragment>
           ))}

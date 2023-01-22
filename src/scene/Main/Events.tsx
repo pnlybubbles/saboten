@@ -1,11 +1,11 @@
 import type { Event } from '@/hooks/useEvents'
 import useEvents from '@/hooks/useEvents'
 import useRoomMember from '@/hooks/useRoomMember'
-import formatCurrencyNumber from '@/utils/basic/formatCurrencyNumber'
 import EventSheet from './EventSheet'
 import usePresent from '@/hooks/usePresent'
 import Avatar from '@/components/Avatar'
 import formatDate from '@/utils/basic/formatDate'
+import useRoomCurrencyRate from '@/hooks/useRoomCurrencyRate'
 
 interface Props {
   roomId: string | null
@@ -27,6 +27,7 @@ function Item({ id, label, payments, members, roomId, createdAt }: Event & Props
   const sheet = usePresent()
   const [, { getMemberName }] = useRoomMember(roomId)
   const [, { updateEvent, removeEvent }] = useEvents(roomId)
+  const [, { displayCurrency }] = useRoomCurrencyRate(roomId)
 
   return (
     <button
@@ -40,7 +41,11 @@ function Item({ id, label, payments, members, roomId, createdAt }: Event & Props
         <div className="text-xs text-zinc-400">{formatDate(createdAt)}</div>
       </div>
       <div className="tabular-nums">
-        <span>{formatCurrencyNumber(BigInt(payments[0]?.amount ?? 0), payments[0]?.currency ?? 'JPY')}</span>
+        <span>
+          {payments[0]
+            ? displayCurrency({ currency: payments[0].currency, amount: BigInt(payments[0].amount) })
+            : displayCurrency({ currency: 'JPY', amount: BigInt(0) })}
+        </span>
         <span className="text-zinc-400"> / </span>
         <span className="text-xs text-zinc-400">{members.length}人</span>
       </div>

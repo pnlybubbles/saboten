@@ -42,11 +42,23 @@ model EventPayment {
 }
 
 model Room {
-  id        String       @id @default(uuid()) @db.Uuid
-  createdAt DateTime     @default(now()) @db.Timestamptz(3)
-  title     String       @default("")
-  events    Event[]
-  members   RoomMember[]
+  id           String             @id @default(uuid()) @db.Uuid
+  createdAt    DateTime           @default(now()) @db.Timestamptz(3)
+  title        String             @default("")
+  events       Event[]
+  members      RoomMember[]
+  currencyRate RoomCurrencyRate[]
+}
+
+model RoomCurrencyRate {
+  createdAt  DateTime @default(now()) @db.Timestamptz(3)
+  roomId     String   @db.Uuid
+  room       Room     @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  toCurrency String
+  currency   String
+  rate       Float
+
+  @@id([roomId, toCurrency, currency])
 }
 
 model RoomMember {

@@ -44,8 +44,10 @@ export default function EventSheet({ roomId, defaultValue, onSubmit, submitLabel
         return
       }
       setLabel(defaultValue?.label ?? '')
-      setAmount(defaultValue?.amount ?? '')
-      setCurrency(defaultValue?.currency ?? 'JPY')
+      const defaultCurrency = defaultValue?.currency ?? 'JPY'
+      setCurrency(defaultCurrency)
+      const digits = cc.code(defaultCurrency)?.digits ?? 0
+      setAmount(defaultValue?.amount ? (Number(BigInt(defaultValue.amount)) / 10 ** digits).toString() : '')
       setPaidByMember(defaultValue?.paidByMemberId ?? userMemberId)
       setEventMembers(defaultValue?.memberIds ?? (members?.map((v) => v.id) ?? [userMemberId]).filter(isNonNullable))
     }, [
@@ -64,9 +66,13 @@ export default function EventSheet({ roomId, defaultValue, onSubmit, submitLabel
     if (roomId === null || userMemberId === null) {
       throw new Error('Not implemented')
     }
+    const digits = cc.code(currency)?.digits
+    if (digits === undefined) {
+      throw new Error('Invalid country code')
+    }
     onSubmit({
       label,
-      amount,
+      amount: BigInt(parseFloat(amount) * 10 ** digits).toString(),
       currency,
       paidByMemberId: paidByMember ?? userMemberId,
       memberIds: eventMembers,

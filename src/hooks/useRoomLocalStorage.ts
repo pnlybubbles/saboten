@@ -25,6 +25,14 @@ const ROOM_SCHEMA = z.object({
       createdAt: z.string().datetime(),
     }),
   ),
+  currencyRate: z.array(
+    z.object({
+      currency: CURRENCY_CODE_SCHEMA,
+      toCurrency: CURRENCY_CODE_SCHEMA,
+      rate: z.number(),
+      createdAt: z.string().datetime(),
+    }),
+  ),
 })
 
 export const ROOM_LOCAL_STORAGE_KEY = (roomId: string) => `room_${roomId}`
