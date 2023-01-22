@@ -32,7 +32,7 @@ model EventMember {
 model EventPayment {
   createdAt      DateTime    @default(now()) @db.Timestamptz(3)
   amount         Decimal     @db.Money
-  currency       String?
+  currency       String
   paidByMemberId String      @db.Uuid
   eventId        String      @db.Uuid
   paiedByMember  RoomMember? @relation(fields: [paidByMemberId], references: [id], onDelete: SetNull)

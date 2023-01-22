@@ -53,6 +53,7 @@
     "https://esm.sh/@trpc/server@10.9.0": "43834ff678639fb5fa4d9fce8fd162112dace72dbf1b6b298f25d0452b83751f",
     "https://esm.sh/@trpc/server@10.9.0/adapters/fetch": "2531a43dee7b8bdc73de7dbb163ab8506f7bf1cdd694b52db68e0f011c7e60bf",
     "https://esm.sh/cookie@0.5.0": "a8e08c4d1cfe7dd7f115dd4224b75c55e7f8ba839263acf749beb19c726d7c94",
+    "https://esm.sh/currency-codes@2.1.0": "be1e3c2257521577a18715d6fd19ecc829ecc40f99b4985debf4debd8f36f9b3",
     "https://esm.sh/v102/@trpc/server@10.9.0/adapters/fetch/index.d.ts": "f5f28ef4d47bb0f729515d55176df9755827dab54f80e8d7b48920c27a9c82f0",
     "https://esm.sh/v102/@trpc/server@10.9.0/deno/adapters/fetch.js": "849da8815e587fbf60756007c64c192047e209bcb37e7662ac6007f64d8d3772",
     "https://esm.sh/v102/@trpc/server@10.9.0/deno/server.js": "34e5e4eb4c94d9c3c4fac7e99f459055bdf14fb9facc7add09f9f861b8e223f6",
@@ -100,7 +101,11 @@
     "https://esm.sh/v102/@trpc/server@10.9.0/dist/transformer.d.ts": "dfa763a64a07681589cd61f44c51ac4d46b68803e41a9ef5f3e77dd14e7f6bfb",
     "https://esm.sh/v102/@trpc/server@10.9.0/dist/types.d.ts": "7fcd437415621d1c3830b99885c45015dabae679d77adb9cef1dfaf678cc4cfd",
     "https://esm.sh/v102/@types/cookie@0.5.1/index.d.ts": "4a547783c826c1dec10d96734687ae4db2e89d40261e91b5c327b60748315dc1",
-    "https://esm.sh/v102/cookie@0.5.0/deno/cookie.js": "4de6eef676abb1b431660d6f20a030351ed7459fb471e7d6711dfd4a13d41b40"
+    "https://esm.sh/v102/cookie@0.5.0/deno/cookie.js": "4de6eef676abb1b431660d6f20a030351ed7459fb471e7d6711dfd4a13d41b40",
+    "https://esm.sh/v104/currency-codes@2.1.0/deno/currency-codes.js": "99ad7423298b83b205447a802b55c7f768a5d75c674dd2181f1fe6010794906a",
+    "https://esm.sh/v104/currency-codes@2.1.0/index.d.ts": "0bb1fdf4fec650419c2dfae6d147fea98dc2b170a0796d4d1100b072a2eabc4d",
+    "https://esm.sh/v104/first-match@0.0.1/deno/first-match.js": "ab93c0f14eb16ea20bdb00313a1c5a1c1889d9dfd0203c902c804f16f6855876",
+    "https://esm.sh/v104/nub@0.0.0/deno/nub.js": "9653a5754b303622b0c785a09ebf5c017fa7dada80d9249c62a506f4e6b087b9"
   },
   "npm": {
     "specifiers": { "prisma": "prisma@4.8.1" },

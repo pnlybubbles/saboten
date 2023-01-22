@@ -4,6 +4,7 @@ import { z } from 'zod'
 import prisma from '../../prisma.ts'
 import { ROOM_SELECT } from '../room/_helper.ts'
 import { DECIMAL_SCHEMA } from '../../utils/decimal.ts'
+import { CURRENCY_CODE_SCHEMA } from '../../utils/currency.ts'
 
 export default sessionProcedure
   .input(
@@ -11,11 +12,12 @@ export default sessionProcedure
       roomId: z.string().uuid().nullable(),
       label: z.string(),
       amount: DECIMAL_SCHEMA,
+      currency: CURRENCY_CODE_SCHEMA,
       paidByMemberId: z.string().uuid().nullable(),
       memberIds: z.array(z.string().uuid()).nullable(),
     }),
   )
-  .mutation(async ({ input: { roomId, label, paidByMemberId, memberIds, amount }, ctx: { userId } }) => {
+  .mutation(async ({ input: { roomId, label, paidByMemberId, memberIds, amount, currency }, ctx: { userId } }) => {
     if (roomId) {
       if (paidByMemberId === null || memberIds === null) {
         // すでにルームがある場合にはmemberIdの指定は必須
@@ -25,7 +27,7 @@ export default sessionProcedure
         data: {
           room: { connect: { id: roomId } },
           label,
-          payments: { create: { paiedByMember: { connect: { id: paidByMemberId } }, amount } },
+          payments: { create: { paiedByMember: { connect: { id: paidByMemberId } }, amount, currency } },
           members: { createMany: { data: memberIds.map((memberId) => ({ memberId })) } },
         },
       })
@@ -47,7 +49,7 @@ export default sessionProcedure
       const event = await prisma.event.create({
         data: {
           room: { connect: { id: room.id } },
-          payments: { create: { paiedByMember: { connect: { id: memberId } }, amount } },
+          payments: { create: { paiedByMember: { connect: { id: memberId } }, amount, currency } },
           members: { create: { member: { connect: { id: memberId } } } },
         },
         include: { payments: true, members: true },
