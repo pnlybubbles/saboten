@@ -1,3 +1,4 @@
+import Icon from '@/components/Icon'
 import useEvents from '@/hooks/useEvents'
 import useRoomMember from '@/hooks/useRoomMember'
 import formatCurrencyNumber from '@/utils/basic/formatCurrencyNumber'
@@ -44,7 +45,7 @@ export default function Balance({ roomId }: Props) {
 
   return (
     <div className="grid gap-2">
-      <div className="text-3xl font-bold">{formatCurrencyNumber(total ?? BigInt(0), 'JPY')}</div>
+      <div className="text-3xl font-bold tabular-nums">{formatCurrencyNumber(total ?? BigInt(0), 'JPY')}</div>
       {balanceByMemberId && (
         <div className="grid grid-cols-[1fr_auto_auto] gap-x-2 gap-y-1">
           {Object.entries(balanceByMemberId)
@@ -52,9 +53,18 @@ export default function Balance({ roomId }: Props) {
             .map(([memberId, balance]) => (
               <React.Fragment key={memberId}>
                 <div className="font-bold">{getMemberName(memberId)}</div>
-                <div className="text-right">{formatCurrencyNumber(balance.paid, 'JPY')}</div>
-                <div className={clsx('text-right font-bold', balance.assets > 0 ? 'text-rose-800' : 'text-lime-800')}>
-                  {balance.assets > 0 ? '-' : '+'}
+                <div className="text-right tabular-nums">{formatCurrencyNumber(balance.paid, 'JPY')}</div>
+                <div
+                  className={clsx(
+                    'flex items-center justify-end font-bold tabular-nums',
+                    balance.assets > 0 ? 'text-rose-500' : 'text-lime-600',
+                  )}
+                >
+                  {balance.assets > 0 ? (
+                    <Icon className="mt-[-2px]" name="remove" />
+                  ) : (
+                    <Icon className="mt-[-2px]" name="add" />
+                  )}
                   {formatCurrencyNumber(balance.assets > 0 ? balance.assets : -balance.assets, 'JPY')}
                 </div>
               </React.Fragment>
