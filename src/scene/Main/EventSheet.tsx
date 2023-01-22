@@ -126,30 +126,34 @@ export default function EventSheet({ roomId, defaultValue, onSubmit, submitLabel
             value={amount}
             onChange={dirty(setAmount)}
           >
-            <div className="mr-[-4px] flex justify-end">
-              {members?.map((member) => (
-                <button
-                  key={member.id ?? member.tmpId}
-                  onClick={() => {
-                    if (paidByMemberEditMode) {
-                      setPaidByMember(member.id)
-                      setPaidByMemberEditMode(false)
-                    } else {
-                      setPaidByMemberEditMode(true)
-                    }
-                  }}
-                  disabled={member.id === null}
-                  className={clsx(
-                    'box-content rounded-full border-2 border-transparent p-[2px] transition-[margin,opacity,border-color] disabled:opacity-30',
-                    paidByMemberEditMode || member.id === paidByMember
-                      ? 'ml-1 w-10 opacity-100'
-                      : 'ml-[calc(-2.5rem-8px)] opacity-0',
-                    member.id === paidByMember && 'border-zinc-900',
-                  )}
-                >
-                  <Avatar mini name={getMemberName(member)}></Avatar>
-                </button>
-              )) ?? <Avatar mini name={user.name}></Avatar>}
+            <div className="flex">
+              <div className="w-4 bg-gradient-to-l from-surface"></div>
+              <div className="mr-[-4px] flex justify-end bg-surface">
+                {members?.map((member) => (
+                  <button
+                    key={member.id ?? member.tmpId}
+                    onClick={() => {
+                      if (paidByMemberEditMode) {
+                        setPaidByMember(member.id)
+                        setPaidByMemberEditMode(false)
+                      } else {
+                        setPaidByMemberEditMode(true)
+                      }
+                    }}
+                    disabled={member.id === null}
+                    className={clsx(
+                      'box-content rounded-full border-2 border-transparent p-[2px] transition-[margin,opacity,border-color] disabled:opacity-30',
+                      paidByMemberEditMode || member.id === paidByMember
+                        ? 'ml-1 w-10 opacity-100 first:ml-0'
+                        : // width: 2.5rem + border: 2px * 2 + padding: 2px * 2
+                          'ml-[calc(-2.5rem-8px)] opacity-0',
+                      member.id === paidByMember && 'border-zinc-900',
+                    )}
+                  >
+                    <Avatar mini name={getMemberName(member)}></Avatar>
+                  </button>
+                )) ?? <Avatar mini name={user.name}></Avatar>}
+              </div>
             </div>
           </TextField>
         </div>
