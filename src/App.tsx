@@ -58,7 +58,7 @@ function Landing() {
           <div>{`"${roomTitle ?? '読込中...'}" に招待されました`}</div>
         </div>
       )}
-      <Button onClick={() => setStage('create')} primary>
+      <Button onClick={() => setStage('create')} variant="primary">
         {roomId ? '参加する' : 'はじめる'}
       </Button>
       <div className="grid grid-cols-[auto_1fr] gap-1 text-xs">

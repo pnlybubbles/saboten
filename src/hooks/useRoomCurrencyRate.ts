@@ -98,19 +98,22 @@ export default function useRoomCurrencyRate(roomId: string | null) {
   )
 
   const displayCurrency = (value: { currency: string; amount: bigint }, displayAsCurrency: string = value.currency) => {
-    const digits = cc.code(value.currency)?.digits
-    if (digits === undefined) {
-      return null
-    }
-    const amountWithDigits = Number(value.amount) / 10 ** digits
     if (displayAsCurrency !== value.currency) {
       const current = state?.find((v) => v.currency === value.currency && v.toCurrency === displayAsCurrency)
       if (current === undefined) {
         return null
       }
-      return formatCurrencyNumber(amountWithDigits * current.rate, displayAsCurrency)
+      const digits = cc.code(displayAsCurrency)?.digits
+      if (digits === undefined) {
+        return null
+      }
+      return formatCurrencyNumber((Number(value.amount) * current.rate) / 10 ** digits, displayAsCurrency)
     }
-    return formatCurrencyNumber(amountWithDigits, displayAsCurrency)
+    const digits = cc.code(value.currency)?.digits
+    if (digits === undefined) {
+      return null
+    }
+    return formatCurrencyNumber(Number(value.amount) / 10 ** digits, displayAsCurrency)
   }
 
   return [state, { updateRate, removeRate, displayCurrency }] as const

@@ -190,7 +190,7 @@ export default function EventSheet({ roomId, defaultValue, onSubmit, submitLabel
           </div>
         </div>
         <div className={clsx('grid gap-2', onRemove && 'grid-cols-[auto_1fr]')}>
-          {onRemove && <Button onClick={onRemove} icon={<Icon name="delete" />} danger></Button>}
+          {onRemove && <Button onClick={onRemove} icon={<Icon name="delete" />} variant="danger"></Button>}
           <Button onClick={handleSubmit} disabled={label === '' || amount === '' || amount === '0'}>
             {submitLabel}
           </Button>

@@ -1,9 +1,11 @@
 import isSP from '@/utils/basic/isSP'
 import clsx from 'clsx'
 
+type Variant = 'default' | 'primary' | 'secondary' | 'danger'
+
 interface OwnProps {
-  primary?: boolean
-  danger?: boolean
+  variant?: Variant
+  mini?: boolean
   onClick?: React.EventHandler<React.SyntheticEvent<unknown>>
   icon?: React.ReactNode
 }
@@ -11,8 +13,8 @@ interface OwnProps {
 type Props = Omit<React.ComponentPropsWithoutRef<'button'>, 'onClick'> & OwnProps
 
 export default function Button({
-  primary = false,
-  danger = false,
+  variant = 'default',
+  mini = false,
   className,
   onClick,
   disabled,
@@ -20,14 +22,15 @@ export default function Button({
   children,
   ...props
 }: Props) {
-  const backgroundColor = toBackgroundColor(primary, danger)
-  const foregroundColor = toForegroundColor(primary, danger)
+  const backgroundColor = toBackgroundColor(variant)
+  const foregroundColor = toForegroundColor(variant)
 
   return (
     <button
       className={clsx(
         className,
-        'grid h-12 select-none items-center justify-items-center rounded-full text-base font-bold transition active:scale-95 disabled:opacity-30',
+        'grid select-none items-center justify-items-center rounded-full font-bold transition active:scale-95 disabled:opacity-30',
+        mini ? 'h-7 text-xs' : 'h-12 text-base',
         icon ? (children == null ? 'w-12 p-0' : 'w-full pr-6 pl-5') : 'w-full px-6',
         backgroundColor,
         foregroundColor,
@@ -52,7 +55,19 @@ export default function Button({
   )
 }
 
-const toBackgroundColor = (primary: boolean, danger: boolean) =>
-  danger ? 'bg-red-500' : primary ? 'bg-primary' : 'bg-zinc-900'
-const toForegroundColor = (primary: boolean, danger: boolean) =>
-  danger ? 'text-white' : primary ? 'text-white' : 'text-zinc-50'
+const toBackgroundColor = (variant: Variant) =>
+  variant === 'danger'
+    ? 'bg-red-500'
+    : variant === 'primary'
+    ? 'bg-primary'
+    : variant === 'secondary'
+    ? 'border border-primary'
+    : 'bg-zinc-900'
+const toForegroundColor = (variant: Variant) =>
+  variant === 'danger'
+    ? 'text-white'
+    : variant === 'primary'
+    ? 'text-white'
+    : variant === 'secondary'
+    ? 'text-primary'
+    : 'text-zinc-50'

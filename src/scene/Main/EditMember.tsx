@@ -59,7 +59,7 @@ export default function EditMember({ roomId, ...sheet }: Props) {
             void addMember(name)
           }}
           disabled={name === ''}
-          primary
+          variant="primary"
         >
           追加
         </Button>
