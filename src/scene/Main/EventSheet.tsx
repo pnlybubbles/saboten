@@ -79,7 +79,6 @@ export default function EventSheet({ roomId, defaultValue, onSubmit, submitLabel
     setCurrency(code)
     editCurrencySheet.close()
   }
-  console.log(editCurrencySheet.isPresent)
 
   if (user === null) {
     // TODO: loading

@@ -54,6 +54,7 @@
     "db:generate": "deno run -A --unstable npm:prisma generate --data-proxy"
   },
   "alias": {
-    "@/*": "./src/$1"
+    "@/*": "./src/$1",
+    "@shared/*": "./netlify/edge-functions/_shared/$1"
   }
 }

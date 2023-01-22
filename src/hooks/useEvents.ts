@@ -46,7 +46,7 @@ export default function useEvents(roomId: string | null) {
             label: event.label,
             tmpId: genTmpId(),
             members: event.memberIds.map((memberId) => ({ memberId })),
-            payments: [{ amount: event.amount, paidByMemberId: event.paidByMemberId }],
+            payments: [{ amount: event.amount, currency: event.currency, paidByMemberId: event.paidByMemberId }],
             createdAt: new Date(),
           },
           ...(current ?? []),
@@ -90,7 +90,7 @@ export default function useEvents(roomId: string | null) {
               id: event.id,
               label: event.label,
               members: event.memberIds.map((memberId) => ({ memberId })),
-              payments: [{ amount: event.amount, paidByMemberId: event.paidByMemberId }],
+              payments: [{ amount: event.amount, currency: event.currency, paidByMemberId: event.paidByMemberId }],
             },
             ...current.slice(index + 1),
           ]

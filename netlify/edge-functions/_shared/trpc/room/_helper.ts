@@ -10,7 +10,7 @@ export const ROOM_SELECT = {
       id: true,
       label: true,
       members: { select: { memberId: true }, orderBy: { createdAt: 'asc' } },
-      payments: { select: { amount: true, paidByMemberId: true } },
+      payments: { select: { amount: true, currency: true, paidByMemberId: true } },
       createdAt: true,
     },
     orderBy: { createdAt: 'desc' },

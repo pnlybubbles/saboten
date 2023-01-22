@@ -40,7 +40,7 @@ function Item({ id, label, payments, members, roomId, createdAt }: Event & Props
         <div className="text-xs text-zinc-400">{formatDate(createdAt)}</div>
       </div>
       <div className="tabular-nums">
-        <span>{formatCurrencyNumber(BigInt(payments[0]?.amount ?? 0), 'JPY')}</span>
+        <span>{formatCurrencyNumber(BigInt(payments[0]?.amount ?? 0), payments[0]?.currency ?? 'JPY')}</span>
         <span className="text-zinc-400"> / </span>
         <span className="text-xs text-zinc-400">{members.length}人</span>
       </div>
@@ -52,6 +52,7 @@ function Item({ id, label, payments, members, roomId, createdAt }: Event & Props
               ? {
                   label,
                   amount: payments[0].amount,
+                  currency: payments[0].currency,
                   memberIds: members.map((v) => v.memberId),
                   paidByMemberId: payments[0].paidByMemberId,
                 }

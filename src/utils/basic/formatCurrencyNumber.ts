@@ -5,7 +5,7 @@
  * @param currency ISO4217 通貨コード (https://ja.wikipedia.org/wiki/ISO_4217)
  * @returns
  */
-export default function formatCurrencyNumber(value: bigint, currency: 'JPY' | 'USD' | 'EUR') {
+export default function formatCurrencyNumber(value: bigint, currency: string) {
   const formatter = new Intl.NumberFormat('ja-JP', {
     style: 'currency',
     currency,
