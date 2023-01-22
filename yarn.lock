@@ -4748,6 +4748,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"currency-codes@npm:^2.1.0":
+  version: 2.1.0
+  resolution: "currency-codes@npm:2.1.0"
+  dependencies:
+    first-match: ~0.0.1
+    nub: ~0.0.0
+  checksum: 925ba4c729201b447d1612f7949e88b8e2882f7b23b5bf317b8214f818843ab30367a3a8e7f7fa3318c1ff2fbcf78f0be7c06cfe5cd0966ae441368d346a90a5
+  languageName: node
+  linkType: hard
+
 "cyclist@npm:^1.0.1":
   version: 1.0.1
   resolution: "cyclist@npm:1.0.1"
@@ -6536,6 +6546,13 @@ __metadata:
     locate-path: ^7.1.0
     path-exists: ^5.0.0
   checksum: 9a21b7f9244a420e54c6df95b4f6fc3941efd3c3e5476f8274eb452f6a85706e7a6a90de71353ee4f091fcb4593271a6f92810a324ec542650398f928783c280
+  languageName: node
+  linkType: hard
+
+"first-match@npm:~0.0.1":
+  version: 0.0.1
+  resolution: "first-match@npm:0.0.1"
+  checksum: 5ed217591bc59634b9ffa15ad0340401781214827ddca4f17f6854181acac3d05818e389ae1241570ce2311a49655bfb63754da62833a085bbc3217a919bb596
   languageName: node
   linkType: hard
 
@@ -10332,6 +10349,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"nub@npm:~0.0.0":
+  version: 0.0.0
+  resolution: "nub@npm:0.0.0"
+  checksum: a84a82a052027ebaa433161af0c7c85ae5a71991d5b6cf7b76ff3bdd4c5667073b6cb391649d9d217ff835b047f6b102b90526f1905ce2a1f618f958ed00bce1
+  languageName: node
+  linkType: hard
+
 "nullthrows@npm:^1.1.1":
   version: 1.1.1
   resolution: "nullthrows@npm:1.1.1"
@@ -12254,6 +12278,7 @@ __metadata:
     "@typescript-eslint/parser": ^5.48.1
     autoprefixer: ^10.4.13
     clsx: ^1.2.1
+    currency-codes: ^2.1.0
     date-fns: ^2.29.3
     dotenv-cli: ^6.0.0
     eslint: ^8.32.0

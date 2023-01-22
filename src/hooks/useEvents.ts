@@ -27,6 +27,7 @@ const eventsStore = createStore(
 export type EventPayload = {
   label: string
   amount: string
+  currency: string
   paidByMemberId: string
   memberIds: string[]
 }

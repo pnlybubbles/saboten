@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import Button from '@/components/Button'
 import type { SheetProps } from '@/components/Sheet'
 import Sheet from '@/components/Sheet'
@@ -12,6 +12,8 @@ import clsx from 'clsx'
 import useDirty from '@/hooks/useDirty'
 import isUnique from '@/utils/basic/isUnique'
 import Icon from '@/components/Icon'
+import usePresent from '@/hooks/usePresent'
+import cc from 'currency-codes'
 
 interface Props extends SheetProps {
   roomId: string | null
@@ -33,6 +35,8 @@ export default function EventSheet({ roomId, defaultValue, onSubmit, submitLabel
   const [eventMembers, setEventMembers] = useState(
     defaultValue?.memberIds ?? (members?.map((v) => v.id) ?? [userMemberId]).filter(isNonNullable),
   )
+  const editCurrencySheet = usePresent()
+  const [currency, setCurrency] = useState(defaultValue?.currency ?? 'JPY')
 
   const { dirty, clearDirty } = useDirty(
     useCallback(() => {
@@ -41,16 +45,18 @@ export default function EventSheet({ roomId, defaultValue, onSubmit, submitLabel
       }
       setLabel(defaultValue?.label ?? '')
       setAmount(defaultValue?.amount ?? '')
+      setCurrency(defaultValue?.currency ?? 'JPY')
       setPaidByMember(defaultValue?.paidByMemberId ?? userMemberId)
       setEventMembers(defaultValue?.memberIds ?? (members?.map((v) => v.id) ?? [userMemberId]).filter(isNonNullable))
     }, [
-      defaultValue?.amount,
-      defaultValue?.label,
-      defaultValue?.memberIds,
-      defaultValue?.paidByMemberId,
-      members,
-      userMemberId,
       sheet.isPresent,
+      defaultValue?.label,
+      defaultValue?.amount,
+      defaultValue?.currency,
+      defaultValue?.paidByMemberId,
+      defaultValue?.memberIds,
+      userMemberId,
+      members,
     ]),
   )
 
@@ -61,12 +67,19 @@ export default function EventSheet({ roomId, defaultValue, onSubmit, submitLabel
     onSubmit({
       label,
       amount,
+      currency,
       paidByMemberId: paidByMember ?? userMemberId,
       memberIds: eventMembers,
     })
     clearDirty()
     sheet.onPresent(false)
   }
+
+  const handleSelectCurrency = (code: string) => {
+    setCurrency(code)
+    editCurrencySheet.close()
+  }
+  console.log(editCurrencySheet.isPresent)
 
   if (user === null) {
     // TODO: loading
@@ -77,8 +90,42 @@ export default function EventSheet({ roomId, defaultValue, onSubmit, submitLabel
     <Sheet {...sheet}>
       <div className="grid gap-4">
         <TextField label="イベントの名前" name="label" value={label} onChange={dirty(setLabel)} />
-        <div className="grid grid-cols-[1fr_auto] gap-1">
-          <TextField label="支払った金額" name="amount" inputMode="decimal" value={amount} onChange={dirty(setAmount)}>
+        <div className="grid grid-cols-[auto_1fr] gap-3">
+          <div
+            className={clsx(
+              'grid h-18 grid-flow-row content-between rounded-xl border-2 border-transparent bg-surface px-5 pt-[0.975rem] pb-[0.875rem] transition',
+              editCurrencySheet.isPresent && 'border-zinc-900',
+            )}
+            onClick={editCurrencySheet.open}
+          >
+            <div className="text-xs font-bold text-zinc-400">通貨</div>
+            <div>{currency}</div>
+          </div>
+          <Sheet {...editCurrencySheet}>
+            <div className="ml-[-1rem] grid grid-cols-[auto_auto_1fr] items-stretch">
+              {cc.codes().map((code) => (
+                <React.Fragment key={code}>
+                  <div className="grid items-center pr-2">
+                    <Icon name="check" className={currency === code ? 'opacity-100' : 'opacity-0'}></Icon>
+                  </div>
+                  <div className="grid items-center" onClick={() => handleSelectCurrency(code)}>
+                    <div>{code}</div>
+                  </div>
+                  <div className="py-1 pl-2 text-zinc-400" onClick={() => handleSelectCurrency(code)}>
+                    {cc.code(code)?.currency}
+                  </div>
+                </React.Fragment>
+              ))}
+            </div>
+          </Sheet>
+          <TextField
+            label="支払った金額"
+            name="amount"
+            type="number"
+            inputMode="decimal"
+            value={amount}
+            onChange={dirty(setAmount)}
+          >
             <div className="mr-[-4px] flex justify-end">
               {members?.map((member) => (
                 <button
