@@ -15,7 +15,7 @@ interface Props {
 export default function Balance({ roomId }: Props) {
   const [, { getMemberName }] = useRoomMember(roomId)
   const [events] = useEvents(roomId)
-  const [currencyRate, { displayCurrency }] = useRoomCurrencyRate(roomId)
+  const [, { displayCurrency, displayCurrencySum, availableCurrencyFor }] = useRoomCurrencyRate(roomId)
 
   const totalByCurrency = (events ?? []).reduce((acc, v) => {
     for (const payment of v.payments) {
@@ -30,12 +30,17 @@ export default function Balance({ roomId }: Props) {
       ? Object.keys(totalByCurrency)[0]
       : null) ?? 'JPY'
 
-  const usedCurrency = Object.keys(totalByCurrency)
-  const rateMissingCurrency = usedCurrency.filter(
-    (currency) =>
-      currency !== primaryCurrency &&
-      currencyRate?.find((v) => v.currency === currency && v.toCurrency === primaryCurrency) === undefined,
+  const totalCurrencyValue = Object.entries(totalByCurrency).map(([currency, amount]) => ({ currency, amount }))
+
+  const availableCurrency = availableCurrencyFor(primaryCurrency)
+
+  const rateMissingTotalCurrencyValue = totalCurrencyValue.filter(
+    ({ currency }) => !availableCurrency.includes(currency),
   )
+
+  const rateConvertibleTotalCurrencyValue = Object.entries(totalByCurrency)
+    .map(([currency, amount]) => ({ currency, amount }))
+    .filter(({ currency }) => availableCurrency.includes(currency))
 
   const balanceByMemberId = (events ?? []).reduce((acc, v) => {
     const sumByCurrency: { [code: string]: bigint } = {}
@@ -79,21 +84,16 @@ export default function Balance({ roomId }: Props) {
     <div className="grid gap-4">
       <div>
         <span className="text-3xl font-bold tabular-nums">
-          {displayCurrency({
-            amount: totalByCurrency[primaryCurrency] ?? BigInt(0),
-            currency: primaryCurrency,
-          })}
+          {displayCurrencySum(rateConvertibleTotalCurrencyValue, primaryCurrency)}
         </span>
-        {Object.entries(totalByCurrency)
-          .filter(([code]) => code !== primaryCurrency)
-          .map(([code, total]) => (
-            <span key={code} className="ml-2 tabular-nums">
-              {displayCurrency({ amount: total, currency: code })}
-            </span>
-          ))}
+        {rateMissingTotalCurrencyValue.map(({ currency, amount }) => (
+          <span key={currency} className="ml-2 tabular-nums">
+            {displayCurrency({ amount, currency })}
+          </span>
+        ))}
       </div>
       <div>
-        {rateMissingCurrency.map((currency) => (
+        {rateMissingTotalCurrencyValue.map(({ currency }) => (
           <div
             key={currency}
             className="grid grid-cols-[auto_1fr] gap-1 rounded-lg bg-secondary p-4 text-xs font-bold text-primary"

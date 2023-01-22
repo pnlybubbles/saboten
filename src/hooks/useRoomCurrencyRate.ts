@@ -23,6 +23,11 @@ export type CurrencyRatePayload = {
   rate: number
 }
 
+interface CurrencyValue {
+  currency: string
+  amount: bigint
+}
+
 export default function useRoomCurrencyRate(roomId: string | null) {
   const [state, setState] = useStore(roomCurrencyRateStore, roomId)
 
@@ -97,9 +102,9 @@ export default function useRoomCurrencyRate(roomId: string | null) {
     [roomId, setState],
   )
 
-  const displayCurrency = (value: { currency: string; amount: bigint }, displayAsCurrency: string = value.currency) => {
-    if (displayAsCurrency !== value.currency) {
-      const current = state?.find((v) => v.currency === value.currency && v.toCurrency === displayAsCurrency)
+  const convertCurrencyValue = ({ amount, currency }: CurrencyValue, displayAsCurrency: string) => {
+    if (displayAsCurrency !== currency) {
+      const current = state?.find((v) => v.currency === currency && v.toCurrency === displayAsCurrency)
       if (current === undefined) {
         return null
       }
@@ -107,14 +112,29 @@ export default function useRoomCurrencyRate(roomId: string | null) {
       if (digits === undefined) {
         return null
       }
-      return formatCurrencyNumber((Number(value.amount) * current.rate) / 10 ** digits, displayAsCurrency)
+      return (Number(amount) * current.rate) / 10 ** digits
     }
-    const digits = cc.code(value.currency)?.digits
+    const digits = cc.code(currency)?.digits
     if (digits === undefined) {
       return null
     }
-    return formatCurrencyNumber(Number(value.amount) / 10 ** digits, displayAsCurrency)
+    return Number(amount) / 10 ** digits
   }
 
-  return [state, { updateRate, removeRate, displayCurrency }] as const
+  const displayCurrency = (value: CurrencyValue, displayAsCurrency: string = value.currency) => {
+    const converted = convertCurrencyValue(value, displayAsCurrency)
+    return converted !== null ? formatCurrencyNumber(converted, displayAsCurrency) : null
+  }
+
+  const displayCurrencySum = (value: CurrencyValue[], displayAsCurrency: string) => {
+    const sum = value.reduce((acc, value) => acc + (convertCurrencyValue(value, displayAsCurrency) ?? 0), 0)
+    return formatCurrencyNumber(sum, displayAsCurrency)
+  }
+
+  const availableCurrencyFor = (displayCurrency: string) => [
+    displayCurrency,
+    ...(state?.filter((v) => v.toCurrency === displayCurrency).map((v) => v.currency) ?? []),
+  ]
+
+  return [state, { updateRate, removeRate, displayCurrency, displayCurrencySum, availableCurrencyFor }] as const
 }
