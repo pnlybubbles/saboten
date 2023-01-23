@@ -105,8 +105,12 @@ export default function useEvents(roomId: string | null) {
           ]
         },
         async () => {
+          if (roomId === null) {
+            // TODO: もしかしたらaddしたすぐ直後の場合はroomIdが確定していない可能性もある
+            throw new Error('No room to remove event')
+          }
           const data = await trpc.event.update.mutate({ ...event, eventId: event.id })
-          const desc = roomLocalStorageDescriptor(data.roomId)
+          const desc = roomLocalStorageDescriptor(roomId)
           const current = desc.get()
           if (current === null) {
             // この時点でデータがキャッシュサれていないのは流石にエラー
@@ -124,7 +128,7 @@ export default function useEvents(roomId: string | null) {
           return events.map((v) => ({ ...v, tmpId: genTmpId(), createdAt: parseISO(v.createdAt) }))
         },
       ),
-    [setState],
+    [roomId, setState],
   )
 
   const removeEvent = useCallback(

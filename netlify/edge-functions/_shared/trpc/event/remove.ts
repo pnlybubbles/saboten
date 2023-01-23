@@ -1,6 +1,6 @@
 import { z } from 'zod'
 import prisma from '../../prisma.ts'
-import { ROOM_SELECT } from '../room/_helper.ts'
+import { ROOM_SELECT, serializeEvent } from '../room/_helper.ts'
 import { sessionProcedure } from '../server.ts'
 
 export default sessionProcedure
@@ -8,5 +8,5 @@ export default sessionProcedure
   .mutation(async ({ input: { eventId, roomId } }) => {
     await prisma.event.delete({ where: { id: eventId } })
     const events = await prisma.event.findMany({ where: { roomId }, ...ROOM_SELECT.events })
-    return events
+    return events.map(serializeEvent)
   })

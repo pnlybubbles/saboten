@@ -2,7 +2,7 @@ import { TRPCError } from '@trpc/server'
 import { z } from 'zod'
 import prisma from '../../../prisma.ts'
 import { sessionProcedure } from '../../server.ts'
-import { ROOM_SELECT } from '../_helper.ts'
+import { ROOM_SELECT, serializeRoom } from '../_helper.ts'
 
 export default sessionProcedure
   .input(z.object({ roomId: z.string().uuid().nullable(), name: z.string() }))
@@ -28,7 +28,7 @@ export default sessionProcedure
       return {
         roomId: room.id,
         members: room.members,
-        room,
+        room: serializeRoom(room),
       }
     }
   })

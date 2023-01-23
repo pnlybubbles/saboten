@@ -25,3 +25,44 @@ export const ROOM_SELECT = {
     orderBy: { createdAt: 'asc' },
   },
 } as const
+
+type Room = {
+  id: string
+  title: string
+  members: {
+    id: string
+    name: string | null
+    createdAt: Date
+    user: { id: string; name: string } | null
+  }[]
+  events: {
+    id: string
+    label: string
+    members: {
+      memberId: string
+      createdAt: Date
+    }[]
+    payments: {
+      amount: bigint
+      currency: string
+      paidByMemberId: string
+    }[]
+    createdAt: Date
+  }[]
+  currencyRate: {
+    currency: string
+    toCurrency: string
+    rate: number
+    createdAt: Date
+  }[]
+}
+
+export const serializeRoom = (room: Room) => ({
+  ...room,
+  events: room.events.map(serializeEvent),
+})
+
+export const serializeEvent = (event: Room['events'][number]) => ({
+  ...event,
+  payments: event.payments.map(({ amount, ...payment }) => ({ ...payment, amount: amount.toString() })),
+})

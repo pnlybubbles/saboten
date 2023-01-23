@@ -2,7 +2,7 @@ import { TRPCError } from '@trpc/server'
 import { sessionProcedure } from '../server.ts'
 import { z } from 'zod'
 import prisma from '../../prisma.ts'
-import { ROOM_SELECT } from '../room/_helper.ts'
+import { ROOM_SELECT, serializeEvent, serializeRoom } from '../room/_helper.ts'
 import { DECIMAL_SCHEMA } from '../../utils/decimal.ts'
 import { CURRENCY_CODE_SCHEMA } from '../../utils/currency.ts'
 
@@ -27,7 +27,9 @@ export default sessionProcedure
         data: {
           room: { connect: { id: roomId } },
           label,
-          payments: { create: { paiedByMember: { connect: { id: paidByMemberId } }, amount, currency } },
+          payments: {
+            create: { paiedByMember: { connect: { id: paidByMemberId } }, amount: BigInt(amount), currency },
+          },
           members: { createMany: { data: memberIds.map((memberId) => ({ memberId })) } },
         },
       })
@@ -35,7 +37,7 @@ export default sessionProcedure
       return {
         room: null,
         roomId,
-        events,
+        events: events.map(serializeEvent),
       }
     } else {
       const room = await prisma.room.create({
@@ -49,15 +51,15 @@ export default sessionProcedure
       const event = await prisma.event.create({
         data: {
           room: { connect: { id: room.id } },
-          payments: { create: { paiedByMember: { connect: { id: memberId } }, amount, currency } },
+          payments: { create: { paiedByMember: { connect: { id: memberId } }, amount: BigInt(amount), currency } },
           members: { create: { member: { connect: { id: memberId } } } },
         },
         include: { payments: true, members: true },
       })
       return {
-        room,
+        room: serializeRoom(room),
         roomId: room.id,
-        events: [...room.events, event],
+        events: [event, ...room.events].map(serializeEvent),
       }
     }
   })

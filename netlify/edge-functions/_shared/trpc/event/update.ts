@@ -3,6 +3,7 @@ import { z } from 'zod'
 import prisma from '../../prisma.ts'
 import { DECIMAL_SCHEMA } from '../../utils/decimal.ts'
 import { CURRENCY_CODE_SCHEMA } from '../../utils/currency.ts'
+import { ROOM_SELECT, serializeEvent } from '../room/_helper.ts'
 
 export default sessionProcedure
   .input(
@@ -21,13 +22,13 @@ export default sessionProcedure
       data: {
         label,
         // TODO: paymentsはいったん1件までしか入らないはずなので、全件updateする
-        payments: { updateMany: { where: {}, data: { paidByMemberId, amount, currency } } },
+        payments: { updateMany: { where: {}, data: { paidByMemberId, amount: BigInt(amount), currency } } },
         members: {
           deleteMany: {},
           createMany: { data: memberIds.map((memberId) => ({ memberId })) },
         },
       },
-      include: { payments: true, members: true },
+      select: ROOM_SELECT.events.select,
     })
-    return event
+    return serializeEvent(event)
   })
