@@ -152,7 +152,8 @@ function Join({ roomId }: { roomId: string }) {
       )}
       <Button
         onClick={create}
-        disabled={selectedMember === undefined || (selectedMember === null && name === '') || busy}
+        disabled={selectedMember === undefined || (selectedMember === null && name === '')}
+        loading={busy}
       >
         参加する
       </Button>
