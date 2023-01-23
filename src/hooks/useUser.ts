@@ -30,10 +30,6 @@ export default function useUser() {
     if (!ready) {
       return
     }
-    // TODO: 一定時間でrevalidate
-    if (user) {
-      return
-    }
     void (async () => {
       if (task) {
         return
@@ -43,9 +39,11 @@ export default function useUser() {
 
       if (fetched) {
         setUserInStorage(fetched)
+      } else {
+        setUserInStorage(undefined)
       }
     })()
-  }, [ready, setUserInStorage, user])
+  }, [ready, setUserInStorage])
 
   return [user, setUser] as const
 }
