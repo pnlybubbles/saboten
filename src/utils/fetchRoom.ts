@@ -5,11 +5,6 @@ const taskMap = new Map<string, ReturnType<typeof trpc.room.item.query>>()
 
 export default function fetchRoom(roomId: string) {
   const desc = roomLocalStorageDescriptor(roomId)
-  const cache = desc.get()
-
-  if (cache) {
-    return Promise.resolve(cache)
-  }
 
   const task = taskMap.get(roomId)
 

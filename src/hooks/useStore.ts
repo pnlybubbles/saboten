@@ -7,7 +7,15 @@ class Store<T> {
   private promise: Promise<void> = Promise.resolve()
   private counter = 0
 
-  constructor(private fetcher: () => Promise<T>, private onUpdate?: (value: unknown, label: string) => void) {}
+  constructor(
+    private fetcher: () => Promise<T>,
+    initialCache?: T | undefined,
+    private onUpdate?: (value: unknown, label: string) => void,
+  ) {
+    // 初回はrevalidateする
+    this.get()
+    this.cache = initialCache
+  }
 
   private updateCache(value: T) {
     this.cache = value
@@ -80,6 +88,7 @@ class Store<T> {
 export function createStore<T, Args extends unknown[] = []>(
   cacheKey: (...args: Args) => string,
   fetcher: (...args: Args) => Promise<T>,
+  persistCache: (...args: Args) => T | undefined,
 ) {
   const cache = new Map<string, Store<T>>()
 
@@ -87,6 +96,7 @@ export function createStore<T, Args extends unknown[] = []>(
     cache,
     cacheKey,
     fetcher,
+    persistCache,
   }
 }
 
@@ -101,6 +111,7 @@ export default function useStore<T, Args extends unknown[]>(
     cachedRecord ??
     new Store(
       () => store.fetcher(...args),
+      store.persistCache(...args),
       (value, label) => log(`store-${label} [${cacheKey.slice(0, 10)}]`, value),
     )
 

@@ -1,6 +1,7 @@
 import trpc from '@/utils/trpc'
 import { useCallback } from 'react'
 import useStore, { createStore } from './useStore'
+import type { Room } from './useRoomLocalStorage'
 import { ROOM_LOCAL_STORAGE_KEY, roomLocalStorageDescriptor } from './useRoomLocalStorage'
 import useEnterNewRoom from './useEnterNewRoom'
 import fetchRoom from '@/utils/fetchRoom'
@@ -8,13 +9,22 @@ import genTmpId from '@/utils/basic/genTmpId'
 import type { User } from './useUser'
 import useUser from './useUser'
 
+const transform = (room: Room) => room.members.map((v) => ({ ...v, id: v.id as string | null, tmpId: genTmpId() }))
+
 const roomMemberStore = createStore(
   (roomId: string | null) => ROOM_LOCAL_STORAGE_KEY(roomId ?? 'tmp'),
   (roomId: string | null) => {
     if (roomId === null) {
       return Promise.resolve([])
     }
-    return fetchRoom(roomId).then((v) => v.members.map((v) => ({ ...v, id: v.id as string | null, tmpId: genTmpId() })))
+    return fetchRoom(roomId).then(transform)
+  },
+  (roomId: string | null) => {
+    if (roomId === null) {
+      return []
+    }
+    const room = roomLocalStorageDescriptor(roomId).get()
+    return room ? transform(room) : undefined
   },
 )
 

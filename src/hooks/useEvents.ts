@@ -1,4 +1,5 @@
 import fetchRoom from '@/utils/fetchRoom'
+import type { Room } from './useRoomLocalStorage'
 import { ROOM_LOCAL_STORAGE_KEY, roomLocalStorageDescriptor } from './useRoomLocalStorage'
 import useStore, { createStore } from './useStore'
 import genTmpId from '@/utils/basic/genTmpId'
@@ -7,20 +8,28 @@ import trpc from '@/utils/trpc'
 import useEnterNewRoom from './useEnterNewRoom'
 import { parseISO } from 'date-fns'
 
+const transform = (room: Room) =>
+  room.events.map((v) => ({
+    ...v,
+    id: v.id as string | null,
+    tmpId: genTmpId(),
+    createdAt: parseISO(v.createdAt),
+  }))
+
 const eventsStore = createStore(
   (roomId: string | null) => ROOM_LOCAL_STORAGE_KEY(roomId ?? 'tmp'),
   (roomId: string | null) => {
     if (roomId === null) {
       return Promise.resolve([])
     }
-    return fetchRoom(roomId).then((v) =>
-      v.events.map((v) => ({
-        ...v,
-        id: v.id as string | null,
-        tmpId: genTmpId(),
-        createdAt: parseISO(v.createdAt),
-      })),
-    )
+    return fetchRoom(roomId).then(transform)
+  },
+  (roomId: string | null) => {
+    if (roomId === null) {
+      return []
+    }
+    const room = roomLocalStorageDescriptor(roomId).get()
+    return room ? transform(room) : undefined
   },
 )
 

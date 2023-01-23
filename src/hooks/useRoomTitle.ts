@@ -1,9 +1,12 @@
 import trpc from '@/utils/trpc'
 import { useCallback } from 'react'
 import useStore, { createStore } from './useStore'
+import type { Room } from './useRoomLocalStorage'
 import { ROOM_LOCAL_STORAGE_KEY, roomLocalStorageDescriptor } from './useRoomLocalStorage'
 import useEnterNewRoom from './useEnterNewRoom'
 import fetchRoom from '@/utils/fetchRoom'
+
+const transform = (room: Room) => room.title
 
 const roomTitleStore = createStore(
   (roomId: string | null) => ROOM_LOCAL_STORAGE_KEY(roomId ?? 'tmp'),
@@ -11,7 +14,14 @@ const roomTitleStore = createStore(
     if (roomId === null) {
       return Promise.resolve('')
     }
-    return fetchRoom(roomId).then((v) => v.title)
+    return fetchRoom(roomId).then(transform)
+  },
+  (roomId: string | null) => {
+    if (roomId === null) {
+      return ''
+    }
+    const room = roomLocalStorageDescriptor(roomId).get()
+    return room ? transform(room) : undefined
   },
 )
 

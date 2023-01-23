@@ -1,11 +1,14 @@
 import trpc from '@/utils/trpc'
 import { useCallback } from 'react'
 import useStore, { createStore } from './useStore'
+import type { Room } from './useRoomLocalStorage'
 import { ROOM_LOCAL_STORAGE_KEY, roomLocalStorageDescriptor } from './useRoomLocalStorage'
 import fetchRoom from '@/utils/fetchRoom'
 import { parseISO } from 'date-fns'
 import cc from 'currency-codes'
 import formatCurrencyNumber from '@/utils/basic/formatCurrencyNumber'
+
+const transform = (room: Room) => room.currencyRate.map((v) => ({ ...v, createdAt: parseISO(v.createdAt) }))
 
 const roomCurrencyRateStore = createStore(
   (roomId: string | null) => ROOM_LOCAL_STORAGE_KEY(roomId ?? 'tmp'),
@@ -13,7 +16,14 @@ const roomCurrencyRateStore = createStore(
     if (roomId === null) {
       return Promise.resolve([])
     }
-    return fetchRoom(roomId).then((v) => v.currencyRate.map((v) => ({ ...v, createdAt: parseISO(v.createdAt) })))
+    return fetchRoom(roomId).then(transform)
+  },
+  (roomId: string | null) => {
+    if (roomId === null) {
+      return []
+    }
+    const room = roomLocalStorageDescriptor(roomId).get()
+    return room ? transform(room) : undefined
   },
 )
 

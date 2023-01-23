@@ -35,6 +35,8 @@ const ROOM_SCHEMA = z.object({
   ),
 })
 
+export type Room = z.infer<typeof ROOM_SCHEMA>
+
 export const ROOM_LOCAL_STORAGE_KEY = (roomId: string) => `room_${roomId}`
 
 export const roomLocalStorageDescriptor = (roomId: string) =>
