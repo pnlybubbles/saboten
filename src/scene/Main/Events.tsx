@@ -6,6 +6,7 @@ import usePresent from '@/hooks/usePresent'
 import Avatar from '@/components/Avatar'
 import formatDate from '@/utils/basic/formatDate'
 import useRoomCurrencyRate from '@/hooks/useRoomCurrencyRate'
+import CurrencyText from '@/components/CurrencyText'
 
 interface Props {
   roomId: string | null
@@ -40,12 +41,12 @@ function Item({ id, label, payments, members, roomId, createdAt }: Event & Props
         <div className="font-bold">{label}</div>
         <div className="text-xs text-zinc-400">{formatDate(createdAt)}</div>
       </div>
-      <div className="tabular-nums">
-        <span>
-          {payments[0]
-            ? displayCurrency({ currency: payments[0].currency, amount: BigInt(payments[0].amount) }).value
-            : displayCurrency({ currency: 'JPY', amount: BigInt(0) }).value}
-        </span>
+      <div>
+        <CurrencyText
+          {...(payments[0]
+            ? displayCurrency({ currency: payments[0].currency, amount: BigInt(payments[0].amount) })
+            : displayCurrency({ currency: 'JPY', amount: BigInt(0) }))}
+        ></CurrencyText>
         <span className="text-zinc-400"> / </span>
         <span className="text-xs text-zinc-400">{members.length}人</span>
       </div>

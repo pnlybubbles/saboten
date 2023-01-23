@@ -1,4 +1,5 @@
 import Button from '@/components/Button'
+import CurrencyText from '@/components/CurrencyText'
 import type { SheetProps } from '@/components/Sheet'
 import Sheet from '@/components/Sheet'
 import TextField from '@/components/TextField'
@@ -14,13 +15,15 @@ interface Props extends SheetProps {
 
 export default function CurrencyRateSheet({ currency, toCurrency, roomId, ...sheet }: Props) {
   const [, { updateRate, displayCurrency }] = useRoomCurrencyRate(roomId)
-  const currencyDigits = cc.code(currency)?.digits
+  const currencyRecord = cc.code(currency)
   const toCurrencyDigits = cc.code(toCurrency)?.digits
   const [rate, setRate] = useState('')
 
-  if (currencyDigits === undefined || toCurrencyDigits === undefined) {
+  if (currencyRecord === undefined || toCurrencyDigits === undefined) {
     return null
   }
+
+  const currencyDigits = currencyRecord.digits
 
   const handleUpdate = () => {
     void updateRate({ currency, toCurrency, rate: (parseFloat(rate) * 10 ** toCurrencyDigits) / 10 ** currencyDigits })
@@ -30,8 +33,13 @@ export default function CurrencyRateSheet({ currency, toCurrency, roomId, ...she
   return (
     <Sheet {...sheet}>
       <div className="grid gap-4">
-        <div className="font-bold">
-          {currency} {displayCurrency({ amount: BigInt(10 ** currencyDigits), currency }).value} =
+        <div className="grid gap-1">
+          <div className="font-bold">
+            <span>{`${currency} `}</span>
+            <CurrencyText {...displayCurrency({ amount: BigInt(10 ** currencyDigits), currency })}></CurrencyText>
+            <span>{` =`}</span>
+          </div>
+          <div className="text-xs">{currencyRecord.currency}</div>
         </div>
         <TextField label={toCurrency} type="number" inputMode="decimal" value={rate} onChange={setRate}></TextField>
         <Button onClick={handleUpdate}>設定</Button>
