@@ -23,6 +23,8 @@ interface Props extends SheetProps {
   onRemove?: () => void
 }
 
+const FREQUENTLY_USED_CURRENCY_CODES = ['JPY', 'USD', 'EUR']
+
 export default function EventSheet({ roomId, defaultValue, onSubmit, submitLabel, onRemove, ...sheet }: Props) {
   const [user] = useUser()
   const [members, { getMemberName }] = useRoomMember(roomId)
@@ -107,20 +109,32 @@ export default function EventSheet({ roomId, defaultValue, onSubmit, submitLabel
             <div>{currency}</div>
           </div>
           <Sheet {...editCurrencySheet}>
-            <div className="ml-[-1rem] grid grid-cols-[auto_auto_1fr] items-stretch">
-              {cc.codes().map((code) => (
-                <React.Fragment key={code}>
-                  <div className="grid items-center pr-2">
-                    <Icon name="check" className={currency === code ? 'opacity-100' : 'opacity-0'}></Icon>
-                  </div>
-                  <div className="grid items-center" onClick={() => handleSelectCurrency(code)}>
-                    <div>{code}</div>
-                  </div>
-                  <div className="py-1 pl-2 text-zinc-400" onClick={() => handleSelectCurrency(code)}>
-                    {cc.code(code)?.currency}
-                  </div>
-                </React.Fragment>
-              ))}
+            <div className="grid gap-2">
+              <div className="text-xs font-bold">よく使う</div>
+              <div className="grid grid-cols-[auto_auto_1fr] items-stretch ">
+                {FREQUENTLY_USED_CURRENCY_CODES.map((code) => (
+                  <EditCurrencyItem
+                    key={code}
+                    code={code}
+                    onClick={() => handleSelectCurrency(code)}
+                    active={currency === code}
+                  ></EditCurrencyItem>
+                ))}
+              </div>
+              <div className="text-xs font-bold">その他</div>
+              <div className="grid grid-cols-[auto_auto_1fr] items-stretch">
+                {cc
+                  .codes()
+                  .filter((v) => !FREQUENTLY_USED_CURRENCY_CODES.includes(v))
+                  .map((code) => (
+                    <EditCurrencyItem
+                      key={code}
+                      code={code}
+                      onClick={() => handleSelectCurrency(code)}
+                      active={currency === code}
+                    ></EditCurrencyItem>
+                  ))}
+              </div>
             </div>
           </Sheet>
           <TextField
@@ -197,5 +211,21 @@ export default function EventSheet({ roomId, defaultValue, onSubmit, submitLabel
         </div>
       </div>
     </Sheet>
+  )
+}
+
+function EditCurrencyItem({ code, onClick, active }: { code: string; onClick: () => void; active: boolean }) {
+  return (
+    <>
+      <div className="grid items-center pr-2">
+        <Icon name="check" className={active ? 'opacity-100' : 'opacity-0'}></Icon>
+      </div>
+      <div className="grid items-center" onClick={onClick}>
+        <div>{code}</div>
+      </div>
+      <div className="py-1 pl-2 text-zinc-400" onClick={onClick}>
+        {cc.code(code)?.currency}
+      </div>
+    </>
   )
 }
