@@ -43,8 +43,8 @@ function Item({ id, label, payments, members, roomId, createdAt }: Event & Props
       <div className="tabular-nums">
         <span>
           {payments[0]
-            ? displayCurrency({ currency: payments[0].currency, amount: BigInt(payments[0].amount) })
-            : displayCurrency({ currency: 'JPY', amount: BigInt(0) })}
+            ? displayCurrency({ currency: payments[0].currency, amount: BigInt(payments[0].amount) }).value
+            : displayCurrency({ currency: 'JPY', amount: BigInt(0) }).value}
         </span>
         <span className="text-zinc-400"> / </span>
         <span className="text-xs text-zinc-400">{members.length}人</span>

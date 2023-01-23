@@ -46,11 +46,13 @@ export default function Icon({
   size = 20,
   fill = false,
   className,
+  inheritFontSize,
 }: {
   name: string
   size?: OpticalSize
   fill?: boolean
   className?: string | undefined
+  inheritFontSize?: boolean
 }) {
   return (
     <i
@@ -65,9 +67,17 @@ export default function Icon({
         }),
         // font-sizeが指定されていればwidth,heightの指定は不要だが、
         // Fallbackフォントが適用されたときにlayout-shiftを抑制するために指定している
-        fontSize: px(size),
-        width: px(size),
-        height: px(size),
+        ...(inheritFontSize
+          ? {
+              fontSize: '1em',
+              width: '1em',
+              height: '1em',
+            }
+          : {
+              fontSize: px(size),
+              width: px(size),
+              height: px(size),
+            }),
       }}
     >
       {name}

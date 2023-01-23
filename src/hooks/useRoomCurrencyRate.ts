@@ -28,6 +28,12 @@ interface CurrencyValue {
   amount: bigint
 }
 
+type DisplayCurrencyValue = {
+  value: string
+  sign: boolean
+  invalid: boolean
+}
+
 export default function useRoomCurrencyRate(roomId: string | null) {
   const [state, setState] = useStore(roomCurrencyRateStore, roomId)
 
@@ -121,14 +127,31 @@ export default function useRoomCurrencyRate(roomId: string | null) {
     return Number(amount) / 10 ** digits
   }
 
-  const displayCurrency = (value: CurrencyValue, displayAsCurrency: string = value.currency) => {
-    const converted = convertCurrencyValue(value, displayAsCurrency)
-    return converted !== null ? formatCurrencyNumber(converted, displayAsCurrency) : null
+  const formatDisplayCurrencyValue = (raw: number | null, displayAsCurrency: string) => {
+    if (raw === null) {
+      return { value: '?', sign: true, invalid: true }
+    }
+
+    const negative = raw < 0
+
+    return {
+      value: formatCurrencyNumber(negative ? -raw : raw, displayAsCurrency),
+      sign: !negative,
+      invalid: false,
+    }
   }
 
-  const displayCurrencySum = (value: CurrencyValue[], displayAsCurrency: string) => {
-    const sum = value.reduce((acc, value) => acc + (convertCurrencyValue(value, displayAsCurrency) ?? 0), 0)
-    return formatCurrencyNumber(sum, displayAsCurrency)
+  const displayCurrency = (value: CurrencyValue, displayAsCurrency: string = value.currency): DisplayCurrencyValue => {
+    return formatDisplayCurrencyValue(convertCurrencyValue(value, displayAsCurrency), displayAsCurrency)
+  }
+
+  const displayCurrencySum = (value: CurrencyValue[], displayAsCurrency: string): DisplayCurrencyValue => {
+    const sum = value.reduce((acc, value) => {
+      const converted = convertCurrencyValue(value, displayAsCurrency)
+      return acc !== null && converted !== null ? acc + converted : null
+    }, 0 as number | null)
+
+    return formatDisplayCurrencyValue(sum, displayAsCurrency)
   }
 
   const availableCurrencyFor = (displayCurrency: string) => [

@@ -31,7 +31,7 @@ export default function CurrencyRateSheet({ currency, toCurrency, roomId, ...she
     <Sheet {...sheet}>
       <div className="grid gap-4">
         <div className="font-bold">
-          {currency} {displayCurrency({ amount: BigInt(10 ** currencyDigits), currency })} =
+          {currency} {displayCurrency({ amount: BigInt(10 ** currencyDigits), currency }).value} =
         </div>
         <TextField label={toCurrency} type="number" inputMode="decimal" value={rate} onChange={setRate}></TextField>
         <Button onClick={handleUpdate}>設定</Button>

@@ -3,10 +3,10 @@ import Icon from '@/components/Icon'
 import useEvents from '@/hooks/useEvents'
 import useRoomCurrencyRate from '@/hooks/useRoomCurrencyRate'
 import useRoomMember from '@/hooks/useRoomMember'
-import clsx from 'clsx'
 import React, { useState } from 'react'
 import CurrencyRateSheet from './CurrencyRateSheet'
 import usePresent from '@/hooks/usePresent'
+import CurrencyText from '@/components/CurrencyText'
 
 interface Props {
   roomId: string | null
@@ -83,13 +83,13 @@ export default function Balance({ roomId }: Props) {
   return (
     <div className="grid gap-4">
       <div>
-        <span className="text-3xl font-bold tabular-nums">
-          {displayCurrencySum(rateConvertibleTotalCurrencyValue, primaryCurrency)}
-        </span>
+        <CurrencyText
+          className="text-3xl font-bold"
+          {...displayCurrencySum(rateConvertibleTotalCurrencyValue, primaryCurrency)}
+        ></CurrencyText>
+        {rateMissingTotalCurrencyValue.length > 0 && <span className="ml-1 text-3xl font-bold">+?</span>}
         {rateMissingTotalCurrencyValue.map(({ currency, amount }) => (
-          <span key={currency} className="ml-2 tabular-nums">
-            {displayCurrency({ amount, currency })}
-          </span>
+          <CurrencyText key={currency} className="ml-2" {...displayCurrency({ amount, currency })}></CurrencyText>
         ))}
       </div>
       <div>
@@ -100,11 +100,11 @@ export default function Balance({ roomId }: Props) {
           >
             <Icon className="mt-[-3px]" name="error" />
             <div className="grid gap-2">
-              <div>{`${currency} を ${primaryCurrency} に変換するレートが指定されていないため、通貨別のみ表記しています`}</div>
+              <div>{`${currency} を ${primaryCurrency} に変換するレートが指定されていないため、通貨別に表記しています`}</div>
               <div className="grid grid-flow-col justify-end gap-2">
-                <Button mini variant="secondary">
+                {/* <Button mini variant="secondary">
                   今はしない
-                </Button>
+                </Button> */}
                 <Button
                   mini
                   variant="primary"
@@ -125,32 +125,66 @@ export default function Balance({ roomId }: Props) {
       )}
       {balances.length > 0 && (
         <div className="grid grid-cols-[1fr_auto_auto] gap-x-2 gap-y-1">
-          {balances.map(([memberId, balanceByCurrency]) =>
-            Object.entries(balanceByCurrency)
+          {balances.map(([memberId, balanceByCurrency]) => [
+            <React.Fragment key={memberId}>
+              <div className="font-bold">{getMemberName(memberId)}</div>
+              <CurrencyText
+                className="text-right"
+                {...displayCurrencySum(
+                  Object.entries(balanceByCurrency)
+                    .map(([currency, balance]) => ({ amount: balance.paid, currency }))
+                    .filter((v) => availableCurrency.includes(v.currency)),
+                  primaryCurrency,
+                )}
+              ></CurrencyText>
+              <CurrencyText
+                color
+                className="font-bold"
+                {...displayCurrencySum(
+                  Object.entries(balanceByCurrency)
+                    .map(([currency, balance]) => ({ amount: balance.assets, currency }))
+                    .filter((v) => availableCurrency.includes(v.currency)),
+                  primaryCurrency,
+                )}
+              ></CurrencyText>
+            </React.Fragment>,
+            ...Object.entries(balanceByCurrency)
+              .filter(([currency]) => availableCurrency.includes(currency))
+              .sort(([a], [b]) => (a === primaryCurrency ? -1 : b === primaryCurrency ? 1 : 0))
+              .map(([currency, balance], _, array) =>
+                array.length <= 1 && currency === primaryCurrency ? null : (
+                  <React.Fragment key={`${memberId}_${currency}`}>
+                    <div className="text-xs opacity-0">{getMemberName(memberId)}</div>
+                    <CurrencyText
+                      className="text-xs opacity-70"
+                      {...displayCurrency({ amount: balance.paid, currency })}
+                    ></CurrencyText>
+                    <CurrencyText
+                      color
+                      className="text-xs opacity-70"
+                      {...displayCurrency({ amount: balance.assets, currency })}
+                    ></CurrencyText>
+                  </React.Fragment>
+                ),
+              ),
+            ...Object.entries(balanceByCurrency)
+              .filter(([currency]) => !availableCurrency.includes(currency))
               .sort(([a], [b]) => (a === primaryCurrency ? -1 : b === primaryCurrency ? 1 : 0))
               .map(([currency, balance]) => (
                 <React.Fragment key={`${memberId}_${currency}`}>
                   <div className="font-bold">{getMemberName(memberId)}</div>
-                  <div className="text-right tabular-nums">{displayCurrency({ amount: balance.paid, currency })}</div>
-                  <div
-                    className={clsx(
-                      'flex items-center justify-end font-bold tabular-nums',
-                      balance.assets > 0 ? 'text-rose-500' : 'text-lime-600',
-                    )}
-                  >
-                    {balance.assets > 0 ? (
-                      <Icon className="mt-[-2px]" name="remove" />
-                    ) : (
-                      <Icon className="mt-[-2px]" name="add" />
-                    )}
-                    {displayCurrency({
-                      amount: balance.assets > 0 ? balance.assets : -balance.assets,
-                      currency,
-                    })}
-                  </div>
+                  <CurrencyText
+                    className="text-right"
+                    {...displayCurrency({ amount: balance.paid, currency })}
+                  ></CurrencyText>
+                  <CurrencyText
+                    color
+                    className="font-bold"
+                    {...displayCurrency({ amount: balance.assets, currency })}
+                  ></CurrencyText>
                 </React.Fragment>
               )),
-          )}
+          ])}
         </div>
       )}
     </div>
