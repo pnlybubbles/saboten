@@ -7,6 +7,8 @@ import Avatar from '@/components/Avatar'
 import formatDate from '@/utils/basic/formatDate'
 import useRoomCurrencyRate from '@/hooks/useRoomCurrencyRate'
 import CurrencyText from '@/components/CurrencyText'
+import Spinner from '@/components/Spinner'
+import clsx from 'clsx'
 
 interface Props {
   roomId: string | null
@@ -34,9 +36,17 @@ function Item({ id, label, payments, members, roomId, createdAt }: Event & Props
     <button
       className="grid grid-cols-[auto_1fr_auto] items-center gap-4 text-left transition active:scale-95 disabled:opacity-30"
       onClick={sheet.open}
-      disabled={!id}
+      disabled={id === null}
     >
-      <Avatar mini name={payments[0] ? getMemberName(payments[0].paidByMemberId) ?? null : null}></Avatar>
+      <div className="flex items-center">
+        <Spinner
+          className={clsx(
+            'pointer-events-none text-zinc-400 transition-[margin,opacity]',
+            id === null ? 'mr-2 opacity-100' : 'mr-[-20px] opacity-0',
+          )}
+        ></Spinner>
+        <Avatar mini name={payments[0] ? getMemberName(payments[0].paidByMemberId) ?? null : null}></Avatar>
+      </div>
       <div>
         <div className="font-bold">{label}</div>
         <div className="text-xs text-zinc-400">{formatDate(createdAt)}</div>
