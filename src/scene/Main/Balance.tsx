@@ -85,7 +85,10 @@ export default function Balance({ roomId }: Props) {
 
   return (
     <div className="grid">
-      <div onClick={() => setShowDetail((v) => !v)} className="grid grid-flow-col items-center justify-between">
+      <div
+        onClick={() => totalCurrencyValue.length > 0 && setShowDetail((v) => !v)}
+        className="grid grid-flow-col items-center justify-between"
+      >
         <div>
           <CurrencyText
             className="text-3xl font-bold"
