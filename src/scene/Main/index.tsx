@@ -16,6 +16,7 @@ import { Link } from 'react-router-dom'
 import useRoomLocalStorage from '@/hooks/useRoomLocalStorage'
 import { deriveMemberName } from '@/hooks/useRoomMember'
 import { useMemo } from 'react'
+import Tips from '@/components/Tips'
 
 interface Props {
   roomId: string | null
@@ -40,7 +41,14 @@ export default function Main({ roomId }: Props) {
             メンバー
           </Button>
         </div>
-        <TitleInput defaultValue={title} onChange={setTitle}></TitleInput>
+        <div className="group">
+          <TitleInput defaultValue={title} onChange={setTitle}></TitleInput>
+          {(title === undefined || title.length === 0) && (
+            <Tips className="mt-[-0.5rem] h-6 text-zinc-400 transition-[opacity,margin,height] group-focus-within:mt-0 group-focus-within:h-0 group-focus-within:opacity-0">
+              タイトルを入力して旅をはじめましょう！
+            </Tips>
+          )}
+        </div>
       </div>
       <div className="sticky top-0 rounded-b-[44px] bg-white p-8 pb-6 shadow-xl">
         <Balance roomId={roomId}></Balance>
