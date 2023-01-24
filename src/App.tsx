@@ -4,6 +4,7 @@ import { RouterProvider, createBrowserRouter, useParams } from 'react-router-dom
 import useRoomMember from './hooks/useRoomMember'
 import Landing from './scene/Landing'
 import Spinner from './components/Spinner'
+import Join from './scene/Landing/Join'
 
 const router = createBrowserRouter([
   {
@@ -26,11 +27,7 @@ function Routing() {
   const [members] = useRoomMember(roomId)
 
   if (user === null) {
-    return (
-      <div className="p-8">
-        <Landing roomId={roomId}></Landing>
-      </div>
-    )
+    return <Landing roomId={roomId}></Landing>
   }
 
   if (roomId === null) {
@@ -47,7 +44,7 @@ function Routing() {
   }
 
   if (members.find((v) => v.user?.id === user.id) === undefined) {
-    return <div>TODO: join room</div>
+    return <Join roomId={roomId}></Join>
   }
 
   return <Main roomId={roomId} />

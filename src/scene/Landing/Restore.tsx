@@ -8,7 +8,7 @@ interface Props {
 
 export default function Restore({ onBack }: Props) {
   return (
-    <div className="grid gap-4">
+    <div className="grid gap-4 p-8">
       <div className="grid grid-flow-col items-center justify-start gap-1 rounded-lg bg-red-100 p-4 text-xs text-red-900">
         <Icon name="construction"></Icon>
         <div>

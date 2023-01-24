@@ -19,7 +19,7 @@ export default function Create() {
   }
 
   return (
-    <div className="grid gap-6">
+    <div className="grid gap-6 p-8">
       <div className="grid gap-2">
         <div className="font-bold">自分のニックネームを設定します</div>
         <div className="grid grid-cols-[auto_1fr] items-center gap-1 text-xs">

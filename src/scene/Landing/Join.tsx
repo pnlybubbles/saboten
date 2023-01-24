@@ -5,6 +5,7 @@ import TextField from '@/components/TextField'
 import useRoomMember from '@/hooks/useRoomMember'
 import useRoomTitle from '@/hooks/useRoomTitle'
 import useUser from '@/hooks/useUser'
+import unreachable from '@/utils/basic/unreachable'
 import clsx from 'clsx'
 import { useState } from 'react'
 
@@ -13,21 +14,25 @@ export default function Join({ roomId }: { roomId: string }) {
   const [members, { getMemberName, joinMember }] = useRoomMember(roomId)
   const [selectedMember, setSelectedMember] = useState<string | null | undefined>()
   const [name, setName] = useState('')
-  const [, setUser] = useUser()
+  const [user, setUser] = useUser()
   const [busy, setBusy] = useState(false)
 
   const create = async () => {
+    if (selectedMember === undefined) {
+      unreachable()
+    }
     setBusy(true)
     try {
-      const user = await setUser({ name: (selectedMember ? getMemberName(selectedMember) : null) ?? name })
-      await joinMember(user, selectedMember ?? null)
+      const joinUser =
+        user ?? (await setUser({ name: (selectedMember ? getMemberName(selectedMember) : null) ?? name }))
+      await joinMember(joinUser, selectedMember)
     } finally {
       setBusy(false)
     }
   }
 
   return (
-    <div className="grid gap-6">
+    <div className="grid gap-6 p-8">
       <div className="font-bold">{`"${roomTitle ?? '読込中...'}"に参加します`}</div>
       <div className="text-xs">どのメンバーとして参加するかを選択してください</div>
       <div className="grid gap-4">
@@ -56,12 +61,12 @@ export default function Join({ roomId }: { roomId: string }) {
           <div className="text-xs font-bold">新しいメンバーとして参加する</div>
         </button>
       </div>
-      {selectedMember === null && (
+      {selectedMember === null && user === null && (
         <TextField label="ニックネーム" name="name" value={name} onChange={setName} disabled={busy} />
       )}
       <Button
         onClick={create}
-        disabled={selectedMember === undefined || (selectedMember === null && name === '')}
+        disabled={selectedMember === undefined || (selectedMember === null && user === null && name === '')}
         loading={busy}
       >
         参加する

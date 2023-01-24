@@ -13,7 +13,7 @@ export default function Start({ roomId, onProceed }: Props) {
   const navigate = useNavigate()
 
   return (
-    <div className="grid gap-6">
+    <div className="grid gap-6 p-8">
       <div className="text-2xl font-bold text-primary">SABOTEN</div>
       <div>
         <div>シンプルな割り勘アプリ</div>
