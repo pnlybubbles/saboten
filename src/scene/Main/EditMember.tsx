@@ -18,14 +18,20 @@ export default function EditMember({ roomId, ...sheet }: Props) {
   const [name, setName] = useState('')
   const [user] = useUser()
 
-  const handleRemove = (id: string | null) => {
-    if (id === null) {
+  const handleRemove = (member: { id: string | null; user: { id: string } | null }) => {
+    if (member.id === null) {
       return
     }
-    if (!confirm(`"${getMemberName(id) ?? ''}" をメンバーから外します。よろしいですか？`)) {
+    if (
+      !confirm(
+        user && member.user?.id === user.id
+          ? 'メンバーから抜けます。よろしいですか？'
+          : `"${getMemberName(member.id) ?? ''}" をメンバーから外します。よろしいですか？`,
+      )
+    ) {
       return
     }
-    void removeMember(id)
+    void removeMember(member.id)
   }
 
   return (
@@ -40,15 +46,13 @@ export default function EditMember({ roomId, ...sheet }: Props) {
                 <div className="font-bold">{getMemberName(v)}</div>
                 {v.user && <Badge>{v.user.id === user?.id ? '自分' : '参加済み'}</Badge>}
               </div>
-              {user && v.user?.id !== user.id && (
-                <button
-                  disabled={v.id === null}
-                  onClick={() => handleRemove(v.id)}
-                  className="grid h-8 w-8 items-center justify-items-center transition active:scale-90 disabled:opacity-30"
-                >
-                  <Icon name="person_remove"></Icon>
-                </button>
-              )}
+              <button
+                disabled={v.id === null}
+                onClick={() => handleRemove(v)}
+                className="grid h-8 w-8 items-center justify-items-center transition active:scale-90 disabled:opacity-30"
+              >
+                <Icon name="person_remove"></Icon>
+              </button>
             </li>
           ))}
         </ul>
