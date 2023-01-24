@@ -32,7 +32,7 @@ export default function Button({
     <button
       className={clsx(
         className,
-        'relative grid select-none items-center justify-items-center rounded-full font-bold transition',
+        'relative select-none rounded-full font-bold transition',
         mini ? 'h-7 text-xs' : 'h-12 text-base',
         icon ? (children == null ? 'w-12 p-0' : 'w-full pr-6 pl-5') : 'w-full px-6',
         loading ? 'cursor-not-allowed' : 'active:scale-95 disabled:cursor-not-allowed disabled:opacity-30',
@@ -43,7 +43,12 @@ export default function Button({
       {...(disabled || loading ? {} : isSP ? { onTouchEnd: onClick } : { onClick })}
       {...props}
     >
-      <div className={clsx('transition-opacity', loading ? 'opacity-[0]' : 'opacity-[1]')}>
+      <div
+        className={clsx(
+          'grid items-center justify-items-center transition-opacity',
+          loading ? 'opacity-[0]' : 'opacity-[1]',
+        )}
+      >
         {icon ? (
           children == null ? (
             icon
