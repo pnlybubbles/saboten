@@ -1,4 +1,3 @@
-import { useParams } from 'react-router-dom'
 import EditMember from './EditMember'
 import useRoomTitle from '@/hooks/useRoomTitle'
 import TitleInput from './TitleInput'
@@ -13,9 +12,12 @@ import Icon from '@/components/Icon'
 import Button from '@/components/Button'
 import EditUser from './EditUser'
 
-export default function Main() {
+interface Props {
+  roomId: string | null
+}
+
+export default function Main({ roomId }: Props) {
   const createEventSheet = usePresent()
-  const { roomId = null } = useParams()
   const [title, setTitle] = useRoomTitle(roomId)
   const [, { addEvent }] = useEvents(roomId)
   const [user] = useUser()

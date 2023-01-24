@@ -1,16 +1,9 @@
 import useUser from './hooks/useUser'
-import Button from './components/Button'
 import Main from './scene/Main'
-import unreachable from './utils/basic/unreachable'
-import { useState } from 'react'
-import { RouterProvider, createBrowserRouter, useNavigate, useParams } from 'react-router-dom'
-import TextField from './components/TextField'
-import Icon from './components/Icon'
-import useRoomTitle from './hooks/useRoomTitle'
+import { RouterProvider, createBrowserRouter, useParams } from 'react-router-dom'
 import useRoomMember from './hooks/useRoomMember'
-import Avatar from './components/Avatar'
-import clsx from 'clsx'
-import Badge from './components/Badge'
+import Landing from './scene/Landing'
+import Spinner from './components/Spinner'
 
 const router = createBrowserRouter([
   {
@@ -29,165 +22,33 @@ export default function App() {
 
 function Routing() {
   const [user] = useUser()
-
-  return user === null ? (
-    <div className="p-8">
-      <Landing></Landing>
-    </div>
-  ) : (
-    <Main></Main>
-  )
-}
-
-function Landing() {
   const { roomId = null } = useParams()
-  const [roomTitle] = useRoomTitle(roomId)
-  const [stage, setStage] = useState<'start' | 'create' | 'restore'>('start')
-  const navigate = useNavigate()
+  const [members] = useRoomMember(roomId)
 
-  return stage === 'start' ? (
-    <div className="grid gap-6">
-      <div className="text-2xl font-bold text-primary">SABOTEN</div>
-      <div>
-        <div>シンプルな割り勘アプリ</div>
-        <div>旅のお金を記録してかんたんに精算</div>
+  if (user === null) {
+    return (
+      <div className="p-8">
+        <Landing roomId={roomId}></Landing>
       </div>
-      {roomId !== null && (
-        <div className="grid grid-cols-[auto_1fr] items-center gap-1 rounded-lg bg-secondary p-4 text-xs font-bold text-primary">
-          <Icon name="group"></Icon>
-          <div>{`"${roomTitle ?? '読込中...'}" に招待されました`}</div>
-        </div>
-      )}
-      <Button onClick={() => setStage('create')} variant="primary">
-        {roomId ? '参加する' : 'はじめる'}
-      </Button>
-      <div className="grid grid-cols-[auto_1fr] gap-1 text-xs">
-        <Icon name="tips_and_updates" />
-        <div>以前に利用したことがある場合は合言葉を使って記録を復元できます</div>
-      </div>
-      <Button onClick={() => setStage('restore')}>{roomId ? '合言葉を入力して参加する' : '合言葉を入力する'}</Button>
-      {roomId !== null && (
-        <>
-          <div className="border-b border-dashed border-zinc-400"></div>
-          <Button onClick={() => navigate('/')}>参加しない</Button>
-        </>
-      )}
-    </div>
-  ) : stage === 'create' ? (
-    roomId ? (
-      <Join roomId={roomId} />
-    ) : (
-      <Create />
     )
-  ) : stage === 'restore' ? (
-    <div className="grid gap-4">
-      <div className="grid grid-flow-col items-center justify-start gap-1 rounded-lg bg-red-100 p-4 text-xs text-red-900">
-        <Icon name="construction"></Icon>
-        <div>
-          {`Now under construction... `}
-          <span className="underline" onClick={() => setStage('start')}>
-            {'< Back'}
-          </span>
-        </div>
-      </div>
-      <div className="font-bold">合言葉を入力してユーザー情報を復元します</div>
-      <TextField label="合言葉" name="secret" onChange={() => void 0} />
-      <Button disabled>復元する</Button>
-    </div>
-  ) : (
-    unreachable(stage)
-  )
-}
-
-function Join({ roomId }: { roomId: string }) {
-  const [roomTitle] = useRoomTitle(roomId)
-  const [members, { getMemberName, joinMember }] = useRoomMember(roomId)
-  const [selectedMember, setSelectedMember] = useState<string | null | undefined>()
-  const [name, setName] = useState('')
-  const [, setUser] = useUser()
-  const [busy, setBusy] = useState(false)
-
-  const create = async () => {
-    setBusy(true)
-    try {
-      const user = await setUser({ name: (selectedMember ? getMemberName(selectedMember) : null) ?? name })
-      await joinMember(user, selectedMember ?? null)
-    } finally {
-      setBusy(false)
-    }
   }
 
-  return (
-    <div className="grid gap-6">
-      <div className="font-bold">{`"${roomTitle ?? '読込中...'}"に参加します`}</div>
-      <div className="text-xs">どのメンバーとして参加するかを選択してください</div>
-      <div className="grid gap-4">
-        {members?.map((member) => (
-          <button
-            onClick={() => member.id && setSelectedMember(member.id)}
-            key={member.id ?? member.tmpId}
-            className={clsx(
-              'm-[-0.5rem] grid grid-flow-col items-center justify-start gap-2 rounded-lg border-2 border-transparent p-2 text-left transition',
-              selectedMember === member.id && 'border-zinc-900',
-            )}
-          >
-            <Avatar mini name={getMemberName(member)}></Avatar>
-            <div className="font-bold">{getMemberName(member)}</div>
-            {member.user && <Badge>参加済み</Badge>}
-          </button>
-        ))}
-        <button
-          onClick={() => setSelectedMember(null)}
-          className={clsx(
-            'm-[-0.5rem] grid grid-cols-[auto_1fr] items-center gap-2 rounded-lg border-2 border-transparent p-2 text-left transition',
-            selectedMember === null && 'border-zinc-900',
-          )}
-        >
-          <Avatar mini name={null}></Avatar>
-          <div className="text-xs font-bold">新しいメンバーとして参加する</div>
-        </button>
-      </div>
-      {selectedMember === null && (
-        <TextField label="ニックネーム" name="name" value={name} onChange={setName} disabled={busy} />
-      )}
-      <Button
-        onClick={create}
-        disabled={selectedMember === undefined || (selectedMember === null && name === '')}
-        loading={busy}
-      >
-        参加する
-      </Button>
-    </div>
-  )
-}
-
-function Create() {
-  const [name, setName] = useState('')
-  const [, setUser] = useUser()
-  const [busy, setBusy] = useState(false)
-
-  const create = async () => {
-    setBusy(true)
-    try {
-      await setUser({ name })
-    } finally {
-      setBusy(false)
-    }
+  if (roomId === null) {
+    return <Main roomId={null} />
   }
 
-  return (
-    <div className="grid gap-6">
-      <div className="grid gap-2">
-        <div className="font-bold">自分のニックネームを設定します</div>
-        <div className="grid grid-cols-[auto_1fr] items-center gap-1 text-xs">
-          <Icon name="warning"></Icon>
-          <div>個人情報は入力しないでください</div>
-        </div>
+  if (members === undefined) {
+    return (
+      <div>
+        <Spinner></Spinner>
+        <div>読込中...</div>
       </div>
-      <TextField label="ニックネーム" name="name" value={name} onChange={setName} disabled={busy} />
-      <Button onClick={create} disabled={busy}>
-        旅をはじめる
-      </Button>
-    </div>
-  )
+    )
+  }
+
+  if (members.find((v) => v.user?.id === user.id) === undefined) {
+    return <div>TODO: join room</div>
+  }
+
+  return <Main roomId={roomId} />
 }

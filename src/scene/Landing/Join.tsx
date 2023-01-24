@@ -1,0 +1,71 @@
+import Avatar from '@/components/Avatar'
+import Badge from '@/components/Badge'
+import Button from '@/components/Button'
+import TextField from '@/components/TextField'
+import useRoomMember from '@/hooks/useRoomMember'
+import useRoomTitle from '@/hooks/useRoomTitle'
+import useUser from '@/hooks/useUser'
+import clsx from 'clsx'
+import { useState } from 'react'
+
+export default function Join({ roomId }: { roomId: string }) {
+  const [roomTitle] = useRoomTitle(roomId)
+  const [members, { getMemberName, joinMember }] = useRoomMember(roomId)
+  const [selectedMember, setSelectedMember] = useState<string | null | undefined>()
+  const [name, setName] = useState('')
+  const [, setUser] = useUser()
+  const [busy, setBusy] = useState(false)
+
+  const create = async () => {
+    setBusy(true)
+    try {
+      const user = await setUser({ name: (selectedMember ? getMemberName(selectedMember) : null) ?? name })
+      await joinMember(user, selectedMember ?? null)
+    } finally {
+      setBusy(false)
+    }
+  }
+
+  return (
+    <div className="grid gap-6">
+      <div className="font-bold">{`"${roomTitle ?? '読込中...'}"に参加します`}</div>
+      <div className="text-xs">どのメンバーとして参加するかを選択してください</div>
+      <div className="grid gap-4">
+        {members?.map((member) => (
+          <button
+            onClick={() => member.id && setSelectedMember(member.id)}
+            key={member.id ?? member.tmpId}
+            className={clsx(
+              'm-[-0.5rem] grid grid-flow-col items-center justify-start gap-2 rounded-lg border-2 border-transparent p-2 text-left transition',
+              selectedMember === member.id && 'border-zinc-900',
+            )}
+          >
+            <Avatar mini name={getMemberName(member)}></Avatar>
+            <div className="font-bold">{getMemberName(member)}</div>
+            {member.user && <Badge>参加済み</Badge>}
+          </button>
+        ))}
+        <button
+          onClick={() => setSelectedMember(null)}
+          className={clsx(
+            'm-[-0.5rem] grid grid-cols-[auto_1fr] items-center gap-2 rounded-lg border-2 border-transparent p-2 text-left transition',
+            selectedMember === null && 'border-zinc-900',
+          )}
+        >
+          <Avatar mini name={null}></Avatar>
+          <div className="text-xs font-bold">新しいメンバーとして参加する</div>
+        </button>
+      </div>
+      {selectedMember === null && (
+        <TextField label="ニックネーム" name="name" value={name} onChange={setName} disabled={busy} />
+      )}
+      <Button
+        onClick={create}
+        disabled={selectedMember === undefined || (selectedMember === null && name === '')}
+        loading={busy}
+      >
+        参加する
+      </Button>
+    </div>
+  )
+}
