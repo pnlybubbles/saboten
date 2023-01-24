@@ -62,7 +62,7 @@ export default function Main({ roomId }: Props) {
           </div>
           <Link to="/" onClick={drawer.close}>
             <Button variant="primary" icon={<Icon name="map"></Icon>}>
-              新しい旅
+              旅をはじめる
             </Button>
           </Link>
           <RecentRooms onEnter={drawer.close}></RecentRooms>
