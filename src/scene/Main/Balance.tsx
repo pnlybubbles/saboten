@@ -87,9 +87,9 @@ export default function Balance({ roomId }: Props) {
     <div className="grid">
       <div
         onClick={() => totalCurrencyValue.length > 0 && setShowDetail((v) => !v)}
-        className="grid grid-flow-col items-center justify-between"
+        className="group grid grid-flow-col items-center justify-between"
       >
-        <div>
+        <div className="transition group-active:scale-95">
           <CurrencyText
             className="text-3xl font-bold"
             {...displayCurrencySum(rateConvertibleTotalCurrencyValue, primaryCurrency)}
@@ -102,7 +102,7 @@ export default function Balance({ roomId }: Props) {
         {totalCurrencyValue.length > 0 && (
           <div className="grid grid-flow-col items-center text-zinc-400">
             {/* <div className="text-xs">{showDetail ? '閉じる' : '詳細'}</div> */}
-            <Icon name="expand_more" className={showDetail ? 'rotate-180' : ''}></Icon>
+            <Icon name="expand_more" className={clsx('transition', showDetail ? 'rotate-180' : '')}></Icon>
           </div>
         )}
       </div>
