@@ -1,6 +1,7 @@
 import Avatar from '@/components/Avatar'
 import Badge from '@/components/Badge'
 import Button from '@/components/Button'
+import Divider from '@/components/Divider'
 import TextField from '@/components/TextField'
 import Tips from '@/components/Tips'
 import useRoomMember from '@/hooks/useRoomMember'
@@ -9,6 +10,7 @@ import useUser from '@/hooks/useUser'
 import unreachable from '@/utils/basic/unreachable'
 import clsx from 'clsx'
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 export default function Join({ roomId }: { roomId: string }) {
   const [roomTitle] = useRoomTitle(roomId)
@@ -17,8 +19,9 @@ export default function Join({ roomId }: { roomId: string }) {
   const [name, setName] = useState('')
   const [user, setUser] = useUser()
   const [busy, setBusy] = useState(false)
+  const navigate = useNavigate()
 
-  const create = async () => {
+  const join = async () => {
     if (selectedMember === undefined) {
       unreachable()
     }
@@ -69,12 +72,15 @@ export default function Join({ roomId }: { roomId: string }) {
       )}
       {user && <Tips>{`ニックネーム "${user.name}" として設定済みのユーザーで参加します`}</Tips>}
       <Button
-        onClick={create}
+        onClick={join}
         disabled={selectedMember === undefined || (selectedMember === null && user === null && name === '')}
         loading={busy}
+        variant="primary"
       >
         参加する
       </Button>
+      <Divider></Divider>
+      <Button onClick={() => navigate('/')}>参加しない</Button>
     </div>
   )
 }

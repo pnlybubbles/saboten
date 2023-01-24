@@ -1,4 +1,5 @@
 import Button from '@/components/Button'
+import Divider from '@/components/Divider'
 import Icon from '@/components/Icon'
 import Tips from '@/components/Tips'
 import useRoomTitle from '@/hooks/useRoomTitle'
@@ -33,7 +34,7 @@ export default function Start({ roomId, onProceed }: Props) {
       <Button onClick={() => onProceed('restore')}>{roomId ? '合言葉を入力して参加する' : '合言葉を入力する'}</Button>
       {roomId !== null && (
         <>
-          <div className="border-b border-dashed border-zinc-400"></div>
+          <Divider></Divider>
           <Button onClick={() => navigate('/')}>参加しない</Button>
         </>
       )}
