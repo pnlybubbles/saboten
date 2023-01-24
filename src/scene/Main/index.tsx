@@ -62,7 +62,7 @@ export default function Main({ roomId }: Props) {
           </div>
           <Link to="/" onClick={drawer.close}>
             <Button variant="primary" icon={<Icon name="map"></Icon>}>
-              新しい旅をはじめる
+              新しい旅
             </Button>
           </Link>
           <RecentRooms></RecentRooms>
@@ -157,10 +157,10 @@ function RecentRoomItem({ roomId, title }: { roomId: string; title: string }) {
   return (
     <Link
       to={`/${roomId}`}
-      className="grid grid-flow-col items-center justify-between rounded-lg bg-surface px-5 py-4 transition active:scale-95"
+      className="grid grid-flow-col items-center justify-between gap-1 rounded-lg bg-surface px-5 py-4 transition active:scale-95"
     >
-      <div className="font-bold">{title}</div>
-      <div className="flex">
+      <div className="font-bold">{room?.title ?? title}</div>
+      <div className="flex pl-2">
         {members?.map((member) => (
           <Avatar className="ml-[-0.5rem] ring-2 ring-surface" mini="xs" name={member.name} key={member.id}></Avatar>
         ))}
