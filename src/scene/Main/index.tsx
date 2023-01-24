@@ -65,7 +65,7 @@ export default function Main({ roomId }: Props) {
               新しい旅
             </Button>
           </Link>
-          <RecentRooms></RecentRooms>
+          <RecentRooms onEnter={drawer.close}></RecentRooms>
         </div>
       </div>
       <div
@@ -126,7 +126,7 @@ export default function Main({ roomId }: Props) {
   )
 }
 
-function RecentRooms() {
+function RecentRooms(props: { onEnter?: () => void }) {
   const [userRooms] = useUserRooms()
 
   if (userRooms === null || userRooms.length === 0) {
@@ -137,13 +137,13 @@ function RecentRooms() {
     <div className="grid gap-2">
       <div className="text-xs font-bold">最近の旅</div>
       {userRooms.map(({ id, title }) => (
-        <RecentRoomItem roomId={id} title={title} key={id}></RecentRoomItem>
+        <RecentRoomItem roomId={id} title={title} key={id} {...props}></RecentRoomItem>
       ))}
     </div>
   )
 }
 
-function RecentRoomItem({ roomId, title }: { roomId: string; title: string }) {
+function RecentRoomItem({ roomId, title, onEnter }: { roomId: string; title: string; onEnter?: () => void }) {
   const [user] = useUser()
 
   // キャッシュに乗ってたら表示するくらいの気持ち
@@ -158,6 +158,7 @@ function RecentRoomItem({ roomId, title }: { roomId: string; title: string }) {
     <Link
       to={`/${roomId}`}
       className="grid grid-flow-col items-center justify-between gap-1 rounded-lg bg-surface px-5 py-4 transition active:scale-95"
+      onClick={onEnter}
     >
       <div className="font-bold">{room?.title ?? title}</div>
       <div className="flex pl-2">
