@@ -28,6 +28,8 @@ const roomMemberStore = createStore(
   },
 )
 
+export type Member = NonNullable<ReturnType<(typeof roomMemberStore)['persistCache']>>[number]
+
 export default function useRoomMember(roomId: string | null) {
   const [state, setState] = useStore(roomMemberStore, roomId)
 
@@ -132,10 +134,14 @@ export default function useRoomMember(roomId: string | null) {
 
   const [user] = useUser()
   const getMember = (memberId: string) => state?.find((v) => v.id === memberId)
-  const getMemberName = (member: string | ReturnType<typeof getMember>) => {
-    const v = typeof member === 'string' ? getMember(member) : member
-    return (user && v?.user?.id === user.id ? user.name : undefined) ?? v?.user?.name ?? v?.name ?? null
+  const getMemberName = (memberIdOrMember: string | Member) => {
+    const member = typeof memberIdOrMember === 'string' ? getMember(memberIdOrMember) : memberIdOrMember
+    return member ? deriveMemberName(user, member) : null
   }
 
   return [state, { addMember, removeMember, getMemberName, getMember, joinMember }] as const
+}
+
+export const deriveMemberName = (user: User | null, member: Pick<Member, 'user' | 'name'>) => {
+  return (user && member.user?.id === user.id ? user.name : undefined) ?? member.user?.name ?? member.name
 }

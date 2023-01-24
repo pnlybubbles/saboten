@@ -5,7 +5,7 @@ import { useMemo } from 'react'
 interface Props {
   name: string | null
   className?: string
-  mini?: boolean
+  mini?: boolean | 'xs'
 }
 
 export default function Avatar({ name, className, mini }: Props) {
@@ -15,7 +15,7 @@ export default function Avatar({ name, className, mini }: Props) {
     <div
       className={clsx(
         'grid h-12 w-12 items-center justify-items-center rounded-full text-lg font-bold text-white',
-        mini && 'h-10 w-10',
+        mini && (mini === 'xs' ? 'h-8 w-8 text-xs' : 'h-10 w-10'),
         hashed !== null ? COLORS[hashed % COLORS.length] : 'bg-zinc-400',
         className,
       )}
