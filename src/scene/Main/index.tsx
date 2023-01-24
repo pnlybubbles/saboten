@@ -15,7 +15,7 @@ import useUserRooms from '@/hooks/useUserRooms'
 import { Link } from 'react-router-dom'
 import useRoomLocalStorage from '@/hooks/useRoomLocalStorage'
 import { deriveMemberName } from '@/hooks/useRoomMember'
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import Tips from '@/components/Tips'
 import clsx from 'clsx'
 
@@ -31,52 +31,95 @@ export default function Main({ roomId }: Props) {
   const editMemberSheet = usePresent()
   const editUserSheet = usePresent()
   const noEvent = events === undefined || events.length === 0
+  const drawer = usePresent()
+
+  useEffect(() => {
+    if (drawer.isPresent) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
+    }
+    return () => {
+      document.body.style.overflow = ''
+    }
+  }, [drawer.isPresent])
 
   return (
-    <div className="grid">
-      <div className="z-[1] mb-[-1.5rem] grid gap-4 bg-white p-8 pb-0">
-        <div className="grid grid-flow-col justify-start gap-4">
-          <button onClick={editUserSheet.open} className="transition active:scale-90">
-            <Avatar name={user?.name ?? null}></Avatar>
-          </button>
-          <Button onClick={editMemberSheet.open} icon={<Icon name="group"></Icon>}>
-            メンバー
-          </Button>
-        </div>
-        <div className="group">
-          <TitleInput defaultValue={title} onChange={setTitle}></TitleInput>
-          {(title === undefined || title.length === 0) && (
-            <Tips className="mt-[-0.5rem] h-6 text-zinc-400 transition-[opacity,margin,height] group-focus-within:mt-0 group-focus-within:h-0 group-focus-within:opacity-0">
-              タイトルを入力して旅をはじめましょう！
-            </Tips>
-          )}
-        </div>
-      </div>
-      <div className="sticky top-0 rounded-b-[44px] bg-white p-8 pb-6 shadow-xl">
-        <Balance roomId={roomId}></Balance>
-      </div>
-      <EditUser defaultValue={user?.name ?? ''} {...editUserSheet}></EditUser>
-      <EditMember roomId={roomId} {...editMemberSheet}></EditMember>
-      <EventSheet {...createEventSheet} roomId={roomId} onSubmit={addEvent} submitLabel="追加"></EventSheet>
-      <div className="p-8 pb-[8rem]">
-        {roomId === null ? (
-          <div>
-            <RecentRooms></RecentRooms>
-          </div>
-        ) : (
-          <Events roomId={roomId}></Events>
+    <div className="relative">
+      <div
+        className={clsx(
+          'fixed top-0 right-full h-full w-3/4 overflow-y-auto transition',
+          drawer.isPresent && 'translate-x-full',
         )}
+      >
+        <div className="grid gap-6 p-8">
+          <div className="grid grid-flow-col items-center justify-start gap-4">
+            <button onClick={editUserSheet.open} className="transition active:scale-90">
+              <Avatar name={user?.name ?? null}></Avatar>
+            </button>
+            <div className="font-bold">{user?.name}</div>
+            <EditUser defaultValue={user?.name ?? ''} {...editUserSheet}></EditUser>
+          </div>
+          <Link to="/" onClick={drawer.close}>
+            <Button variant="primary" icon={<Icon name="map"></Icon>}>
+              新しい旅をはじめる
+            </Button>
+          </Link>
+          <RecentRooms></RecentRooms>
+        </div>
       </div>
-      <div className={'pointer-events-none fixed bottom-0 left-0 w-full'}>
-        {noEvent && <div className="h-12 w-full bg-gradient-to-t from-zinc-50"></div>}
-        <div className={clsx('grid justify-items-center gap-2 pb-8 pt-2', noEvent && 'bg-zinc-50')}>
-          {noEvent && <Tips className="text-zinc-400">最初のイベントを追加しよう</Tips>}
-          <button
-            className="pointer-events-auto grid h-16 w-16 select-none grid-flow-col items-center justify-items-center gap-1 rounded-full bg-zinc-900 text-white shadow-xl transition active:scale-90"
-            onClick={createEventSheet.open}
-          >
-            <Icon name="add" size={24}></Icon>
-          </button>
+      <div
+        className={clsx('transition', drawer.isPresent && 'translate-x-3/4')}
+        onClick={() => drawer.isPresent && drawer.close()}
+      >
+        <div className={clsx('grid min-h-screen grid-rows-[auto_auto_1fr]', drawer.isPresent && 'pointer-events-none')}>
+          <div className="sticky top-[-9rem] z-[1] grid gap-4 rounded-b-[44px] bg-white p-8 pb-6 shadow-xl">
+            <div className="grid grid-flow-col justify-start gap-4">
+              <Button
+                variant="primary"
+                onClick={drawer.open}
+                icon={
+                  <div className="relative h-5 w-5">
+                    <Icon
+                      className={clsx('absolute top-0 left-0', !drawer.isPresent ? 'opacity-100' : 'opacity-0')}
+                      name="menu"
+                    ></Icon>
+                    <Icon
+                      className={clsx('absolute top-0 left-0', drawer.isPresent ? 'opacity-100' : 'opacity-0')}
+                      name="close"
+                    ></Icon>
+                  </div>
+                }
+              ></Button>
+              <Button onClick={editMemberSheet.open} icon={<Icon name="group"></Icon>}>
+                メンバー
+              </Button>
+            </div>
+            <div className="group">
+              <TitleInput defaultValue={title} onChange={setTitle}></TitleInput>
+              {(title === undefined || title.length === 0) && (
+                <Tips className="mt-[-0.5rem] h-6 text-zinc-400 transition-[opacity,margin,height] group-focus-within:mt-0 group-focus-within:h-0 group-focus-within:opacity-0">
+                  タイトルを入力して旅をはじめましょう！
+                </Tips>
+              )}
+            </div>
+            <Balance roomId={roomId}></Balance>
+          </div>
+          <EditMember roomId={roomId} {...editMemberSheet}></EditMember>
+          <EventSheet {...createEventSheet} roomId={roomId} onSubmit={addEvent} submitLabel="追加"></EventSheet>
+          <div className="p-8">{roomId === null ? <RecentRooms></RecentRooms> : <Events roomId={roomId}></Events>}</div>
+          <div className={'pointer-events-none sticky bottom-0 left-0 w-full self-end'}>
+            {noEvent && <div className="h-12 w-full bg-gradient-to-t from-zinc-50"></div>}
+            <div className={clsx('grid justify-items-center gap-2 pb-8 pt-2', noEvent && 'bg-zinc-50')}>
+              {noEvent && <Tips className="text-zinc-400">最初のイベントを追加しよう</Tips>}
+              <button
+                className="pointer-events-auto grid h-16 w-16 select-none grid-flow-col items-center justify-items-center gap-1 rounded-full bg-zinc-900 text-white shadow-xl transition active:scale-90"
+                onClick={createEventSheet.open}
+              >
+                <Icon name="add" size={24}></Icon>
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -93,7 +136,7 @@ function RecentRooms() {
   return (
     <div className="grid gap-2">
       <div className="text-xs font-bold">最近の旅</div>
-      {userRooms.slice(0, 5).map(({ id, title }) => (
+      {userRooms.map(({ id, title }) => (
         <RecentRoomItem roomId={id} title={title} key={id}></RecentRoomItem>
       ))}
     </div>
