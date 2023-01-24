@@ -87,11 +87,9 @@ function RecentRooms() {
   return (
     <div className="grid gap-2">
       <div className="text-xs font-bold">最近の旅</div>
-      <div>
-        {userRooms.slice(0, 5).map(({ id, title }) => (
-          <RecentRoomItem roomId={id} title={title} key={id}></RecentRoomItem>
-        ))}
-      </div>
+      {userRooms.slice(0, 5).map(({ id, title }) => (
+        <RecentRoomItem roomId={id} title={title} key={id}></RecentRoomItem>
+      ))}
     </div>
   )
 }
