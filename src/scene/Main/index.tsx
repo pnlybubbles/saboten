@@ -17,6 +17,7 @@ import useRoomLocalStorage from '@/hooks/useRoomLocalStorage'
 import { deriveMemberName } from '@/hooks/useRoomMember'
 import { useMemo } from 'react'
 import Tips from '@/components/Tips'
+import clsx from 'clsx'
 
 interface Props {
   roomId: string | null
@@ -25,10 +26,11 @@ interface Props {
 export default function Main({ roomId }: Props) {
   const createEventSheet = usePresent()
   const [title, setTitle] = useRoomTitle(roomId)
-  const [, { addEvent }] = useEvents(roomId)
+  const [events, { addEvent }] = useEvents(roomId)
   const [user] = useUser()
   const editMemberSheet = usePresent()
   const editUserSheet = usePresent()
+  const noEvent = events === undefined || events.length === 0
 
   return (
     <div className="grid">
@@ -65,13 +67,17 @@ export default function Main({ roomId }: Props) {
           <Events roomId={roomId}></Events>
         )}
       </div>
-      <div className="fixed bottom-8 left-0 grid w-full grid-cols-[max-content] justify-center">
-        <button
-          className="grid h-16 w-16 select-none grid-flow-col items-center justify-items-center gap-1 rounded-full bg-zinc-900 text-white shadow-xl transition active:scale-90"
-          onClick={createEventSheet.open}
-        >
-          <Icon name="add" size={24}></Icon>
-        </button>
+      <div className={'pointer-events-none fixed bottom-0 left-0 w-full'}>
+        {noEvent && <div className="h-12 w-full bg-gradient-to-t from-zinc-50"></div>}
+        <div className={clsx('grid justify-items-center gap-2 pb-8 pt-2', noEvent && 'bg-zinc-50')}>
+          {noEvent && <Tips className="text-zinc-400">最初のイベントを追加しよう</Tips>}
+          <button
+            className="pointer-events-auto grid h-16 w-16 select-none grid-flow-col items-center justify-items-center gap-1 rounded-full bg-zinc-900 text-white shadow-xl transition active:scale-90"
+            onClick={createEventSheet.open}
+          >
+            <Icon name="add" size={24}></Icon>
+          </button>
+        </div>
       </div>
     </div>
   )
