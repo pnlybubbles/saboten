@@ -17,7 +17,7 @@ export default function Join({ roomId }: { roomId: string }) {
   const [members, { getMemberName, joinMember }] = useRoomMember(roomId)
   const [selectedMember, setSelectedMember] = useState<string | null | undefined>()
   const [name, setName] = useState('')
-  const [user, setUser] = useUser()
+  const [user, { setUser }] = useUser()
   const [busy, setBusy] = useState(false)
   const navigate = useNavigate()
 

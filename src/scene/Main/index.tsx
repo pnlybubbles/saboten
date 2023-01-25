@@ -58,7 +58,7 @@ export default function Main({ roomId }: Props) {
               <Avatar name={user?.name ?? null}></Avatar>
             </button>
             <div className="font-bold">{user?.name}</div>
-            <EditUser defaultValue={user?.name ?? ''} {...editUserSheet}></EditUser>
+            <EditUser {...editUserSheet}></EditUser>
           </div>
           <Link to="/" onClick={drawer.close}>
             <Button variant="primary" icon={<Icon name="map"></Icon>}>

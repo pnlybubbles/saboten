@@ -3,12 +3,14 @@ import { z } from 'zod'
 import { useLocalStorage } from './useLocalStorage'
 import { useEffect } from 'react'
 import trpc from '@/utils/trpc'
+import { COMPRESSED_USER_ID_SCHEMA } from '@shared/utils/schema'
 
 const USER_STORAGE_DESCRIPTOR = createLocalStorageDescriptor(
   'user_id',
   z.object({
     id: z.string(),
     name: z.string(),
+    compressedId: COMPRESSED_USER_ID_SCHEMA.optional(),
   }),
 )
 
@@ -23,6 +25,18 @@ export default function useUser() {
     }
     const fetched = await trpc.user.item.mutate({ id: user?.id, ...props })
     setUserInStorage(fetched)
+    return fetched
+  }
+
+  const restoreUser = async (compressedUserId: string) => {
+    const fetched = await trpc.user.refresh.mutate({ compressedUserId })
+
+    if (fetched) {
+      setUserInStorage(fetched)
+    } else {
+      setUserInStorage(undefined)
+    }
+
     return fetched
   }
 
@@ -45,7 +59,7 @@ export default function useUser() {
     })()
   }, [ready, setUserInStorage])
 
-  return [user, setUser] as const
+  return [user, { setUser, restoreUser }] as const
 }
 
 export type User = NonNullable<ReturnType<typeof useUser>[0]>

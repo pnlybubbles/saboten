@@ -22,3 +22,21 @@ export function uuidToCompressedPrintableString(uuid: string) {
   const trimmedBase64String = base64String.slice(0, 22)
   return trimmedBase64String
 }
+
+export function compressedPrintableStringToUuid(trimmedBase64String: string) {
+  const base64String = trimmedBase64String + '=='
+  const binaryString = atob(base64String)
+  let hexString = ''
+  // 1文字8bit分まで使ってる文字列
+  // 128bit分あるので、8bitづつ取り出して16回
+  for (let i = 0; i < binaryString.length; i++) {
+    // 8bit分を取り出して、16進数(4bit) x 2文字 に変換
+    hexString += binaryString.charCodeAt(i).toString(16)
+  }
+  // uuidのフォーマットに合わせる
+  const uuid = `${hexString.slice(0, 8)}-${hexString.slice(8, 12)}-${hexString.slice(12, 16)}-${hexString.slice(
+    16,
+    20,
+  )}-${hexString.slice(20)}`
+  return uuid
+}

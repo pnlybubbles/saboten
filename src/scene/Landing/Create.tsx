@@ -6,7 +6,7 @@ import { useState } from 'react'
 
 export default function Create() {
   const [name, setName] = useState('')
-  const [, setUser] = useUser()
+  const [, { setUser }] = useUser()
   const [busy, setBusy] = useState(false)
 
   const create = async () => {
@@ -28,7 +28,7 @@ export default function Create() {
         </div>
       </div>
       <TextField label="ニックネーム" name="name" value={name} onChange={setName} disabled={busy} />
-      <Button onClick={create} disabled={busy}>
+      <Button onClick={create} loading={busy}>
         旅をはじめる
       </Button>
     </div>
