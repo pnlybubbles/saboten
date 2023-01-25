@@ -13,7 +13,7 @@ export default function Sheet({ isPresent, onPresent, children }: PropsWithChild
 
   return (
     <BottomSheet open={isPresent} onDismiss={() => onPresent(false)} ref={ref} initialFocusRef={false}>
-      <div className="px-8 pb-8 pt-4">{children}</div>
+      <div className="select-none px-8 pb-8 pt-4">{children}</div>
     </BottomSheet>
   )
 }
