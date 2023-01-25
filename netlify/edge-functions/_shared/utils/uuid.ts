@@ -20,10 +20,13 @@ export function uuidToCompressedPrintableString(uuid: string) {
   const base64String = btoa(binaryString)
   // 情報は22文字文字で足りてるので余った後ろ2文字は確定で'='が入るため、取り除く
   const trimmedBase64String = base64String.slice(0, 22)
-  return trimmedBase64String
+  // 似ている文字は認識の妨げになるのでbase64外の記号に置き換える
+  const result = [...trimmedBase64String].map((v) => IGNORED_SIMILER_CHARACTOR_MAPPING[v] ?? v).join('')
+  return result
 }
 
-export function compressedPrintableStringToUuid(trimmedBase64String: string) {
+export function compressedPrintableStringToUuid(value: string) {
+  const trimmedBase64String = [...value].map((v) => IGNORED_SIMILER_CHARACTOR_MAPPING_REVERSE[v] ?? v).join('')
   const base64String = trimmedBase64String + '=='
   const binaryString = atob(base64String)
   let hexString = ''
@@ -40,3 +43,15 @@ export function compressedPrintableStringToUuid(trimmedBase64String: string) {
   )}-${hexString.slice(20)}`
   return uuid
 }
+
+const IGNORED_SIMILER_CHARACTOR_MAPPING: Record<string, string> = {
+  o: '@',
+  O: '%',
+  '0': '&',
+  I: '$',
+  l: '#',
+}
+
+const IGNORED_SIMILER_CHARACTOR_MAPPING_REVERSE = Object.fromEntries(
+  Object.entries(IGNORED_SIMILER_CHARACTOR_MAPPING).map(([k, v]) => [v, k]),
+)
