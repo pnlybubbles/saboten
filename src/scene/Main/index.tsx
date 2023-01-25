@@ -77,7 +77,10 @@ export default function Main({ roomId }: Props) {
             <div className="grid grid-flow-col justify-start gap-4">
               <Button
                 variant="primary"
-                onClick={drawer.open}
+                onClick={(e) => {
+                  e.stopPropagation()
+                  drawer.open()
+                }}
                 icon={
                   <div className="relative h-5 w-5">
                     <Icon
