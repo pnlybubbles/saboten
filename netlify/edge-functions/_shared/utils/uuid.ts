@@ -34,7 +34,7 @@ export function compressedPrintableStringToUuid(value: string) {
   // 128bit分あるので、8bitづつ取り出して16回
   for (let i = 0; i < binaryString.length; i++) {
     // 8bit分を取り出して、16進数(4bit) x 2文字 に変換
-    hexString += binaryString.charCodeAt(i).toString(16)
+    hexString += binaryString.charCodeAt(i).toString(16).padStart(2, '0')
   }
   // uuidのフォーマットに合わせる
   const uuid = `${hexString.slice(0, 8)}-${hexString.slice(8, 12)}-${hexString.slice(12, 16)}-${hexString.slice(
