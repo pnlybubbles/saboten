@@ -36,9 +36,9 @@ function Routing() {
 
   if (members === undefined) {
     return (
-      <div>
+      <div className="grid h-screen content-center justify-items-center gap-2">
         <Spinner></Spinner>
-        <div>読込中...</div>
+        <div className="text-sm font-bold text-zinc-400">読込中...</div>
       </div>
     )
   }
