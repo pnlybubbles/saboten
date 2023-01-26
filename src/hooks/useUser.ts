@@ -49,8 +49,13 @@ export default function useUser() {
 
     if (fetched) {
       setUserInStorage(fetched)
-    } else {
-      setUserInStorage(undefined)
+      if (user) {
+        const userRooms = userRoomsLocalStorageDescriptor(user.id)
+        const rooms = userRooms.get()?.map((v) => v.id) ?? []
+        for (const roomId of rooms) {
+          roomLocalStorageDescriptor(roomId).set(undefined)
+        }
+      }
     }
 
     return fetched

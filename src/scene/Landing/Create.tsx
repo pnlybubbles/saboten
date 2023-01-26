@@ -1,6 +1,6 @@
 import Button from '@/components/Button'
-import Icon from '@/components/Icon'
 import TextField from '@/components/TextField'
+import Tips from '@/components/Tips'
 import useUser from '@/hooks/useUser'
 import { useState } from 'react'
 
@@ -22,10 +22,7 @@ export default function Create() {
     <div className="grid gap-6 p-8">
       <div className="grid gap-2">
         <div className="font-bold">自分のニックネームを設定します</div>
-        <div className="grid grid-cols-[auto_1fr] items-center gap-1 text-xs">
-          <Icon name="warning"></Icon>
-          <div>個人情報は入力しないでください</div>
-        </div>
+        <Tips type="warning">個人情報は入力しないでください</Tips>
       </div>
       <TextField label="ニックネーム" name="name" value={name} onChange={setName} disabled={busy} />
       <Button onClick={create} loading={busy}>

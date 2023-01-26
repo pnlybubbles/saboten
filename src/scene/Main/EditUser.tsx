@@ -90,7 +90,11 @@ function UserResetSheet({ ...sheet }: SheetProps) {
         <Tips type="warning">
           ユーザーを切り替えた後に、もとのユーザーに戻す場合には合言葉が必要です。合言葉を忘れてしまった場合は復元することはできません。
         </Tips>
-        <CompressedUserIdForm submitLabel="切り替える" submitVariant="danger" />
+        <CompressedUserIdForm
+          submitLabel="切り替える"
+          submitVariant="danger"
+          onRestore={() => sheet.onPresent(false)}
+        />
       </div>
     </Sheet>
   )

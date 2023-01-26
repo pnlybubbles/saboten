@@ -9,9 +9,11 @@ import useUser from '@/hooks/useUser'
 export default function CompressedUserIdForm({
   submitLabel,
   submitVariant,
+  onRestore,
 }: {
   submitLabel: string
   submitVariant?: Variant
+  onRestore?: () => void
 }) {
   const [, { restoreUser }] = useUser()
   const [busy, setBusy] = useState(false)
@@ -30,6 +32,7 @@ export default function CompressedUserIdForm({
         setError(true)
       } else {
         setError(false)
+        onRestore?.()
       }
     } finally {
       setBusy(false)
@@ -48,6 +51,7 @@ export default function CompressedUserIdForm({
           value={compressedUserId}
           onChange={setCompressedUserId}
           onBlur={() => setIsDirty(true)}
+          disabled={busy}
         />
         <div className="grid">
           {!validation.success &&
