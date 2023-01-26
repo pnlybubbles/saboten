@@ -1,4 +1,5 @@
 import isSP from '@/utils/basic/isSP'
+import noop from '@/utils/basic/noop'
 import React from 'react'
 
 export type Props = Pick<React.ComponentPropsWithoutRef<'button'>, 'disabled' | 'className' | 'children'> & {
@@ -10,7 +11,8 @@ export default function Clickable({ onClick, disabled, div, ...rest }: Props) {
   const props = {
     ...rest,
     disabled,
-    ...(!disabled && (isSP ? { onTouchEnd: onClick } : { onClick })),
+    ...(!disabled && { onClick }),
+    ...(isSP && { onTouchEnd: noop }),
   }
   return div ? <div {...props}></div> : <button {...props}></button>
 }
