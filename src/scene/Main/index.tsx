@@ -46,7 +46,7 @@ export default function Main({ roomId }: Props) {
   }, [drawer.isPresent])
 
   return (
-    <div className="relative w-full overflow-hidden">
+    <div className={clsx('relative w-full', drawer.isPresent && 'overflow-hidden')}>
       <div
         className={clsx(
           'fixed top-0 right-full h-full w-3/4 overflow-y-auto transition',
