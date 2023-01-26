@@ -45,8 +45,9 @@
     "typescript": "5.0.0-dev.20230112"
   },
   "scripts": {
-    "dev": "rimraf dist && netlify dev",
-    "build": "rimraf dist && netlify build",
+    "clean": "rimraf dist .netlify/edge-functions-dist",
+    "dev": "yarn clean && netlify dev",
+    "build": "yarn clean && netlify build",
     "deploy": "dotenv -- sh -c 'yarn build && netlify deploy'",
     "deploy:prod": "dotenv -- netlify deploy --prod",
     "fmt": "prettier . --write && eslint --fix .",
