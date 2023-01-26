@@ -9,6 +9,7 @@ export type Props = Pick<React.ComponentPropsWithoutRef<'button'>, 'disabled' | 
 export default function Clickable({ onClick, disabled, div, ...rest }: Props) {
   const props = {
     ...rest,
+    disabled,
     ...(!disabled && (isSP ? { onTouchEnd: onClick } : { onClick })),
   }
   return div ? <div {...props}></div> : <button {...props}></button>

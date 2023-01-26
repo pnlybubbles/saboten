@@ -9,8 +9,8 @@ const USER_ROOMS_STORAGE = z.array(z.object({ id: z.string(), title: z.string() 
 
 export const USER_ROOMS_LOCAL_STORAGE_KEY = (userId: string) => `user_rooms_${userId}`
 
-export const userRoomsLocalStorageDescriptor = (roomId: string) =>
-  createLocalStorageDescriptor(USER_ROOMS_LOCAL_STORAGE_KEY(roomId), USER_ROOMS_STORAGE)
+export const userRoomsLocalStorageDescriptor = (userId: string) =>
+  createLocalStorageDescriptor(USER_ROOMS_LOCAL_STORAGE_KEY(userId), USER_ROOMS_STORAGE)
 
 let task: null | ReturnType<typeof trpc.room.joined.query> = null
 

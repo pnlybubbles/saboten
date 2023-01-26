@@ -1,10 +1,14 @@
+import Button from '@/components/Button'
+import CompressedUserIdForm from '@/components/CompressedUserIdForm'
 import type { SheetProps } from '@/components/Sheet'
 import Sheet from '@/components/Sheet'
 import TextField from '@/components/TextField'
 import Tips from '@/components/Tips'
 import useDirty from '@/hooks/useDirty'
+import usePresent from '@/hooks/usePresent'
 import useUser from '@/hooks/useUser'
 import { useCallback, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 export default function EditUser({ ...sheet }: SheetProps) {
   const [user, { setUser }] = useUser()
@@ -24,6 +28,8 @@ export default function EditUser({ ...sheet }: SheetProps) {
     void setUser({ name })
   }
 
+  const secretSheet = usePresent()
+
   return (
     <Sheet {...sheet}>
       <div className="grid gap-4">
@@ -36,6 +42,10 @@ export default function EditUser({ ...sheet }: SheetProps) {
             </Tips>
           </div>
         )}
+        <Button className="text-sm" onClick={secretSheet.open}>
+          ユーザーを切り替える・削除する
+        </Button>
+        <UserResetSheet {...secretSheet}></UserResetSheet>
         <TextField
           label="ニックネーム"
           name="name"
@@ -43,6 +53,44 @@ export default function EditUser({ ...sheet }: SheetProps) {
           onChange={dirty(setName)}
           onBlur={handleSubmit}
         ></TextField>
+      </div>
+    </Sheet>
+  )
+}
+
+function UserResetSheet({ ...sheet }: SheetProps) {
+  const [, { removeUser }] = useUser()
+  const [busy, setBusy] = useState(false)
+  const navigate = useNavigate()
+
+  const leave = async () => {
+    if (!confirm('ユーザーを削除します。よろしいですか？')) {
+      return
+    }
+    setBusy(true)
+    try {
+      await removeUser()
+      navigate('/')
+    } finally {
+      setBusy(false)
+    }
+  }
+
+  return (
+    <Sheet {...sheet}>
+      <div className="grid gap-4">
+        <div className="font-bold">ユーザーを削除する</div>
+        <Tips type="warning">
+          すべてのユーザーに関連するデータが削除されます。旅の記録は参加済みのメンバーが一人でもいる限り残りますが、作成されたイベントは匿名化されます。
+        </Tips>
+        <Button variant="danger" onClick={leave} loading={busy}>
+          削除する
+        </Button>
+        <div className="font-bold">ユーザーを切り替える</div>
+        <Tips type="warning">
+          ユーザーを切り替えた後に、もとのユーザーに戻す場合には合言葉が必要です。合言葉を忘れてしまった場合は復元することはできません。
+        </Tips>
+        <CompressedUserIdForm submitLabel="切り替える" submitVariant="danger" />
       </div>
     </Sheet>
   )

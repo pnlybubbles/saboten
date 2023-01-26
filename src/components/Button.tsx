@@ -3,7 +3,7 @@ import Spinner from './Spinner'
 import type { Props as ClickableProps } from './Clickable'
 import Clickable from './Clickable'
 
-type Variant = 'default' | 'primary' | 'secondary' | 'danger'
+export type Variant = 'default' | 'primary' | 'secondary' | 'danger'
 
 interface OwnProps {
   variant?: Variant
