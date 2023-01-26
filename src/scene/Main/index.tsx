@@ -46,7 +46,7 @@ export default function Main({ roomId }: Props) {
   }, [drawer.isPresent])
 
   return (
-    <div className="relative">
+    <div className="relative w-full overflow-hidden">
       <div
         className={clsx(
           'fixed top-0 right-full h-full w-3/4 overflow-y-auto transition',
@@ -69,7 +69,11 @@ export default function Main({ roomId }: Props) {
           <RecentRooms onEnter={drawer.close}></RecentRooms>
         </div>
       </div>
-      <Clickable className={clsx('transition', drawer.isPresent && 'translate-x-3/4')} onClick={drawer.close} div>
+      <Clickable
+        className={clsx('w-full transition', drawer.isPresent && 'translate-x-3/4')}
+        onClick={drawer.close}
+        div
+      >
         <div className={clsx('grid min-h-screen grid-rows-[auto_auto_1fr]', drawer.isPresent && 'pointer-events-none')}>
           <div className="sticky top-[-9rem] z-[1] grid gap-4 rounded-b-[44px] bg-white p-8 pb-6 shadow-xl">
             <div className="grid grid-flow-col justify-start gap-4">
