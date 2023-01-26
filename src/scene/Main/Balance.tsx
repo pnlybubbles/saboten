@@ -8,6 +8,7 @@ import CurrencyRateSheet from './CurrencyRateSheet'
 import usePresent from '@/hooks/usePresent'
 import CurrencyText from '@/components/CurrencyText'
 import clsx from 'clsx'
+import Clickable from '@/components/Clickable'
 
 interface Props {
   roomId: string | null
@@ -85,7 +86,7 @@ export default function Balance({ roomId }: Props) {
 
   return (
     <div className="grid">
-      <div
+      <Clickable
         onClick={() => totalCurrencyValue.length > 0 && setShowDetail((v) => !v)}
         className="group grid grid-flow-col items-center justify-between"
       >
@@ -105,7 +106,7 @@ export default function Balance({ roomId }: Props) {
             <Icon name="expand_more" className={clsx('transition', showDetail ? 'rotate-180' : '')}></Icon>
           </div>
         )}
-      </div>
+      </Clickable>
       <div
         className={clsx(
           'grid gap-4 transition-[margin,opacity] duration-500',

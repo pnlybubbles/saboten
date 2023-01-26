@@ -1,6 +1,7 @@
 import Avatar from '@/components/Avatar'
 import Badge from '@/components/Badge'
 import Button from '@/components/Button'
+import Clickable from '@/components/Clickable'
 import Icon from '@/components/Icon'
 import type { SheetProps } from '@/components/Sheet'
 import Sheet from '@/components/Sheet'
@@ -46,13 +47,13 @@ export default function EditMember({ roomId, ...sheet }: Props) {
                 <div className="font-bold">{getMemberName(v)}</div>
                 {v.user && <Badge>{v.user.id === user?.id ? '自分' : '参加済み'}</Badge>}
               </div>
-              <button
+              <Clickable
                 disabled={v.id === null}
                 onClick={() => handleRemove(v)}
                 className="grid h-8 w-8 items-center justify-items-center transition active:scale-90 disabled:opacity-30"
               >
                 <Icon name="person_remove"></Icon>
-              </button>
+              </Clickable>
             </li>
           ))}
         </ul>

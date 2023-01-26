@@ -9,6 +9,7 @@ import useRoomCurrencyRate from '@/hooks/useRoomCurrencyRate'
 import CurrencyText from '@/components/CurrencyText'
 import Spinner from '@/components/Spinner'
 import clsx from 'clsx'
+import Clickable from '@/components/Clickable'
 
 interface Props {
   roomId: string | null
@@ -33,7 +34,7 @@ function Item({ id, label, payments, members, roomId, createdAt }: Event & Props
   const [, { displayCurrency }] = useRoomCurrencyRate(roomId)
 
   return (
-    <button
+    <Clickable
       className="grid grid-cols-[auto_1fr_auto] items-center gap-4 text-left transition active:scale-95 disabled:opacity-30"
       onClick={sheet.open}
       disabled={id === null}
@@ -80,6 +81,6 @@ function Item({ id, label, payments, members, roomId, createdAt }: Event & Props
           {...sheet}
         ></EventSheet>
       )}
-    </button>
+    </Clickable>
   )
 }

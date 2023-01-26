@@ -14,6 +14,7 @@ import isUnique from '@/utils/basic/isUnique'
 import Icon from '@/components/Icon'
 import usePresent from '@/hooks/usePresent'
 import cc from 'currency-codes'
+import Clickable from '@/components/Clickable'
 
 interface Props extends SheetProps {
   roomId: string | null
@@ -149,7 +150,7 @@ export default function EventSheet({ roomId, defaultValue, onSubmit, submitLabel
               <div className="w-4 bg-gradient-to-l from-surface"></div>
               <div className="mr-[-4px] flex justify-end bg-surface">
                 {members?.map((member) => (
-                  <button
+                  <Clickable
                     key={member.id ?? member.tmpId}
                     onClick={() => {
                       if (paidByMemberEditMode) {
@@ -170,7 +171,7 @@ export default function EventSheet({ roomId, defaultValue, onSubmit, submitLabel
                     )}
                   >
                     <Avatar mini name={getMemberName(member)}></Avatar>
-                  </button>
+                  </Clickable>
                 )) ?? <Avatar mini name={user.name}></Avatar>}
               </div>
             </div>
@@ -180,7 +181,7 @@ export default function EventSheet({ roomId, defaultValue, onSubmit, submitLabel
           <div className="text-xs font-bold text-zinc-400">割り勘するメンバー</div>
           <div className="ml-[-4px] grid grid-flow-col justify-start gap-1">
             {members?.map((member) => (
-              <button
+              <Clickable
                 key={member.id ?? member.tmpId}
                 disabled={member.id === null}
                 className={clsx(
@@ -199,7 +200,7 @@ export default function EventSheet({ roomId, defaultValue, onSubmit, submitLabel
                 }}
               >
                 <Avatar mini name={getMemberName(member)}></Avatar>
-              </button>
+              </Clickable>
             ))}
           </div>
         </div>
@@ -220,12 +221,12 @@ function EditCurrencyItem({ code, onClick, active }: { code: string; onClick: ()
       <div className="grid items-center pr-2">
         <Icon name="check" className={active ? 'opacity-100' : 'opacity-0'}></Icon>
       </div>
-      <div className="grid items-center" onClick={onClick}>
+      <Clickable className="grid items-center" onClick={onClick}>
         <div>{code}</div>
-      </div>
-      <div className="py-1 pl-2 text-zinc-400" onClick={onClick}>
+      </Clickable>
+      <Clickable className="py-1 pl-2 text-zinc-400" onClick={onClick}>
         {cc.code(code)?.currency}
-      </div>
+      </Clickable>
     </>
   )
 }

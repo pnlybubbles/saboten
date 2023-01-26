@@ -18,6 +18,7 @@ import { deriveMemberName } from '@/hooks/useRoomMember'
 import { useEffect, useMemo } from 'react'
 import Tips from '@/components/Tips'
 import clsx from 'clsx'
+import Clickable from '@/components/Clickable'
 
 interface Props {
   roomId: string | null
@@ -54,24 +55,21 @@ export default function Main({ roomId }: Props) {
       >
         <div className="grid gap-6 p-8">
           <div className="grid grid-flow-col items-center justify-start gap-4">
-            <button onClick={editUserSheet.open} className="transition active:scale-90">
+            <Clickable onClick={editUserSheet.open} className="transition active:scale-90">
               <Avatar name={user?.name ?? null}></Avatar>
-            </button>
+            </Clickable>
             <div className="font-bold">{user?.name}</div>
             <EditUser {...editUserSheet}></EditUser>
           </div>
-          <Link to="/" onClick={drawer.close}>
-            <Button variant="primary" icon={<Icon name="map"></Icon>}>
+          <Link to="/">
+            <Button variant="primary" icon={<Icon name="map"></Icon>} onClick={drawer.close}>
               旅をはじめる
             </Button>
           </Link>
           <RecentRooms onEnter={drawer.close}></RecentRooms>
         </div>
       </div>
-      <div
-        className={clsx('transition', drawer.isPresent && 'translate-x-3/4')}
-        onClick={() => drawer.isPresent && drawer.close()}
-      >
+      <Clickable className={clsx('transition', drawer.isPresent && 'translate-x-3/4')} onClick={drawer.close} div>
         <div className={clsx('grid min-h-screen grid-rows-[auto_auto_1fr]', drawer.isPresent && 'pointer-events-none')}>
           <div className="sticky top-[-9rem] z-[1] grid gap-4 rounded-b-[44px] bg-white p-8 pb-6 shadow-xl">
             <div className="grid grid-flow-col justify-start gap-4">
@@ -115,16 +113,16 @@ export default function Main({ roomId }: Props) {
             {noEvent && <div className="h-12 w-full bg-gradient-to-t from-zinc-50"></div>}
             <div className={clsx('grid justify-items-center gap-2 pb-8 pt-2', noEvent && 'bg-zinc-50')}>
               {noEvent && <Tips className="text-zinc-400">最初のイベントを追加しよう</Tips>}
-              <button
+              <Clickable
                 className="pointer-events-auto grid h-16 w-16 select-none grid-flow-col items-center justify-items-center gap-1 rounded-full bg-zinc-900 text-white shadow-xl transition active:scale-90"
                 onClick={createEventSheet.open}
               >
                 <Icon name="add" size={24}></Icon>
-              </button>
+              </Clickable>
             </div>
           </div>
         </div>
-      </div>
+      </Clickable>
     </div>
   )
 }
@@ -158,17 +156,18 @@ function RecentRoomItem({ roomId, title, onEnter }: { roomId: string; title: str
   )
 
   return (
-    <Link
-      to={`/${roomId}`}
-      className="grid grid-flow-col items-center justify-between gap-1 rounded-lg bg-surface px-5 py-4 transition active:scale-95"
-      onClick={onEnter}
-    >
-      <div className="font-bold">{room?.title ?? title}</div>
-      <div className="flex pl-2">
-        {members?.map((member) => (
-          <Avatar className="ml-[-0.5rem] ring-2 ring-surface" mini="xs" name={member.name} key={member.id}></Avatar>
-        ))}
-      </div>
-    </Link>
+    <Clickable {...(onEnter && { onClick: onEnter })} div>
+      <Link
+        to={`/${roomId}`}
+        className="grid grid-flow-col items-center justify-between gap-1 rounded-lg bg-surface px-5 py-4 transition active:scale-95"
+      >
+        <div className="font-bold">{room?.title ?? title}</div>
+        <div className="flex pl-2">
+          {members?.map((member) => (
+            <Avatar className="ml-[-0.5rem] ring-2 ring-surface" mini="xs" name={member.name} key={member.id}></Avatar>
+          ))}
+        </div>
+      </Link>
+    </Clickable>
   )
 }

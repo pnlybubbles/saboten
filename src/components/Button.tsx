@@ -1,6 +1,7 @@
-import isSP from '@/utils/basic/isSP'
 import clsx from 'clsx'
 import Spinner from './Spinner'
+import type { Props as ClickableProps } from './Clickable'
+import Clickable from './Clickable'
 
 type Variant = 'default' | 'primary' | 'secondary' | 'danger'
 
@@ -12,13 +13,12 @@ interface OwnProps {
   loading?: boolean
 }
 
-type Props = Omit<React.ComponentPropsWithoutRef<'button'>, 'onClick'> & OwnProps
+type Props = ClickableProps & OwnProps
 
 export default function Button({
   variant = 'default',
   mini = false,
   className,
-  onClick,
   disabled,
   icon,
   loading,
@@ -29,7 +29,7 @@ export default function Button({
   const foregroundColor = toForegroundColor(variant)
 
   return (
-    <button
+    <Clickable
       className={clsx(
         className,
         'relative select-none rounded-full font-bold transition',
@@ -40,7 +40,6 @@ export default function Button({
         foregroundColor,
       )}
       disabled={disabled || loading}
-      {...(disabled || loading ? {} : isSP ? { onTouchEnd: onClick } : { onClick })}
       {...props}
     >
       <div
@@ -68,7 +67,7 @@ export default function Button({
           loading ? 'opacity-[1]' : 'opacity-[0]',
         )}
       />
-    </button>
+    </Clickable>
   )
 }
 

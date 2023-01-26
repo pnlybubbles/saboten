@@ -1,6 +1,7 @@
 import Avatar from '@/components/Avatar'
 import Badge from '@/components/Badge'
 import Button from '@/components/Button'
+import Clickable from '@/components/Clickable'
 import Divider from '@/components/Divider'
 import TextField from '@/components/TextField'
 import Tips from '@/components/Tips'
@@ -43,7 +44,7 @@ export default function Join({ roomId }: { roomId: string }) {
       </div>
       <div className="grid gap-4">
         {members?.map((member) => (
-          <button
+          <Clickable
             onClick={() => member.id && setSelectedMember(member.id)}
             key={member.id ?? member.tmpId}
             className={clsx(
@@ -54,9 +55,9 @@ export default function Join({ roomId }: { roomId: string }) {
             <Avatar mini name={getMemberName(member)}></Avatar>
             <div className="font-bold">{getMemberName(member)}</div>
             {member.user && <Badge>参加済み</Badge>}
-          </button>
+          </Clickable>
         ))}
-        <button
+        <Clickable
           onClick={() => setSelectedMember(null)}
           className={clsx(
             'm-[-0.5rem] grid grid-cols-[auto_1fr] items-center gap-2 rounded-lg border-2 border-transparent p-2 text-left transition',
@@ -65,7 +66,7 @@ export default function Join({ roomId }: { roomId: string }) {
         >
           <Avatar mini name={null}></Avatar>
           <div className="text-xs font-bold">新しいメンバーとして参加する</div>
-        </button>
+        </Clickable>
       </div>
       {selectedMember === null && user === null && (
         <TextField label="ニックネーム" name="name" value={name} onChange={setName} disabled={busy} />
