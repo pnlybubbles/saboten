@@ -1,4 +1,3 @@
-import Button from '@/components/Button'
 import type { SheetProps } from '@/components/Sheet'
 import Sheet from '@/components/Sheet'
 import TextField from '@/components/TextField'
@@ -23,7 +22,6 @@ export default function EditUser({ ...sheet }: SheetProps) {
   const handleSubmit = () => {
     clearDirty()
     void setUser({ name })
-    sheet.onPresent(false)
   }
 
   return (
@@ -38,8 +36,13 @@ export default function EditUser({ ...sheet }: SheetProps) {
             </Tips>
           </div>
         )}
-        <TextField label="ニックネーム" name="name" value={name} onChange={dirty(setName)}></TextField>
-        <Button onClick={handleSubmit}>変更</Button>
+        <TextField
+          label="ニックネーム"
+          name="name"
+          value={name}
+          onChange={dirty(setName)}
+          onBlur={handleSubmit}
+        ></TextField>
       </div>
     </Sheet>
   )

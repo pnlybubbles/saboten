@@ -1,8 +1,9 @@
 import { z } from 'zod'
 import prisma from '../../prisma.ts'
 import { COMPRESSED_USER_ID_SCHEMA } from '../../utils/schema.ts'
-import { compressedPrintableStringToUuid, uuidToCompressedPrintableString } from '../../utils/uuid.ts'
+import { compressedPrintableStringToUuid } from '../../utils/uuid.ts'
 import { publicProcedure } from '../server.ts'
+import { withCompressedUserId } from './_helper.ts'
 
 export default publicProcedure
   .input(z.object({ compressedUserId: COMPRESSED_USER_ID_SCHEMA }).optional())
@@ -21,11 +22,5 @@ export default publicProcedure
       // ユーザーが見つからないのであればcookieを削除する
       removeCookie('id')
     }
-    return user
-      ? ({
-          ...user,
-          // TOOD: 消す可能性があるのでoptionalにしておく
-          compressedId: uuidToCompressedPrintableString(user.id),
-        } as typeof user & { compressedId?: string })
-      : null
+    return user ? withCompressedUserId(user) : null
   })
