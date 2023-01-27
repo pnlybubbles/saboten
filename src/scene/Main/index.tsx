@@ -19,6 +19,7 @@ import { useEffect, useMemo } from 'react'
 import Tips from '@/components/Tips'
 import clsx from 'clsx'
 import Clickable from '@/components/Clickable'
+import SettingsSheet from './SettingsSheet'
 
 interface Props {
   roomId: string | null
@@ -29,6 +30,7 @@ export default function Main({ roomId }: Props) {
   const [title, setTitle] = useRoomTitle(roomId)
   const [events, { addEvent }] = useEvents(roomId)
   const [user] = useUser()
+  const settingsSheet = usePresent()
   const editMemberSheet = usePresent()
   const editUserSheet = usePresent()
   const noEvent = events == null || events.length === 0
@@ -76,7 +78,7 @@ export default function Main({ roomId }: Props) {
       >
         <div className={clsx('grid min-h-screen grid-rows-[auto_auto_1fr]', drawer.isPresent && 'pointer-events-none')}>
           <div className="sticky top-[-9rem] z-[1] grid gap-4 rounded-b-[44px] bg-white p-8 pb-6 shadow-xl">
-            <div className="grid grid-flow-col justify-start gap-4">
+            <div className="grid grid-cols-[1fr_auto_auto] justify-start gap-3">
               <Button
                 variant="primary"
                 onClick={(e) => {
@@ -96,9 +98,12 @@ export default function Main({ roomId }: Props) {
                   </div>
                 }
               ></Button>
-              <Button onClick={editMemberSheet.open} icon={<Icon name="group"></Icon>}>
-                メンバー
-              </Button>
+              <Button
+                className={clsx(roomId ? 'scale-100 opacity-100' : 'pointer-events-none scale-50 opacity-0')}
+                onClick={settingsSheet.open}
+                icon={<Icon name="settings"></Icon>}
+              ></Button>
+              <Button onClick={editMemberSheet.open} icon={<Icon name="group"></Icon>}></Button>
             </div>
             <div className="group">
               <TitleInput defaultValue={title} onChange={setTitle}></TitleInput>
@@ -111,6 +116,7 @@ export default function Main({ roomId }: Props) {
             <Balance roomId={roomId}></Balance>
           </div>
           <EditMember roomId={roomId} {...editMemberSheet}></EditMember>
+          {roomId && <SettingsSheet roomId={roomId} {...settingsSheet}></SettingsSheet>}
           <EventSheet {...createEventSheet} roomId={roomId} onSubmit={addEvent} submitLabel="追加"></EventSheet>
           <div className="p-8">{roomId === null ? <RecentRooms></RecentRooms> : <Events roomId={roomId}></Events>}</div>
           <div className={'pointer-events-none sticky bottom-0 left-0 w-full self-end'}>

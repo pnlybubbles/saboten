@@ -4,6 +4,7 @@ import item from './item.ts'
 import member from './member/index.ts'
 import currencyRate from './currencyRate/index.ts'
 import joined from './joined.ts'
+import remove from './remove.ts'
 
 export default router({
   title,
@@ -11,4 +12,5 @@ export default router({
   member,
   currencyRate,
   joined,
+  remove,
 })
