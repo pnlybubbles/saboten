@@ -182,7 +182,7 @@ export default function EventSheet({ roomId, defaultValue, onSubmit, submitLabel
                     }}
                     disabled={member.id === null}
                     className={clsx(
-                      'box-content rounded-full border-2 border-transparent p-[2px] transition-[margin,opacity,border-color] disabled:opacity-30',
+                      'box-content rounded-full border-2 border-transparent p-[2px] transition-[margin,opacity,border-color] active:scale-90 disabled:opacity-30',
                       paidByMemberEditMode || member.id === paidByMember
                         ? 'ml-1 w-10 opacity-100 first:ml-0'
                         : // width: 2.5rem + border: 2px * 2 + padding: 2px * 2
@@ -209,7 +209,7 @@ export default function EventSheet({ roomId, defaultValue, onSubmit, submitLabel
                 key={member.id ?? member.tmpId}
                 disabled={member.id === null}
                 className={clsx(
-                  'rounded-full border-2 border-transparent p-[2px] transition disabled:opacity-30',
+                  'rounded-full border-2 border-transparent p-[2px] transition active:scale-90 disabled:opacity-30',
                   member.id && eventMembers.includes(member.id) && 'border-zinc-900',
                 )}
                 onClick={() => {
