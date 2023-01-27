@@ -6,6 +6,7 @@ import Icon from '@/components/Icon'
 import type { SheetProps } from '@/components/Sheet'
 import Sheet from '@/components/Sheet'
 import TextField from '@/components/TextField'
+import Tips from '@/components/Tips'
 import useRoomMember from '@/hooks/useRoomMember'
 import useUser from '@/hooks/useUser'
 import genTmpId from '@/utils/basic/genTmpId'
@@ -84,6 +85,7 @@ export default function EditMember({ roomId, ...sheet }: Props) {
         >
           追加
         </Button>
+        <Tips>メンバーにも旅の記録を入力してもらうには、このページのURLを共有することで参加できるようになります。</Tips>
       </div>
     </Sheet>
   )
