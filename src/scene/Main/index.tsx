@@ -56,11 +56,13 @@ export default function Main({ roomId }: Props) {
         )}
       >
         <div className="grid gap-6 p-8">
-          <div className="grid grid-flow-col items-center justify-start gap-4">
+          <div className="grid grid-cols-[auto_1fr] items-center justify-start gap-4">
             <Clickable onClick={editUserSheet.open} className="transition active:scale-90">
               <Avatar name={user?.name ?? null}></Avatar>
             </Clickable>
-            <div className="font-bold">{user?.name}</div>
+            <Clickable onClick={editUserSheet.open} className="text-left font-bold transition active:scale-95">
+              {user?.name}
+            </Clickable>
             <EditUser {...editUserSheet}></EditUser>
           </div>
           <Link to="/">
