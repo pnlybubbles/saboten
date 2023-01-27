@@ -66,7 +66,6 @@ export default function EditMember({ roomId, ...sheet }: Props) {
         <TextField label="ニックネーム" name="nickname" value={name} onChange={setName} disabled={busy} />
         <Button
           onClick={async () => {
-            setName('')
             if (roomId) {
               void addMember(name)
             } else {
@@ -78,6 +77,7 @@ export default function EditMember({ roomId, ...sheet }: Props) {
                 setBusy(false)
               }
             }
+            setName('')
           }}
           disabled={name === ''}
           loading={busy}
