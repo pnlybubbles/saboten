@@ -44,7 +44,7 @@ export default sessionProcedure
         data: { members: { createMany: { data: [{ userId }] } } },
         select: ROOM_SELECT,
       })
-      const memberId = room.members.find((v) => v.user?.id !== userId)?.id
+      const memberId = room.members.find((v) => v.user?.id === userId)?.id
       if (memberId === undefined) {
         throw new TRPCError({ code: 'INTERNAL_SERVER_ERROR' })
       }
@@ -54,7 +54,7 @@ export default sessionProcedure
           payments: { create: { paiedByMember: { connect: { id: memberId } }, amount: BigInt(amount), currency } },
           members: { create: { member: { connect: { id: memberId } } } },
         },
-        include: { payments: true, members: true },
+        select: ROOM_SELECT.events.select,
       })
       return {
         room: serializeRoom(room),
