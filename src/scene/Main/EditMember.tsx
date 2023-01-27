@@ -85,7 +85,11 @@ export default function EditMember({ roomId, ...sheet }: Props) {
         >
           追加
         </Button>
-        <Tips>メンバーにも旅の記録を入力してもらうには、このページのURLを共有することで参加できるようになります。</Tips>
+        {roomId ? (
+          <Tips>このページのURLを共有することで、他のメンバーも旅の記録に参加することができます</Tips>
+        ) : (
+          <Tips>旅のタイトルを設定すると、旅の記録を共有して参加できるようになります</Tips>
+        )}
       </div>
     </Sheet>
   )
