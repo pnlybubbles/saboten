@@ -49,14 +49,14 @@ export default function SettingsSheet({ roomId, ...sheet }: Props) {
   return (
     <Sheet {...sheet}>
       <div className="grid gap-4">
-        <div className="font-bold">旅の記録を削除する</div>
+        <div className="font-bold">旅の記録</div>
         <Tips type="warning">すべての記録を削除します。参加しているメンバーは記録を参照できなくなります。</Tips>
         <Button variant="danger" loading={busy} onClick={handleRemove}>
-          削除する
+          削除
         </Button>
         {currencyRate && currencyRate.length > 0 && (
           <>
-            <div className="font-bold">通貨レートを変更する</div>
+            <div className="font-bold">通貨レート</div>
             <div className="grid gap-2">
               {currencyRate?.map((v) => (
                 <CurrencyRateItem key={`${v.currency}_${v.toCurrency}`} {...v} roomId={roomId}></CurrencyRateItem>

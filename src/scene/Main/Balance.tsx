@@ -120,7 +120,7 @@ export default function Balance({ roomId }: Props) {
           >
             <Icon className="mt-[-3px]" name="error" />
             <div className="grid gap-2">
-              <div>{`${currency} を ${primaryCurrency} に変換するレートが指定されていないため、通貨別に表記しています`}</div>
+              <div>{`${currency} を ${primaryCurrency} に変換するレートが設定されていないため、通貨別に表記しています`}</div>
               <div className="grid grid-flow-col justify-end gap-2">
                 {/* <Button mini variant="secondary">
                   今はしない
@@ -133,7 +133,7 @@ export default function Balance({ roomId }: Props) {
                     currencyRateSheet.open()
                   }}
                 >
-                  指定する
+                  設定
                 </Button>
               </div>
             </div>

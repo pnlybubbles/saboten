@@ -65,7 +65,7 @@ export default function Join({ roomId }: { roomId: string }) {
           )}
         >
           <Avatar mini name={null}></Avatar>
-          <div className="text-xs font-bold">新しいメンバーとして参加する</div>
+          <div className="text-xs font-bold">新しいメンバーとして参加</div>
         </Clickable>
       </div>
       {selectedMember === null && user === null && (
@@ -78,7 +78,7 @@ export default function Join({ roomId }: { roomId: string }) {
         loading={busy}
         variant="primary"
       >
-        参加する
+        参加
       </Button>
       <Divider></Divider>
       <Button onClick={() => navigate('/')}>参加しない</Button>

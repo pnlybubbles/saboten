@@ -44,7 +44,7 @@ export default function EditMember({ roomId, ...sheet }: Props) {
   return (
     <Sheet {...sheet}>
       <div className="grid gap-4">
-        <div className="font-bold">メンバーを管理する</div>
+        <div className="font-bold">メンバー管理</div>
         <ul className="grid gap-4">
           {displayableMembers.map((v) => (
             <li key={v.id} className="grid grid-flow-col grid-cols-[auto_1fr_auto] items-center gap-4">
