@@ -51,6 +51,7 @@ export default sessionProcedure
       const event = await prisma.event.create({
         data: {
           room: { connect: { id: room.id } },
+          label,
           payments: { create: { paiedByMember: { connect: { id: memberId } }, amount: BigInt(amount), currency } },
           members: { create: { member: { connect: { id: memberId } } } },
         },
