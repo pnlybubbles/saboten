@@ -104,6 +104,7 @@ function CurrencyRateItem({ currency, toCurrency, rate, roomId }: CurrencyRatePa
       <CurrencyRateSheet
         currency={currency}
         toCurrency={toCurrency}
+        defaultRate={rate}
         roomId={roomId}
         {...currencyRateSheet}
       ></CurrencyRateSheet>
