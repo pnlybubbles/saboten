@@ -8,6 +8,7 @@ import Sheet from '@/components/Sheet'
 import TextField from '@/components/TextField'
 import useRoomMember from '@/hooks/useRoomMember'
 import useUser from '@/hooks/useUser'
+import genTmpId from '@/utils/basic/genTmpId'
 import { useState } from 'react'
 
 interface Props extends SheetProps {
@@ -35,12 +36,15 @@ export default function EditMember({ roomId, ...sheet }: Props) {
     void removeMember(member.id)
   }
 
+  // 一人目のメンバーを追加した時に部屋が作成されるので、部屋作成前はあたかも自分が入っているかのように見せる
+  const displayableMembers = members ?? [{ id: null, name: null, tmpId: genTmpId(), user }]
+
   return (
     <Sheet {...sheet}>
       <div className="grid gap-4">
         <div className="font-bold">メンバーを管理する</div>
         <ul className="grid gap-4">
-          {members?.map((v) => (
+          {displayableMembers.map((v) => (
             <li key={v.id} className="grid grid-flow-col grid-cols-[auto_1fr_auto] items-center gap-4">
               <Avatar mini name={getMemberName(v)}></Avatar>
               <div className="grid grid-flow-col items-center justify-start gap-2">

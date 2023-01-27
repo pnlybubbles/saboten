@@ -15,13 +15,13 @@ const roomMemberStore = createStore(
   (roomId: string | null) => ROOM_LOCAL_STORAGE_KEY(roomId ?? 'tmp'),
   (roomId: string | null) => {
     if (roomId === null) {
-      return Promise.resolve([])
+      return Promise.resolve(null)
     }
     return fetchRoom(roomId).then(transform)
   },
   (roomId: string | null) => {
     if (roomId === null) {
-      return []
+      return null
     }
     const room = roomLocalStorageDescriptor(roomId).get()
     return room ? transform(room) : undefined
@@ -35,10 +35,21 @@ export default function useRoomMember(roomId: string | null) {
 
   const enterNewRoom = useEnterNewRoom()
 
+  const [user] = useUser()
+
   const addMember = useCallback(
     (name: string) =>
       setState(
-        (current) => [...(current ?? []), { name: name, user: null, id: null, tmpId: genTmpId() }],
+        (current) => {
+          if (user === null) {
+            // ユーザーが未作成の場合はメンバー追加できない
+            return current
+          }
+          return [
+            ...(current ?? [{ name: null, user, id: null, tmpId: genTmpId() }]),
+            { name: name, user: null, id: null, tmpId: genTmpId() },
+          ]
+        },
         async () => {
           const data = await trpc.room.member.add.mutate({ roomId, name })
           const desc = roomLocalStorageDescriptor(data.roomId)
@@ -56,14 +67,14 @@ export default function useRoomMember(roomId: string | null) {
           return data.members.map((v) => ({ ...v, tmpId: genTmpId() }))
         },
       ),
-    [enterNewRoom, roomId, setState],
+    [enterNewRoom, roomId, setState, user],
   )
 
   const removeMember = useCallback(
     (memberId: string) =>
       setState(
         (current) => {
-          if (current === undefined) {
+          if (current == null) {
             return current
           }
           const index = current.findIndex((v) => v.id === memberId)
@@ -97,7 +108,7 @@ export default function useRoomMember(roomId: string | null) {
     (user: User, memberId: string | null) =>
       setState(
         (current) => {
-          if (current === undefined) {
+          if (current == null) {
             // データが無いと参加は不可
             return current
           }
@@ -132,7 +143,6 @@ export default function useRoomMember(roomId: string | null) {
     [roomId, setState],
   )
 
-  const [user] = useUser()
   const getMember = (memberId: string) => state?.find((v) => v.id === memberId)
   const getMemberName = (memberIdOrMember: string | Member) => {
     const member = typeof memberIdOrMember === 'string' ? getMember(memberIdOrMember) : memberIdOrMember

@@ -87,7 +87,13 @@ class Store<T> {
 
 export function createStore<T, Args extends unknown[] = []>(
   cacheKey: (...args: Args) => string,
+  /**
+   * NOTE: undefinedはキャッシュがない状態を意味するのでrefetchが行われて無限ループしてしまう
+   */
   fetcher: (...args: Args) => Promise<T>,
+  /**
+   * undefinedはキャッシュが無いことを意味する
+   */
   persistCache: (...args: Args) => T | undefined,
 ) {
   const cache = new Map<string, Store<T>>()
