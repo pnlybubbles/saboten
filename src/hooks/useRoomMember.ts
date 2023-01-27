@@ -57,6 +57,7 @@ export default function useRoomMember(roomId: string | null) {
           if (data.room) {
             desc.set(data.room)
             enterNewRoom(data.roomId)
+            return
           } else {
             const current = desc.get()
             if (current === null) {
@@ -64,8 +65,8 @@ export default function useRoomMember(roomId: string | null) {
               throw new Error('No cache')
             }
             desc.set({ ...current, members: data.members })
+            return data.members.map((v) => ({ ...v, tmpId: genTmpId() }))
           }
-          return data.members.map((v) => ({ ...v, tmpId: genTmpId() }))
         },
       ),
     [enterNewRoom, roomId, setState, user],

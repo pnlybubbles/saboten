@@ -76,6 +76,7 @@ export default function useEvents(roomId: string | null) {
           if (data.room) {
             desc.set(data.room)
             enterNewRoom(data.roomId)
+            return
           } else {
             const current = desc.get()
             if (current === null) {
@@ -83,8 +84,8 @@ export default function useEvents(roomId: string | null) {
               throw new Error('No cache')
             }
             desc.set({ ...current, events: data.events })
+            return data.events.map((v) => ({ ...v, tmpId: genTmpId(), createdAt: parseISO(v.createdAt) }))
           }
-          return data.events.map((v) => ({ ...v, tmpId: genTmpId(), createdAt: parseISO(v.createdAt) }))
         },
       ),
     [enterNewRoom, roomId, setState],

@@ -57,10 +57,11 @@ export default sessionProcedure
         },
         select: ROOM_SELECT.events.select,
       })
+      const events = [event, ...room.events]
       return {
-        room: serializeRoom(room),
+        room: serializeRoom({ ...room, events }),
         roomId: room.id,
-        events: [event, ...room.events].map(serializeEvent),
+        events: events.map(serializeEvent),
       }
     }
   })
