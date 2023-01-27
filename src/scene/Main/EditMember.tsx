@@ -88,7 +88,7 @@ export default function EditMember({ roomId, ...sheet }: Props) {
         {roomId ? (
           <Tips>このページのURLを共有することで、他のメンバーも旅の記録に参加することができます</Tips>
         ) : (
-          <Tips>旅のタイトルを設定すると、旅の記録を共有して参加できるようになります</Tips>
+          <Tips>旅のタイトルを設定すると、旅の記録を共有することで他のメンバーが参加できるようになります</Tips>
         )}
       </div>
     </Sheet>
