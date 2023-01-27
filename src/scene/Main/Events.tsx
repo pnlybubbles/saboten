@@ -10,6 +10,7 @@ import CurrencyText from '@/components/CurrencyText'
 import Spinner from '@/components/Spinner'
 import clsx from 'clsx'
 import Clickable from '@/components/Clickable'
+import unreachable from '@/utils/basic/unreachable'
 
 interface Props {
   roomId: string | null
@@ -75,7 +76,13 @@ function Item({ id, label, payments, members, roomId, createdAt }: Event & Props
                 }
               : undefined
           }
-          onSubmit={(v) => updateEvent({ ...v, id })}
+          onSubmit={async (v) => {
+            if (v.paidByMemberId === null) {
+              // 更新時にroom作成がまだなことはないので無視
+              unreachable()
+            }
+            await updateEvent({ ...v, id })
+          }}
           onRemove={() => confirm('イベントを削除しますか？') && removeEvent(id)}
           submitLabel="保存"
           {...sheet}

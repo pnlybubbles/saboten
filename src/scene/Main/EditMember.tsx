@@ -17,6 +17,7 @@ interface Props extends SheetProps {
 
 export default function EditMember({ roomId, ...sheet }: Props) {
   const [members, { addMember, removeMember, getMemberName }] = useRoomMember(roomId)
+  const [busy, setBusy] = useState(false)
   const [name, setName] = useState('')
   const [user] = useUser()
 
@@ -61,13 +62,24 @@ export default function EditMember({ roomId, ...sheet }: Props) {
             </li>
           ))}
         </ul>
-        <TextField label="ニックネーム" name="nickname" value={name} onChange={setName} />
+        <TextField label="ニックネーム" name="nickname" value={name} onChange={setName} disabled={busy} />
         <Button
-          onClick={() => {
+          onClick={async () => {
             setName('')
-            void addMember(name)
+            if (roomId) {
+              void addMember(name)
+            } else {
+              // ルーム作成前の場合はoptimistic updateしない
+              setBusy(true)
+              try {
+                await addMember(name)
+              } finally {
+                setBusy(false)
+              }
+            }
           }}
           disabled={name === ''}
+          loading={busy}
           variant="primary"
         >
           追加

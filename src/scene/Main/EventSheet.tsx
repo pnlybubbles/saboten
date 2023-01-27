@@ -6,7 +6,7 @@ import TextField from '@/components/TextField'
 import useRoomMember from '@/hooks/useRoomMember'
 import useUser from '@/hooks/useUser'
 import isNonNullable from '@/utils/basic/isNonNullable'
-import type { EventPayload } from '@/hooks/useEvents'
+import type { EventPayload, EventPayloadAddPhase } from '@/hooks/useEvents'
 import Avatar from '@/components/Avatar'
 import clsx from 'clsx'
 import useDirty from '@/hooks/useDirty'
@@ -15,11 +15,13 @@ import Icon from '@/components/Icon'
 import usePresent from '@/hooks/usePresent'
 import cc from 'currency-codes'
 import Clickable from '@/components/Clickable'
+import { useMemo } from 'react'
+import unreachable from '@/utils/basic/unreachable'
 
 interface Props extends SheetProps {
   roomId: string | null
   defaultValue?: EventPayload | undefined
-  onSubmit: (payload: EventPayload) => void
+  onSubmit: (payload: EventPayloadAddPhase) => Promise<void>
   submitLabel: string
   onRemove?: () => void
 }
@@ -35,9 +37,8 @@ export default function EventSheet({ roomId, defaultValue, onSubmit, submitLabel
   const [amount, setAmount] = useState(defaultValue?.amount ?? '')
   const [paidByMember, setPaidByMember] = useState(defaultValue?.paidByMemberId ?? userMemberId)
   const [paidByMemberEditMode, setPaidByMemberEditMode] = useState(false)
-  const [eventMembers, setEventMembers] = useState(
-    defaultValue?.memberIds ?? (members?.map((v) => v.id) ?? [userMemberId]).filter(isNonNullable),
-  )
+  const eventMembersCandidate = useMemo(() => members?.map((v) => v.id).filter(isNonNullable) ?? [], [members])
+  const [eventMembers, setEventMembers] = useState(defaultValue?.memberIds ?? eventMembersCandidate)
   const editCurrencySheet = usePresent()
   const [currency, setCurrency] = useState(defaultValue?.currency ?? 'JPY')
 
@@ -52,34 +53,50 @@ export default function EventSheet({ roomId, defaultValue, onSubmit, submitLabel
       const digits = cc.code(defaultCurrency)?.digits ?? 0
       setAmount(defaultValue?.amount ? (Number(BigInt(defaultValue.amount)) / 10 ** digits).toString() : '')
       setPaidByMember(defaultValue?.paidByMemberId ?? userMemberId)
-      setEventMembers(defaultValue?.memberIds ?? (members?.map((v) => v.id) ?? [userMemberId]).filter(isNonNullable))
+      setEventMembers(defaultValue?.memberIds ?? eventMembersCandidate)
     }, [
       sheet.isPresent,
       defaultValue?.label,
-      defaultValue?.amount,
       defaultValue?.currency,
+      defaultValue?.amount,
       defaultValue?.paidByMemberId,
       defaultValue?.memberIds,
       userMemberId,
-      members,
+      eventMembersCandidate,
     ]),
   )
 
-  const handleSubmit = () => {
-    if (roomId === null || userMemberId === null) {
-      throw new Error('Not implemented')
-    }
+  const [busy, setBusy] = useState(false)
+
+  const handleSubmit = async () => {
     const digits = cc.code(currency)?.digits
     if (digits === undefined) {
       throw new Error('Invalid country code')
     }
-    onSubmit({
-      label,
-      amount: BigInt(parseFloat(amount) * 10 ** digits).toString(),
-      currency,
-      paidByMemberId: paidByMember ?? userMemberId,
-      memberIds: eventMembers,
-    })
+    const amountValue = BigInt(parseFloat(amount) * 10 ** digits).toString()
+    if (roomId === null || userMemberId === null) {
+      // room作成前の場合はoptimistic updateしないので、リクエストを待つ
+      setBusy(true)
+      try {
+        await onSubmit({
+          label,
+          amount: amountValue,
+          currency,
+          paidByMemberId: null,
+          memberIds: null,
+        })
+      } finally {
+        setBusy(false)
+      }
+    } else {
+      void onSubmit({
+        label,
+        amount: amountValue,
+        currency,
+        paidByMemberId: paidByMember ?? userMemberId,
+        memberIds: eventMembers,
+      })
+    }
     clearDirty()
     sheet.onPresent(false)
   }
@@ -153,6 +170,9 @@ export default function EventSheet({ roomId, defaultValue, onSubmit, submitLabel
                   <Clickable
                     key={member.id ?? member.tmpId}
                     onClick={() => {
+                      if (member.id === null) {
+                        unreachable()
+                      }
                       if (paidByMemberEditMode) {
                         setPaidByMember(member.id)
                         setPaidByMemberEditMode(false)
@@ -172,7 +192,11 @@ export default function EventSheet({ roomId, defaultValue, onSubmit, submitLabel
                   >
                     <Avatar mini name={getMemberName(member)}></Avatar>
                   </Clickable>
-                )) ?? <Avatar mini name={user.name}></Avatar>}
+                )) ?? (
+                  <div className="rounded-full border-2 border-zinc-900 p-[2px]">
+                    <Avatar mini name={user.name}></Avatar>
+                  </div>
+                )}
               </div>
             </div>
           </TextField>
@@ -201,12 +225,25 @@ export default function EventSheet({ roomId, defaultValue, onSubmit, submitLabel
               >
                 <Avatar mini name={getMemberName(member)}></Avatar>
               </Clickable>
-            ))}
+            )) ?? (
+              <div className="rounded-full border-2 border-zinc-900 p-[2px]">
+                <Avatar mini name={user.name}></Avatar>
+              </div>
+            )}
           </div>
         </div>
         <div className={clsx('grid gap-2', onRemove && 'grid-cols-[auto_1fr]')}>
           {onRemove && <Button onClick={onRemove} icon={<Icon name="delete" />} variant="danger"></Button>}
-          <Button onClick={handleSubmit} disabled={label === '' || amount === '' || amount === '0'}>
+          <Button
+            onClick={handleSubmit}
+            disabled={
+              label === '' ||
+              amount === '' ||
+              amount === '0' ||
+              (eventMembersCandidate.length > 0 && eventMembers.length === 0)
+            }
+            loading={busy}
+          >
             {submitLabel}
           </Button>
         </div>

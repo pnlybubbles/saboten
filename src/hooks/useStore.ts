@@ -44,12 +44,12 @@ class Store<T> {
     const next =
       typeof mutation === 'function' ? (mutation as (current: T | undefined) => T | undefined)(this.cache) : mutation
     if (next === undefined) {
-      return
+      return Promise.resolve()
     }
     this.updateCache(next)
     this.onUpdate?.(next, 'set')
     if (!action) {
-      return
+      return Promise.resolve()
     }
     this.counter++
     this.promise = this.promise

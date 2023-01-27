@@ -45,10 +45,11 @@ export default function useRoomMember(roomId: string | null) {
             // ユーザーが未作成の場合はメンバー追加できない
             return current
           }
-          return [
-            ...(current ?? [{ name: null, user, id: null, tmpId: genTmpId() }]),
-            { name: name, user: null, id: null, tmpId: genTmpId() },
-          ]
+          if (current == null) {
+            // ルームが未作成の場合にはoptimistic updateしない
+            return current
+          }
+          return [...current, { name: name, user: null, id: null, tmpId: genTmpId() }]
         },
         async () => {
           const data = await trpc.room.member.add.mutate({ roomId, name })

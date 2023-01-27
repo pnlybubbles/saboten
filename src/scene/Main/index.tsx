@@ -31,7 +31,7 @@ export default function Main({ roomId }: Props) {
   const [user] = useUser()
   const editMemberSheet = usePresent()
   const editUserSheet = usePresent()
-  const noEvent = events === undefined || events.length === 0
+  const noEvent = events == null || events.length === 0
   const drawer = usePresent()
 
   useEffect(() => {
