@@ -112,7 +112,7 @@ export default function EventSheet({ roomId, defaultValue, onSubmit, submitLabel
           <Sheet {...editCurrencySheet}>
             <div className="grid gap-2">
               <div className="text-xs font-bold">よく使う</div>
-              <div className="grid grid-cols-[auto_auto_1fr] items-stretch ">
+              <div className="grid grid-cols-[auto_auto_1fr] items-stretch">
                 {FREQUENTLY_USED_CURRENCY_CODES.map((code) => (
                   <EditCurrencyItem
                     key={code}
@@ -221,10 +221,10 @@ function EditCurrencyItem({ code, onClick, active }: { code: string; onClick: ()
       <div className="grid items-center pr-2">
         <Icon name="check" className={active ? 'opacity-100' : 'opacity-0'}></Icon>
       </div>
-      <Clickable className="grid items-center" onClick={onClick}>
+      <Clickable className="grid items-center text-left" onClick={onClick}>
         <div>{code}</div>
       </Clickable>
-      <Clickable className="py-1 pl-2 text-zinc-400" onClick={onClick}>
+      <Clickable className="py-1 pl-2 text-left text-zinc-400" onClick={onClick}>
         {cc.code(code)?.currency}
       </Clickable>
     </>
