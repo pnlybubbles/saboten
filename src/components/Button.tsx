@@ -35,7 +35,8 @@ export default function Button({
         'relative select-none rounded-full font-bold transition',
         mini ? 'h-7 text-xs' : 'h-12 text-base',
         icon ? (children == null ? 'w-12 p-0' : 'w-full pr-6 pl-5') : 'w-full px-6',
-        loading ? 'cursor-not-allowed' : 'active:scale-95 disabled:cursor-not-allowed disabled:opacity-30',
+        loading ? 'cursor-not-allowed' : 'disabled:cursor-not-allowed disabled:opacity-30',
+        !loading && !disabled && (icon && children == null ? 'active:scale-90' : 'active:scale-95'),
         backgroundColor,
         foregroundColor,
       )}

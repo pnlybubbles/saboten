@@ -86,7 +86,7 @@ function CurrencyRateItem({ currency, toCurrency, rate, roomId }: CurrencyRatePa
     <>
       <Clickable
         onClick={currencyRateSheet.open}
-        className="grid grid-flow-col justify-between rounded-lg bg-surface p-4 transition active:scale-90"
+        className="grid grid-flow-col justify-between rounded-lg bg-surface p-4 transition active:scale-95"
       >
         <div className="font-bold">{`${currency} / ${toCurrency}`}</div>
         <div>
