@@ -65,7 +65,9 @@ export default function CurrencyRateSheet({ currency, toCurrency, roomId, defaul
           value={inputRate}
           onChange={dirty(setInputRate)}
         ></TextField>
-        <Button onClick={handleUpdate}>設定</Button>
+        <Button onClick={handleUpdate} disabled={inputRate === ''}>
+          設定
+        </Button>
       </div>
     </Sheet>
   )
