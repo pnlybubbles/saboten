@@ -24,7 +24,7 @@ export default function Landing({ roomId }: Props) {
     roomId ? (
       <Join roomId={roomId} />
     ) : (
-      <Create />
+      <Create onBack={() => setStage('start')} />
     )
   ) : stage === 'restore' ? (
     <Restore onBack={() => setStage('start')} />

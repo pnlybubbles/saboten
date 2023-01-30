@@ -1,10 +1,15 @@
 import Button from '@/components/Button'
+import Divider from '@/components/Divider'
 import TextField from '@/components/TextField'
 import Tips from '@/components/Tips'
 import useUser from '@/hooks/useUser'
 import { useState } from 'react'
 
-export default function Create() {
+interface Props {
+  onBack: () => void
+}
+
+export default function Create({ onBack }: Props) {
   const [name, setName] = useState('')
   const [, { setUser }] = useUser()
   const [busy, setBusy] = useState(false)
@@ -25,9 +30,11 @@ export default function Create() {
         <Tips type="warning">個人情報は入力しないでください</Tips>
       </div>
       <TextField label="ニックネーム" name="name" value={name} onChange={setName} disabled={busy} />
-      <Button onClick={create} loading={busy}>
+      <Button onClick={create} loading={busy} variant="primary">
         旅をはじめる
       </Button>
+      <Divider></Divider>
+      <Button onClick={onBack}>戻る</Button>
     </div>
   )
 }
