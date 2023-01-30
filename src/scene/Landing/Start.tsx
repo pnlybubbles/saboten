@@ -27,6 +27,10 @@ export default function Start({ roomId, onProceed }: Props) {
           <div>{`"${roomTitle ?? '読込中...'}" に招待されました`}</div>
         </div>
       )}
+      <Tips>
+        ブラウザ内にデータが保存されるため、Safari や Chrome
+        などいつも利用しているブラウザではじめることをおすすめします
+      </Tips>
       <Button onClick={() => onProceed('create')} variant="primary">
         {roomId ? '参加' : 'はじめる'}
       </Button>
