@@ -1,10 +1,10 @@
 [dev]
   autoLaunch = false
-  command = "parcel src/index.html"
+  command = "parcel src/app/index.html"
 
 [build]
   publish = "dist/"
-  command = "parcel build src/index.html"
+  command = "parcel build src/app/index.html"
 
 [functions]
   deno_import_map = "./netlify/edge-functions/import_map.json"
