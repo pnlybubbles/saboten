@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import { useCallback, useState } from 'react'
 import Button from '@/components/Button'
 import type { SheetProps } from '@/components/Sheet'
 import Sheet from '@/components/Sheet'
@@ -118,7 +118,7 @@ export default function EventSheet({ roomId, defaultValue, onSubmit, submitLabel
         <div className="grid grid-cols-[auto_1fr] gap-3">
           <div
             className={clsx(
-              'grid h-18 grid-flow-row content-between rounded-xl border-2 border-transparent bg-surface px-5 pt-[0.975rem] pb-[0.875rem] transition',
+              'grid h-18 grid-flow-row content-between rounded-xl border-2 border-transparent bg-surface px-5 pb-[0.875rem] pt-[0.975rem] transition',
               editCurrencySheet.isPresent && 'border-zinc-900',
             )}
             onClick={editCurrencySheet.open}

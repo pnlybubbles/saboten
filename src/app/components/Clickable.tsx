@@ -1,6 +1,6 @@
 import isSP from '@/utils/basic/isSP'
 import noop from '@/utils/basic/noop'
-import React from 'react'
+import type React from 'react'
 
 export type Props = Pick<React.ComponentPropsWithoutRef<'button'>, 'disabled' | 'className' | 'children'> & {
   onClick?: React.EventHandler<React.SyntheticEvent<unknown>>

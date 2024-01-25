@@ -19,13 +19,16 @@ export default function Balance({ roomId }: Props) {
   const [events] = useEvents(roomId)
   const [, { displayCurrency, displayCurrencySum, availableCurrencyFor }] = useRoomCurrencyRate(roomId)
 
-  const totalByCurrency = (events ?? []).reduce((acc, v) => {
-    for (const payment of v.payments) {
-      acc[payment.currency] ??= BigInt(0)
-      acc[payment.currency] += BigInt(payment.amount)
-    }
-    return acc
-  }, {} as { [code: string]: bigint })
+  const totalByCurrency = (events ?? []).reduce(
+    (acc, v) => {
+      for (const payment of v.payments) {
+        acc[payment.currency] ??= BigInt(0)
+        acc[payment.currency] += BigInt(payment.amount)
+      }
+      return acc
+    },
+    {} as { [code: string]: bigint },
+  )
 
   const primaryCurrency =
     (totalByCurrency['JPY'] === undefined || totalByCurrency['JPY'] === BigInt(0)
@@ -44,35 +47,38 @@ export default function Balance({ roomId }: Props) {
     .map(([currency, amount]) => ({ currency, amount }))
     .filter(({ currency }) => availableCurrency.includes(currency))
 
-  const balanceByMemberId = (events ?? []).reduce((acc, v) => {
-    const sumByCurrency: { [code: string]: bigint } = {}
-    for (const { paidByMemberId, currency, amount } of v.payments) {
-      acc[paidByMemberId] ??= {}
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      acc[paidByMemberId]![currency] ??= { paid: BigInt(0), assets: BigInt(0) }
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      acc[paidByMemberId]![currency]!.paid += BigInt(amount)
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      acc[paidByMemberId]![currency]!.assets += BigInt(amount)
-
-      sumByCurrency[currency] ??= BigInt(0)
-      sumByCurrency[currency] += BigInt(amount)
-    }
-
-    for (const [code, sum] of Object.entries(sumByCurrency)) {
-      const div = sum / BigInt(v.members.length)
-
-      for (const { memberId } of v.members) {
-        acc[memberId] ??= {}
+  const balanceByMemberId = (events ?? []).reduce(
+    (acc, v) => {
+      const sumByCurrency: { [code: string]: bigint } = {}
+      for (const { paidByMemberId, currency, amount } of v.payments) {
+        acc[paidByMemberId] ??= {}
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        acc[memberId]![code] ??= { paid: BigInt(0), assets: BigInt(0) }
+        acc[paidByMemberId]![currency] ??= { paid: BigInt(0), assets: BigInt(0) }
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        acc[memberId]![code]!.assets -= div
+        acc[paidByMemberId]![currency]!.paid += BigInt(amount)
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        acc[paidByMemberId]![currency]!.assets += BigInt(amount)
+
+        sumByCurrency[currency] ??= BigInt(0)
+        sumByCurrency[currency] += BigInt(amount)
       }
-    }
 
-    return acc
-  }, {} as { [memberId: string]: { [code: string]: { paid: bigint; assets: bigint } } })
+      for (const [code, sum] of Object.entries(sumByCurrency)) {
+        const div = sum / BigInt(v.members.length)
+
+        for (const { memberId } of v.members) {
+          acc[memberId] ??= {}
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+          acc[memberId]![code] ??= { paid: BigInt(0), assets: BigInt(0) }
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+          acc[memberId]![code]!.assets -= div
+        }
+      }
+
+      return acc
+    },
+    {} as { [memberId: string]: { [code: string]: { paid: bigint; assets: bigint } } },
+  )
 
   const balances = Object.entries(balanceByMemberId)
 

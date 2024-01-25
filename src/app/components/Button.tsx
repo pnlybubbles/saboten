@@ -34,7 +34,7 @@ export default function Button({
         className,
         'relative select-none rounded-full font-bold transition',
         mini ? 'h-7 text-xs' : 'h-12 text-base',
-        icon ? (children == null ? 'w-12 p-0' : 'w-full pr-6 pl-5') : 'w-full px-6',
+        icon ? (children == null ? 'w-12 p-0' : 'w-full pl-5 pr-6') : 'w-full px-6',
         loading ? 'cursor-not-allowed' : 'disabled:cursor-not-allowed disabled:opacity-30',
         !loading && !disabled && (icon && children == null ? 'active:scale-90' : 'active:scale-95'),
         backgroundColor,
@@ -64,7 +64,7 @@ export default function Button({
       </div>
       <Spinner
         className={clsx(
-          'pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 transition-opacity',
+          'pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transition-opacity',
           loading ? 'opacity-[1]' : 'opacity-[0]',
         )}
       />
@@ -76,15 +76,15 @@ const toBackgroundColor = (variant: Variant) =>
   variant === 'danger'
     ? 'bg-red-500'
     : variant === 'primary'
-    ? 'bg-primary'
-    : variant === 'secondary'
-    ? 'border border-primary'
-    : 'bg-zinc-900'
+      ? 'bg-primary'
+      : variant === 'secondary'
+        ? 'border border-primary'
+        : 'bg-zinc-900'
 const toForegroundColor = (variant: Variant) =>
   variant === 'danger'
     ? 'text-white'
     : variant === 'primary'
-    ? 'text-white'
-    : variant === 'secondary'
-    ? 'text-primary'
-    : 'text-zinc-50'
+      ? 'text-white'
+      : variant === 'secondary'
+        ? 'text-primary'
+        : 'text-zinc-50'

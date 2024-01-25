@@ -51,7 +51,7 @@ export default function Main({ roomId }: Props) {
     <div className={clsx('relative w-full', drawer.isPresent && 'overflow-hidden')}>
       <div
         className={clsx(
-          'fixed top-0 right-full h-full w-3/4 overflow-y-auto transition',
+          'fixed right-full top-0 h-full w-3/4 overflow-y-auto transition',
           drawer.isPresent && 'translate-x-full',
         )}
       >
@@ -88,13 +88,13 @@ export default function Main({ roomId }: Props) {
                   drawer.open()
                 }}
                 icon={
-                  <div className="relative h-5 w-5">
+                  <div className="relative size-5">
                     <Icon
-                      className={clsx('absolute top-0 left-0', !drawer.isPresent ? 'opacity-100' : 'opacity-0')}
+                      className={clsx('absolute left-0 top-0', !drawer.isPresent ? 'opacity-100' : 'opacity-0')}
                       name="menu"
                     ></Icon>
                     <Icon
-                      className={clsx('absolute top-0 left-0', drawer.isPresent ? 'opacity-100' : 'opacity-0')}
+                      className={clsx('absolute left-0 top-0', drawer.isPresent ? 'opacity-100' : 'opacity-0')}
                       name="close"
                     ></Icon>
                   </div>
@@ -126,7 +126,7 @@ export default function Main({ roomId }: Props) {
             <div className={clsx('grid justify-items-center gap-2 pb-8 pt-2', noEvent && 'bg-zinc-50')}>
               {noEvent && <Tips className="text-zinc-400">最初のイベントを追加しよう</Tips>}
               <Clickable
-                className="pointer-events-auto grid h-16 w-16 select-none grid-flow-col items-center justify-items-center gap-1 rounded-full bg-zinc-900 text-white shadow-xl transition active:scale-90"
+                className="pointer-events-auto grid size-16 select-none grid-flow-col items-center justify-items-center gap-1 rounded-full bg-zinc-900 text-white shadow-xl transition active:scale-90"
                 onClick={createEventSheet.open}
               >
                 <Icon name="add" size={24}></Icon>

@@ -21,9 +21,7 @@ export default function Events({ roomId }: Props) {
 
   return (
     <div className="grid gap-6">
-      {events?.map((event) => (
-        <Item key={event.id ?? event.tmpId} {...event} roomId={roomId}></Item>
-      ))}
+      {events?.map((event) => <Item key={event.id ?? event.tmpId} {...event} roomId={roomId}></Item>)}
     </div>
   )
 }

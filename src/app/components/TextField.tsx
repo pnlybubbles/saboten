@@ -35,7 +35,7 @@ export default forwardRef<HTMLInputElement, Props>(function TextField(
         {...props}
       />
       {label && (
-        <div className="pointer-events-none absolute top-0 left-5 grid h-[2.70rem] items-center text-xs font-bold text-zinc-400 transition-[font-size,height] peer-placeholder-shown:h-full peer-placeholder-shown:text-base peer-focus:h-[2.70rem] peer-focus:text-xs">
+        <div className="pointer-events-none absolute left-5 top-0 grid h-[2.70rem] items-center text-xs font-bold text-zinc-400 transition-[font-size,height] peer-placeholder-shown:h-full peer-placeholder-shown:text-base peer-focus:h-[2.70rem] peer-focus:text-xs">
           {label}
         </div>
       )}

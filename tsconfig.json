@@ -16,10 +16,9 @@
     "paths": {
       "@/*": ["./src/app/*"],
       "@shared/*": ["./netlify/edge-functions/_shared/*"],
-      "@prisma/client": ["./netlify/edge-functions/_shared/generated/prisma"]
-    }
+      "@prisma/client": ["./netlify/edge-functions/_shared/generated/prisma"],
+    },
   },
-  "files": [".eslintrc.js"],
   "include": ["./src/**/*", "./*.config.js"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules"],
 }

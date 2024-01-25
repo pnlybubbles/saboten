@@ -156,10 +156,13 @@ export default function useRoomCurrencyRate(roomId: string | null) {
   }
 
   const displayCurrencySum = (value: CurrencyValue[], displayAsCurrency: string): DisplayCurrencyValue => {
-    const sum = value.reduce((acc, value) => {
-      const converted = convertCurrencyValue(value, displayAsCurrency)
-      return acc !== null && converted !== null ? acc + converted : null
-    }, 0 as number | null)
+    const sum = value.reduce(
+      (acc, value) => {
+        const converted = convertCurrencyValue(value, displayAsCurrency)
+        return acc !== null && converted !== null ? acc + converted : null
+      },
+      0 as number | null,
+    )
 
     return formatDisplayCurrencyValue(sum, displayAsCurrency)
   }

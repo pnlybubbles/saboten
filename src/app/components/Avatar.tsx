@@ -14,8 +14,8 @@ export default function Avatar({ name, className, mini }: Props) {
   return (
     <div
       className={clsx(
-        'grid h-12 w-12 items-center justify-items-center rounded-full text-lg font-bold text-white',
-        mini && (mini === 'xs' ? 'h-7 w-7 text-xs' : 'h-10 w-10'),
+        'grid size-12 items-center justify-items-center rounded-full text-lg font-bold text-white',
+        mini && (mini === 'xs' ? 'size-7 text-xs' : 'size-10'),
         hashed !== null ? COLORS[hashed % COLORS.length] : 'bg-zinc-400',
         className,
       )}
