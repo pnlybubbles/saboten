@@ -1,7 +1,7 @@
 {
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
-    "project": ["./tsconfig.json"]
+    "project": ["./tsconfig.json", "./tsconfig.node.json"]
   },
   "extends": [
     "eslint:recommended",
@@ -27,5 +27,10 @@
         "checksVoidReturn": { "attributes": false }
       }
     ]
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
   }
 }

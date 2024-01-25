@@ -1,0 +1,15 @@
+{
+  "extends": "@tsconfig/strictest/tsconfig.json",
+  "compilerOptions": {
+    "target": "ES2022",
+    "useDefineForClassFields": true,
+    "lib": ["ES2023"],
+    "types": ["node"],
+    "module": "Node16",
+    "moduleResolution": "Node16",
+    "composite": true,
+    "noEmit": true,
+    "allowJs": true
+  },
+  "include": ["vite.config.ts", "drizzle.config.ts"]
+}

@@ -1,0 +1,62 @@
+CREATE TABLE `Event` (
+	`id` text PRIMARY KEY NOT NULL,
+	`createdAt` text DEFAULT CURRENT_TIMESTAMP NOT NULL,
+	`roomId` text NOT NULL,
+	`label` text DEFAULT '' NOT NULL,
+	FOREIGN KEY (`roomId`) REFERENCES `Room`(`id`) ON UPDATE cascade ON DELETE cascade
+);
+--> statement-breakpoint
+CREATE TABLE `EventMember` (
+	`createdAt` text DEFAULT CURRENT_TIMESTAMP NOT NULL,
+	`eventId` text NOT NULL,
+	`memberId` text NOT NULL,
+	PRIMARY KEY(`eventId`, `memberId`),
+	FOREIGN KEY (`eventId`) REFERENCES `Event`(`id`) ON UPDATE cascade ON DELETE cascade,
+	FOREIGN KEY (`memberId`) REFERENCES `RoomMember`(`id`) ON UPDATE cascade ON DELETE no action
+);
+--> statement-breakpoint
+CREATE TABLE `EventPayment` (
+	`createdAt` text DEFAULT CURRENT_TIMESTAMP NOT NULL,
+	`amount` integer NOT NULL,
+	`currency` text NOT NULL,
+	`paidByMenberId` text NOT NULL,
+	`eventId` text NOT NULL,
+	PRIMARY KEY(`eventId`, `paidByMenberId`),
+	FOREIGN KEY (`paidByMenberId`) REFERENCES `RoomMember`(`id`) ON UPDATE cascade ON DELETE no action,
+	FOREIGN KEY (`eventId`) REFERENCES `Event`(`id`) ON UPDATE cascade ON DELETE cascade
+);
+--> statement-breakpoint
+CREATE TABLE `Room` (
+	`id` text PRIMARY KEY NOT NULL,
+	`createdAt` text DEFAULT CURRENT_TIMESTAMP NOT NULL,
+	`title` text DEFAULT '' NOT NULL
+);
+--> statement-breakpoint
+CREATE TABLE `RoomCurrencyRate` (
+	`createdAt` text DEFAULT CURRENT_TIMESTAMP NOT NULL,
+	`roomId` text NOT NULL,
+	`toCurrency` text NOT NULL,
+	`currency` text NOT NULL,
+	`rate` real NOT NULL,
+	PRIMARY KEY(`currency`, `roomId`, `toCurrency`),
+	FOREIGN KEY (`roomId`) REFERENCES `Room`(`id`) ON UPDATE cascade ON DELETE cascade
+);
+--> statement-breakpoint
+CREATE TABLE `RoomMember` (
+	`id` text NOT NULL,
+	`createdAt` text DEFAULT CURRENT_TIMESTAMP NOT NULL,
+	`roomId` text NOT NULL,
+	`name` text DEFAULT '' NOT NULL,
+	`userId` text,
+	FOREIGN KEY (`roomId`) REFERENCES `Room`(`id`) ON UPDATE cascade ON DELETE cascade,
+	FOREIGN KEY (`userId`) REFERENCES `User`(`id`) ON UPDATE cascade ON DELETE set null
+);
+--> statement-breakpoint
+CREATE TABLE `User` (
+	`id` text PRIMARY KEY NOT NULL,
+	`secret` text NOT NULL,
+	`createdAt` text DEFAULT CURRENT_TIMESTAMP NOT NULL,
+	`name` text DEFAULT '' NOT NULL
+);
+--> statement-breakpoint
+CREATE UNIQUE INDEX `User_secret_unique` ON `User` (`secret`);

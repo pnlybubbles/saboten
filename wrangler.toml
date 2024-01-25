@@ -1,0 +1,9 @@
+compatibility_date = "2023-12-18"
+main="src/api/index.ts"
+name="saboten"
+minify=true
+
+[[d1_databases]]
+binding = "DB" # available in your Worker on env.DB
+database_name = "saboten"
+database_id = "bc3a4c59-9f8c-4e5e-91b4-54a6045d7a62"
