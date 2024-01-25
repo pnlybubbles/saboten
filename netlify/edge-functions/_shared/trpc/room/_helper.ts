@@ -59,10 +59,19 @@ type Room = {
 
 export const serializeRoom = (room: Room) => ({
   ...room,
+  members: room.members.map(serializeCreatedAt),
   events: room.events.map(serializeEvent),
+  currencyRate: room.currencyRate.map(serializeCreatedAt),
 })
 
-export const serializeEvent = (event: Room['events'][number]) => ({
-  ...event,
-  payments: event.payments.map(({ amount, ...payment }) => ({ ...payment, amount: amount.toString() })),
+export const serializeEvent = (event: Room['events'][number]) =>
+  serializeCreatedAt({
+    ...event,
+    members: event.members.map(serializeCreatedAt),
+    payments: event.payments.map(({ amount, ...payment }) => ({ ...payment, amount: amount.toString() })),
+  })
+
+export const serializeCreatedAt = <T extends { createdAt: Date }>({ createdAt, ...rest }: T) => ({
+  ...rest,
+  createdAt: createdAt.toISOString(),
 })
