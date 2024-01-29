@@ -1,7 +1,14 @@
 {
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
-    "project": ["./tsconfig.json", "./tsconfig.node.json"]
+    "project": [
+      "./tsconfig.json",
+      "./tsconfig.node.json",
+      "./src/api/tsconfig.json",
+      "./src/app/tsconfig.json",
+      "./src/db/tsconfig.json",
+      "./src/util/tsconfig.json"
+    ]
   },
   "extends": [
     "eslint:recommended",

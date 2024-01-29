@@ -5,8 +5,8 @@
     "useDefineForClassFields": true,
     "lib": ["ES2023"],
     "types": ["node"],
-    "module": "Node16",
-    "moduleResolution": "Node16",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
     "composite": true,
     "noEmit": true,
     "allowJs": true
