@@ -4,7 +4,7 @@ import Tips from './Tips'
 import { COMPRESSED_USER_ID_SCHEMA } from '@shared/utils/schema'
 import type { Variant } from './Button'
 import Button from './Button'
-import useUser from '@app/hooks/useUser'
+import useUser from '@/app/hooks/useUser'
 
 export default function CompressedUserIdForm({
   submitLabel,

@@ -1,12 +1,12 @@
-import { createLocalStorageDescriptor } from '@app/util/createLocalStorageDescriptor'
+import { createLocalStorageDescriptor } from '@/app/util/createLocalStorageDescriptor'
 import { z } from 'zod'
 import { useLocalStorage } from './useLocalStorage'
 import { useEffect } from 'react'
-import trpc from '@app/util/trpc'
+import trpc from '@/app/util/trpc'
 import { COMPRESSED_USER_ID_SCHEMA } from '@shared/utils/schema'
 import { userRoomsLocalStorageDescriptor } from './useUserRooms'
 import { roomLocalStorageDescriptor } from './useRoomLocalStorage'
-import rpc from '@app/util/rpc'
+import rpc from '@/app/util/rpc'
 
 const USER_STORAGE_DESCRIPTOR = createLocalStorageDescriptor(
   'user_id',

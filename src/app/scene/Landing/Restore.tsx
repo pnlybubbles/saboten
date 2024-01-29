@@ -1,6 +1,6 @@
-import Button from '@app/components/Button'
-import CompressedUserIdForm from '@app/components/CompressedUserIdForm'
-import Divider from '@app/components/Divider'
+import Button from '@/app/components/Button'
+import CompressedUserIdForm from '@/app/components/CompressedUserIdForm'
+import Divider from '@/app/components/Divider'
 
 interface Props {
   onBack: () => void

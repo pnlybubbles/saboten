@@ -1,8 +1,8 @@
-import Button from '@app/components/Button'
-import Divider from '@app/components/Divider'
-import Icon from '@app/components/Icon'
-import Tips from '@app/components/Tips'
-import useRoomTitle from '@app/hooks/useRoomTitle'
+import Button from '@/app/components/Button'
+import Divider from '@/app/components/Divider'
+import Icon from '@/app/components/Icon'
+import Tips from '@/app/components/Tips'
+import useRoomTitle from '@/app/hooks/useRoomTitle'
 import { useNavigate } from 'react-router-dom'
 
 interface Props {

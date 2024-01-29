@@ -1,4 +1,4 @@
-import useDirty from '@app/hooks/useDirty'
+import useDirty from '@/app/hooks/useDirty'
 import { useCallback, useRef, useState } from 'react'
 
 export default function TitleInput({

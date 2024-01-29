@@ -1,8 +1,8 @@
-import Button from '@app/components/Button'
-import Divider from '@app/components/Divider'
-import TextField from '@app/components/TextField'
-import Tips from '@app/components/Tips'
-import useUser from '@app/hooks/useUser'
+import Button from '@/app/components/Button'
+import Divider from '@/app/components/Divider'
+import TextField from '@/app/components/TextField'
+import Tips from '@/app/components/Tips'
+import useUser from '@/app/hooks/useUser'
 import { useState } from 'react'
 
 interface Props {

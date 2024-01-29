@@ -1,14 +1,14 @@
-import Button from '@app/components/Button'
-import Icon from '@app/components/Icon'
-import useEvents from '@app/hooks/useEvents'
-import useRoomCurrencyRate from '@app/hooks/useRoomCurrencyRate'
-import useRoomMember from '@app/hooks/useRoomMember'
+import Button from '@/app/components/Button'
+import Icon from '@/app/components/Icon'
+import useEvents from '@/app/hooks/useEvents'
+import useRoomCurrencyRate from '@/app/hooks/useRoomCurrencyRate'
+import useRoomMember from '@/app/hooks/useRoomMember'
 import React, { useState } from 'react'
 import CurrencyRateSheet from './CurrencyRateSheet'
-import usePresent from '@app/hooks/usePresent'
-import CurrencyText from '@app/components/CurrencyText'
+import usePresent from '@/app/hooks/usePresent'
+import CurrencyText from '@/app/components/CurrencyText'
 import clsx from 'clsx'
-import Clickable from '@app/components/Clickable'
+import Clickable from '@/app/components/Clickable'
 
 interface Props {
   roomId: string | null
