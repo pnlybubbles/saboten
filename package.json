@@ -26,6 +26,7 @@
     "@cloudflare/workers-types": "^4.20240117.0",
     "@trpc/server": "10.45.0",
     "@tsconfig/strictest": "^2.0.2",
+    "@types/cookie": "^0.6.0",
     "@types/eslint": "^8.56.2",
     "@types/node": "^20.11.6",
     "@types/prettier": "^3.0.0",

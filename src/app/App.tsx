@@ -30,7 +30,7 @@ function Routing() {
     return <Landing roomId={roomId}></Landing>
   }
 
-  if (roomId === null) {
+  if (roomId === null || members === null) {
     return <Main roomId={null} />
   }
 

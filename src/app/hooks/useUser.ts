@@ -26,9 +26,10 @@ export default function useUser() {
     if (user) {
       setUserInStorage({ ...user, ...props })
     }
-    const fetched = await rpc.user.item.$post({ json: { id: user?.id, ...props } })
-    setUserInStorage(await fetched.json())
-    return fetched
+    const res = await rpc.user.item.$post({ json: { id: user?.id, ...props } })
+    const data = await res.json()
+    setUserInStorage(data)
+    return data
   }
 
   const removeUser = async () => {

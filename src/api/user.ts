@@ -3,12 +3,11 @@ import { z } from 'zod'
 import { zValidator } from '@hono/zod-validator'
 import { drizzle } from 'drizzle-orm/d1'
 import type { Env } from './type'
-import schema from 'src/db/schema'
+import schema from '@db/schema'
 import { eq } from 'drizzle-orm'
 import unwrap from '@util/unwrap'
-import uuid from './util/uuid'
+import uuid, { uuidToCompressedPrintableString } from './util/uuid'
 import { setCookie } from 'hono/cookie'
-import { uuidToCompressedPrintableString } from '@util/uuid'
 
 const user = new Hono<Env>().post(
   '/item',
