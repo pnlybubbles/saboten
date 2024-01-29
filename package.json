@@ -79,5 +79,6 @@
   "alias": {
     "@/*": "./src/app/$1",
     "@shared/*": "./netlify/edge-functions/_shared/$1"
-  }
+  },
+  "source": "src/app/index.html"
 }
