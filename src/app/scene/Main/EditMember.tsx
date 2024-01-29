@@ -9,7 +9,7 @@ import TextField from '@/components/TextField'
 import Tips from '@/components/Tips'
 import useRoomMember from '@/hooks/useRoomMember'
 import useUser from '@/hooks/useUser'
-import genTmpId from '@/utils/basic/genTmpId'
+import genTmpId from '@/util/genTmpId'
 import { useState } from 'react'
 
 interface Props extends SheetProps {

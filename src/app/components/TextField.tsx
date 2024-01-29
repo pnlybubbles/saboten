@@ -1,4 +1,4 @@
-import isSP from '@/utils/basic/isSP'
+import isSP from '@/util/isSP'
 import clsx from 'clsx'
 import { forwardRef } from 'react'
 

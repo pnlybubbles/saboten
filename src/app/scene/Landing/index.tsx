@@ -3,7 +3,7 @@ import Start from './Start'
 import Join from './Join'
 import Create from './Create'
 import Restore from './Restore'
-import unreachable from '@/utils/basic/unreachable'
+import unreachable from '@/util/unreachable'
 import { useLocation } from 'react-router-dom'
 
 interface Props {

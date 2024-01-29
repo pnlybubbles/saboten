@@ -1,5 +1,5 @@
 import { useLocalStorage } from '@/hooks/useLocalStorage'
-import { createLocalStorageDescriptor } from '@/utils/basic/createLocalStorageDescriptor'
+import { createLocalStorageDescriptor } from '@/util/createLocalStorageDescriptor'
 import { CURRENCY_CODE_SCHEMA } from '@shared/utils/currency'
 import { useMemo } from 'react'
 import { z } from 'zod'

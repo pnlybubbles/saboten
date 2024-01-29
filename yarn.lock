@@ -258,6 +258,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@cloudflare/workers-types@npm:^4.20240117.0":
+  version: 4.20240117.0
+  resolution: "@cloudflare/workers-types@npm:4.20240117.0"
+  checksum: 91a051dd414fe2e838c81f2c8376b160dc9da6d54493ad3490a7d34bfce1dee83bed20cfb98daceb8bb1d3c6f4119d60172358f0ee98c978c9faa2208c769950
+  languageName: node
+  linkType: hard
+
 "@colors/colors@npm:1.5.0":
   version: 1.5.0
   resolution: "@colors/colors@npm:1.5.0"
@@ -14381,6 +14388,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "root-workspace-0b6124@workspace:."
   dependencies:
+    "@cloudflare/workers-types": ^4.20240117.0
     "@hono/zod-validator": ^0.1.11
     "@prisma/client": 5.8.1
     "@trpc/client": ^10.45.0

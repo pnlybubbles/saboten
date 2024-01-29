@@ -1,4 +1,4 @@
-import isNonNullable from '@/utils/basic/isNonNullable'
+import isNonNullable from '@/util/isNonNullable'
 import clsx from 'clsx'
 
 const OPTICAL_SIZE = [20, 24] as const

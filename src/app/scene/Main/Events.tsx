@@ -4,13 +4,13 @@ import useRoomMember from '@/hooks/useRoomMember'
 import EventSheet from './EventSheet'
 import usePresent from '@/hooks/usePresent'
 import Avatar from '@/components/Avatar'
-import formatDate from '@/utils/basic/formatDate'
+import formatDate from '@/util/formatDate'
 import useRoomCurrencyRate from '@/hooks/useRoomCurrencyRate'
 import CurrencyText from '@/components/CurrencyText'
 import Spinner from '@/components/Spinner'
 import clsx from 'clsx'
 import Clickable from '@/components/Clickable'
-import unreachable from '@/utils/basic/unreachable'
+import unreachable from '@/util/unreachable'
 
 interface Props {
   roomId: string | null

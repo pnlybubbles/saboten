@@ -1,11 +1,11 @@
 {
   "extends": "@tsconfig/strictest/tsconfig.json",
   "compilerOptions": {
-    "target": "ES2020",
+    "target": "ES2022",
     "useDefineForClassFields": true,
-    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "lib": ["ES2023", "DOM", "DOM.Iterable"],
     "types": ["node"],
-    "module": "ESNext",
+    "module": "Node16",
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
     "resolveJsonModule": true,
@@ -14,6 +14,8 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/app/*"],
+      "@db/*": ["./src/db/*"],
+      "@util/*": ["./src/util/*"],
       "@shared/*": ["./netlify/edge-functions/_shared/*"],
       "@prisma/client": ["./netlify/edge-functions/_shared/generated/prisma"],
     },

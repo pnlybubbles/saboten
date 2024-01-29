@@ -3,7 +3,7 @@ import { integer, primaryKey, real, sqliteTable, text } from 'drizzle-orm/sqlite
 
 const NOW = sql`CURRENT_TIMESTAMP`
 
-export const event = sqliteTable('Event', {
+const event = sqliteTable('Event', {
   id: text('id').notNull().primaryKey(),
   createdAt: text('createdAt').notNull().default(NOW),
   roomId: text('roomId')
@@ -12,7 +12,7 @@ export const event = sqliteTable('Event', {
   label: text('label').notNull().default(''),
 })
 
-export const eventMember = sqliteTable(
+const eventMember = sqliteTable(
   'EventMember',
   {
     createdAt: text('createdAt').notNull().default(NOW),
@@ -28,7 +28,7 @@ export const eventMember = sqliteTable(
   }),
 )
 
-export const eventPayment = sqliteTable(
+const eventPayment = sqliteTable(
   'EventPayment',
   {
     createdAt: text('createdAt').notNull().default(NOW),
@@ -46,13 +46,13 @@ export const eventPayment = sqliteTable(
   }),
 )
 
-export const room = sqliteTable('Room', {
+const room = sqliteTable('Room', {
   id: text('id').notNull().primaryKey(),
   createdAt: text('createdAt').notNull().default(NOW),
   title: text('title').notNull().default(''),
 })
 
-export const roomCurrencyRate = sqliteTable(
+const roomCurrencyRate = sqliteTable(
   'RoomCurrencyRate',
   {
     createdAt: text('createdAt').notNull().default(NOW),
@@ -68,7 +68,7 @@ export const roomCurrencyRate = sqliteTable(
   }),
 )
 
-export const roomMember = sqliteTable('RoomMember', {
+const roomMember = sqliteTable('RoomMember', {
   id: text('id').notNull(),
   createdAt: text('createdAt').notNull().default(NOW),
   roomId: text('roomId')
@@ -78,9 +78,21 @@ export const roomMember = sqliteTable('RoomMember', {
   userId: text('userId').references(() => user.id, { onDelete: 'set null', onUpdate: 'cascade' }),
 })
 
-export const user = sqliteTable('User', {
+const user = sqliteTable('User', {
   id: text('id').notNull().primaryKey(),
   secret: text('secret').notNull().unique(),
   createdAt: text('createdAt').notNull().default(NOW),
   name: text('name').notNull().default(''),
 })
+
+const schema = {
+  event,
+  eventMember,
+  eventPayment,
+  room,
+  roomCurrencyRate,
+  roomMember,
+  user,
+}
+
+export default schema

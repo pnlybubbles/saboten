@@ -1,5 +1,5 @@
-import isSP from '@/utils/basic/isSP'
-import noop from '@/utils/basic/noop'
+import isSP from '@/util/isSP'
+import noop from '@/util/noop'
 import type React from 'react'
 
 export type Props = Pick<React.ComponentPropsWithoutRef<'button'>, 'disabled' | 'className' | 'children'> & {

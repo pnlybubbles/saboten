@@ -1,6 +1,6 @@
 import { createTRPCProxyClient, httpLink } from '@trpc/client'
 import type { AppRouter } from '@shared/trpc/router'
-import { log } from './basic/log'
+import { log } from './log'
 
 const trpc = createTRPCProxyClient<AppRouter>({
   links: [httpLink({ url: '/api' })],

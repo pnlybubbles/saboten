@@ -1,14 +1,8 @@
 import { Hono } from 'hono'
-// import { drizzle } from 'drizzle-orm/d1'
-// import { createInsertSchema } from 'drizzle-zod'
-// import { user } from '../db/schema'
 import { cors } from 'hono/cors'
+import type { Env } from './type'
 
-type Bindings = {
-  // DB: D1Database
-}
-
-const api = new Hono<{ Bindings: Bindings }>()
+const api = new Hono<Env>()
 
 api.use('*', cors())
 

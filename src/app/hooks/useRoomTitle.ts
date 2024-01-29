@@ -1,10 +1,10 @@
-import trpc from '@/utils/trpc'
+import trpc from '@/util/trpc'
 import { useCallback } from 'react'
 import useStore, { createStore } from './useStore'
 import type { Room } from './useRoomLocalStorage'
 import { ROOM_LOCAL_STORAGE_KEY, roomLocalStorageDescriptor } from './useRoomLocalStorage'
 import useEnterNewRoom from './useEnterNewRoom'
-import fetchRoom from '@/utils/fetchRoom'
+import fetchRoom from '@/util/fetchRoom'
 
 const transform = (room: Room) => room.title
 
