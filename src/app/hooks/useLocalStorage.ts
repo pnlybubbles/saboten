@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import type { LocalStorageDescriptor } from '@/util/createLocalStorageDescriptor'
+import type { LocalStorageDescriptor } from '@app/util/createLocalStorageDescriptor'
 
 export const useLocalStorage = <T>(descriptor: LocalStorageDescriptor<T> | undefined) => {
   const [state, setState] = useState<T | null>(null)

@@ -13,9 +13,7 @@
     "jsx": "react-jsx",
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/app/*"],
-      "@db/*": ["./src/db/*"],
-      "@util/*": ["./src/util/*"],
+      "@*": ["./src/*"],
       "@shared/*": ["./netlify/edge-functions/_shared/*"],
       "@prisma/client": ["./netlify/edge-functions/_shared/generated/prisma"],
     },

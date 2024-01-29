@@ -1,4 +1,4 @@
-import stringToHash from '@/util/stringToHash'
+import stringToHash from '@app/util/stringToHash'
 import clsx from 'clsx'
 import { useMemo } from 'react'
 

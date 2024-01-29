@@ -1,4 +1,4 @@
-import { log } from '@/util/log'
+import { log } from '@app/util/log'
 import { useCallback, useSyncExternalStore } from 'react'
 
 class Store<T> {

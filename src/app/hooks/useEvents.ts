@@ -1,10 +1,10 @@
-import fetchRoom from '@/util/fetchRoom'
+import fetchRoom from '@app/util/fetchRoom'
 import type { Room } from './useRoomLocalStorage'
 import { ROOM_LOCAL_STORAGE_KEY, roomLocalStorageDescriptor } from './useRoomLocalStorage'
 import useStore, { createStore } from './useStore'
-import genTmpId from '@/util/genTmpId'
+import genTmpId from '@app/util/genTmpId'
 import { useCallback } from 'react'
-import trpc from '@/util/trpc'
+import trpc from '@app/util/trpc'
 import useEnterNewRoom from './useEnterNewRoom'
 import { parseISO } from 'date-fns'
 

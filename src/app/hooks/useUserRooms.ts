@@ -1,9 +1,9 @@
-import { createLocalStorageDescriptor } from '@/util/createLocalStorageDescriptor'
+import { createLocalStorageDescriptor } from '@app/util/createLocalStorageDescriptor'
 import { z } from 'zod'
 import { useLocalStorage } from './useLocalStorage'
 import { useEffect, useMemo } from 'react'
 import useUser from './useUser'
-import trpc from '@/util/trpc'
+import trpc from '@app/util/trpc'
 import { useCallback } from 'react'
 
 const USER_ROOMS_STORAGE = z.array(z.object({ id: z.string(), title: z.string() }))
