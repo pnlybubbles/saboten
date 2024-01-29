@@ -34,6 +34,7 @@
     "@types/uuid": "^9.0.7",
     "@typescript-eslint/eslint-plugin": "^6.19.1",
     "@typescript-eslint/parser": "^6.19.1",
+    "@vitejs/plugin-react-swc": "^3.5.0",
     "autoprefixer": "^10.4.17",
     "better-sqlite3": "^9.3.0",
     "dotenv-cli": "^7.3.0",
@@ -46,7 +47,6 @@
     "eslint-plugin-tailwindcss": "^3.14.0",
     "netlify-cli": "^17.15.2",
     "npm-run-all": "^4.1.5",
-    "parcel": "^2.11.0",
     "postcss": "^8.4.33",
     "prettier": "^3.2.4",
     "prettier-plugin-tailwindcss": "^0.5.11",
@@ -57,13 +57,15 @@
     "simple-reverse-proxy": "^1.0.2",
     "tailwindcss": "^3.4.1",
     "typescript": "5.3.3",
+    "vite": "^5.0.12",
+    "vite-tsconfig-paths": "^4.3.1",
     "wrangler": "^3.24.0"
   },
   "scripts": {
     "dev": "run-p 'dev:*'",
     "dev:worker": "wrangler dev",
-    "dev:app": "parcel",
-    "deploy": "$_ run db:apply && wrangler deploy && parcel build && wrangler pages deploy dist",
+    "dev:app": "vite",
+    "deploy": "$_ run db:apply && wrangler deploy && vite build && wrangler pages deploy dist",
     "db:setup": "wrangler d1 migrations apply saboten --local",
     "db:push": "drizzle-kit push:sqlite",
     "db:migrate": "drizzle-kit generate:sqlite",
@@ -75,10 +77,5 @@
     "lint": "run-p 'lint:*'",
     "lint:prettier": "prettier --check .",
     "lint:eslint": "eslint . --report-unused-disable-directives --max-warnings 0"
-  },
-  "alias": {
-    "@/*": "./src/$1",
-    "@shared/*": "./netlify/edge-functions/_shared/$1"
-  },
-  "source": "src/app/index.html"
+  }
 }
