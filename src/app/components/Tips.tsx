@@ -1,7 +1,7 @@
 import type { PropsWithChildren } from 'react'
 import Icon from './Icon'
 import clsx from 'clsx'
-import unreachable from '@/app/util/unreachable'
+import unreachable from '@app/util/unreachable'
 
 export default function Tips({
   children,

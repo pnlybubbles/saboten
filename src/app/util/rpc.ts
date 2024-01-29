@@ -1,5 +1,5 @@
 import { hc } from 'hono/client'
-import type { API } from '@/api'
+import type { API } from '@api'
 
 const rpc = hc<API>('http://localhost:8787')
 

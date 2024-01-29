@@ -1,4 +1,4 @@
-import { roomLocalStorageDescriptor } from '@/app/hooks/useRoomLocalStorage'
+import { roomLocalStorageDescriptor } from '@app/hooks/useRoomLocalStorage'
 import trpc from './trpc'
 
 const taskMap = new Map<string, ReturnType<typeof trpc.room.item.query>>()
