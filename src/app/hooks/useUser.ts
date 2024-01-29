@@ -6,6 +6,7 @@ import trpc from '@app/util/trpc'
 import { COMPRESSED_USER_ID_SCHEMA } from '@shared/utils/schema'
 import { userRoomsLocalStorageDescriptor } from './useUserRooms'
 import { roomLocalStorageDescriptor } from './useRoomLocalStorage'
+import rpc from '@app/util/rpc'
 
 const USER_STORAGE_DESCRIPTOR = createLocalStorageDescriptor(
   'user_id',
@@ -25,8 +26,8 @@ export default function useUser() {
     if (user) {
       setUserInStorage({ ...user, ...props })
     }
-    const fetched = await trpc.user.item.mutate({ id: user?.id, ...props })
-    setUserInStorage(fetched)
+    const fetched = await rpc.user.item.$post({ json: { id: user?.id, ...props } })
+    setUserInStorage(await fetched.json())
     return fetched
   }
 
