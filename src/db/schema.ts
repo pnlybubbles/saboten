@@ -1,4 +1,4 @@
-import { sql } from 'drizzle-orm'
+import { relations, sql } from 'drizzle-orm'
 import { integer, primaryKey, real, sqliteTable, text } from 'drizzle-orm/sqlite-core'
 
 const NOW = sql`CURRENT_TIMESTAMP`
@@ -11,6 +11,11 @@ const event = sqliteTable('Event', {
     .references(() => room.id, { onDelete: 'cascade', onUpdate: 'cascade' }),
   label: text('label').notNull().default(''),
 })
+
+const eventRelations = relations(event, ({ many }) => ({
+  members: many(eventMember),
+  payments: many(eventPayment),
+}))
 
 const eventMember = sqliteTable(
   'EventMember',
@@ -52,6 +57,12 @@ const room = sqliteTable('Room', {
   title: text('title').notNull().default(''),
 })
 
+const roomRelations = relations(room, ({ many }) => ({
+  members: many(roomMember),
+  events: many(event),
+  currencyRate: many(roomCurrencyRate),
+}))
+
 const roomCurrencyRate = sqliteTable(
   'RoomCurrencyRate',
   {
@@ -78,6 +89,10 @@ const roomMember = sqliteTable('RoomMember', {
   userId: text('userId').references(() => user.id, { onDelete: 'set null', onUpdate: 'cascade' }),
 })
 
+const roomMemberRelations = relations(roomMember, ({ one }) => ({
+  user: one(user),
+}))
+
 const user = sqliteTable('User', {
   id: text('id').notNull().primaryKey(),
   secret: text('secret').notNull().unique(),
@@ -87,11 +102,14 @@ const user = sqliteTable('User', {
 
 const schema = {
   event,
+  eventRelations,
   eventMember,
   eventPayment,
   room,
+  roomRelations,
   roomCurrencyRate,
   roomMember,
+  roomMemberRelations,
   user,
 }
 

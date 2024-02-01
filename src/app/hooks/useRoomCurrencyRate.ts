@@ -1,4 +1,3 @@
-import trpc from '@app/util/trpc'
 import { useCallback } from 'react'
 import useStore, { createStore } from './useStore'
 import type { Room } from './useRoomLocalStorage'
@@ -7,6 +6,8 @@ import fetchRoom from '@app/util/fetchRoom'
 import { parseISO } from 'date-fns'
 import cc from 'currency-codes'
 import formatCurrencyNumber from '@app/util/formatCurrencyNumber'
+import rpc from '@app/util/rpc'
+import ok from '@app/util/ok'
 
 const transform = (room: Room) => room.currencyRate.map((v) => ({ ...v, createdAt: parseISO(v.createdAt) }))
 
@@ -69,7 +70,7 @@ export default function useRoomCurrencyRate(roomId: string | null) {
             // イベントを登録してからじゃないとレート入力は必要にならないので、ルームがない場合は利用不可
             throw new Error('No room to add currency rate')
           }
-          const data = await trpc.room.currencyRate.update.mutate({ roomId, ...currencyRate })
+          const data = await ok(rpc.room.currencyRate.update.$post({ json: { roomId, ...currencyRate } }))
           const desc = roomLocalStorageDescriptor(roomId)
           const current = desc.get()
           if (current === null) {
@@ -104,7 +105,7 @@ export default function useRoomCurrencyRate(roomId: string | null) {
             // イベントを登録してからじゃないとレート入力は必要にならないので、ルームがない場合は利用不可
             throw new Error('No room to remove currency rate')
           }
-          const data = await trpc.room.currencyRate.remove.mutate({ roomId, ...currencyRate })
+          const data = await ok(rpc.room.currencyRate.remove.$post({ json: { roomId, ...currencyRate } }))
           const desc = roomLocalStorageDescriptor(roomId)
           const current = desc.get()
           if (current === null) {

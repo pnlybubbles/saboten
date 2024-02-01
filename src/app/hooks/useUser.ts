@@ -2,11 +2,12 @@ import { createLocalStorageDescriptor } from '@app/util/createLocalStorageDescri
 import { z } from 'zod'
 import { useLocalStorage } from './useLocalStorage'
 import { useEffect } from 'react'
-import trpc from '@app/util/trpc'
 import { COMPRESSED_USER_ID_SCHEMA } from '@shared/utils/schema'
 import { userRoomsLocalStorageDescriptor } from './useUserRooms'
 import { roomLocalStorageDescriptor } from './useRoomLocalStorage'
+import type { RPCResponseType } from '@app/util/rpc'
 import rpc from '@app/util/rpc'
+import ok from '@app/util/ok'
 
 const USER_STORAGE_DESCRIPTOR = createLocalStorageDescriptor(
   'user_id',
@@ -17,7 +18,7 @@ const USER_STORAGE_DESCRIPTOR = createLocalStorageDescriptor(
   }),
 )
 
-let task: null | ReturnType<typeof trpc.user.refresh.mutate> = null
+let task: null | Promise<RPCResponseType<typeof rpc.user.refresh.$post>> = null
 
 export default function useUser() {
   const [user, setUserInStorage, ready] = useLocalStorage(USER_STORAGE_DESCRIPTOR)
@@ -36,7 +37,7 @@ export default function useUser() {
     if (!user) {
       return
     }
-    await trpc.user.leave.mutate()
+    await rpc.user.leave.$post()
     setUserInStorage(undefined)
     const userRooms = userRoomsLocalStorageDescriptor(user.id)
     const rooms = userRooms.get()?.map((v) => v.id) ?? []
@@ -47,9 +48,9 @@ export default function useUser() {
   }
 
   const restoreUser = async (compressedUserId: string) => {
-    const fetched = await trpc.user.refresh.mutate({ compressedUserId })
+    const fetched = await ok(rpc.user.refresh.$post({ json: { compressedUserId } }))
 
-    if (fetched) {
+    if (!('error' in fetched)) {
       setUserInStorage(fetched)
       if (user) {
         const userRooms = userRoomsLocalStorageDescriptor(user.id)
@@ -71,10 +72,10 @@ export default function useUser() {
       if (task) {
         return
       }
-      task = trpc.user.refresh.mutate()
+      task = ok(rpc.user.refresh.$post())
       const fetched = await task
 
-      if (fetched) {
+      if (!('error' in fetched)) {
         setUserInStorage(fetched)
       } else {
         setUserInStorage(undefined)

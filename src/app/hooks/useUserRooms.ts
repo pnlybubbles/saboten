@@ -3,8 +3,10 @@ import { z } from 'zod'
 import { useLocalStorage } from './useLocalStorage'
 import { useEffect, useMemo } from 'react'
 import useUser from './useUser'
-import trpc from '@app/util/trpc'
 import { useCallback } from 'react'
+import type { RPCResponseType } from '@app/util/rpc'
+import rpc from '@app/util/rpc'
+import ok from '@app/util/ok'
 
 const USER_ROOMS_STORAGE = z.array(z.object({ id: z.string(), title: z.string() }))
 
@@ -14,7 +16,7 @@ export const userRoomsLocalStorageDescriptor = (userId: string) =>
   createLocalStorageDescriptor(USER_ROOMS_LOCAL_STORAGE_KEY(userId), USER_ROOMS_STORAGE)
 
 let onceFetched = false
-let task: null | ReturnType<typeof trpc.room.joined.query> = null
+let task: null | Promise<RPCResponseType<typeof rpc.room.joined.$get>> = null
 
 export default function useUserRooms() {
   const [user] = useUser()
@@ -26,7 +28,7 @@ export default function useUserRooms() {
     if (task) {
       return
     }
-    task = trpc.room.joined.query()
+    task = ok(rpc.room.joined.$get())
     const fetched = await task
     task = null
 

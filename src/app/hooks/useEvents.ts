@@ -4,9 +4,10 @@ import { ROOM_LOCAL_STORAGE_KEY, roomLocalStorageDescriptor } from './useRoomLoc
 import useStore, { createStore } from './useStore'
 import genTmpId from '@app/util/genTmpId'
 import { useCallback } from 'react'
-import trpc from '@app/util/trpc'
 import useEnterNewRoom from './useEnterNewRoom'
 import { parseISO } from 'date-fns'
+import rpc from '@app/util/rpc'
+import ok from '@app/util/ok'
 
 const transform = (room: Room) =>
   room.events.map((v) => ({
@@ -35,7 +36,7 @@ const eventsStore = createStore(
 
 export type EventPayload = {
   label: string
-  amount: string
+  amount: number
   currency: string
   paidByMemberId: string
   memberIds: string[]
@@ -43,7 +44,7 @@ export type EventPayload = {
 
 export type EventPayloadAddPhase =
   | EventPayload
-  | { label: string; amount: string; currency: string; paidByMemberId: null; memberIds: null }
+  | { label: string; amount: number; currency: string; paidByMemberId: null; memberIds: null }
 
 export default function useEvents(roomId: string | null) {
   const [state, setState] = useStore(eventsStore, roomId)
@@ -71,7 +72,7 @@ export default function useEvents(roomId: string | null) {
           ]
         },
         async () => {
-          const data = await trpc.event.add.mutate({ ...event, roomId })
+          const data = await ok(rpc.event.add.$post({ json: { ...event, roomId } }))
           const desc = roomLocalStorageDescriptor(data.roomId)
           if (data.room) {
             desc.set(data.room)
@@ -120,7 +121,7 @@ export default function useEvents(roomId: string | null) {
             // TODO: もしかしたらaddしたすぐ直後の場合はroomIdが確定していない可能性もある
             throw new Error('No room to remove event')
           }
-          const data = await trpc.event.update.mutate({ ...event, eventId: event.id })
+          const data = await ok(rpc.event.update.$post({ json: { ...event, eventId: event.id } }))
           const desc = roomLocalStorageDescriptor(roomId)
           const current = desc.get()
           if (current === null) {
@@ -161,7 +162,7 @@ export default function useEvents(roomId: string | null) {
             // TODO: もしかしたらaddしたすぐ直後の場合はroomIdが確定していない可能性もある
             throw new Error('No room to remove event')
           }
-          const data = await trpc.event.remove.mutate({ eventId, roomId })
+          const data = await ok(rpc.event.remove.$post({ json: { eventId, roomId } }))
           const desc = roomLocalStorageDescriptor(roomId)
           const current = desc.get()
           if (current === null) {

@@ -1,7 +1,9 @@
 import { roomLocalStorageDescriptor } from '@app/hooks/useRoomLocalStorage'
-import trpc from './trpc'
+import ok from './ok'
+import type { RPCResponseType } from './rpc'
+import rpc from './rpc'
 
-const taskMap = new Map<string, ReturnType<typeof trpc.room.item.query>>()
+const taskMap = new Map<string, Promise<RPCResponseType<typeof rpc.room.item.$get>>>()
 
 export default function fetchRoom(roomId: string) {
   const desc = roomLocalStorageDescriptor(roomId)
@@ -12,7 +14,8 @@ export default function fetchRoom(roomId: string) {
     return task
   }
 
-  const promise = trpc.room.item.query({ id: roomId }).then((value) => {
+  const promise = ok(rpc.room.item.$get({ json: { id: roomId } })).then((value) => {
+    value.events.map((v) => v.payments)
     desc.set(value)
     return value
   })

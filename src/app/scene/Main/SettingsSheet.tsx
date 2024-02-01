@@ -8,13 +8,13 @@ import useRoomCurrencyRate from '@app/hooks/useRoomCurrencyRate'
 import { roomLocalStorageDescriptor } from '@app/hooks/useRoomLocalStorage'
 import useUser from '@app/hooks/useUser'
 import { userRoomsLocalStorageDescriptor } from '@app/hooks/useUserRooms'
-import trpc from '@app/util/trpc'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import cc from 'currency-codes'
 import CurrencyRateSheet from './CurrencyRateSheet'
 import usePresent from '@app/hooks/usePresent'
 import Clickable from '@app/components/Clickable'
+import rpc from '@app/util/rpc'
 
 interface Props extends SheetProps {
   roomId: string
@@ -31,7 +31,7 @@ export default function SettingsSheet({ roomId, ...sheet }: Props) {
     }
     setBusy(true)
     try {
-      await trpc.room.remove.mutate({ roomId })
+      await rpc.room.remove.$post({ json: { roomId } })
       roomLocalStorageDescriptor(roomId).set(undefined)
       if (user) {
         const desc = userRoomsLocalStorageDescriptor(user.id)

@@ -1,4 +1,3 @@
-import trpc from '@app/util/trpc'
 import { useCallback } from 'react'
 import useStore, { createStore } from './useStore'
 import type { Room } from './useRoomLocalStorage'
@@ -8,6 +7,8 @@ import fetchRoom from '@app/util/fetchRoom'
 import genTmpId from '@app/util/genTmpId'
 import type { User } from './useUser'
 import useUser from './useUser'
+import rpc from '@app/util/rpc'
+import ok from '@app/util/ok'
 
 const transform = (room: Room) => room.members.map((v) => ({ ...v, id: v.id as string | null, tmpId: genTmpId() }))
 
@@ -52,7 +53,7 @@ export default function useRoomMember(roomId: string | null) {
           return [...current, { name: name, user: null, id: null, tmpId: genTmpId() }]
         },
         async () => {
-          const data = await trpc.room.member.add.mutate({ roomId, name })
+          const data = await ok(rpc.room.member.add.$post({ json: { roomId, name } }))
           const desc = roomLocalStorageDescriptor(data.roomId)
           if (data.room) {
             desc.set(data.room)
@@ -92,7 +93,7 @@ export default function useRoomMember(roomId: string | null) {
             // メンバー追加&部屋作成はキューイングされるので、roomId=nullのクロージャに入ってる間にキューに入った場合はエラーになる
             throw new Error('No room to remove member')
           }
-          const members = await trpc.room.member.remove.mutate({ roomId: roomId, memberId })
+          const members = await ok(rpc.room.member.remove.$post({ json: { roomId: roomId, memberId } }))
           const desc = roomLocalStorageDescriptor(roomId)
           const current = desc.get()
           if (current === null) {
@@ -131,7 +132,7 @@ export default function useRoomMember(roomId: string | null) {
             // 部屋がないと参加はできない
             throw new Error('No room to join')
           }
-          const members = await trpc.room.member.join.mutate({ roomId, memberId })
+          const members = await ok(rpc.room.member.join.$post({ json: { roomId, memberId } }))
           const desc = roomLocalStorageDescriptor(roomId)
           const current = desc.get()
           if (current === null) {

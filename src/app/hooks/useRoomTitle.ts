@@ -1,10 +1,11 @@
-import trpc from '@app/util/trpc'
 import { useCallback } from 'react'
 import useStore, { createStore } from './useStore'
 import type { Room } from './useRoomLocalStorage'
 import { ROOM_LOCAL_STORAGE_KEY, roomLocalStorageDescriptor } from './useRoomLocalStorage'
 import useEnterNewRoom from './useEnterNewRoom'
 import fetchRoom from '@app/util/fetchRoom'
+import rpc from '@app/util/rpc'
+import ok from '@app/util/ok'
 
 const transform = (room: Room) => room.title
 
@@ -33,7 +34,7 @@ export default function useRoomTitle(roomIdOrNull: string | null) {
   const setTitle = useCallback(
     (value: string) =>
       setState(value, async () => {
-        const { roomId, room, ...rest } = await trpc.room.title.mutate({ roomId: roomIdOrNull, value })
+        const { roomId, room, ...rest } = await ok(rpc.room.title.$post({ json: { roomId: roomIdOrNull, value } }))
         const desc = roomLocalStorageDescriptor(roomId)
         if (room) {
           desc.set(room)

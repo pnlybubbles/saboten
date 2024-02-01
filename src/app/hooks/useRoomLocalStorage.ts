@@ -1,6 +1,7 @@
 import { useLocalStorage } from '@app/hooks/useLocalStorage'
 import { createLocalStorageDescriptor } from '@app/util/createLocalStorageDescriptor'
 import { CURRENCY_CODE_SCHEMA } from '@shared/utils/currency'
+import ISO8601_STRING_SCHEMA from '@util/ISO8601_STRING_SCHEMA'
 import { useMemo } from 'react'
 import { z } from 'zod'
 
@@ -20,9 +21,9 @@ const ROOM_SCHEMA = z.object({
       label: z.string(),
       members: z.array(z.object({ memberId: z.string().uuid() })),
       payments: z.array(
-        z.object({ amount: z.string(), paidByMemberId: z.string().uuid(), currency: CURRENCY_CODE_SCHEMA }),
+        z.object({ amount: z.number(), paidByMemberId: z.string().uuid(), currency: CURRENCY_CODE_SCHEMA }),
       ),
-      createdAt: z.string().datetime(),
+      createdAt: ISO8601_STRING_SCHEMA,
     }),
   ),
   currencyRate: z.array(
@@ -30,7 +31,7 @@ const ROOM_SCHEMA = z.object({
       currency: CURRENCY_CODE_SCHEMA,
       toCurrency: CURRENCY_CODE_SCHEMA,
       rate: z.number(),
-      createdAt: z.string().datetime(),
+      createdAt: ISO8601_STRING_SCHEMA,
     }),
   ),
 })
