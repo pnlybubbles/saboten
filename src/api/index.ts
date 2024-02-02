@@ -6,6 +6,7 @@ import room from './room'
 import event from './event'
 
 const api = new Hono<Env>()
+  .basePath('/api')
   .use('*', cors())
   .get('/', (c) => {
     return c.json({ hello: true })

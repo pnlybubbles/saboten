@@ -2,7 +2,7 @@ import type { ClientResponse } from 'hono/client'
 import { hc } from 'hono/client'
 import type { API } from '@api'
 
-const rpc = hc<API>('http://localhost:8787')
+const rpc = hc<API>('/api')
 
 export default rpc
 
