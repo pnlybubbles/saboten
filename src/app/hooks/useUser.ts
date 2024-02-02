@@ -72,7 +72,7 @@ export default function useUser() {
       if (task) {
         return
       }
-      task = ok(rpc.user.refresh.$post())
+      task = ok(rpc.user.refresh.$post({ json: {} }))
       const fetched = await task
 
       if (!('error' in fetched)) {

@@ -10,6 +10,7 @@ import { setCookie, deleteCookie } from 'hono/cookie'
 import { COMPRESSED_USER_ID_SCHEMA } from '@util/schema'
 import auth from './middleware/auth'
 import first from '@util/first'
+import authOrUndef from './middleware/authOrUndef'
 
 const user = new Hono<Env>()
   .post('/item', zValidator('json', z.object({ id: z.string().uuid().optional(), name: z.string() })), async (c) => {
@@ -27,13 +28,13 @@ const user = new Hono<Env>()
   })
   .post(
     '/refresh',
-    auth,
-    zValidator('json', z.object({ compressedUserId: COMPRESSED_USER_ID_SCHEMA }).optional()),
+    authOrUndef,
+    zValidator('json', z.object({ compressedUserId: COMPRESSED_USER_ID_SCHEMA.optional() })),
     async (c) => {
       const db = drizzle(c.env.DB)
-      const input = c.req.valid('json')
+      const { compressedUserId } = c.req.valid('json')
       const overrideUserId =
-        input?.compressedUserId !== undefined ? compressedPrintableStringToUuid(input.compressedUserId) : undefined
+        compressedUserId !== undefined ? compressedPrintableStringToUuid(compressedUserId) : undefined
       const userId = overrideUserId ?? c.var.userId
       if (!userId) {
         return c.json({ error: 'Invalid user ID' })
