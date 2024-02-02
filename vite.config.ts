@@ -4,5 +4,12 @@ import tsconfigPaths from 'vite-tsconfig-paths'
 
 export default defineConfig({
   root: 'src/app',
-  plugins: [react(), tsconfigPaths()],
+  plugins: [
+    react(),
+    tsconfigPaths({
+      // デフォルトではルートの src/app の tsconfig.json から依存関係を解決しつつ他プロジェクトの tsconfig を読みに行く挙動になっている
+      // しかし他プロジェクトの tsconfig を読みにくと無言で落ちてしまうので回避策としてルートのみに制限する
+      projects: ['tsconfig.json'],
+    }),
+  ],
 })
