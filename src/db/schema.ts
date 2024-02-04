@@ -3,7 +3,7 @@ import { integer, primaryKey, real, sqliteTable, text } from 'drizzle-orm/sqlite
 
 const NOW = sql`CURRENT_TIMESTAMP`
 
-const event = sqliteTable('Event', {
+export const event = sqliteTable('Event', {
   id: text('id').notNull().primaryKey(),
   createdAt: text('createdAt').notNull().default(NOW),
   roomId: text('roomId')
@@ -12,12 +12,12 @@ const event = sqliteTable('Event', {
   label: text('label').notNull().default(''),
 })
 
-const eventRelations = relations(event, ({ many }) => ({
+export const eventRelations = relations(event, ({ many }) => ({
   members: many(eventMember),
   payments: many(eventPayment),
 }))
 
-const eventMember = sqliteTable(
+export const eventMember = sqliteTable(
   'EventMember',
   {
     createdAt: text('createdAt').notNull().default(NOW),
@@ -33,7 +33,7 @@ const eventMember = sqliteTable(
   }),
 )
 
-const eventPayment = sqliteTable(
+export const eventPayment = sqliteTable(
   'EventPayment',
   {
     createdAt: text('createdAt').notNull().default(NOW),
@@ -51,19 +51,19 @@ const eventPayment = sqliteTable(
   }),
 )
 
-const room = sqliteTable('Room', {
+export const room = sqliteTable('Room', {
   id: text('id').notNull().primaryKey(),
   createdAt: text('createdAt').notNull().default(NOW),
   title: text('title').notNull().default(''),
 })
 
-const roomRelations = relations(room, ({ many }) => ({
+export const roomRelations = relations(room, ({ many }) => ({
   members: many(roomMember),
   events: many(event),
   currencyRate: many(roomCurrencyRate),
 }))
 
-const roomCurrencyRate = sqliteTable(
+export const roomCurrencyRate = sqliteTable(
   'RoomCurrencyRate',
   {
     createdAt: text('createdAt').notNull().default(NOW),
@@ -79,8 +79,8 @@ const roomCurrencyRate = sqliteTable(
   }),
 )
 
-const roomMember = sqliteTable('RoomMember', {
-  id: text('id').notNull(),
+export const roomMember = sqliteTable('RoomMember', {
+  id: text('id').notNull().primaryKey(),
   createdAt: text('createdAt').notNull().default(NOW),
   roomId: text('roomId')
     .notNull()
@@ -89,11 +89,13 @@ const roomMember = sqliteTable('RoomMember', {
   userId: text('userId').references(() => user.id, { onDelete: 'set null', onUpdate: 'cascade' }),
 })
 
-const roomMemberRelations = relations(roomMember, ({ one }) => ({
+export const roomMemberRelations = relations(roomMember, ({ one, many }) => ({
   user: one(user),
+  payments: many(eventPayment),
+  eventMembers: many(eventMember),
 }))
 
-const user = sqliteTable('User', {
+export const user = sqliteTable('User', {
   id: text('id').notNull().primaryKey(),
   secret: text('secret').notNull().unique(),
   createdAt: text('createdAt').notNull().default(NOW),

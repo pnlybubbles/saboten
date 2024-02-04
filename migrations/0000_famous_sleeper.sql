@@ -43,7 +43,7 @@ CREATE TABLE `RoomCurrencyRate` (
 );
 --> statement-breakpoint
 CREATE TABLE `RoomMember` (
-	`id` text NOT NULL,
+	`id` text PRIMARY KEY NOT NULL,
 	`createdAt` text DEFAULT CURRENT_TIMESTAMP NOT NULL,
 	`roomId` text NOT NULL,
 	`name` text DEFAULT '' NOT NULL,
