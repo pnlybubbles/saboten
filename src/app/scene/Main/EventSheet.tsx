@@ -34,7 +34,7 @@ export default function EventSheet({ roomId, defaultValue, onSubmit, submitLabel
   const userMemberId = user ? members?.find((v) => v.user?.id === user.id)?.id ?? null : null
 
   const [label, setLabel] = useState(defaultValue?.label ?? '')
-  const [amount, setAmount] = useState(defaultValue?.amount ?? '')
+  const [amount, setAmount] = useState(defaultValue?.amount.toString() ?? '')
   const [paidByMember, setPaidByMember] = useState(defaultValue?.paidByMemberId ?? userMemberId)
   const [paidByMemberEditMode, setPaidByMemberEditMode] = useState(false)
   const eventMembersCandidate = useMemo(() => members?.map((v) => v.id).filter(isNonNullable) ?? [], [members])
@@ -73,7 +73,7 @@ export default function EventSheet({ roomId, defaultValue, onSubmit, submitLabel
     if (digits === undefined) {
       throw new Error('Invalid country code')
     }
-    const amountValue = BigInt(parseFloat(amount) * 10 ** digits).toString()
+    const amountValue = parseFloat(amount) * 10 ** digits
     if (roomId === null || userMemberId === null) {
       // room作成前の場合はoptimistic updateしないので、リクエストを待つ
       setBusy(true)
