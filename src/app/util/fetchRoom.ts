@@ -14,7 +14,7 @@ export default function fetchRoom(roomId: string) {
     return task
   }
 
-  const promise = ok(rpc.api.room.item.$get({ json: { id: roomId } })).then((value) => {
+  const promise = ok(rpc.api.room.item.$get({ query: { id: roomId } })).then((value) => {
     value.events.map((v) => v.payments)
     desc.set(value)
     return value

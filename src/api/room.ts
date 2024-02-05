@@ -14,9 +14,9 @@ import roomMember from './room.member'
 import roomCurrencyRate from './room.currencyRate'
 
 const room = new Hono<Env>()
-  .get('/item', zValidator('json', z.object({ id: z.string().uuid() })), async (c) => {
+  .get('/item', zValidator('query', z.object({ id: z.string().uuid() })), async (c) => {
     const db = drizzle(c.env.DB, { schema })
-    const { id: roomId } = c.req.valid('json')
+    const { id: roomId } = c.req.valid('query')
     const room = await db.query.room.findFirst({
       where: (room) => eq(room.id, roomId),
       with: {
