@@ -82,6 +82,12 @@
     "fmt:eslint": "eslint --fix .",
     "lint": "run-p 'lint:*'",
     "lint:prettier": "prettier --check .",
-    "lint:eslint": "eslint . --report-unused-disable-directives --max-warnings 0"
+    "lint:eslint": "eslint . --report-unused-disable-directives --max-warnings 0",
+    "typecheck": "run-p 'typecheck:*'",
+    "typecheck:node": "tsc -p tsconfig.node.json",
+    "typecheck:app": "tsc -p src/app",
+    "typecheck:worker": "tsc -p src/api",
+    "typecheck:db": "tsc -p src/db",
+    "typecheck:util": "tsc -p src/util"
   }
 }
