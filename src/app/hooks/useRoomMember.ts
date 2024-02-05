@@ -146,11 +146,14 @@ export default function useRoomMember(roomId: string | null) {
     [roomId, setState],
   )
 
-  const getMember = (memberId: string) => state?.find((v) => v.id === memberId)
-  const getMemberName = (memberIdOrMember: string | Member) => {
-    const member = typeof memberIdOrMember === 'string' ? getMember(memberIdOrMember) : memberIdOrMember
-    return member ? deriveMemberName(user, member) : null
-  }
+  const getMember = useCallback((memberId: string) => state?.find((v) => v.id === memberId), [state])
+  const getMemberName = useCallback(
+    (memberIdOrMember: string | Member) => {
+      const member = typeof memberIdOrMember === 'string' ? getMember(memberIdOrMember) : memberIdOrMember
+      return member ? deriveMemberName(user, member) : null
+    },
+    [getMember, user],
+  )
 
   return [state, { addMember, removeMember, getMemberName, getMember, joinMember }] as const
 }

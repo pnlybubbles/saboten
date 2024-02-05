@@ -137,8 +137,6 @@ export default function EventSheet({ roomId, defaultValue, onSubmit, submitLabel
     return <div>ユーザーのニックネーム設定が必要です</div>
   }
 
-  console.log(defaultValue, { members, paidByMember })
-
   return (
     <Sheet {...sheet}>
       <div className="grid gap-4">

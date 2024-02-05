@@ -3,11 +3,12 @@ import type { Room } from './useRoomLocalStorage'
 import { ROOM_LOCAL_STORAGE_KEY, roomLocalStorageDescriptor } from './useRoomLocalStorage'
 import useStore, { createStore } from './useStore'
 import genTmpId from '@app/util/genTmpId'
-import { useCallback } from 'react'
+import { useCallback, useMemo } from 'react'
 import useEnterNewRoom from './useEnterNewRoom'
 import { parseISO } from 'date-fns'
 import rpc from '@app/util/rpc'
 import ok from '@app/util/ok'
+import useRoomMember from './useRoomMember'
 
 const transform = (room: Room) =>
   room.events.map((v) => ({
@@ -176,7 +177,26 @@ export default function useEvents(roomId: string | null) {
     [roomId, setState],
   )
 
-  return [state, { addEvent, updateEvent, removeEvent }] as const
+  // TODO: この依存は無い方が良い気がしつつ、参照方向としてはこれで自然な気もする
+  const [, { getMember }] = useRoomMember(roomId)
+
+  const validatedState = useMemo(
+    () =>
+      state
+        ? state.map((event) => ({
+            ...event,
+            // すでに抜けているメンバーが居たら除去 (onDelete: cascade)
+            members: event.members.filter((v) => getMember(v.memberId)),
+            // すでに抜けているメンバーの支払いがある場合はnullにする (onDelete: set-null)
+            payments: event.payments.map((v) =>
+              v.paidByMemberId && getMember(v.paidByMemberId) ? v : { ...v, paidByMemberId: null },
+            ),
+          }))
+        : state,
+    [state, getMember],
+  )
+
+  return [validatedState, { addEvent, updateEvent, removeEvent }] as const
 }
 
 export type Event = NonNullable<ReturnType<typeof useEvents>[0]>[number]
