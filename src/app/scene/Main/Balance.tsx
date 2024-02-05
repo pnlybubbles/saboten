@@ -9,6 +9,7 @@ import usePresent from '@app/hooks/usePresent'
 import CurrencyText from '@app/components/CurrencyText'
 import clsx from 'clsx'
 import Clickable from '@app/components/Clickable'
+import isNonNullable from '@app/util/isNonNullable'
 
 interface Props {
   roomId: string | null
@@ -16,10 +17,21 @@ interface Props {
 
 export default function Balance({ roomId }: Props) {
   const [, { getMemberName }] = useRoomMember(roomId)
-  const [events] = useEvents(roomId)
+  const [rawEvents] = useEvents(roomId)
   const [, { displayCurrency, displayCurrencySum, availableCurrencyFor }] = useRoomCurrencyRate(roomId)
 
-  const totalByCurrency = (events ?? []).reduce(
+  // 支払い者が離脱している場合は累計の計算から除外する
+  const events =
+    rawEvents?.map((v) => ({
+      ...v,
+      payments: v.payments
+        .map((payment) =>
+          payment.paidByMemberId !== null ? { ...payment, paidByMemberId: payment.paidByMemberId } : null,
+        )
+        .filter(isNonNullable),
+    })) ?? []
+
+  const totalByCurrency = events.reduce(
     (acc, v) => {
       for (const payment of v.payments) {
         acc[payment.currency] ??= BigInt(0)

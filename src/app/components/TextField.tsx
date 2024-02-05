@@ -39,7 +39,7 @@ export default forwardRef<HTMLInputElement, Props>(function TextField(
           {label}
         </div>
       )}
-      <div className="absolute right-4 grid h-full items-center">{children}</div>
+      <div className="absolute right-5 grid h-full items-center">{children}</div>
     </label>
   )
 })

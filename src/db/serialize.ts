@@ -20,7 +20,7 @@ type Room = {
     payments: {
       amount: number
       currency: string
-      paidByMemberId: string
+      paidByMemberId: string | null
     }[]
     createdAt: string
   }[]

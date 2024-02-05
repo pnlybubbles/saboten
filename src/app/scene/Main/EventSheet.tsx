@@ -18,9 +18,13 @@ import Clickable from '@app/components/Clickable'
 import { useMemo } from 'react'
 import unreachable from '@app/util/unreachable'
 
+type EventPayloadDefault = Omit<EventPayload, 'paidByMemberId'> & {
+  paidByMemberId: string | null
+}
+
 interface Props extends SheetProps {
   roomId: string | null
-  defaultValue?: EventPayload | undefined
+  defaultValue?: EventPayloadDefault | undefined
   onSubmit: (payload: EventPayloadAddPhase) => Promise<void>
   submitLabel: string
   onRemove?: () => void
@@ -33,36 +37,55 @@ export default function EventSheet({ roomId, defaultValue, onSubmit, submitLabel
   const [members, { getMemberName }] = useRoomMember(roomId)
   const userMemberId = user ? members?.find((v) => v.user?.id === user.id)?.id ?? null : null
 
-  const [label, setLabel] = useState(defaultValue?.label ?? '')
-  const [amount, setAmount] = useState(defaultValue?.amount.toString() ?? '')
-  const [paidByMember, setPaidByMember] = useState(defaultValue?.paidByMemberId ?? userMemberId)
-  const [paidByMemberEditMode, setPaidByMemberEditMode] = useState(false)
+  const defaultCurrency = defaultValue?.currency ?? 'JPY'
+  const defaultCurrencyDigits = cc.code(defaultCurrency)?.digits ?? 0
   const eventMembersCandidate = useMemo(() => members?.map((v) => v.id).filter(isNonNullable) ?? [], [members])
-  const [eventMembers, setEventMembers] = useState(defaultValue?.memberIds ?? eventMembersCandidate)
+  const defaultFormValue = useMemo(
+    () => ({
+      label: defaultValue?.label ?? '',
+      amount: defaultValue?.amount
+        ? (Number(BigInt(defaultValue.amount)) / 10 ** defaultCurrencyDigits).toString()
+        : '',
+      paidByMember: defaultValue?.paidByMemberId === undefined ? userMemberId : defaultValue.paidByMemberId,
+      eventMembers: defaultValue?.memberIds ?? eventMembersCandidate,
+      currency: defaultCurrency,
+    }),
+    [
+      defaultCurrency,
+      defaultCurrencyDigits,
+      defaultValue?.amount,
+      defaultValue?.label,
+      defaultValue?.memberIds,
+      defaultValue?.paidByMemberId,
+      eventMembersCandidate,
+      userMemberId,
+    ],
+  )
+  const [label, setLabel] = useState(defaultFormValue.label)
+  const [amount, setAmount] = useState(defaultFormValue.amount)
+  const [paidByMember, setPaidByMember] = useState(defaultFormValue.paidByMember)
+  const [eventMembers, setEventMembers] = useState(defaultFormValue.eventMembers)
+  const [currency, setCurrency] = useState(defaultFormValue.currency)
   const editCurrencySheet = usePresent()
-  const [currency, setCurrency] = useState(defaultValue?.currency ?? 'JPY')
+  const [paidByMemberEditMode, setPaidByMemberEditMode] = useState(false)
 
   const { dirty, clearDirty } = useDirty(
     useCallback(() => {
       if (!sheet.isPresent) {
         return
       }
-      setLabel(defaultValue?.label ?? '')
-      const defaultCurrency = defaultValue?.currency ?? 'JPY'
-      setCurrency(defaultCurrency)
-      const digits = cc.code(defaultCurrency)?.digits ?? 0
-      setAmount(defaultValue?.amount ? (Number(BigInt(defaultValue.amount)) / 10 ** digits).toString() : '')
-      setPaidByMember(defaultValue?.paidByMemberId ?? userMemberId)
-      setEventMembers(defaultValue?.memberIds ?? eventMembersCandidate)
+      setLabel(defaultFormValue.label)
+      setCurrency(defaultFormValue.currency)
+      setAmount(defaultFormValue.amount)
+      setPaidByMember(defaultFormValue.paidByMember)
+      setEventMembers(defaultFormValue.eventMembers)
     }, [
+      defaultFormValue.amount,
+      defaultFormValue.currency,
+      defaultFormValue.eventMembers,
+      defaultFormValue.label,
+      defaultFormValue.paidByMember,
       sheet.isPresent,
-      defaultValue?.label,
-      defaultValue?.currency,
-      defaultValue?.amount,
-      defaultValue?.paidByMemberId,
-      defaultValue?.memberIds,
-      userMemberId,
-      eventMembersCandidate,
     ]),
   )
 
@@ -110,6 +133,8 @@ export default function EventSheet({ roomId, defaultValue, onSubmit, submitLabel
     // TODO: loading
     return <div>ユーザーのニックネーム設定が必要です</div>
   }
+
+  console.log(defaultValue, { members, paidByMember })
 
   return (
     <Sheet {...sheet}>
@@ -166,33 +191,56 @@ export default function EventSheet({ roomId, defaultValue, onSubmit, submitLabel
             <div className="flex">
               <div className="w-4 bg-gradient-to-l from-surface"></div>
               <div className="mr-[-4px] flex justify-end bg-surface">
-                {members?.map((member) => (
-                  <Clickable
-                    key={member.id ?? member.tmpId}
-                    onClick={() => {
-                      if (member.id === null) {
-                        unreachable()
-                      }
-                      if (paidByMemberEditMode) {
-                        setPaidByMember(member.id)
-                        setPaidByMemberEditMode(false)
-                      } else {
-                        setPaidByMemberEditMode(true)
-                      }
-                    }}
-                    disabled={member.id === null}
-                    className={clsx(
-                      'box-content rounded-full border-2 border-transparent p-[2px] transition-[margin,opacity,border-color] active:scale-90 disabled:opacity-30',
-                      paidByMemberEditMode || member.id === paidByMember
-                        ? 'ml-1 w-10 opacity-100 first:ml-0'
-                        : // width: 2.5rem + border: 2px * 2 + padding: 2px * 2
-                          'ml-[calc(-2.5rem-8px)] opacity-0',
-                      member.id === paidByMember && 'border-zinc-900',
-                    )}
-                  >
-                    <Avatar mini name={getMemberName(member)}></Avatar>
-                  </Clickable>
-                )) ?? (
+                {members ? (
+                  [
+                    ...(paidByMember === null && !paidByMemberEditMode
+                      ? [
+                          <Clickable
+                            key="null"
+                            onClick={() => {
+                              if (!paidByMemberEditMode) {
+                                setPaidByMemberEditMode(true)
+                              }
+                            }}
+                            className={clsx(
+                              'box-content rounded-full border-2 p-[2px] transition-[margin,opacity,border-color] active:scale-90 disabled:opacity-30',
+                              'ml-1 w-10 opacity-100 first:ml-0',
+                              'border-zinc-900',
+                            )}
+                          >
+                            <Avatar mini name={null}></Avatar>
+                          </Clickable>,
+                        ]
+                      : []),
+                    ...members.map((member) => (
+                      <Clickable
+                        key={member.id ?? member.tmpId}
+                        onClick={() => {
+                          if (member.id === null) {
+                            unreachable()
+                          }
+                          if (paidByMemberEditMode) {
+                            setPaidByMember(member.id)
+                            setPaidByMemberEditMode(false)
+                          } else {
+                            setPaidByMemberEditMode(true)
+                          }
+                        }}
+                        disabled={member.id === null}
+                        className={clsx(
+                          'box-content rounded-full border-2 border-transparent p-[2px] transition-[margin,opacity,border-color] active:scale-90 disabled:opacity-30',
+                          paidByMemberEditMode || member.id === paidByMember
+                            ? 'ml-1 w-10 opacity-100 first:ml-0'
+                            : // width: 2.5rem + border: 2px * 2 + padding: 2px * 2
+                              'ml-[calc(-2.5rem-8px)] opacity-0',
+                          member.id === paidByMember && 'border-zinc-900',
+                        )}
+                      >
+                        <Avatar mini name={getMemberName(member)}></Avatar>
+                      </Clickable>
+                    )),
+                  ]
+                ) : (
                   <div className="rounded-full border-2 border-zinc-900 p-[2px]">
                     <Avatar mini name={user.name}></Avatar>
                   </div>

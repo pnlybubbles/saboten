@@ -12,17 +12,17 @@ CREATE TABLE `EventMember` (
 	`memberId` text NOT NULL,
 	PRIMARY KEY(`eventId`, `memberId`),
 	FOREIGN KEY (`eventId`) REFERENCES `Event`(`id`) ON UPDATE cascade ON DELETE cascade,
-	FOREIGN KEY (`memberId`) REFERENCES `RoomMember`(`id`) ON UPDATE cascade ON DELETE no action
+	FOREIGN KEY (`memberId`) REFERENCES `RoomMember`(`id`) ON UPDATE cascade ON DELETE cascade
 );
 --> statement-breakpoint
 CREATE TABLE `EventPayment` (
 	`createdAt` text DEFAULT CURRENT_TIMESTAMP NOT NULL,
 	`amount` integer NOT NULL,
 	`currency` text NOT NULL,
-	`paidByMenberId` text NOT NULL,
+	`paidByMemberId` text,
 	`eventId` text NOT NULL,
-	PRIMARY KEY(`eventId`, `paidByMenberId`),
-	FOREIGN KEY (`paidByMenberId`) REFERENCES `RoomMember`(`id`) ON UPDATE cascade ON DELETE no action,
+	PRIMARY KEY(`eventId`, `paidByMemberId`),
+	FOREIGN KEY (`paidByMemberId`) REFERENCES `RoomMember`(`id`) ON UPDATE cascade ON DELETE set null,
 	FOREIGN KEY (`eventId`) REFERENCES `Event`(`id`) ON UPDATE cascade ON DELETE cascade
 );
 --> statement-breakpoint

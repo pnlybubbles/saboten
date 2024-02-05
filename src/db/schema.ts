@@ -27,7 +27,7 @@ export const eventMember = sqliteTable(
       .references(() => event.id, { onDelete: 'cascade', onUpdate: 'cascade' }),
     memberId: text('memberId')
       .notNull()
-      .references(() => roomMember.id, { onDelete: 'no action', onUpdate: 'cascade' }),
+      .references(() => roomMember.id, { onDelete: 'cascade', onUpdate: 'cascade' }),
   },
   (table) => ({
     pk: primaryKey({ columns: [table.eventId, table.memberId] }),
@@ -44,9 +44,10 @@ export const eventPayment = sqliteTable(
     createdAt: text('createdAt').notNull().default(NOW),
     amount: integer('amount').notNull(),
     currency: text('currency').notNull(),
-    paidByMemberId: text('paidByMenberId')
-      .notNull()
-      .references(() => roomMember.id, { onDelete: 'no action', onUpdate: 'cascade' }),
+    paidByMemberId: text('paidByMemberId').references(() => roomMember.id, {
+      onDelete: 'set null',
+      onUpdate: 'cascade',
+    }),
     eventId: text('eventId')
       .notNull()
       .references(() => event.id, { onDelete: 'cascade', onUpdate: 'cascade' }),
@@ -102,10 +103,9 @@ export const roomMember = sqliteTable('RoomMember', {
   userId: text('userId').references(() => user.id, { onDelete: 'set null', onUpdate: 'cascade' }),
 })
 
-export const roomMemberRelations = relations(roomMember, ({ one, many }) => ({
+export const roomMemberRelations = relations(roomMember, ({ one }) => ({
   user: one(user, { fields: [roomMember.userId], references: [user.id] }),
   room: one(room, { fields: [roomMember.roomId], references: [room.id] }),
-  payments: many(eventPayment),
 }))
 
 export const user = sqliteTable('User', {

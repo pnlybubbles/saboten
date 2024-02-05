@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "sqlite",
-  "id": "7dc76152-a6cd-4993-8b72-f6a330d1f650",
+  "id": "5fb35aee-659b-47a3-83ce-b1e799c4d6c4",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "Event": {
@@ -108,7 +108,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
+          "onDelete": "cascade",
           "onUpdate": "cascade"
         }
       },
@@ -148,11 +148,11 @@
           "notNull": true,
           "autoincrement": false
         },
-        "paidByMenberId": {
-          "name": "paidByMenberId",
+        "paidByMemberId": {
+          "name": "paidByMemberId",
           "type": "text",
           "primaryKey": false,
-          "notNull": true,
+          "notNull": false,
           "autoincrement": false
         },
         "eventId": {
@@ -165,17 +165,17 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "EventPayment_paidByMenberId_RoomMember_id_fk": {
-          "name": "EventPayment_paidByMenberId_RoomMember_id_fk",
+        "EventPayment_paidByMemberId_RoomMember_id_fk": {
+          "name": "EventPayment_paidByMemberId_RoomMember_id_fk",
           "tableFrom": "EventPayment",
           "tableTo": "RoomMember",
           "columnsFrom": [
-            "paidByMenberId"
+            "paidByMemberId"
           ],
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
+          "onDelete": "set null",
           "onUpdate": "cascade"
         },
         "EventPayment_eventId_Event_id_fk": {
@@ -193,12 +193,12 @@
         }
       },
       "compositePrimaryKeys": {
-        "EventPayment_eventId_paidByMenberId_pk": {
+        "EventPayment_eventId_paidByMemberId_pk": {
           "columns": [
             "eventId",
-            "paidByMenberId"
+            "paidByMemberId"
           ],
-          "name": "EventPayment_eventId_paidByMenberId_pk"
+          "name": "EventPayment_eventId_paidByMemberId_pk"
         }
       },
       "uniqueConstraints": {}

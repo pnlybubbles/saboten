@@ -46,7 +46,10 @@ function Item({ id, label, payments, members, roomId, createdAt }: Event & Props
               id === null ? 'mr-2 opacity-100' : 'mr-[-20px] opacity-0',
             )}
           ></Spinner>
-          <Avatar mini name={payments[0] ? getMemberName(payments[0].paidByMemberId) ?? null : null}></Avatar>
+          <Avatar
+            mini
+            name={payments[0]?.paidByMemberId ? getMemberName(payments[0].paidByMemberId) ?? null : null}
+          ></Avatar>
         </div>
         <div>
           <div className="font-bold">{label}</div>
