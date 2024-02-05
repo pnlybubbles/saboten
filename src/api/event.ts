@@ -135,11 +135,11 @@ const event = new Hono<Env>()
       if (row === undefined) {
         throw new HTTPException(403, { message: 'Only member can update the event' })
       }
-      const event = first(await db.update(schema.event).set({ label }).returning())
+      const event = first(await db.update(schema.event).set({ label }).where(eq(schema.event.id, eventId)).returning())
       const eventPayment = await db
         .update(schema.eventPayment)
         .set({ amount, currency })
-        .where(eq(schema.eventPayment.paidByMemberId, paidByMemberId))
+        .where(and(eq(schema.eventPayment.eventId, eventId), eq(schema.eventPayment.paidByMemberId, paidByMemberId)))
         .returning()
       // TODO: 差分の更新にする。もしかしたらカラムを分けないほうが便利かもしれない
       await db.delete(schema.eventMember).where(eq(schema.eventMember.eventId, eventId))
