@@ -96,6 +96,7 @@ const room = new Hono<Env>()
       throw new HTTPException(403, { message: 'Only member can delete the room' })
     }
     await db.delete(schema.room).where(and(eq(schema.room.id, roomId)))
+    return c.json({})
   })
   .route('/member', roomMember)
   .route('/currencyRate', roomCurrencyRate)
