@@ -21,7 +21,7 @@ const roomMember = new Hono<Env>()
       const { userId } = c.var
       if (roomId) {
         const { id: memberId } = first(
-          await db.insert(schema.roomMember).values({ name, roomId, id: uuid(), userId }).returning(),
+          await db.insert(schema.roomMember).values({ name, roomId, id: uuid() }).returning(),
         )
         const members = await db.query.roomMember.findMany({
           where: (member) => eq(member.roomId, roomId),
