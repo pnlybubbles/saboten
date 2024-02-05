@@ -12,7 +12,8 @@ export const event = sqliteTable('Event', {
   label: text('label').notNull().default(''),
 })
 
-export const eventRelations = relations(event, ({ many }) => ({
+export const eventRelations = relations(event, ({ one, many }) => ({
+  room: one(room, { fields: [event.roomId], references: [room.id] }),
   members: many(eventMember),
   payments: many(eventPayment),
 }))
@@ -33,6 +34,10 @@ export const eventMember = sqliteTable(
   }),
 )
 
+export const eventMemberRelations = relations(eventMember, ({ one }) => ({
+  event: one(event, { fields: [eventMember.eventId], references: [event.id] }),
+}))
+
 export const eventPayment = sqliteTable(
   'EventPayment',
   {
@@ -50,6 +55,10 @@ export const eventPayment = sqliteTable(
     pk: primaryKey({ columns: [table.eventId, table.paidByMemberId] }),
   }),
 )
+
+export const eventPaymentRelations = relations(eventPayment, ({ one }) => ({
+  event: one(event, { fields: [eventPayment.eventId], references: [event.id] }),
+}))
 
 export const room = sqliteTable('Room', {
   id: text('id').notNull().primaryKey(),
@@ -79,6 +88,10 @@ export const roomCurrencyRate = sqliteTable(
   }),
 )
 
+export const roomCurrencyRateRelations = relations(roomCurrencyRate, ({ one }) => ({
+  room: one(room, { fields: [roomCurrencyRate.roomId], references: [room.id] }),
+}))
+
 export const roomMember = sqliteTable('RoomMember', {
   id: text('id').notNull().primaryKey(),
   createdAt: text('createdAt').notNull().default(NOW),
@@ -90,9 +103,9 @@ export const roomMember = sqliteTable('RoomMember', {
 })
 
 export const roomMemberRelations = relations(roomMember, ({ one, many }) => ({
-  user: one(user),
+  user: one(user, { fields: [roomMember.userId], references: [user.id] }),
+  room: one(room, { fields: [roomMember.roomId], references: [room.id] }),
   payments: many(eventPayment),
-  eventMembers: many(eventMember),
 }))
 
 export const user = sqliteTable('User', {
@@ -106,10 +119,13 @@ const schema = {
   event,
   eventRelations,
   eventMember,
+  eventMemberRelations,
   eventPayment,
+  eventPaymentRelations,
   room,
   roomRelations,
   roomCurrencyRate,
+  roomCurrencyRateRelations,
   roomMember,
   roomMemberRelations,
   user,
