@@ -136,10 +136,11 @@ const event = new Hono<Env>()
         throw new HTTPException(403, { message: 'Only member can update the event' })
       }
       const event = first(await db.update(schema.event).set({ label }).where(eq(schema.event.id, eventId)).returning())
-      const eventPayment = await db
-        .update(schema.eventPayment)
-        .set({ amount, currency })
-        .where(and(eq(schema.eventPayment.eventId, eventId), eq(schema.eventPayment.paidByMemberId, paidByMemberId)))
+      // TODO: 差分の更新にする。もしかしたらカラムを分けないほうが便利かもしれない
+      await db.delete(schema.eventPayment).where(eq(schema.eventPayment.eventId, eventId))
+      const eventPayments = await db
+        .insert(schema.eventPayment)
+        .values({ eventId, paidByMemberId, amount, currency })
         .returning()
       // TODO: 差分の更新にする。もしかしたらカラムを分けないほうが便利かもしれない
       await db.delete(schema.eventMember).where(eq(schema.eventMember.eventId, eventId))
@@ -147,7 +148,7 @@ const event = new Hono<Env>()
         .insert(schema.eventMember)
         .values(memberIds.map((memberId) => ({ eventId, memberId })))
         .returning()
-      return c.json(serializeEvent({ ...event, payments: eventPayment, members: eventMembers }))
+      return c.json(serializeEvent({ ...event, payments: eventPayments, members: eventMembers }))
     },
   )
 
