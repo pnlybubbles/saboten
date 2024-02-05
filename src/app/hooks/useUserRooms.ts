@@ -16,7 +16,7 @@ export const userRoomsLocalStorageDescriptor = (userId: string) =>
   createLocalStorageDescriptor(USER_ROOMS_LOCAL_STORAGE_KEY(userId), USER_ROOMS_STORAGE)
 
 let onceFetched = false
-let task: null | Promise<RPCResponseType<typeof rpc.room.joined.$get>> = null
+let task: null | Promise<RPCResponseType<typeof rpc.api.room.joined.$get>> = null
 
 export default function useUserRooms() {
   const [user] = useUser()
@@ -28,7 +28,7 @@ export default function useUserRooms() {
     if (task) {
       return
     }
-    task = ok(rpc.room.joined.$get())
+    task = ok(rpc.api.room.joined.$get())
     const fetched = await task
     task = null
 

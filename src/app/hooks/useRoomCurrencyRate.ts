@@ -70,7 +70,7 @@ export default function useRoomCurrencyRate(roomId: string | null) {
             // イベントを登録してからじゃないとレート入力は必要にならないので、ルームがない場合は利用不可
             throw new Error('No room to add currency rate')
           }
-          const data = await ok(rpc.room.currencyRate.update.$post({ json: { roomId, ...currencyRate } }))
+          const data = await ok(rpc.api.room.currencyRate.update.$post({ json: { roomId, ...currencyRate } }))
           const desc = roomLocalStorageDescriptor(roomId)
           const current = desc.get()
           if (current === null) {
@@ -105,7 +105,7 @@ export default function useRoomCurrencyRate(roomId: string | null) {
             // イベントを登録してからじゃないとレート入力は必要にならないので、ルームがない場合は利用不可
             throw new Error('No room to remove currency rate')
           }
-          const data = await ok(rpc.room.currencyRate.remove.$post({ json: { roomId, ...currencyRate } }))
+          const data = await ok(rpc.api.room.currencyRate.remove.$post({ json: { roomId, ...currencyRate } }))
           const desc = roomLocalStorageDescriptor(roomId)
           const current = desc.get()
           if (current === null) {

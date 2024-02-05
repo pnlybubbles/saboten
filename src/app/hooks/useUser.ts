@@ -18,7 +18,7 @@ const USER_STORAGE_DESCRIPTOR = createLocalStorageDescriptor(
   }),
 )
 
-let task: null | Promise<RPCResponseType<typeof rpc.user.refresh.$post>> = null
+let task: null | Promise<RPCResponseType<typeof rpc.api.user.refresh.$post>> = null
 
 export default function useUser() {
   const [user, setUserInStorage, ready] = useLocalStorage(USER_STORAGE_DESCRIPTOR)
@@ -27,7 +27,7 @@ export default function useUser() {
     if (user) {
       setUserInStorage({ ...user, ...props })
     }
-    const res = await rpc.user.item.$post({ json: { id: user?.id, ...props } })
+    const res = await rpc.api.user.item.$post({ json: { id: user?.id, ...props } })
     const data = await res.json()
     setUserInStorage(data)
     return data
@@ -37,7 +37,7 @@ export default function useUser() {
     if (!user) {
       return
     }
-    await rpc.user.leave.$post()
+    await rpc.api.user.leave.$post()
     setUserInStorage(undefined)
     const userRooms = userRoomsLocalStorageDescriptor(user.id)
     const rooms = userRooms.get()?.map((v) => v.id) ?? []
@@ -48,7 +48,7 @@ export default function useUser() {
   }
 
   const restoreUser = async (compressedUserId: string) => {
-    const fetched = await ok(rpc.user.refresh.$post({ json: { compressedUserId } }))
+    const fetched = await ok(rpc.api.user.refresh.$post({ json: { compressedUserId } }))
 
     if (!('error' in fetched)) {
       setUserInStorage(fetched)
@@ -72,7 +72,7 @@ export default function useUser() {
       if (task) {
         return
       }
-      task = ok(rpc.user.refresh.$post({ json: {} }))
+      task = ok(rpc.api.user.refresh.$post({ json: {} }))
       const fetched = await task
 
       if (!('error' in fetched)) {

@@ -53,7 +53,7 @@ export default function useRoomMember(roomId: string | null) {
           return [...current, { name: name, user: null, id: null, tmpId: genTmpId() }]
         },
         async () => {
-          const data = await ok(rpc.room.member.add.$post({ json: { roomId, name } }))
+          const data = await ok(rpc.api.room.member.add.$post({ json: { roomId, name } }))
           const desc = roomLocalStorageDescriptor(data.roomId)
           if (data.room) {
             desc.set(data.room)
@@ -93,7 +93,7 @@ export default function useRoomMember(roomId: string | null) {
             // メンバー追加&部屋作成はキューイングされるので、roomId=nullのクロージャに入ってる間にキューに入った場合はエラーになる
             throw new Error('No room to remove member')
           }
-          const members = await ok(rpc.room.member.remove.$post({ json: { roomId: roomId, memberId } }))
+          const members = await ok(rpc.api.room.member.remove.$post({ json: { roomId: roomId, memberId } }))
           const desc = roomLocalStorageDescriptor(roomId)
           const current = desc.get()
           if (current === null) {
@@ -132,7 +132,7 @@ export default function useRoomMember(roomId: string | null) {
             // 部屋がないと参加はできない
             throw new Error('No room to join')
           }
-          const members = await ok(rpc.room.member.join.$post({ json: { roomId, memberId } }))
+          const members = await ok(rpc.api.room.member.join.$post({ json: { roomId, memberId } }))
           const desc = roomLocalStorageDescriptor(roomId)
           const current = desc.get()
           if (current === null) {

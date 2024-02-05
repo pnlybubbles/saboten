@@ -72,7 +72,7 @@ export default function useEvents(roomId: string | null) {
           ]
         },
         async () => {
-          const data = await ok(rpc.event.add.$post({ json: { ...event, roomId } }))
+          const data = await ok(rpc.api.event.add.$post({ json: { ...event, roomId } }))
           const desc = roomLocalStorageDescriptor(data.roomId)
           if (data.room) {
             desc.set(data.room)
@@ -121,7 +121,7 @@ export default function useEvents(roomId: string | null) {
             // TODO: もしかしたらaddしたすぐ直後の場合はroomIdが確定していない可能性もある
             throw new Error('No room to remove event')
           }
-          const data = await ok(rpc.event.update.$post({ json: { ...event, eventId: event.id } }))
+          const data = await ok(rpc.api.event.update.$post({ json: { ...event, eventId: event.id } }))
           const desc = roomLocalStorageDescriptor(roomId)
           const current = desc.get()
           if (current === null) {
@@ -162,7 +162,7 @@ export default function useEvents(roomId: string | null) {
             // TODO: もしかしたらaddしたすぐ直後の場合はroomIdが確定していない可能性もある
             throw new Error('No room to remove event')
           }
-          const data = await ok(rpc.event.remove.$post({ json: { eventId, roomId } }))
+          const data = await ok(rpc.api.event.remove.$post({ json: { eventId, roomId } }))
           const desc = roomLocalStorageDescriptor(roomId)
           const current = desc.get()
           if (current === null) {

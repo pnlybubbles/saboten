@@ -31,7 +31,7 @@ export default function SettingsSheet({ roomId, ...sheet }: Props) {
     }
     setBusy(true)
     try {
-      await rpc.room.remove.$post({ json: { roomId } })
+      await rpc.api.room.remove.$post({ json: { roomId } })
       roomLocalStorageDescriptor(roomId).set(undefined)
       if (user) {
         const desc = userRoomsLocalStorageDescriptor(user.id)

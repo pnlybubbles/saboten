@@ -34,7 +34,7 @@ export default function useRoomTitle(roomIdOrNull: string | null) {
   const setTitle = useCallback(
     (value: string) =>
       setState(value, async () => {
-        const { roomId, room, ...rest } = await ok(rpc.room.title.$post({ json: { roomId: roomIdOrNull, value } }))
+        const { roomId, room, ...rest } = await ok(rpc.api.room.title.$post({ json: { roomId: roomIdOrNull, value } }))
         const desc = roomLocalStorageDescriptor(roomId)
         if (room) {
           desc.set(room)
