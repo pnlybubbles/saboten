@@ -112,11 +112,14 @@ export default function EventSheet({ roomId, defaultValue, onSubmit, submitLabel
         setBusy(false)
       }
     } else {
+      if (paidByMember === null) {
+        throw new Error('"paidByMember" must be updated to be non-null')
+      }
       void onSubmit({
         label,
         amount: amountValue,
         currency,
-        paidByMemberId: paidByMember ?? userMemberId,
+        paidByMemberId: paidByMember,
         memberIds: eventMembers,
       })
     }
@@ -288,7 +291,8 @@ export default function EventSheet({ roomId, defaultValue, onSubmit, submitLabel
               label === '' ||
               amount === '' ||
               amount === '0' ||
-              (eventMembersCandidate.length > 0 && eventMembers.length === 0)
+              (eventMembersCandidate.length > 0 && eventMembers.length === 0) ||
+              paidByMember === null
             }
             loading={busy}
           >
