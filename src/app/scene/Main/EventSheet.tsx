@@ -290,7 +290,7 @@ export default function EventSheet({ roomId, defaultValue, onSubmit, submitLabel
               amount === '' ||
               amount === '0' ||
               (eventMembersCandidate.length > 0 && eventMembers.length === 0) ||
-              paidByMember === null
+              (roomId !== null && paidByMember === null)
             }
             loading={busy}
           >
