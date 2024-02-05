@@ -19,6 +19,7 @@
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.22.0",
     "react-spring-bottom-sheet": "3.5.0-alpha.0",
+    "string-hash": "^1.1.3",
     "uuid": "^9.0.1",
     "zod": "3.22.4"
   },
@@ -33,6 +34,7 @@
     "@types/prettier": "^3.0.0",
     "@types/react": "^18.2.51",
     "@types/react-dom": "^18.2.18",
+    "@types/string-hash": "^1.1.3",
     "@types/uuid": "^9.0.7",
     "@typescript-eslint/eslint-plugin": "^6.20.0",
     "@typescript-eslint/parser": "^6.20.0",

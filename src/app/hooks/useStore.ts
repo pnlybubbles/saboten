@@ -1,4 +1,4 @@
-import { log } from '@app/util/log'
+import log from '@app/util/log'
 import { useCallback, useSyncExternalStore } from 'react'
 
 class Store<T> {
@@ -118,7 +118,7 @@ export default function useStore<T, Args extends unknown[]>(
     new Store(
       () => store.fetcher(...args),
       store.persistCache(...args),
-      (value, label) => log(`store-${label} [${cacheKey.slice(0, 10)}]`, value),
+      (value, label) => log('Store', `${label} (${cacheKey.slice(0, 10)})`, value),
     )
 
   if (cachedRecord === undefined) {

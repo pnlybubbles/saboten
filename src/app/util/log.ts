@@ -1,12 +1,19 @@
-export const log = (title: string, payload: unknown) => {
+import hash from 'string-hash'
+
+export default function log(title: string, message: string, payload: unknown) {
+  const deg = (hash(title) / 4294967295) * 360
   console.log(
-    `%c${getTimeString()} %c${title}%c %o`,
+    `%c${getTimeString()} %c${title}%c ${abbreviateUUID(message)}%c %o`,
     styleObjectToString({
       color: '#aaa',
     }),
     styleObjectToString({
+      'text-decoration': 'underline',
       'font-weight': 'bold',
-      color: '#7c7',
+      color: `hsl(${deg}deg 70% 48%)`,
+    }),
+    styleObjectToString({
+      color: `hsl(${deg}deg 15% 40%)`,
     }),
     styleObjectToString({}),
     payload,
@@ -24,5 +31,9 @@ const getTimeString = () => {
 
 const styleObjectToString = (style: Record<string, string>) =>
   Object.keys(style)
-    .map((key) => `${key}: ${style[key] as string};`)
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    .map((key) => `${key}: ${style[key]!};`)
     .join('\n')
+
+const abbreviateUUID = (str: string) =>
+  str.replaceAll(/([0-9a-f]{6})[0-9a-f]{2}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/g, '$1..')
