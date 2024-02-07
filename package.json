@@ -18,9 +18,9 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.22.0",
-    "react-spring-bottom-sheet": "3.5.0-alpha.0",
     "string-hash": "^1.1.3",
     "uuid": "^9.0.1",
+    "vaul": "^0.9.0",
     "zod": "3.22.4"
   },
   "devDependencies": {
