@@ -64,6 +64,22 @@ export default function EventSheet({ roomId, defaultValue, onSubmit, submitLabel
   const [paidByMember, setPaidByMember] = useState(defaultFormValue.paidByMember)
   const [eventMembers, setEventMembers] = useState(defaultFormValue.eventMembers)
   const [currency, setCurrency] = useState(defaultFormValue.currency)
+  const validatedAmountValue = useMemo(() => {
+    const currencyDigits = cc.code(currency)?.digits
+    if (currencyDigits === undefined) return null
+    if (amount === '') return null
+    const amountNumeric = parseFloat(amount)
+    if (isNaN(amountNumeric) || amountNumeric === 0) return null
+    // 通貨単位によって有効な少数桁数をチェックする
+    const dot = amount.indexOf('.')
+    if (dot !== -1) {
+      const fractionDigits = amount.length - dot - 1
+      if (fractionDigits > currencyDigits) return null
+    }
+    // 整数に変換
+    return amountNumeric * 10 ** currencyDigits
+  }, [amount, currency])
+
   const editCurrencySheet = usePresent()
   const [paidByMemberEditMode, setPaidByMemberEditMode] = useState(false)
 
@@ -90,18 +106,16 @@ export default function EventSheet({ roomId, defaultValue, onSubmit, submitLabel
   const [busy, setBusy] = useState(false)
 
   const handleSubmit = async () => {
-    const digits = cc.code(currency)?.digits
-    if (digits === undefined) {
-      throw new Error('Invalid country code')
+    if (validatedAmountValue === null) {
+      throw new Error('Invalid amount')
     }
-    const amountValue = parseFloat(amount) * 10 ** digits
     if (roomId === null || userMemberId === null) {
       // room作成前の場合はoptimistic updateしないので、リクエストを待つ
       setBusy(true)
       try {
         await onSubmit({
           label,
-          amount: amountValue,
+          amount: validatedAmountValue,
           currency,
           paidByMemberId: null,
           memberIds: null,
@@ -115,7 +129,7 @@ export default function EventSheet({ roomId, defaultValue, onSubmit, submitLabel
       }
       void onSubmit({
         label,
-        amount: amountValue,
+        amount: validatedAmountValue,
         currency,
         paidByMemberId: paidByMember,
         memberIds: eventMembers,
@@ -285,8 +299,7 @@ export default function EventSheet({ roomId, defaultValue, onSubmit, submitLabel
             onClick={handleSubmit}
             disabled={
               label === '' ||
-              amount === '' ||
-              amount === '0' ||
+              validatedAmountValue === null ||
               (eventMembersCandidate.length > 0 && eventMembers.length === 0) ||
               (roomId !== null && paidByMember === null)
             }

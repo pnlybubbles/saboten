@@ -21,7 +21,7 @@ const event = new Hono<Env>()
       z.object({
         roomId: z.string().uuid().nullable(),
         label: z.string(),
-        amount: z.number(),
+        amount: z.number().int(),
         currency: CURRENCY_CODE_SCHEMA,
         paidByMemberId: z.string().uuid().nullable(),
         memberIds: z.array(z.string().uuid()).nullable(),
@@ -117,7 +117,7 @@ const event = new Hono<Env>()
       z.object({
         eventId: z.string().uuid(),
         label: z.string(),
-        amount: z.number(),
+        amount: z.number().int(),
         currency: CURRENCY_CODE_SCHEMA,
         paidByMemberId: z.string().uuid(),
         memberIds: z.array(z.string().uuid()),
