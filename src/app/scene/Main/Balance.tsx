@@ -3,13 +3,14 @@ import Icon from '@app/components/Icon'
 import useEvents from '@app/hooks/useEvents'
 import useRoomCurrencyRate from '@app/hooks/useRoomCurrencyRate'
 import useRoomMember from '@app/hooks/useRoomMember'
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import CurrencyRateSheet from './CurrencyRateSheet'
 import usePresent from '@app/hooks/usePresent'
 import CurrencyText from '@app/components/CurrencyText'
 import clsx from 'clsx'
 import Clickable from '@app/components/Clickable'
 import isNonNullable from '@app/util/isNonNullable'
+import useResizeObserver from '@app/hooks/useResizeObserver'
 
 interface Props {
   roomId: string | null
@@ -101,11 +102,14 @@ export default function Balance({ roomId }: Props) {
 
   const [showDetail, setShowDetail] = useState(false)
 
+  const ref = useRef<HTMLDivElement>(null)
+  const { height } = useResizeObserver(ref)
+
   return (
-    <div className="grid">
+    <div className="grid overflow-hidden">
       <Clickable
         onClick={() => totalCurrencyValue.length > 0 && setShowDetail((v) => !v)}
-        className="group grid grid-flow-col items-center justify-between"
+        className="group z-[1] grid grid-flow-col items-center justify-between bg-gradient-to-t from-transparent to-white"
       >
         <div className="transition group-active:scale-95">
           <CurrencyText
@@ -125,10 +129,12 @@ export default function Balance({ roomId }: Props) {
         )}
       </Clickable>
       <div
+        ref={ref}
         className={clsx(
           'grid gap-4 transition-[margin,opacity] duration-500',
-          showDetail ? 'mt-4' : 'pointer-events-none mt-[-100%] opacity-0',
+          showDetail ? '!mt-4' : 'pointer-events-none opacity-0',
         )}
+        style={height ? { marginTop: -height } : {}}
       >
         {rateMissingTotalCurrencyValue.map(({ currency }) => (
           <div
