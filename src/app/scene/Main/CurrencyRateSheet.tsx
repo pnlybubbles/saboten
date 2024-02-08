@@ -53,7 +53,7 @@ export default function CurrencyRateSheet({ currency, toCurrency, roomId, defaul
         <div className="grid gap-1">
           <div className="font-bold">
             <span>{`${currency} `}</span>
-            <CurrencyText {...displayCurrency({ amount: BigInt(10 ** currencyDigits), currency })}></CurrencyText>
+            <CurrencyText {...displayCurrency({ amount: 10 ** currencyDigits, currency })}></CurrencyText>
             <span>{` =`}</span>
           </div>
           <div className="text-xs">{currencyRecord.currency}</div>

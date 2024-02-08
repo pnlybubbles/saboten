@@ -34,18 +34,17 @@ export default function Balance({ roomId }: Props) {
   const totalByCurrency = events.reduce(
     (acc, v) => {
       for (const payment of v.payments) {
-        acc[payment.currency] ??= BigInt(0)
-        acc[payment.currency] += BigInt(payment.amount)
+        acc[payment.currency] ??= 0
+        acc[payment.currency] += payment.amount
       }
       return acc
     },
-    {} as { [code: string]: bigint },
+    {} as { [code: string]: number },
   )
 
   const primaryCurrency =
-    (totalByCurrency['JPY'] === undefined || totalByCurrency['JPY'] === BigInt(0)
-      ? Object.keys(totalByCurrency)[0]
-      : null) ?? 'JPY'
+    (totalByCurrency['JPY'] === undefined || totalByCurrency['JPY'] === 0 ? Object.keys(totalByCurrency)[0] : null) ??
+    'JPY'
 
   const totalCurrencyValue = Object.entries(totalByCurrency).map(([currency, amount]) => ({ currency, amount }))
 
@@ -61,27 +60,27 @@ export default function Balance({ roomId }: Props) {
 
   const balanceByMemberId = (events ?? []).reduce(
     (acc, v) => {
-      const sumByCurrency: { [code: string]: bigint } = {}
+      const sumByCurrency: { [code: string]: number } = {}
       for (const { paidByMemberId, currency, amount } of v.payments) {
         acc[paidByMemberId] ??= {}
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        acc[paidByMemberId]![currency] ??= { paid: BigInt(0), assets: BigInt(0) }
+        acc[paidByMemberId]![currency] ??= { paid: 0, assets: 0 }
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        acc[paidByMemberId]![currency]!.paid += BigInt(amount)
+        acc[paidByMemberId]![currency]!.paid += amount
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        acc[paidByMemberId]![currency]!.assets += BigInt(amount)
+        acc[paidByMemberId]![currency]!.assets += amount
 
-        sumByCurrency[currency] ??= BigInt(0)
-        sumByCurrency[currency] += BigInt(amount)
+        sumByCurrency[currency] ??= 0
+        sumByCurrency[currency] += amount
       }
 
       for (const [code, sum] of Object.entries(sumByCurrency)) {
-        const div = sum / BigInt(v.members.length)
+        const div = sum / v.members.length
 
         for (const { memberId } of v.members) {
           acc[memberId] ??= {}
           // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-          acc[memberId]![code] ??= { paid: BigInt(0), assets: BigInt(0) }
+          acc[memberId]![code] ??= { paid: 0, assets: 0 }
           // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           acc[memberId]![code]!.assets -= div
         }
@@ -89,7 +88,7 @@ export default function Balance({ roomId }: Props) {
 
       return acc
     },
-    {} as { [memberId: string]: { [code: string]: { paid: bigint; assets: bigint } } },
+    {} as { [memberId: string]: { [code: string]: { paid: number; assets: number } } },
   )
 
   const balances = Object.entries(balanceByMemberId)

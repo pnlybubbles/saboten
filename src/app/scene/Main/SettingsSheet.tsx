@@ -91,12 +91,12 @@ function CurrencyRateItem({ currency, toCurrency, rate, roomId }: CurrencyRatePa
         <div className="font-bold">{`${currency} / ${toCurrency}`}</div>
         <div>
           <CurrencyText
-            {...displayCurrency({ amount: BigInt(10 ** currencyDigits), currency })}
+            {...displayCurrency({ amount: 10 ** currencyDigits, currency })}
             className="text-xs font-bold text-zinc-400"
           ></CurrencyText>
           <span className="text-xs font-bold text-zinc-400">{` = `}</span>
           <CurrencyText
-            {...displayCurrency({ amount: BigInt(rate * 10 ** currencyDigits), currency: toCurrency })}
+            {...displayCurrency({ amount: rate * 10 ** currencyDigits, currency: toCurrency })}
             className="font-bold"
           ></CurrencyText>
         </div>

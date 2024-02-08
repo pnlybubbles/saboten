@@ -36,7 +36,7 @@ export type CurrencyRatePayload = {
 
 interface CurrencyValue {
   currency: string
-  amount: bigint
+  amount: number
 }
 
 type DisplayCurrencyValue = {
@@ -129,13 +129,13 @@ export default function useRoomCurrencyRate(roomId: string | null) {
       if (digits === undefined) {
         return null
       }
-      return (Number(amount) * current.rate) / 10 ** digits
+      return (amount * current.rate) / 10 ** digits
     }
     const digits = cc.code(currency)?.digits
     if (digits === undefined) {
       return null
     }
-    return Number(amount) / 10 ** digits
+    return amount / 10 ** digits
   }
 
   const formatDisplayCurrencyValue = (raw: number | null, displayAsCurrency: string) => {

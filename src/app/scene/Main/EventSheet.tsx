@@ -43,9 +43,7 @@ export default function EventSheet({ roomId, defaultValue, onSubmit, submitLabel
   const defaultFormValue = useMemo(
     () => ({
       label: defaultValue?.label ?? '',
-      amount: defaultValue?.amount
-        ? (Number(BigInt(defaultValue.amount)) / 10 ** defaultCurrencyDigits).toString()
-        : '',
+      amount: defaultValue?.amount ? (defaultValue.amount / 10 ** defaultCurrencyDigits).toString() : '',
       paidByMember: defaultValue?.paidByMemberId === undefined ? userMemberId : defaultValue.paidByMemberId,
       eventMembers: defaultValue?.memberIds ?? eventMembersCandidate,
       currency: defaultCurrency,
