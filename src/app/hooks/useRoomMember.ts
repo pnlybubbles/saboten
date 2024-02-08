@@ -122,7 +122,7 @@ export default function useRoomMember(roomId: string | null) {
               return current
             }
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            return [...current.slice(0, index), { ...current[index]!, user }, ...current.slice(index)]
+            return [...current.slice(0, index), { ...current[index]!, user }, ...current.slice(index + 1)]
           } else {
             return [...current, { id: null, name: null, tmpId: genTmpId(), user }]
           }
