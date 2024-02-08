@@ -7,7 +7,7 @@ import auth from './middleware/auth'
 import schema from '@db/schema'
 import uuid from '@db/uuid'
 import first from '@util/first'
-import { eq } from 'drizzle-orm'
+import { and, eq } from 'drizzle-orm'
 import serializeRoom, { serializeCreatedAt } from '@db/serialize'
 
 const roomMember = new Hono<Env>()
@@ -84,24 +84,22 @@ const roomMember = new Hono<Env>()
       const { roomId, memberId } = c.req.valid('json')
       const { userId } = c.var
       if (memberId) {
-        await db.update(schema.roomMember).set({ userId, id: uuid(), roomId }).where(eq(schema.roomMember.id, memberId))
+        await db
+          .update(schema.roomMember)
+          .set({ userId })
+          .where(and(eq(schema.roomMember.roomId, roomId), eq(schema.roomMember.id, memberId)))
         const members = await db.query.roomMember.findMany({
           where: (member) => eq(member.roomId, roomId),
           with: { user: { columns: { id: true, name: true } } },
         })
         return c.json(members.map(serializeCreatedAt))
       } else {
-        const room = first(await db.insert(schema.room).values({ id: uuid() }).returning())
-        const member = first(
-          await db.insert(schema.roomMember).values({ id: uuid(), roomId: room.id, userId }).returning(),
-        )
-        const user = first(
-          await db
-            .select({ id: schema.user.id, name: schema.user.name })
-            .from(schema.user)
-            .where(eq(schema.user.id, userId)),
-        )
-        return c.json([{ ...member, user }])
+        await db.insert(schema.roomMember).values({ id: uuid(), roomId, userId })
+        const members = await db.query.roomMember.findMany({
+          where: (member) => eq(member.roomId, roomId),
+          with: { user: { columns: { id: true, name: true } } },
+        })
+        return c.json(members.map(serializeCreatedAt))
       }
     },
   )
