@@ -27,8 +27,7 @@ export default function useUser() {
     if (user) {
       setUserInStorage({ ...user, ...props })
     }
-    const res = await rpc.api.user.item.$post({ json: { id: user?.id, ...props } })
-    const data = await res.json()
+    const data = await ok(rpc.api.user.item.$post({ json: { id: user?.id, ...props } }))
     setUserInStorage(data)
     return data
   }
@@ -37,7 +36,7 @@ export default function useUser() {
     if (!user) {
       return
     }
-    await rpc.api.user.leave.$post()
+    await ok(rpc.api.user.leave.$post())
     setUserInStorage(undefined)
     const userRooms = userRoomsLocalStorageDescriptor(user.id)
     const rooms = userRooms.get()?.map((v) => v.id) ?? []

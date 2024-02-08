@@ -56,6 +56,7 @@ const user = new Hono<Env>()
     // TODO: 空っぽになる部屋を削除する
     await db.delete(schema.user).where(eq(schema.user.id, userId))
     deleteCookie(c, 'id')
+    return c.json({})
   })
 
 export default user
