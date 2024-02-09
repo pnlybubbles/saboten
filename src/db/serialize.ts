@@ -1,9 +1,10 @@
-import { formatISO, parse } from 'date-fns'
+import { formatISO, parseISO } from 'date-fns'
 import type { ISO8601String } from '@util/date'
 
 type Room = {
   id: string
   title: string
+  createdAt: string
   members: {
     id: string
     name: string
@@ -34,7 +35,7 @@ type Room = {
 
 export default function serializeRoom(room: Room) {
   return {
-    ...room,
+    ...serializeCreatedAt(room),
     members: room.members.map(serializeCreatedAt),
     events: room.events.map(serializeEvent),
     currencyRate: room.currencyRate.map(serializeCreatedAt),
@@ -49,5 +50,5 @@ export const serializeEvent = (event: Room['events'][number]) =>
 
 export const serializeCreatedAt = <T extends { createdAt: string }>({ createdAt, ...rest }: T) => ({
   ...rest,
-  createdAt: formatISO(parse(createdAt, 'yyyy-MM-dd HH:mm:ss', new Date())) as ISO8601String,
+  createdAt: formatISO(parseISO(createdAt)) as ISO8601String,
 })
