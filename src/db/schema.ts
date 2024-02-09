@@ -76,13 +76,13 @@ export const roomRelations = relations(room, ({ many }) => ({
 export const roomCurrencyRate = sqliteTable(
   'RoomCurrencyRate',
   {
-    createdAt: text('createdAt').notNull().default(NOW),
     roomId: text('roomId')
       .notNull()
       .references(() => room.id, { onDelete: 'cascade', onUpdate: 'cascade' }),
     toCurrency: text('toCurrency').notNull(),
     currency: text('currency').notNull(),
     rate: real('rate').notNull(),
+    createdAt: text('createdAt').notNull().default(NOW),
   },
   (table) => ({
     pk: primaryKey({ columns: [table.roomId, table.toCurrency, table.currency] }),
@@ -110,9 +110,9 @@ export const roomMemberRelations = relations(roomMember, ({ one }) => ({
 
 export const user = sqliteTable('User', {
   id: text('id').notNull().primaryKey(),
-  secret: text('secret').notNull().unique(),
   createdAt: text('createdAt').notNull().default(NOW),
   name: text('name').notNull().default(''),
+  secret: text('secret').notNull().unique(),
 })
 
 const schema = {

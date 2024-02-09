@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "sqlite",
-  "id": "5fb35aee-659b-47a3-83ce-b1e799c4d6c4",
+  "id": "32c579d9-5285-4469-9c65-474eac692174",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "Event": {
@@ -238,14 +238,6 @@
     "RoomCurrencyRate": {
       "name": "RoomCurrencyRate",
       "columns": {
-        "createdAt": {
-          "name": "createdAt",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": "CURRENT_TIMESTAMP"
-        },
         "roomId": {
           "name": "roomId",
           "type": "text",
@@ -273,6 +265,14 @@
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "CURRENT_TIMESTAMP"
         }
       },
       "indexes": {},
@@ -386,13 +386,6 @@
           "notNull": true,
           "autoincrement": false
         },
-        "secret": {
-          "name": "secret",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
         "createdAt": {
           "name": "createdAt",
           "type": "text",
@@ -408,6 +401,13 @@
           "notNull": true,
           "autoincrement": false,
           "default": "''"
+        },
+        "secret": {
+          "name": "secret",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
         }
       },
       "indexes": {

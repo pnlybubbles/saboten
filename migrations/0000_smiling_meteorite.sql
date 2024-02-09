@@ -33,11 +33,11 @@ CREATE TABLE `Room` (
 );
 --> statement-breakpoint
 CREATE TABLE `RoomCurrencyRate` (
-	`createdAt` text DEFAULT CURRENT_TIMESTAMP NOT NULL,
 	`roomId` text NOT NULL,
 	`toCurrency` text NOT NULL,
 	`currency` text NOT NULL,
 	`rate` real NOT NULL,
+	`createdAt` text DEFAULT CURRENT_TIMESTAMP NOT NULL,
 	PRIMARY KEY(`currency`, `roomId`, `toCurrency`),
 	FOREIGN KEY (`roomId`) REFERENCES `Room`(`id`) ON UPDATE cascade ON DELETE cascade
 );
@@ -54,9 +54,9 @@ CREATE TABLE `RoomMember` (
 --> statement-breakpoint
 CREATE TABLE `User` (
 	`id` text PRIMARY KEY NOT NULL,
-	`secret` text NOT NULL,
 	`createdAt` text DEFAULT CURRENT_TIMESTAMP NOT NULL,
-	`name` text DEFAULT '' NOT NULL
+	`name` text DEFAULT '' NOT NULL,
+	`secret` text NOT NULL
 );
 --> statement-breakpoint
 CREATE UNIQUE INDEX `User_secret_unique` ON `User` (`secret`);
