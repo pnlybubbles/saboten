@@ -26,7 +26,7 @@ export default process.env['NODE_ENV'] === 'production' ? remoteConfig : localCo
 function getSqliteFile(dir: string) {
   const files = fs.readdirSync(dir)
   const file = files.find((v) => v.endsWith('.sqlite'))
-  if (!file) throw new Error('Not found `.sqlite` Object. Run `pnp db:setup` to migrate first.')
+  if (!file) throw new Error('Not found `.sqlite` Object. Run `pnp db:apply` to migrate first.')
   const pathname = path.join(dir, file)
   console.log(`SQLite file '${pathname}'`)
   return pathname
