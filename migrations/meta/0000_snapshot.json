@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "sqlite",
-  "id": "32c579d9-5285-4469-9c65-474eac692174",
+  "id": "4dbd38da-2a31-4723-b5d0-250a09254acb",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "Event": {
@@ -20,7 +20,7 @@
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
-          "default": "CURRENT_TIMESTAMP"
+          "default": "(STRFTIME('%Y-%m-%d %H:%M:%f+00', 'NOW'))"
         },
         "roomId": {
           "name": "roomId",
@@ -66,7 +66,7 @@
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
-          "default": "CURRENT_TIMESTAMP"
+          "default": "(STRFTIME('%Y-%m-%d %H:%M:%f+00', 'NOW'))"
         },
         "eventId": {
           "name": "eventId",
@@ -132,7 +132,7 @@
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
-          "default": "CURRENT_TIMESTAMP"
+          "default": "(STRFTIME('%Y-%m-%d %H:%M:%f+00', 'NOW'))"
         },
         "amount": {
           "name": "amount",
@@ -219,7 +219,7 @@
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
-          "default": "CURRENT_TIMESTAMP"
+          "default": "(STRFTIME('%Y-%m-%d %H:%M:%f+00', 'NOW'))"
         },
         "title": {
           "name": "title",
@@ -272,7 +272,7 @@
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
-          "default": "CURRENT_TIMESTAMP"
+          "default": "(STRFTIME('%Y-%m-%d %H:%M:%f+00', 'NOW'))"
         }
       },
       "indexes": {},
@@ -319,7 +319,7 @@
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
-          "default": "CURRENT_TIMESTAMP"
+          "default": "(STRFTIME('%Y-%m-%d %H:%M:%f+00', 'NOW'))"
         },
         "roomId": {
           "name": "roomId",
@@ -392,7 +392,7 @@
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false,
-          "default": "CURRENT_TIMESTAMP"
+          "default": "(STRFTIME('%Y-%m-%d %H:%M:%f+00', 'NOW'))"
         },
         "name": {
           "name": "name",

@@ -1,13 +1,13 @@
 CREATE TABLE `Event` (
 	`id` text PRIMARY KEY NOT NULL,
-	`createdAt` text DEFAULT CURRENT_TIMESTAMP NOT NULL,
+	`createdAt` text DEFAULT (STRFTIME('%Y-%m-%d %H:%M:%f+00', 'NOW')) NOT NULL,
 	`roomId` text NOT NULL,
 	`label` text DEFAULT '' NOT NULL,
 	FOREIGN KEY (`roomId`) REFERENCES `Room`(`id`) ON UPDATE cascade ON DELETE cascade
 );
 --> statement-breakpoint
 CREATE TABLE `EventMember` (
-	`createdAt` text DEFAULT CURRENT_TIMESTAMP NOT NULL,
+	`createdAt` text DEFAULT (STRFTIME('%Y-%m-%d %H:%M:%f+00', 'NOW')) NOT NULL,
 	`eventId` text NOT NULL,
 	`memberId` text NOT NULL,
 	PRIMARY KEY(`eventId`, `memberId`),
@@ -16,7 +16,7 @@ CREATE TABLE `EventMember` (
 );
 --> statement-breakpoint
 CREATE TABLE `EventPayment` (
-	`createdAt` text DEFAULT CURRENT_TIMESTAMP NOT NULL,
+	`createdAt` text DEFAULT (STRFTIME('%Y-%m-%d %H:%M:%f+00', 'NOW')) NOT NULL,
 	`amount` integer NOT NULL,
 	`currency` text NOT NULL,
 	`paidByMemberId` text,
@@ -28,7 +28,7 @@ CREATE TABLE `EventPayment` (
 --> statement-breakpoint
 CREATE TABLE `Room` (
 	`id` text PRIMARY KEY NOT NULL,
-	`createdAt` text DEFAULT CURRENT_TIMESTAMP NOT NULL,
+	`createdAt` text DEFAULT (STRFTIME('%Y-%m-%d %H:%M:%f+00', 'NOW')) NOT NULL,
 	`title` text DEFAULT '' NOT NULL
 );
 --> statement-breakpoint
@@ -37,14 +37,14 @@ CREATE TABLE `RoomCurrencyRate` (
 	`toCurrency` text NOT NULL,
 	`currency` text NOT NULL,
 	`rate` real NOT NULL,
-	`createdAt` text DEFAULT CURRENT_TIMESTAMP NOT NULL,
+	`createdAt` text DEFAULT (STRFTIME('%Y-%m-%d %H:%M:%f+00', 'NOW')) NOT NULL,
 	PRIMARY KEY(`currency`, `roomId`, `toCurrency`),
 	FOREIGN KEY (`roomId`) REFERENCES `Room`(`id`) ON UPDATE cascade ON DELETE cascade
 );
 --> statement-breakpoint
 CREATE TABLE `RoomMember` (
 	`id` text PRIMARY KEY NOT NULL,
-	`createdAt` text DEFAULT CURRENT_TIMESTAMP NOT NULL,
+	`createdAt` text DEFAULT (STRFTIME('%Y-%m-%d %H:%M:%f+00', 'NOW')) NOT NULL,
 	`roomId` text NOT NULL,
 	`name` text DEFAULT '' NOT NULL,
 	`userId` text,
@@ -54,7 +54,7 @@ CREATE TABLE `RoomMember` (
 --> statement-breakpoint
 CREATE TABLE `User` (
 	`id` text PRIMARY KEY NOT NULL,
-	`createdAt` text DEFAULT CURRENT_TIMESTAMP NOT NULL,
+	`createdAt` text DEFAULT (STRFTIME('%Y-%m-%d %H:%M:%f+00', 'NOW')) NOT NULL,
 	`name` text DEFAULT '' NOT NULL,
 	`secret` text NOT NULL
 );

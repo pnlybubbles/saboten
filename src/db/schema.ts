@@ -1,7 +1,7 @@
 import { relations, sql } from 'drizzle-orm'
 import { integer, primaryKey, real, sqliteTable, text } from 'drizzle-orm/sqlite-core'
 
-const NOW = sql`CURRENT_TIMESTAMP`
+const NOW = sql`(STRFTIME('%Y-%m-%d %H:%M:%f+00', 'NOW'))`
 
 export const event = sqliteTable('Event', {
   id: text('id').notNull().primaryKey(),
