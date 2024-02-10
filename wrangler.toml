@@ -6,4 +6,4 @@ minify=true
 [[d1_databases]]
 binding = "DB" # available in your Worker on env.DB
 database_name = "saboten"
-database_id = "bc3a4c59-9f8c-4e5e-91b4-54a6045d7a62"
+database_id = "71c42205-323c-4602-9f3a-72d2deea4823"
