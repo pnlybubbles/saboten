@@ -4,6 +4,9 @@ import tsconfigPaths from 'vite-tsconfig-paths'
 
 export default defineConfig({
   root: 'src/app',
+  build: {
+    outDir: '../../dist',
+  },
   plugins: [
     react(),
     tsconfigPaths({
