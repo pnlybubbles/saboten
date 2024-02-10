@@ -34,7 +34,7 @@ export default function Start({ roomId, onProceed }: Props) {
       <Button onClick={() => onProceed('create')} variant="primary">
         {roomId ? '参加' : 'はじめる'}
       </Button>
-      <Tips>以前に利用したことがある場合は合言葉を使って記録を復元できます</Tips>
+      <Tips type={Icon.KeyRound}>以前に利用したことがある場合は合言葉を使って記録を復元できます</Tips>
       <Button onClick={() => onProceed('restore')}>{roomId ? '合言葉を入力して参加' : '合言葉を入力'}</Button>
       {roomId !== null && (
         <>

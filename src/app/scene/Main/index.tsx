@@ -111,7 +111,10 @@ export default function Main({ roomId }: Props) {
             <div className="group">
               <TitleInput defaultValue={title} onChange={setTitle}></TitleInput>
               {(title === undefined || title.length === 0) && (
-                <Tips className="mt-[-0.5rem] h-6 text-zinc-400 transition-[opacity,margin,height] group-focus-within:mt-0 group-focus-within:h-0 group-focus-within:opacity-0">
+                <Tips
+                  type={Icon.PlaneTakeoff}
+                  className="mt-[-0.5rem] h-6 text-zinc-400 transition-[opacity,margin,height] group-focus-within:mt-0 group-focus-within:h-0 group-focus-within:opacity-0"
+                >
                   タイトルを入力して旅をはじめましょう！
                 </Tips>
               )}
@@ -125,7 +128,11 @@ export default function Main({ roomId }: Props) {
           <div className={'pointer-events-none sticky bottom-0 left-0 w-full self-end'}>
             {noEvent && <div className="h-12 w-full bg-gradient-to-t from-zinc-50"></div>}
             <div className={clsx('grid justify-items-center gap-2 pb-8 pt-2', noEvent && 'bg-zinc-50')}>
-              {noEvent && <Tips className="text-zinc-400">最初のイベントを追加しよう</Tips>}
+              {noEvent && (
+                <Tips type={Icon.PawPrint} className="text-zinc-400">
+                  最初のイベントを追加しよう
+                </Tips>
+              )}
               <Clickable
                 className="pointer-events-auto grid size-16 select-none grid-flow-col items-center justify-items-center gap-1 rounded-full bg-zinc-900 text-white shadow-xl transition active:scale-90"
                 onClick={createEventSheet.open}

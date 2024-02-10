@@ -1,28 +1,30 @@
 import type { PropsWithChildren } from 'react'
 import clsx from 'clsx'
-import unreachable from '@app/util/unreachable'
 import * as Icon from 'lucide-react'
+import type { LucideIcon } from 'lucide-react'
 
 export default function Tips({
   children,
   className,
-  type = 'default',
-}: PropsWithChildren<{ className?: string; type?: 'warning' | 'default' }>) {
+  type: Type = 'default',
+}: PropsWithChildren<{ className?: string; type?: 'warning' | 'default' | LucideIcon }>) {
   return (
     <div
       className={clsx(
         'grid grid-cols-[auto_1fr] gap-1 text-xs',
-        type === 'default' ? 'text-zinc-400' : 'text-red-500',
+        Type === 'default' ? 'text-zinc-400' : Type === 'warning' ? 'text-red-500' : 'text-zinc-400',
         className,
       )}
     >
-      {type === 'default' ? (
-        <Icon.Lightbulb size={20} className="mt-[-3px]" />
-      ) : type === 'warning' ? (
-        <Icon.AlertCircle size={20} className="mt-[-3px]" />
-      ) : (
-        unreachable(type)
-      )}
+      <div className="mt-[-3px]">
+        {Type === 'default' ? (
+          <Icon.Bird size={19} strokeWidth={1.5} />
+        ) : Type === 'warning' ? (
+          <Icon.AlertCircle size={19} strokeWidth={1.5} />
+        ) : (
+          <Type size={19} strokeWidth={1.5} />
+        )}
+      </div>
       <div>{children}</div>
     </div>
   )

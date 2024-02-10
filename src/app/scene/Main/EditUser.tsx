@@ -9,6 +9,7 @@ import usePresent from '@app/hooks/usePresent'
 import useUser from '@app/hooks/useUser'
 import { useCallback, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import * as Icon from 'lucide-react'
 
 export default function EditUser({ ...sheet }: SheetProps) {
   const [user, { setUser }] = useUser()
@@ -37,7 +38,7 @@ export default function EditUser({ ...sheet }: SheetProps) {
           <div className="grid gap-2">
             <div className="text-xs font-bold text-zinc-400">合言葉</div>
             <div className="select-auto tracking-wider">{user.compressedId}</div>
-            <Tips className="text-zinc-400">
+            <Tips type={Icon.KeyRound}>
               合言葉を使うことでユーザーの記録を復元することができます。この画面をスクリーンショットして合言葉を保存しておきましょう。
             </Tips>
           </div>
