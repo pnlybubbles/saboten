@@ -106,7 +106,7 @@ export default function Balance({ roomId }: Props) {
   const { height } = useResizeObserver(ref)
 
   return (
-    <div className="grid overflow-hidden">
+    <div className="-mb-6 grid overflow-hidden after:block after:h-6 after:bg-gradient-to-b after:from-transparent after:to-white">
       <Clickable
         onClick={() => totalCurrencyValue.length > 0 && setShowDetail((v) => !v)}
         className="group z-[1] grid grid-flow-col items-center justify-between bg-gradient-to-t from-transparent to-white"
@@ -129,106 +129,107 @@ export default function Balance({ roomId }: Props) {
         )}
       </Clickable>
       <div
-        ref={ref}
         className={clsx(
-          'grid gap-4 transition-[margin,opacity] duration-500',
-          showDetail ? '!mt-4' : 'pointer-events-none opacity-0',
+          'transition-[height,opacity] duration-500',
+          !showDetail && 'pointer-events-none !h-0 opacity-0',
         )}
-        style={height ? { marginTop: -height } : {}}
+        style={height ? { height } : {}}
       >
-        {rateMissingTotalCurrencyValue.map(({ currency }) => (
-          <div
-            key={currency}
-            className="grid grid-cols-[auto_1fr] gap-1 rounded-lg bg-secondary p-4 text-xs font-bold text-primary"
-          >
-            <Icon className="mt-[-3px]" name="error" />
-            <div className="grid gap-2">
-              <div>{`${currency} を ${primaryCurrency} に変換するレートが設定されていないため、通貨別に表記しています`}</div>
-              <div className="grid grid-flow-col justify-end gap-2">
-                {/* <Button mini variant="secondary">
+        <div ref={ref} className="grid gap-4 before:block">
+          {rateMissingTotalCurrencyValue.map(({ currency }) => (
+            <div
+              key={currency}
+              className="grid grid-cols-[auto_1fr] gap-1 rounded-lg bg-secondary p-4 text-xs font-bold text-primary"
+            >
+              <Icon className="mt-[-3px]" name="error" />
+              <div className="grid gap-2">
+                <div>{`${currency} を ${primaryCurrency} に変換するレートが設定されていないため、通貨別に表記しています`}</div>
+                <div className="grid grid-flow-col justify-end gap-2">
+                  {/* <Button mini variant="secondary">
                   今はしない
                 </Button> */}
-                <Button
-                  mini
-                  variant="primary"
-                  onClick={() => {
-                    setCurrencyRateSheetProps({ currency, toCurrency: primaryCurrency })
-                    currencyRateSheet.open()
-                  }}
-                >
-                  設定
-                </Button>
+                  <Button
+                    mini
+                    variant="primary"
+                    onClick={() => {
+                      setCurrencyRateSheetProps({ currency, toCurrency: primaryCurrency })
+                      currencyRateSheet.open()
+                    }}
+                  >
+                    設定
+                  </Button>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
-        {currencyRateSheetProps && (
-          <CurrencyRateSheet roomId={roomId} {...currencyRateSheetProps} {...currencyRateSheet}></CurrencyRateSheet>
-        )}
-        {balances.length > 0 && (
-          <div className="grid grid-cols-[1fr_auto_auto] gap-x-2 gap-y-1">
-            {balances.map(([memberId, balanceByCurrency]) => [
-              <React.Fragment key={memberId}>
-                <div className="font-bold">{getMemberName(memberId)}</div>
-                <CurrencyText
-                  className="text-right"
-                  {...displayCurrencySum(
-                    Object.entries(balanceByCurrency)
-                      .map(([currency, balance]) => ({ amount: balance.paid, currency }))
-                      .filter((v) => availableCurrency.includes(v.currency)),
-                    primaryCurrency,
-                  )}
-                ></CurrencyText>
-                <CurrencyText
-                  color
-                  className="font-bold"
-                  {...displayCurrencySum(
-                    Object.entries(balanceByCurrency)
-                      .map(([currency, balance]) => ({ amount: balance.assets, currency }))
-                      .filter((v) => availableCurrency.includes(v.currency)),
-                    primaryCurrency,
-                  )}
-                ></CurrencyText>
-              </React.Fragment>,
-              ...Object.entries(balanceByCurrency)
-                .filter(([currency]) => availableCurrency.includes(currency))
-                .sort(([a], [b]) => (a === primaryCurrency ? -1 : b === primaryCurrency ? 1 : 0))
-                .map(([currency, balance], _, array) =>
-                  array.length <= 1 && currency === primaryCurrency ? null : (
+          ))}
+          {currencyRateSheetProps && (
+            <CurrencyRateSheet roomId={roomId} {...currencyRateSheetProps} {...currencyRateSheet}></CurrencyRateSheet>
+          )}
+          {balances.length > 0 && (
+            <div className="grid grid-cols-[1fr_auto_auto] gap-x-2 gap-y-1">
+              {balances.map(([memberId, balanceByCurrency]) => [
+                <React.Fragment key={memberId}>
+                  <div className="font-bold">{getMemberName(memberId)}</div>
+                  <CurrencyText
+                    className="text-right"
+                    {...displayCurrencySum(
+                      Object.entries(balanceByCurrency)
+                        .map(([currency, balance]) => ({ amount: balance.paid, currency }))
+                        .filter((v) => availableCurrency.includes(v.currency)),
+                      primaryCurrency,
+                    )}
+                  ></CurrencyText>
+                  <CurrencyText
+                    color
+                    className="font-bold"
+                    {...displayCurrencySum(
+                      Object.entries(balanceByCurrency)
+                        .map(([currency, balance]) => ({ amount: balance.assets, currency }))
+                        .filter((v) => availableCurrency.includes(v.currency)),
+                      primaryCurrency,
+                    )}
+                  ></CurrencyText>
+                </React.Fragment>,
+                ...Object.entries(balanceByCurrency)
+                  .filter(([currency]) => availableCurrency.includes(currency))
+                  .sort(([a], [b]) => (a === primaryCurrency ? -1 : b === primaryCurrency ? 1 : 0))
+                  .map(([currency, balance], _, array) =>
+                    array.length <= 1 && currency === primaryCurrency ? null : (
+                      <React.Fragment key={`${memberId}_${currency}`}>
+                        <div className="text-xs opacity-0">{getMemberName(memberId)}</div>
+                        <CurrencyText
+                          className="text-xs opacity-70"
+                          {...displayCurrency({ amount: balance.paid, currency })}
+                        ></CurrencyText>
+                        <CurrencyText
+                          color
+                          className="text-xs opacity-70"
+                          {...displayCurrency({ amount: balance.assets, currency })}
+                        ></CurrencyText>
+                      </React.Fragment>
+                    ),
+                  ),
+                ...Object.entries(balanceByCurrency)
+                  .filter(([currency]) => !availableCurrency.includes(currency))
+                  .sort(([a], [b]) => (a === primaryCurrency ? -1 : b === primaryCurrency ? 1 : 0))
+                  .map(([currency, balance]) => (
                     <React.Fragment key={`${memberId}_${currency}`}>
-                      <div className="text-xs opacity-0">{getMemberName(memberId)}</div>
+                      <div className="font-bold">{getMemberName(memberId)}</div>
                       <CurrencyText
-                        className="text-xs opacity-70"
+                        className="text-right"
                         {...displayCurrency({ amount: balance.paid, currency })}
                       ></CurrencyText>
                       <CurrencyText
                         color
-                        className="text-xs opacity-70"
+                        className="font-bold"
                         {...displayCurrency({ amount: balance.assets, currency })}
                       ></CurrencyText>
                     </React.Fragment>
-                  ),
-                ),
-              ...Object.entries(balanceByCurrency)
-                .filter(([currency]) => !availableCurrency.includes(currency))
-                .sort(([a], [b]) => (a === primaryCurrency ? -1 : b === primaryCurrency ? 1 : 0))
-                .map(([currency, balance]) => (
-                  <React.Fragment key={`${memberId}_${currency}`}>
-                    <div className="font-bold">{getMemberName(memberId)}</div>
-                    <CurrencyText
-                      className="text-right"
-                      {...displayCurrency({ amount: balance.paid, currency })}
-                    ></CurrencyText>
-                    <CurrencyText
-                      color
-                      className="font-bold"
-                      {...displayCurrency({ amount: balance.assets, currency })}
-                    ></CurrencyText>
-                  </React.Fragment>
-                )),
-            ])}
-          </div>
-        )}
+                  )),
+              ])}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   )
