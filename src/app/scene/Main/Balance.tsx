@@ -202,11 +202,13 @@ export default function Balance({ roomId }: Props) {
                         <div className="text-xs opacity-0">{getMemberName(memberId)}</div>
                         <CurrencyText
                           className="text-xs opacity-70"
+                          signSize={12}
                           {...displayCurrency({ amount: balance.paid, currency })}
                         ></CurrencyText>
                         <CurrencyText
                           color
                           className="text-xs opacity-70"
+                          signSize={12}
                           {...displayCurrency({ amount: balance.assets, currency })}
                         ></CurrencyText>
                       </React.Fragment>

@@ -5,10 +5,11 @@ interface Props {
   className?: string
   value: string
   sign?: boolean
+  signSize?: number
   color?: boolean
 }
 
-export default function CurrencyText({ value, sign, color, className }: Props) {
+export default function CurrencyText({ value, sign, signSize = 16, color, className }: Props) {
   return (
     <div
       className={clsx(
@@ -18,9 +19,9 @@ export default function CurrencyText({ value, sign, color, className }: Props) {
       )}
     >
       {!sign ? (
-        <Icon.Minus size={16} className="mt-[-1px]" />
+        <Icon.Minus size={signSize} className="mt-[-2px]" />
       ) : color ? (
-        <Icon.Plus size={16} className="mt-[-1px]" />
+        <Icon.Plus size={signSize} className="mt-[-2px]" />
       ) : null}
       {value}
     </div>
