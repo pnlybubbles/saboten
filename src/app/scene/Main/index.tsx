@@ -52,7 +52,7 @@ export default function Main({ roomId }: Props) {
     <div className={clsx('relative z-0 w-full', drawer.isPresent && 'overflow-hidden')}>
       <div
         className={clsx(
-          'fixed right-full top-0 h-full w-3/4 overflow-y-auto transition',
+          'fixed right-full top-0 h-full w-3/4 overflow-y-auto transition duration-300',
           drawer.isPresent && 'translate-x-full',
         )}
       >
@@ -75,7 +75,7 @@ export default function Main({ roomId }: Props) {
         </div>
       </div>
       <Clickable
-        className={clsx('w-full transition', drawer.isPresent && 'translate-x-3/4')}
+        className={clsx('w-full transition duration-300', drawer.isPresent && 'translate-x-3/4')}
         onClick={drawer.close}
         div
       >

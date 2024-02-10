@@ -133,7 +133,7 @@ export default function Balance({ roomId }: Props) {
       </Clickable>
       <div
         className={clsx(
-          'transition-[height,opacity] duration-500',
+          'transition-[height,opacity] duration-300',
           !showDetail && 'pointer-events-none !h-0 opacity-0',
         )}
         style={height ? { height } : {}}
