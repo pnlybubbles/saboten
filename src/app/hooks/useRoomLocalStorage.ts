@@ -1,6 +1,6 @@
 import { useLocalStorage } from '@app/hooks/useLocalStorage'
 import { createLocalStorageDescriptor } from '@app/util/createLocalStorageDescriptor'
-import { CURRENCY_CODE_SCHEMA } from '@shared/utils/currency'
+import { CURRENCY_CODE_SCHEMA } from '@util/currency'
 import ISO8601_STRING_SCHEMA from '@util/ISO8601_STRING_SCHEMA'
 import { useMemo } from 'react'
 import { z } from 'zod'

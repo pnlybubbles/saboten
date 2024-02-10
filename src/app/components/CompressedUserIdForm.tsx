@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import TextField from './TextField'
 import Tips from './Tips'
-import { COMPRESSED_USER_ID_SCHEMA } from '@shared/utils/schema'
+import COMPRESSED_UUID_SCHEMA from '@util/COMPRESSED_UUID_SCHEMA'
 import type { Variant } from './Button'
 import Button from './Button'
 import useUser from '@app/hooks/useUser'
@@ -22,7 +22,7 @@ export default function CompressedUserIdForm({
   const [compressedUserId, setCompressedUserId] = useState('')
   const [isDirty, setIsDirty] = useState(false)
 
-  const validation = COMPRESSED_USER_ID_SCHEMA.safeParse(compressedUserId)
+  const validation = COMPRESSED_UUID_SCHEMA.safeParse(compressedUserId)
 
   const restore = async () => {
     setBusy(true)

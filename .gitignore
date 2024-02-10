@@ -1,11 +1,7 @@
 node_modules
 
 .DS_Store
-.parcel-cache
 dist
 .env
 .wrangler
 tsconfig.node.tsbuildinfo
-
-# Local Netlify folder
-.netlify

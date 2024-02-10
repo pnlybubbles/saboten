@@ -2,7 +2,7 @@ import { createLocalStorageDescriptor } from '@app/util/createLocalStorageDescri
 import { z } from 'zod'
 import { useLocalStorage } from './useLocalStorage'
 import { useEffect } from 'react'
-import { COMPRESSED_USER_ID_SCHEMA } from '@shared/utils/schema'
+import COMPRESSED_UUID_SCHEMA from '@util/COMPRESSED_UUID_SCHEMA'
 import { userRoomsLocalStorageDescriptor } from './useUserRooms'
 import { roomLocalStorageDescriptor } from './useRoomLocalStorage'
 import type { RPCResponseType } from '@app/util/rpc'
@@ -14,7 +14,7 @@ const USER_STORAGE_DESCRIPTOR = createLocalStorageDescriptor(
   z.object({
     id: z.string(),
     name: z.string(),
-    compressedId: COMPRESSED_USER_ID_SCHEMA.optional(),
+    compressedId: COMPRESSED_UUID_SCHEMA.optional(),
   }),
 )
 
