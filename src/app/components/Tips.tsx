@@ -1,7 +1,7 @@
 import type { PropsWithChildren } from 'react'
-import Icon from './Icon'
 import clsx from 'clsx'
 import unreachable from '@app/util/unreachable'
+import * as Icon from 'lucide-react'
 
 export default function Tips({
   children,
@@ -16,10 +16,13 @@ export default function Tips({
         className,
       )}
     >
-      <Icon
-        name={type === 'default' ? 'tips_and_updates' : type === 'warning' ? 'error' : unreachable(type)}
-        className="mt-[-3px]"
-      />
+      {type === 'default' ? (
+        <Icon.Lightbulb size={20} className="mt-[-3px]" />
+      ) : type === 'warning' ? (
+        <Icon.AlertCircle size={20} className="mt-[-3px]" />
+      ) : (
+        unreachable(type)
+      )}
       <div>{children}</div>
     </div>
   )

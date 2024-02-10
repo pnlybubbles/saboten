@@ -2,7 +2,6 @@ import Avatar from '@app/components/Avatar'
 import Badge from '@app/components/Badge'
 import Button from '@app/components/Button'
 import Clickable from '@app/components/Clickable'
-import Icon from '@app/components/Icon'
 import type { SheetProps } from '@app/components/Sheet'
 import Sheet from '@app/components/Sheet'
 import TextField from '@app/components/TextField'
@@ -11,6 +10,7 @@ import useRoomMember from '@app/hooks/useRoomMember'
 import useUser from '@app/hooks/useUser'
 import genTmpId from '@app/util/genTmpId'
 import { useState } from 'react'
+import * as Icon from 'lucide-react'
 
 interface Props extends SheetProps {
   roomId: string | null
@@ -58,7 +58,7 @@ export default function EditMember({ roomId, ...sheet }: Props) {
                 onClick={() => handleRemove(v)}
                 className="grid size-8 items-center justify-items-center transition active:scale-90 disabled:opacity-30"
               >
-                <Icon name="person_remove"></Icon>
+                <Icon.UserMinus size={20}></Icon.UserMinus>
               </Clickable>
             </li>
           ))}

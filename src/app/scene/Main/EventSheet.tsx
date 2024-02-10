@@ -11,12 +11,12 @@ import Avatar from '@app/components/Avatar'
 import clsx from 'clsx'
 import useDirty from '@app/hooks/useDirty'
 import isUnique from '@app/util/isUnique'
-import Icon from '@app/components/Icon'
 import usePresent from '@app/hooks/usePresent'
 import cc from 'currency-codes'
 import Clickable from '@app/components/Clickable'
 import { useMemo } from 'react'
 import unreachable from '@app/util/unreachable'
+import * as Icon from 'lucide-react'
 
 type EventPayloadDefault = Omit<EventPayload, 'paidByMemberId'> & {
   paidByMemberId: string | null
@@ -294,7 +294,7 @@ export default function EventSheet({ roomId, defaultValue, onSubmit, submitLabel
           </div>
         </div>
         <div className={clsx('grid gap-2', onRemove && 'grid-cols-[auto_1fr]')}>
-          {onRemove && <Button onClick={onRemove} icon={<Icon name="delete" />} variant="danger"></Button>}
+          {onRemove && <Button onClick={onRemove} icon={<Icon.Trash2 size={20} />} variant="danger"></Button>}
           <Button
             onClick={handleSubmit}
             disabled={
@@ -317,7 +317,7 @@ function EditCurrencyItem({ code, onClick, active }: { code: string; onClick: ()
   return (
     <>
       <div className="grid items-center pr-2">
-        <Icon name="check" className={active ? 'opacity-100' : 'opacity-0'}></Icon>
+        <Icon.Check size={20} className={active ? 'opacity-100' : 'opacity-0'} />
       </div>
       <Clickable className="grid items-center text-left" onClick={onClick}>
         <div>{code}</div>

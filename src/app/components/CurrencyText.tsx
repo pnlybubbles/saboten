@@ -1,5 +1,5 @@
 import clsx from 'clsx'
-import Icon from './Icon'
+import * as Icon from 'lucide-react'
 
 interface Props {
   className?: string
@@ -18,9 +18,9 @@ export default function CurrencyText({ value, sign, color, className }: Props) {
       )}
     >
       {!sign ? (
-        <Icon inheritFontSize className="mt-[-2px]" name="remove" />
+        <Icon.Minus size={16} className="mt-[-1px]" />
       ) : color ? (
-        <Icon inheritFontSize className="mt-[-2px]" name="add" />
+        <Icon.Plus size={16} className="mt-[-1px]" />
       ) : null}
       {value}
     </div>

@@ -1,9 +1,9 @@
 import Button from '@app/components/Button'
 import Divider from '@app/components/Divider'
-import Icon from '@app/components/Icon'
 import Tips from '@app/components/Tips'
 import useRoomTitle from '@app/hooks/useRoomTitle'
 import { useNavigate } from 'react-router-dom'
+import * as Icon from 'lucide-react'
 
 interface Props {
   roomId: string | null
@@ -23,7 +23,7 @@ export default function Start({ roomId, onProceed }: Props) {
       </div>
       {roomId !== null && (
         <div className="grid grid-cols-[auto_1fr] items-center gap-1 rounded-lg bg-secondary p-4 text-xs font-bold text-primary">
-          <Icon name="group"></Icon>
+          <Icon.Users size={20}></Icon.Users>
           <div>{`"${roomTitle ?? '読込中...'}" に招待されました`}</div>
         </div>
       )}

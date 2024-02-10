@@ -8,7 +8,7 @@ import useEvents from '@app/hooks/useEvents'
 import Balance from './Balance'
 import Avatar from '@app/components/Avatar'
 import useUser from '@app/hooks/useUser'
-import Icon from '@app/components/Icon'
+// import Icon from '@app/components/Icon'
 import Button from '@app/components/Button'
 import EditUser from './EditUser'
 import useUserRooms from '@app/hooks/useUserRooms'
@@ -20,6 +20,7 @@ import Tips from '@app/components/Tips'
 import clsx from 'clsx'
 import Clickable from '@app/components/Clickable'
 import SettingsSheet from './SettingsSheet'
+import * as Icon from 'lucide-react'
 
 interface Props {
   roomId: string | null
@@ -66,7 +67,7 @@ export default function Main({ roomId }: Props) {
             <EditUser {...editUserSheet}></EditUser>
           </div>
           <Link to="/">
-            <Button variant="primary" icon={<Icon name="map"></Icon>} onClick={drawer.close}>
+            <Button variant="primary" icon={<Icon.Plane size={20}></Icon.Plane>} onClick={drawer.close}>
               旅をはじめる
             </Button>
           </Link>
@@ -89,23 +90,23 @@ export default function Main({ roomId }: Props) {
                 }}
                 icon={
                   <div className="relative size-5">
-                    <Icon
+                    <Icon.Menu
+                      size={20}
                       className={clsx('absolute left-0 top-0', !drawer.isPresent ? 'opacity-100' : 'opacity-0')}
-                      name="menu"
-                    ></Icon>
-                    <Icon
+                    ></Icon.Menu>
+                    <Icon.X
+                      size={20}
                       className={clsx('absolute left-0 top-0', drawer.isPresent ? 'opacity-100' : 'opacity-0')}
-                      name="close"
-                    ></Icon>
+                    ></Icon.X>
                   </div>
                 }
               ></Button>
               <Button
                 className={clsx(roomId ? 'scale-100 opacity-100' : 'pointer-events-none scale-50 opacity-0')}
                 onClick={settingsSheet.open}
-                icon={<Icon name="settings"></Icon>}
+                icon={<Icon.Settings size={20}></Icon.Settings>}
               ></Button>
-              <Button onClick={editMemberSheet.open} icon={<Icon name="group"></Icon>}></Button>
+              <Button onClick={editMemberSheet.open} icon={<Icon.Users size={20} />}></Button>
             </div>
             <div className="group">
               <TitleInput defaultValue={title} onChange={setTitle}></TitleInput>
@@ -129,7 +130,7 @@ export default function Main({ roomId }: Props) {
                 className="pointer-events-auto grid size-16 select-none grid-flow-col items-center justify-items-center gap-1 rounded-full bg-zinc-900 text-white shadow-xl transition active:scale-90"
                 onClick={createEventSheet.open}
               >
-                <Icon name="add" size={24}></Icon>
+                <Icon.Plus size={24}></Icon.Plus>
               </Clickable>
             </div>
           </div>

@@ -1,5 +1,4 @@
 import Button from '@app/components/Button'
-import Icon from '@app/components/Icon'
 import useEvents from '@app/hooks/useEvents'
 import useRoomCurrencyRate from '@app/hooks/useRoomCurrencyRate'
 import useRoomMember from '@app/hooks/useRoomMember'
@@ -11,6 +10,7 @@ import clsx from 'clsx'
 import Clickable from '@app/components/Clickable'
 import isNonNullable from '@app/util/isNonNullable'
 import useResizeObserver from '@app/hooks/useResizeObserver'
+import * as Icon from 'lucide-react'
 
 interface Props {
   roomId: string | null
@@ -124,7 +124,10 @@ export default function Balance({ roomId }: Props) {
         {totalCurrencyValue.length > 0 && (
           <div className="grid grid-flow-col items-center text-zinc-400">
             {/* <div className="text-xs">{showDetail ? '閉じる' : '詳細'}</div> */}
-            <Icon name="expand_more" className={clsx('transition', showDetail ? 'rotate-180' : '')}></Icon>
+            <Icon.ChevronDown
+              size={20}
+              className={clsx('transition', showDetail ? 'rotate-180' : '')}
+            ></Icon.ChevronDown>
           </div>
         )}
       </Clickable>
@@ -141,7 +144,7 @@ export default function Balance({ roomId }: Props) {
               key={currency}
               className="grid grid-cols-[auto_1fr] gap-1 rounded-lg bg-secondary p-4 text-xs font-bold text-primary"
             >
-              <Icon className="mt-[-3px]" name="error" />
+              <Icon.AlertCircle size={20} className="mt-[-3px]" />
               <div className="grid gap-2">
                 <div>{`${currency} を ${primaryCurrency} に変換するレートが設定されていないため、通貨別に表記しています`}</div>
                 <div className="grid grid-flow-col justify-end gap-2">
