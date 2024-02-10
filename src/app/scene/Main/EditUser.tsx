@@ -1,5 +1,5 @@
 import Button from '@app/components/Button'
-import CompressedUserIdForm from '@app/components/CompressedUserIdForm'
+import RestoreFromSecretForm from '@app/components/RestoreFromSecretForm'
 import type { SheetProps } from '@app/components/Sheet'
 import Sheet from '@app/components/Sheet'
 import TextField from '@app/components/TextField'
@@ -34,10 +34,10 @@ export default function EditUser({ ...sheet }: SheetProps) {
   return (
     <Sheet {...sheet}>
       <div className="grid gap-4">
-        {user?.compressedId && (
+        {user?.secret && (
           <div className="grid gap-2">
             <div className="text-xs font-bold text-zinc-400">合言葉</div>
-            <div className="select-auto tracking-wider">{user.compressedId}</div>
+            <div className="select-auto tracking-wider">{user.secret}</div>
             <Tips type={Icon.KeyRound}>
               合言葉を使うことでユーザーの記録を復元することができます。この画面をスクリーンショットして合言葉を保存しておきましょう。
             </Tips>
@@ -89,7 +89,7 @@ function UserResetSheet({ ...sheet }: SheetProps) {
         <Tips type="warning">
           ユーザーを切り替えた後に、もとのユーザーに戻す場合には合言葉が必要です。合言葉を忘れてしまった場合は復元することはできません。
         </Tips>
-        <CompressedUserIdForm submitLabel="切り替え" submitVariant="danger" onRestore={() => sheet.onPresent(false)} />
+        <RestoreFromSecretForm submitLabel="切り替え" submitVariant="danger" onRestore={() => sheet.onPresent(false)} />
       </div>
     </Sheet>
   )

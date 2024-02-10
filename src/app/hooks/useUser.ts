@@ -14,7 +14,7 @@ const USER_STORAGE_DESCRIPTOR = createLocalStorageDescriptor(
   z.object({
     id: z.string(),
     name: z.string(),
-    compressedId: COMPRESSED_UUID_SCHEMA.optional(),
+    secret: COMPRESSED_UUID_SCHEMA,
   }),
 )
 
@@ -27,7 +27,7 @@ export default function useUser() {
     if (user) {
       setUserInStorage({ ...user, ...props })
     }
-    const data = await ok(rpc.api.user.item.$post({ json: { id: user?.id, ...props } }))
+    const data = await ok(rpc.api.user.item.$post({ json: props }))
     setUserInStorage(data)
     return data
   }
@@ -46,8 +46,8 @@ export default function useUser() {
     userRooms.set(undefined)
   }
 
-  const restoreUser = async (compressedUserId: string) => {
-    const fetched = await ok(rpc.api.user.refresh.$post({ json: { compressedUserId } }))
+  const restoreUser = async (compressedSecret: string) => {
+    const fetched = await ok(rpc.api.user.refresh.$post({ json: { secret: compressedSecret } }))
 
     if (!('error' in fetched)) {
       setUserInStorage(fetched)

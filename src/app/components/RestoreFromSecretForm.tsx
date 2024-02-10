@@ -6,7 +6,7 @@ import type { Variant } from './Button'
 import Button from './Button'
 import useUser from '@app/hooks/useUser'
 
-export default function CompressedUserIdForm({
+export default function RestoreFromSecretForm({
   submitLabel,
   submitVariant,
   onRestore,
@@ -19,15 +19,15 @@ export default function CompressedUserIdForm({
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState(false)
 
-  const [compressedUserId, setCompressedUserId] = useState('')
+  const [secret, setSecret] = useState('')
   const [isDirty, setIsDirty] = useState(false)
 
-  const validation = COMPRESSED_UUID_SCHEMA.safeParse(compressedUserId)
+  const validation = COMPRESSED_UUID_SCHEMA.safeParse(secret)
 
   const restore = async () => {
     setBusy(true)
     try {
-      const fetched = await restoreUser(compressedUserId)
+      const fetched = await restoreUser(secret)
       if (fetched === null) {
         setError(true)
       } else {
@@ -48,8 +48,8 @@ export default function CompressedUserIdForm({
         <TextField
           label="合言葉"
           name="secret"
-          value={compressedUserId}
-          onChange={setCompressedUserId}
+          value={secret}
+          onChange={setSecret}
           onBlur={() => setIsDirty(true)}
           disabled={busy}
         />

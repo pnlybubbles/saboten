@@ -1,40 +1,41 @@
 import { Hono } from 'hono'
 import { z } from 'zod'
 import { zValidator } from '@hono/zod-validator'
+import type { DrizzleD1Database } from 'drizzle-orm/d1'
 import { drizzle } from 'drizzle-orm/d1'
 import type { Env } from './type'
 import schema from '@db/schema'
 import { eq } from 'drizzle-orm'
-import uuid, { compressedPrintableStringToUuid, uuidToCompressedPrintableString } from '../db/uuid'
+import uuid, { compressedPrintableStringToUuid, uuidToCompressedPrintableString } from '@db/uuid'
 import { setCookie, deleteCookie } from 'hono/cookie'
-import { COMPRESSED_USER_ID_SCHEMA } from '@util/schema'
+import COMPRESSED_UUID_SCHEMA from '@util/COMPRESSED_UUID_SCHEMA'
 import auth from './middleware/auth'
 import first from '@util/first'
 import authOrUndef from './middleware/authOrUndef'
 
 const user = new Hono<Env>()
-  .post('/item', zValidator('json', z.object({ id: z.string().uuid().optional(), name: z.string() })), async (c) => {
+  .post('/item', authOrUndef, zValidator('json', z.object({ name: z.string() })), async (c) => {
     const db = drizzle(c.env.DB)
-    const { id, name } = c.req.valid('json')
+    const { name } = c.req.valid('json')
+    const { userId } = c.var
 
-    if (id) {
-      const user = first(await db.update(schema.user).set({ name }).where(eq(schema.user.id, id)).returning())
-      return c.json(withCompressedUserId(user))
+    if (userId) {
+      const user = first(await db.update(schema.user).set({ name }).where(eq(schema.user.id, userId)).returning())
+      return c.json(withCompressedSecret(user))
     } else {
       const user = first(await db.insert(schema.user).values({ id: uuid(), secret: uuid(), name }).returning())
       setCookie(c, 'id', user.id, { maxAge: 60 * 60 * 24 * 365 * 2 })
-      return c.json(withCompressedUserId(user))
+      return c.json(withCompressedSecret(user))
     }
   })
   .post(
     '/refresh',
     authOrUndef,
-    zValidator('json', z.object({ compressedUserId: COMPRESSED_USER_ID_SCHEMA.optional() })),
+    zValidator('json', z.object({ secret: COMPRESSED_UUID_SCHEMA.optional() })),
     async (c) => {
       const db = drizzle(c.env.DB)
-      const { compressedUserId } = c.req.valid('json')
-      const overrideUserId =
-        compressedUserId !== undefined ? compressedPrintableStringToUuid(compressedUserId) : undefined
+      const { secret } = c.req.valid('json')
+      const overrideUserId = secret ? await compressedSecretToUserId(db, secret) : undefined
       const userId = overrideUserId ?? c.var.userId
       if (!userId) {
         return c.json({ error: 'Invalid user ID' })
@@ -47,7 +48,7 @@ const user = new Hono<Env>()
         // ユーザーが見つからないのであればcookieを削除する
         deleteCookie(c, 'id')
       }
-      return c.json(user ? withCompressedUserId(user) : { error: 'User not found' })
+      return c.json(user ? withCompressedSecret(user) : { error: 'User not found' })
     },
   )
   .post('/leave', auth, async (c) => {
@@ -59,11 +60,15 @@ const user = new Hono<Env>()
     return c.json({})
   })
 
-export default user
+async function compressedSecretToUserId(db: DrizzleD1Database, compressedSecret: string) {
+  const secret = compressedPrintableStringToUuid(compressedSecret)
+  const [overrideUserId] = await db.select().from(schema.user).where(eq(schema.user.secret, secret))
+  return overrideUserId?.id
+}
 
-const withCompressedUserId = <T extends { id: string }>(user: T) =>
-  ({
-    ...user,
-    // TOOD: 消す可能性があるのでoptionalにしておく
-    compressedId: uuidToCompressedPrintableString(user.id),
-  }) as typeof user & { compressedId?: string }
+const withCompressedSecret = <T extends { secret: string }>(user: T) => ({
+  ...user,
+  secret: uuidToCompressedPrintableString(user.secret),
+})
+
+export default user
