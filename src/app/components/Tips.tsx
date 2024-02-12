@@ -12,7 +12,7 @@ export default function Tips({
     <div
       className={clsx(
         'grid grid-cols-[auto_1fr] gap-1 text-xs',
-        Type === 'default' ? 'text-zinc-400' : Type === 'warning' ? 'text-red-500' : 'text-zinc-400',
+        Type === 'default' ? 'text-zinc-400' : Type === 'warning' ? 'text-error' : 'text-zinc-400',
         className,
       )}
     >

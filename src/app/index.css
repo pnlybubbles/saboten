@@ -9,14 +9,8 @@
   }
 
   body {
-    background-color: rgb(250 250 250 / 1);
+    background-color: rgb(251 251 250 / 1);
     font-family: Avenir, sans-serif;
     user-select: none;
   }
-}
-
-:root {
-  --rsbs-backdrop-bg: rgba(10, 10, 12, 0.4);
-  --rsbs-bg: rgb(250 250 250 / 1);
-  --rsbs-overlay-rounded: 16px;
 }

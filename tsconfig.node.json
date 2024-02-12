@@ -11,5 +11,5 @@
     "noEmit": true,
     "allowJs": true
   },
-  "include": ["vite.config.ts", "drizzle.config.ts", "script"]
+  "include": ["vite.config.ts", "drizzle.config.ts", "tailwind.config.js", "script"]
 }

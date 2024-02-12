@@ -156,13 +156,13 @@ export default function EventSheet({ roomId, defaultValue, onSubmit, submitLabel
         <div className="grid grid-cols-[auto_1fr] gap-3">
           <div
             className={clsx(
-              'grid h-18 grid-flow-row content-between rounded-xl border-2 border-transparent bg-surface px-5 pb-[0.875rem] pt-[0.975rem] transition',
-              editCurrencySheet.isPresent && 'border-zinc-900',
+              'grid h-18 grid-flow-row content-between rounded-xl bg-surface px-5 pb-[0.625rem] pt-[0.85rem] transition',
+              editCurrencySheet.isPresent && 'shadow-focus',
             )}
             onClick={editCurrencySheet.open}
           >
             <div className="text-xs font-bold text-zinc-400">通貨</div>
-            <div>{currency}</div>
+            <div className="text-base">{currency}</div>
           </div>
           <Sheet {...editCurrencySheet}>
             <div className="grid gap-2">

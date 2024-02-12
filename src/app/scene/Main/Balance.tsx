@@ -106,7 +106,7 @@ export default function Balance({ roomId }: Props) {
   const { height } = useResizeObserver(ref)
 
   return (
-    <div className="-mb-6 grid overflow-hidden after:block after:h-6 after:bg-gradient-to-b after:from-transparent after:to-white">
+    <div className="-mx-1 -mb-6 grid overflow-hidden px-1 after:block after:h-6 after:bg-gradient-to-b after:from-transparent after:to-white">
       <Clickable
         onClick={() => totalCurrencyValue.length > 0 && setShowDetail((v) => !v)}
         className="group z-[1] grid grid-flow-col items-center justify-between bg-gradient-to-t from-transparent to-white"
@@ -142,7 +142,7 @@ export default function Balance({ roomId }: Props) {
           {rateMissingTotalCurrencyValue.map(({ currency }) => (
             <div
               key={currency}
-              className="grid grid-cols-[auto_1fr] gap-1 rounded-lg bg-secondary p-4 text-xs font-bold text-primary"
+              className="shadow-emboss text-error grid grid-cols-[auto_1fr] gap-1 rounded-lg p-4 text-xs"
             >
               <Icon.AlertCircle size={20} className="mt-[-3px]" />
               <div className="grid gap-2">
@@ -153,11 +153,11 @@ export default function Balance({ roomId }: Props) {
                 </Button> */}
                   <Button
                     mini
-                    variant="primary"
                     onClick={() => {
                       setCurrencyRateSheetProps({ currency, toCurrency: primaryCurrency })
                       currencyRateSheet.open()
                     }}
+                    variant="secondary"
                   >
                     設定
                   </Button>

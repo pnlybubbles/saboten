@@ -15,7 +15,7 @@ export default forwardRef<HTMLInputElement, Props>(function TextField(
   return (
     <label
       className={clsx(
-        'relative grid items-end rounded-xl border-2 border-transparent bg-surface transition focus-within:border-zinc-900 aria-disabled:opacity-40',
+        'focus-within:shadow-focus relative grid items-end rounded-xl bg-surface transition aria-disabled:opacity-40',
         label ? 'h-18' : 'h-14',
         className,
       )}

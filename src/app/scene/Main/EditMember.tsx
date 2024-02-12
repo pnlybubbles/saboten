@@ -81,7 +81,6 @@ export default function EditMember({ roomId, ...sheet }: Props) {
           }}
           disabled={name === ''}
           loading={busy}
-          variant="primary"
         >
           追加
         </Button>

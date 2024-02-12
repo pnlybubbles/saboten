@@ -25,8 +25,7 @@ export default function Button({
   children,
   ...props
 }: Props) {
-  const backgroundColor = toBackgroundColor(variant)
-  const foregroundColor = toForegroundColor(variant)
+  const style = toBackground(variant)
 
   return (
     <Clickable
@@ -37,8 +36,7 @@ export default function Button({
         icon ? (children == null ? 'w-12 p-0' : 'w-full pl-5 pr-6') : 'w-full px-6',
         loading ? 'cursor-not-allowed' : 'disabled:cursor-not-allowed disabled:opacity-30',
         !loading && !disabled && (icon && children == null ? 'active:scale-90' : 'active:scale-95'),
-        backgroundColor,
-        foregroundColor,
+        style,
       )}
       disabled={disabled || loading}
       {...props}
@@ -72,19 +70,13 @@ export default function Button({
   )
 }
 
-const toBackgroundColor = (variant: Variant) =>
-  variant === 'danger'
-    ? 'bg-red-500'
-    : variant === 'primary'
-      ? 'bg-primary'
-      : variant === 'secondary'
-        ? 'border border-primary'
-        : 'bg-zinc-900'
-const toForegroundColor = (variant: Variant) =>
-  variant === 'danger'
-    ? 'text-white'
-    : variant === 'primary'
-      ? 'text-white'
-      : variant === 'secondary'
-        ? 'text-primary'
-        : 'text-zinc-50'
+const toBackground = (variant: Variant) =>
+  clsx(
+    variant === 'danger'
+      ? 'text-white bg-error'
+      : variant === 'primary'
+        ? 'text-main bg-white shadow-emboss'
+        : variant === 'secondary'
+          ? 'text-main bg-white shadow-border'
+          : 'text-white bg-main',
+  )
