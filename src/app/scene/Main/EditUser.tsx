@@ -80,7 +80,7 @@ function UserResetSheet({ ...sheet }: SheetProps) {
       <div className="grid gap-4">
         <div className="font-bold">ユーザー削除</div>
         <Tips type="warning">
-          すべてのユーザーに関連するデータが削除されます。旅の記録は参加済みのメンバーが一人でもいる限り残りますが、作成されたイベントは匿名化されます。
+          すべてのユーザーに関連するデータが削除されます。旅の記録は参加済みのメンバーが一人でもいる限り残り続けますが、ユーザーとの関連付けが解消されて匿名になります。
         </Tips>
         <Button variant="danger" onClick={leave} loading={busy}>
           削除

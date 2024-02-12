@@ -115,7 +115,7 @@ export default function Main({ roomId }: Props) {
                   type={Icon.PlaneTakeoff}
                   className="mt-[-0.5rem] h-6 text-zinc-400 transition-[opacity,margin,height] group-focus-within:mt-0 group-focus-within:h-0 group-focus-within:opacity-0"
                 >
-                  タイトルを入力して旅をはじめましょう！
+                  タイトルを入力して旅をはじめよう！
                 </Tips>
               )}
             </div>
@@ -130,7 +130,7 @@ export default function Main({ roomId }: Props) {
             <div className={clsx('grid justify-items-center gap-2 pb-8 pt-2', noEvent && 'bg-zinc-50')}>
               {noEvent && (
                 <Tips type={Icon.PawPrint} className="text-zinc-400">
-                  最初のイベントを追加しよう
+                  最初のイベントを追加しよう！
                 </Tips>
               )}
               <Clickable
