@@ -17,6 +17,7 @@ import Clickable from '@app/components/Clickable'
 import { useMemo } from 'react'
 import unreachable from '@app/util/unreachable'
 import * as Icon from 'lucide-react'
+import useRoomCurrencyRate from '@app/hooks/useRoomCurrencyRate'
 
 type EventPayloadDefault = Omit<EventPayload, 'paidByMemberId'> & {
   paidByMemberId: string | null
@@ -139,6 +140,9 @@ export default function EventSheet({ roomId, defaultValue, onSubmit, submitLabel
     sheet.onPresent(false)
   }
 
+  const [roomCurrencyRate] = useRoomCurrencyRate(roomId)
+  const recentlyUsedCurrencyCodes = useMemo(() => roomCurrencyRate?.map((v) => v.currency) ?? [], [roomCurrencyRate])
+
   const handleSelectCurrency = (code: string) => {
     setCurrency(code)
     editCurrencySheet.close()
@@ -168,7 +172,7 @@ export default function EventSheet({ roomId, defaultValue, onSubmit, submitLabel
             <div className="grid gap-2">
               <div className="text-xs font-bold">よく使う</div>
               <div className="grid grid-cols-[auto_auto_1fr] items-stretch">
-                {FREQUENTLY_USED_CURRENCY_CODES.map((code) => (
+                {[...recentlyUsedCurrencyCodes, ...FREQUENTLY_USED_CURRENCY_CODES].map((code) => (
                   <EditCurrencyItem
                     key={code}
                     code={code}
@@ -177,19 +181,16 @@ export default function EventSheet({ roomId, defaultValue, onSubmit, submitLabel
                   ></EditCurrencyItem>
                 ))}
               </div>
-              <div className="text-xs font-bold">その他</div>
+              <div className="text-xs font-bold">すべて</div>
               <div className="grid grid-cols-[auto_auto_1fr] items-stretch">
-                {cc
-                  .codes()
-                  .filter((v) => !FREQUENTLY_USED_CURRENCY_CODES.includes(v))
-                  .map((code) => (
-                    <EditCurrencyItem
-                      key={code}
-                      code={code}
-                      onClick={() => handleSelectCurrency(code)}
-                      active={currency === code}
-                    ></EditCurrencyItem>
-                  ))}
+                {cc.codes().map((code) => (
+                  <EditCurrencyItem
+                    key={code}
+                    code={code}
+                    onClick={() => handleSelectCurrency(code)}
+                    active={currency === code}
+                  ></EditCurrencyItem>
+                ))}
               </div>
             </div>
           </Sheet>
