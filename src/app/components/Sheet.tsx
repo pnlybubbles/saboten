@@ -14,7 +14,7 @@ export default function Sheet({ isPresent, onPresent, children }: PropsWithChild
   const inner = (
     <Drawer.Portal>
       <Drawer.Overlay className="fixed inset-0 bg-black/40" />
-      <Drawer.Content className="fixed inset-x-0 bottom-0 flex max-h-[96%] flex-col rounded-t-[44px] bg-white text-main">
+      <Drawer.Content className="fixed inset-x-0 bottom-0 flex max-h-[96%] flex-col overflow-hidden rounded-t-[44px] bg-white text-main">
         <div className="z-[1] mt-4 bg-gradient-to-b from-white to-transparent pb-4">
           <div className="mx-auto -mb-2 h-2 w-12 shrink-0 -translate-y-1/2 rounded-full bg-zinc-200" />
         </div>
