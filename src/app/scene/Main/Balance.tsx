@@ -111,15 +111,21 @@ export default function Balance({ roomId }: Props) {
         onClick={() => totalCurrencyValue.length > 0 && setShowDetail((v) => !v)}
         className="group z-[1] grid grid-flow-col items-center justify-between bg-gradient-to-t from-transparent to-white"
       >
-        <div className="transition group-active:scale-95">
+        <div className="text-left transition group-active:scale-95">
           <CurrencyText
             className="text-3xl font-bold"
             {...displayCurrencySum(rateConvertibleTotalCurrencyValue, primaryCurrency)}
           ></CurrencyText>
-          {rateMissingTotalCurrencyValue.length > 0 && <span className="ml-1 text-3xl font-bold">+?</span>}
-          {rateMissingTotalCurrencyValue.map(({ currency, amount }) => (
-            <CurrencyText key={currency} className="ml-2" {...displayCurrency({ amount, currency })}></CurrencyText>
-          ))}
+          {rateMissingTotalCurrencyValue.length > 0 && <span className="ml-1 mr-2 text-3xl font-bold">+?</span>}
+          <span className="mt-1 inline-block">
+            {rateMissingTotalCurrencyValue.map(({ currency, amount }) => (
+              <CurrencyText
+                key={currency}
+                className="[&:not(:last-child)]:mr-2"
+                {...displayCurrency({ amount, currency })}
+              ></CurrencyText>
+            ))}
+          </span>
         </div>
         {totalCurrencyValue.length > 0 && (
           <div className="grid grid-flow-col items-center text-zinc-400">
@@ -142,7 +148,7 @@ export default function Balance({ roomId }: Props) {
           {rateMissingTotalCurrencyValue.map(({ currency }) => (
             <div
               key={currency}
-              className="shadow-emboss text-error grid grid-cols-[auto_1fr] gap-1 rounded-lg p-4 text-xs"
+              className="grid grid-cols-[auto_1fr] gap-1 rounded-lg p-4 text-xs text-error shadow-emboss"
             >
               <Icon.AlertCircle size={20} className="mt-[-3px]" />
               <div className="grid gap-2">
