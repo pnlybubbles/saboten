@@ -1,3 +1,4 @@
 .yarn/*
 dist
-netlify/edge-functions/_shared/generated
+migrations
+pnpm-lock.yaml

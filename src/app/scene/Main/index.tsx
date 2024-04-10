@@ -80,7 +80,7 @@ export default function Main({ roomId }: Props) {
         div
       >
         <div className={clsx('grid min-h-screen grid-rows-[auto_auto_1fr]', drawer.isPresent && 'pointer-events-none')}>
-          <div className="shadow-float sticky top-[-9rem] z-[1] grid gap-4 overflow-hidden rounded-b-[44px] bg-white p-8 pb-6">
+          <div className="sticky top-[-9rem] z-[1] grid gap-4 overflow-hidden rounded-b-[44px] bg-white p-8 pb-6 shadow-float">
             <div className="grid grid-cols-[1fr_auto_auto] justify-start gap-3">
               <Button
                 variant="primary"
@@ -134,7 +134,7 @@ export default function Main({ roomId }: Props) {
                 </Tips>
               )}
               <Clickable
-                className="shadow-float pointer-events-auto grid size-16 select-none grid-flow-col items-center justify-items-center gap-1 rounded-full bg-white transition active:scale-90"
+                className="pointer-events-auto grid size-16 select-none grid-flow-col items-center justify-items-center gap-1 rounded-full bg-white shadow-float transition active:scale-90"
                 onClick={createEventSheet.open}
               >
                 <Icon.Plus size={24}></Icon.Plus>
