@@ -13,4 +13,8 @@
     font-family: Avenir, sans-serif;
     user-select: none;
   }
+
+  [vaul-drawer] {
+    outline: none;
+  }
 }
