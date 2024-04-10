@@ -172,7 +172,7 @@ export default function EventSheet({ roomId, defaultValue, onSubmit, submitLabel
             <div className="grid gap-2">
               <div className="text-xs font-bold">よく使う</div>
               <div className="grid grid-cols-[auto_auto_1fr] items-stretch">
-                {[...recentlyUsedCurrencyCodes, ...FREQUENTLY_USED_CURRENCY_CODES].map((code) => (
+                {[...recentlyUsedCurrencyCodes, ...FREQUENTLY_USED_CURRENCY_CODES].filter(isUnique).map((code) => (
                   <EditCurrencyItem
                     key={code}
                     code={code}
