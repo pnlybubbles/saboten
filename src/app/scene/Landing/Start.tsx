@@ -4,6 +4,9 @@ import Tips from '@app/components/Tips'
 import useRoomTitle from '@app/hooks/useRoomTitle'
 import { useNavigate } from 'react-router-dom'
 import * as Icon from 'lucide-react'
+import usePresent from '@app/hooks/usePresent'
+import AboutSheet from '../Main/AboutSheet'
+import Clickable from '@app/components/Clickable'
 
 interface Props {
   roomId: string | null
@@ -13,10 +16,20 @@ interface Props {
 export default function Start({ roomId, onProceed }: Props) {
   const [roomTitle] = useRoomTitle(roomId)
   const navigate = useNavigate()
+  const aboutSheet = usePresent()
 
   return (
     <div className="grid gap-6 p-8">
-      <div className="text-2xl font-bold text-primary">SABOTEN</div>
+      <div className="grid grid-cols-[1fr_auto]">
+        <div className="text-2xl font-bold text-primary">SABOTEN</div>
+        <Clickable
+          onClick={aboutSheet.open}
+          className="grid w-8 items-center justify-items-center transition active:scale-90"
+        >
+          <Icon.Construction size={20} />
+        </Clickable>
+        <AboutSheet {...aboutSheet}></AboutSheet>
+      </div>
       <div>
         <div>シンプルな割り勘アプリ</div>
         <div>旅のお金を記録してかんたんに精算</div>

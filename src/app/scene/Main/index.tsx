@@ -21,6 +21,7 @@ import clsx from 'clsx'
 import Clickable from '@app/components/Clickable'
 import SettingsSheet from './SettingsSheet'
 import * as Icon from 'lucide-react'
+import AboutSheet from './AboutSheet'
 
 interface Props {
   roomId: string | null
@@ -34,6 +35,7 @@ export default function Main({ roomId }: Props) {
   const settingsSheet = usePresent()
   const editMemberSheet = usePresent()
   const editUserSheet = usePresent()
+  const aboutSheet = usePresent()
   const noEvent = events == null || events.length === 0
   const drawer = usePresent()
 
@@ -57,14 +59,16 @@ export default function Main({ roomId }: Props) {
         )}
       >
         <div className="grid gap-6 p-8">
-          <div className="grid grid-cols-[auto_1fr] items-center justify-start gap-4">
+          <div className="grid grid-cols-[auto_1fr_auto] items-center justify-start gap-4">
             <Clickable onClick={editUserSheet.open} className="transition active:scale-90">
               <Avatar name={user?.name ?? null}></Avatar>
             </Clickable>
             <Clickable onClick={editUserSheet.open} className="text-left font-bold transition active:scale-95">
               {user?.name}
             </Clickable>
+            <Button variant="primary" onClick={aboutSheet.open} icon={<Icon.Construction size={20} />}></Button>
             <EditUser {...editUserSheet}></EditUser>
+            <AboutSheet {...aboutSheet}></AboutSheet>
           </div>
           <Link to="/">
             <Button variant="primary" icon={<Icon.Plane size={20}></Icon.Plane>} onClick={drawer.close}>
