@@ -123,6 +123,8 @@ export default function EventSheet({ roomId, defaultValue, onSubmit, submitLabel
     ]),
   )
 
+  const transferToMember = eventMembers.filter((v) => v !== paidByMember)[0]
+
   const [busy, setBusy] = useState(false)
 
   const handleSubmit = async () => {
@@ -171,7 +173,7 @@ export default function EventSheet({ roomId, defaultValue, onSubmit, submitLabel
           memberIds: eventMembers,
         })
       } else if (tab === 'transfer') {
-        if (eventMembers[0] === undefined) {
+        if (transferToMember === undefined) {
           throw new Error('Transfer event must be specify at least 1 "eventMembers"')
         }
         void onSubmit({
@@ -180,7 +182,7 @@ export default function EventSheet({ roomId, defaultValue, onSubmit, submitLabel
           amount: validatedAmountValue,
           currency,
           paidByMemberId: paidByMember,
-          transferToMemberId: eventMembers[0],
+          transferToMemberId: transferToMember,
         })
       } else {
         unreachable(tab)
@@ -338,42 +340,45 @@ export default function EventSheet({ roomId, defaultValue, onSubmit, submitLabel
             {tab === 'payment' ? '割り勘するメンバー' : '送金先のメンバー'}
           </div>
           <div className="ml-[-4px] grid grid-flow-col justify-start gap-1">
-            {members?.map((member) => (
-              <Clickable
-                key={member.id ?? member.tmpId}
-                disabled={member.id === null}
-                className={clsx(
-                  'rounded-full border-2 border-transparent p-[2px] transition active:scale-90 disabled:opacity-30',
-                  member.id &&
-                    (tab === 'payment'
-                      ? // 支払いのイベントの場合は複数選択可能
-                        eventMembers.includes(member.id)
-                      : tab === 'transfer'
-                        ? // 送金イベントの場合は最初の選択のみ使う
-                          eventMembers[0] === member.id
-                        : unreachable(tab)) &&
-                    'border-zinc-900',
-                )}
-                onClick={() => {
-                  if (member.id === null) {
-                    return
-                  }
-                  if (tab === 'payment') {
-                    if (eventMembers.includes(member.id)) {
-                      setEventMembers((v) => v.filter((w) => w !== member.id))
-                    } else {
-                      setEventMembers((v) => [...v, member.id].filter(isNonNullable).filter(isUnique))
-                    }
-                  } else if (tab === 'transfer') {
-                    setEventMembers([member.id])
-                  } else {
-                    unreachable(tab)
-                  }
-                }}
-              >
-                <Avatar mini noNegative name={getMemberName(member)}></Avatar>
-              </Clickable>
-            )) ?? (
+            {members?.map(
+              (member) =>
+                (tab !== 'transfer' || member.id !== paidByMember) && (
+                  <Clickable
+                    key={member.id ?? member.tmpId}
+                    disabled={member.id === null}
+                    className={clsx(
+                      'rounded-full border-2 border-transparent p-[2px] transition active:scale-90 disabled:opacity-30',
+                      member.id &&
+                        (tab === 'payment'
+                          ? // 支払いのイベントの場合は複数選択可能
+                            eventMembers.includes(member.id)
+                          : tab === 'transfer'
+                            ? // 送金イベントの場合は最初の選択のみ使う
+                              transferToMember === member.id
+                            : unreachable(tab)) &&
+                        'border-zinc-900',
+                    )}
+                    onClick={() => {
+                      if (member.id === null) {
+                        return
+                      }
+                      if (tab === 'payment') {
+                        if (eventMembers.includes(member.id)) {
+                          setEventMembers((v) => v.filter((w) => w !== member.id))
+                        } else {
+                          setEventMembers((v) => [...v, member.id].filter(isNonNullable).filter(isUnique))
+                        }
+                      } else if (tab === 'transfer') {
+                        setEventMembers([member.id])
+                      } else {
+                        unreachable(tab)
+                      }
+                    }}
+                  >
+                    <Avatar mini noNegative name={getMemberName(member)}></Avatar>
+                  </Clickable>
+                ),
+            ) ?? (
               <div className="rounded-full border-2 border-zinc-900 p-[2px]">
                 <Avatar mini noNegative name={user.name}></Avatar>
               </div>
@@ -388,6 +393,7 @@ export default function EventSheet({ roomId, defaultValue, onSubmit, submitLabel
               label === '' ||
               validatedAmountValue === null ||
               (eventMembersCandidate.length > 0 && eventMembers.length === 0) ||
+              (tab === 'transfer' && transferToMember === undefined) ||
               (roomId !== null && paidByMember === null)
             }
             loading={busy}
