@@ -127,7 +127,14 @@ export default function Main({ roomId }: Props) {
           </div>
           <EditMember roomId={roomId} {...editMemberSheet}></EditMember>
           {roomId && <SettingsSheet roomId={roomId} {...settingsSheet}></SettingsSheet>}
-          <EventSheet {...createEventSheet} roomId={roomId} onSubmit={addEvent} submitLabel="追加"></EventSheet>
+          <EventSheet
+            {...createEventSheet}
+            roomId={roomId}
+            // roomIdが変化したらフォームのデータをリセットするために再マウントさせる
+            key={roomId}
+            onSubmit={addEvent}
+            submitLabel="追加"
+          ></EventSheet>
           <div className="p-8">{roomId === null ? <RecentRooms></RecentRooms> : <Events roomId={roomId}></Events>}</div>
           <div className={'pointer-events-none sticky bottom-0 left-0 w-full self-end'}>
             {noEvent && <div className="h-12 w-full bg-gradient-to-t from-zinc-50"></div>}
