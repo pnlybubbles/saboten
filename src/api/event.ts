@@ -21,18 +21,24 @@ const event = new Hono<Env>()
       z.object({
         roomId: z.string().uuid().nullable(),
         label: z.string(),
-        amount: z.number().int(),
-        currency: CURRENCY_CODE_SCHEMA,
-        paidByMemberId: z.string().uuid().nullable(),
         memberIds: z.array(z.string().uuid()).nullable(),
+        payments: z
+          .array(
+            z.object({
+              amount: z.number().int(),
+              currency: CURRENCY_CODE_SCHEMA,
+              paidByMemberId: z.string().uuid().nullable(),
+            }),
+          )
+          .min(1),
       }),
     ),
     async (c) => {
       const db = drizzle(c.env.DB, { schema })
-      const { roomId, label, paidByMemberId, memberIds, amount, currency } = c.req.valid('json')
+      const { roomId, label, memberIds, payments } = c.req.valid('json')
       const { userId } = c.var
       if (roomId) {
-        if (paidByMemberId === null || memberIds === null) {
+        if (payments.some((v) => v.paidByMemberId === null) || memberIds === null) {
           // すでにルームがある場合にはmemberIdの指定は必須
           throw new HTTPException(400, { message: 'memberIds required' })
         }
@@ -44,7 +50,14 @@ const event = new Hono<Env>()
           throw new HTTPException(403, { message: 'Only member can delete the event' })
         }
         const event = first(await db.insert(schema.event).values({ id: uuid(), roomId, label }).returning())
-        await db.insert(schema.eventPayment).values({ eventId: event.id, amount, currency, paidByMemberId })
+        await db.insert(schema.eventPayment).values(
+          payments.map(({ amount, currency, paidByMemberId }) => ({
+            eventId: event.id,
+            amount,
+            currency,
+            paidByMemberId,
+          })),
+        )
         await db.insert(schema.eventMember).values(memberIds.map((memberId) => ({ eventId: event.id, memberId })))
         const events = await db.query.event.findMany({
           where: (event) => eq(event.roomId, roomId),
@@ -70,7 +83,14 @@ const event = new Hono<Env>()
         const event = first(await db.insert(schema.event).values({ id: uuid(), roomId: room.id, label }).returning())
         const eventPayment = await db
           .insert(schema.eventPayment)
-          .values({ eventId: event.id, amount, currency, paidByMemberId: member.id })
+          .values(
+            payments.map(({ amount, currency }) => ({
+              eventId: event.id,
+              amount,
+              currency,
+              paidByMemberId: member.id,
+            })),
+          )
           .returning()
         const eventMember = await db
           .insert(schema.eventMember)
@@ -117,15 +137,21 @@ const event = new Hono<Env>()
       z.object({
         eventId: z.string().uuid(),
         label: z.string(),
-        amount: z.number().int(),
-        currency: CURRENCY_CODE_SCHEMA,
-        paidByMemberId: z.string().uuid(),
         memberIds: z.array(z.string().uuid()),
+        payments: z
+          .array(
+            z.object({
+              amount: z.number().int(),
+              currency: CURRENCY_CODE_SCHEMA,
+              paidByMemberId: z.string().uuid(),
+            }),
+          )
+          .min(1),
       }),
     ),
     async (c) => {
       const db = drizzle(c.env.DB, { schema })
-      const { eventId, label, paidByMemberId, memberIds, amount, currency } = c.req.valid('json')
+      const { eventId, label, memberIds, payments } = c.req.valid('json')
       const { userId } = c.var
       const [row] = await db
         .select()
@@ -140,7 +166,14 @@ const event = new Hono<Env>()
       await db.delete(schema.eventPayment).where(eq(schema.eventPayment.eventId, eventId))
       const eventPayments = await db
         .insert(schema.eventPayment)
-        .values({ eventId, paidByMemberId, amount, currency })
+        .values(
+          payments.map(({ amount, currency, paidByMemberId }) => ({
+            eventId: event.id,
+            amount,
+            currency,
+            paidByMemberId,
+          })),
+        )
         .returning()
       // TODO: 差分の更新にする。もしかしたらカラムを分けないほうが便利かもしれない
       await db.delete(schema.eventMember).where(eq(schema.eventMember.eventId, eventId))

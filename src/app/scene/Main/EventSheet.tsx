@@ -19,9 +19,9 @@ import unreachable from '@app/util/unreachable'
 import * as Icon from 'lucide-react'
 import useRoomCurrencyRate from '@app/hooks/useRoomCurrencyRate'
 
-type EventPayloadDefault = Omit<EventPayload, 'paidByMemberId'> & {
-  paidByMemberId: string | null
-}
+type EventPayloadDefault =
+  | (Omit<Extract<EventPayload, { type: 'payment' }>, 'paidByMemberId'> & { paidByMemberId: string | null })
+  | (Omit<Extract<EventPayload, { type: 'transfer' }>, 'paidByMemberId'> & { paidByMemberId: string | null })
 
 interface Props extends SheetProps {
   roomId: string | null
@@ -41,25 +41,44 @@ export default function EventSheet({ roomId, defaultValue, onSubmit, submitLabel
   const defaultCurrency = defaultValue?.currency ?? 'JPY'
   const defaultCurrencyDigits = cc.code(defaultCurrency)?.digits ?? 0
   const eventMembersCandidate = useMemo(() => members?.map((v) => v.id).filter(isNonNullable) ?? [], [members])
+  const defaultEventMembers = useMemo(
+    () =>
+      defaultValue?.type === 'payment'
+        ? defaultValue.memberIds
+        : defaultValue?.type === 'transfer'
+          ? [defaultValue.transferToMemberId]
+          : eventMembersCandidate,
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [
+      defaultValue?.type,
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      defaultValue && 'memberIds' in defaultValue && defaultValue.memberIds,
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      defaultValue && 'transferToMemberId' in defaultValue && defaultValue.transferToMemberId,
+    ],
+  )
   const defaultFormValue = useMemo(
     () => ({
+      type: defaultValue?.type ?? 'payment',
       label: defaultValue?.label ?? '',
       amount: defaultValue?.amount ? (defaultValue.amount / 10 ** defaultCurrencyDigits).toString() : '',
       paidByMember: defaultValue?.paidByMemberId === undefined ? userMemberId : defaultValue.paidByMemberId,
-      eventMembers: defaultValue?.memberIds ?? eventMembersCandidate,
+      eventMembers: defaultEventMembers,
       currency: defaultCurrency,
     }),
     [
       defaultCurrency,
       defaultCurrencyDigits,
+      defaultEventMembers,
       defaultValue?.amount,
       defaultValue?.label,
-      defaultValue?.memberIds,
       defaultValue?.paidByMemberId,
-      eventMembersCandidate,
+      defaultValue?.type,
       userMemberId,
     ],
   )
+
+  const [tab, setTab] = useState<'payment' | 'transfer'>(defaultFormValue.type)
   const [label, setLabel] = useState(defaultFormValue.label)
   const [amount, setAmount] = useState(defaultFormValue.amount)
   const [paidByMember, setPaidByMember] = useState(defaultFormValue.paidByMember)
@@ -114,13 +133,27 @@ export default function EventSheet({ roomId, defaultValue, onSubmit, submitLabel
       // room作成前の場合はoptimistic updateしないので、リクエストを待つ
       setBusy(true)
       try {
-        await onSubmit({
-          label,
-          amount: validatedAmountValue,
-          currency,
-          paidByMemberId: null,
-          memberIds: null,
-        })
+        if (tab === 'payment') {
+          await onSubmit({
+            type: 'payment',
+            label,
+            amount: validatedAmountValue,
+            currency,
+            paidByMemberId: null,
+            memberIds: null,
+          })
+        } else if (tab === 'transfer') {
+          await onSubmit({
+            type: 'transfer',
+            label,
+            amount: validatedAmountValue,
+            currency,
+            paidByMemberId: null,
+            transferToMemberId: null,
+          })
+        } else {
+          unreachable(tab)
+        }
       } finally {
         setBusy(false)
       }
@@ -128,13 +161,30 @@ export default function EventSheet({ roomId, defaultValue, onSubmit, submitLabel
       if (paidByMember === null) {
         throw new Error('"paidByMember" must be updated to be non-null')
       }
-      void onSubmit({
-        label,
-        amount: validatedAmountValue,
-        currency,
-        paidByMemberId: paidByMember,
-        memberIds: eventMembers,
-      })
+      if (tab === 'payment') {
+        void onSubmit({
+          type: 'payment',
+          label,
+          amount: validatedAmountValue,
+          currency,
+          paidByMemberId: paidByMember,
+          memberIds: eventMembers,
+        })
+      } else if (tab === 'transfer') {
+        if (eventMembers[0] === undefined) {
+          throw new Error('Transfer event must be specify at least 1 "eventMembers"')
+        }
+        void onSubmit({
+          type: 'transfer',
+          label,
+          amount: validatedAmountValue,
+          currency,
+          paidByMemberId: paidByMember,
+          transferToMemberId: eventMembers[0],
+        })
+      } else {
+        unreachable(tab)
+      }
     }
     clearDirty()
     sheet.onPresent(false)
@@ -156,6 +206,26 @@ export default function EventSheet({ roomId, defaultValue, onSubmit, submitLabel
   return (
     <Sheet {...sheet}>
       <div className="grid gap-4">
+        <div className="grid grid-flow-col gap-3 justify-self-start text-xs font-bold">
+          <Clickable
+            onClick={() => setTab('payment')}
+            className={clsx(
+              'w-20 rounded-xl bg-surface py-2 transition',
+              tab === 'payment' ? 'border-2 border-zinc-900 text-zinc-900' : 'text-zinc-400',
+            )}
+          >
+            支払い
+          </Clickable>
+          <Clickable
+            onClick={() => setTab('transfer')}
+            className={clsx(
+              'w-20 rounded-xl bg-surface py-2 transition',
+              tab === 'transfer' ? 'border-2 border-zinc-900 text-zinc-900' : 'text-zinc-400',
+            )}
+          >
+            送金
+          </Clickable>
+        </div>
         <TextField label="イベントの名前" name="label" value={label} onChange={dirty(setLabel)} />
         <div className="grid grid-cols-[auto_1fr] gap-3">
           <div
@@ -195,7 +265,7 @@ export default function EventSheet({ roomId, defaultValue, onSubmit, submitLabel
             </div>
           </Sheet>
           <TextField
-            label="支払った金額"
+            label={tab === 'payment' ? '支払った金額' : '送金した金額'}
             name="amount"
             type="number"
             inputMode="decimal"
@@ -264,7 +334,9 @@ export default function EventSheet({ roomId, defaultValue, onSubmit, submitLabel
           </TextField>
         </div>
         <div className="grid gap-3 rounded-xl bg-surface px-5 py-4">
-          <div className="text-xs font-bold text-zinc-400">割り勘するメンバー</div>
+          <div className="text-xs font-bold text-zinc-400">
+            {tab === 'payment' ? '割り勘するメンバー' : '送金先のメンバー'}
+          </div>
           <div className="ml-[-4px] grid grid-flow-col justify-start gap-1">
             {members?.map((member) => (
               <Clickable
@@ -272,16 +344,30 @@ export default function EventSheet({ roomId, defaultValue, onSubmit, submitLabel
                 disabled={member.id === null}
                 className={clsx(
                   'rounded-full border-2 border-transparent p-[2px] transition active:scale-90 disabled:opacity-30',
-                  member.id && eventMembers.includes(member.id) && 'border-zinc-900',
+                  member.id &&
+                    (tab === 'payment'
+                      ? // 支払いのイベントの場合は複数選択可能
+                        eventMembers.includes(member.id)
+                      : tab === 'transfer'
+                        ? // 送金イベントの場合は最初の選択のみ使う
+                          eventMembers[0] === member.id
+                        : unreachable(tab)) &&
+                    'border-zinc-900',
                 )}
                 onClick={() => {
                   if (member.id === null) {
                     return
                   }
-                  if (eventMembers.includes(member.id)) {
-                    setEventMembers((v) => v.filter((w) => w !== member.id))
+                  if (tab === 'payment') {
+                    if (eventMembers.includes(member.id)) {
+                      setEventMembers((v) => v.filter((w) => w !== member.id))
+                    } else {
+                      setEventMembers((v) => [...v, member.id].filter(isNonNullable).filter(isUnique))
+                    }
+                  } else if (tab === 'transfer') {
+                    setEventMembers([member.id])
                   } else {
-                    setEventMembers((v) => [...v, member.id].filter(isNonNullable).filter(isUnique))
+                    unreachable(tab)
                   }
                 }}
               >
