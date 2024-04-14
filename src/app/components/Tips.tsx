@@ -7,9 +7,13 @@ export default function Tips({
   children,
   className,
   type: Type = 'default',
-}: PropsWithChildren<{ className?: string; type?: 'warning' | 'default' | LucideIcon }>) {
+  ...props
+}: PropsWithChildren<
+  { className?: string; type?: 'warning' | 'default' | LucideIcon } & React.ComponentPropsWithoutRef<'div'>
+>) {
   return (
     <div
+      {...props}
       className={clsx(
         'grid grid-cols-[auto_1fr] gap-1 text-xs',
         Type === 'default' ? 'text-zinc-400' : Type === 'warning' ? 'text-error' : 'text-zinc-400',

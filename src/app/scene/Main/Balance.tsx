@@ -2,7 +2,7 @@ import Button from '@app/components/Button'
 import useEvents from '@app/hooks/useEvents'
 import useRoomCurrencyRate from '@app/hooks/useRoomCurrencyRate'
 import useRoomMember from '@app/hooks/useRoomMember'
-import React, { useRef, useState } from 'react'
+import React, { useReducer, useRef, useState } from 'react'
 import CurrencyRateSheet from './CurrencyRateSheet'
 import usePresent from '@app/hooks/usePresent'
 import CurrencyText from '@app/components/CurrencyText'
@@ -11,6 +11,7 @@ import Clickable from '@app/components/Clickable'
 import isNonNullable from '@app/util/isNonNullable'
 import useResizeObserver from '@app/hooks/useResizeObserver'
 import * as Icon from 'lucide-react'
+import Tips from '@app/components/Tips'
 
 interface Props {
   roomId: string | null
@@ -105,6 +106,8 @@ export default function Balance({ roomId }: Props) {
   const ref = useRef<HTMLDivElement>(null)
   const { height } = useResizeObserver(ref)
 
+  const [isPresentTip, toggleTip] = useReducer((v) => !v, true)
+
   return (
     <div className="-mx-1 -mb-6 grid overflow-hidden px-1 after:block after:h-6 after:bg-gradient-to-b after:from-transparent after:to-white">
       <Clickable
@@ -175,7 +178,7 @@ export default function Balance({ roomId }: Props) {
             <CurrencyRateSheet roomId={roomId} {...currencyRateSheetProps} {...currencyRateSheet}></CurrencyRateSheet>
           )}
           {balances.length > 0 && (
-            <div className="grid grid-cols-[1fr_auto_auto] gap-x-2 gap-y-1">
+            <div className="grid grid-cols-[1fr_auto_auto] gap-x-2 gap-y-1" onClick={toggleTip}>
               {balances.map(([memberId, balanceByCurrency]) => [
                 <React.Fragment key={memberId}>
                   <div className="font-bold">{getMemberName(memberId)}</div>
@@ -239,6 +242,14 @@ export default function Balance({ roomId }: Props) {
                   )),
               ])}
             </div>
+          )}
+          {isPresentTip && (
+            <Tips onClick={toggleTip} type={Icon.PiggyBank}>
+              <span className="font-bold">黒文字</span>は使った合計金額、
+              <span className="font-bold text-lime-600">緑文字</span>
+              は多く支払いすぎている金額、<span className="font-bold text-rose-500">赤文字</span>
+              は誰かに建て替えてもらっている金額になります。
+            </Tips>
           )}
         </div>
       </div>
