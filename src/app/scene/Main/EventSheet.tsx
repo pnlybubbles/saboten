@@ -378,11 +378,15 @@ export default function EventSheet({ roomId, defaultValue, onSubmit, submitLabel
                     <Avatar mini noNegative name={getMemberName(member)}></Avatar>
                   </Clickable>
                 ),
-            ) ?? (
-              <div className="rounded-full border-2 border-zinc-900 p-[2px]">
-                <Avatar mini noNegative name={user.name}></Avatar>
-              </div>
-            )}
+            ) ??
+              (tab === 'transfer' ? null : (
+                <div className="rounded-full border-2 border-zinc-900 p-[2px]">
+                  <Avatar mini noNegative name={user.name}></Avatar>
+                </div>
+              ))}
+            <div className="ml-[4px] hidden h-12 items-center rounded-xl border-2 border-dotted border-zinc-400 px-4 text-xs text-zinc-400 first:grid">
+              選択できるメンバーがいません
+            </div>
           </div>
         </div>
         <div className={clsx('grid gap-2', onRemove && 'grid-cols-[auto_1fr]')}>
