@@ -222,7 +222,7 @@ export default function EventSheet({ roomId, defaultValue, onSubmit, submitLabel
                               'border-zinc-900',
                             )}
                           >
-                            <Avatar mini name={null}></Avatar>
+                            <Avatar mini noNegative name={null}></Avatar>
                           </Clickable>,
                         ]
                       : []),
@@ -250,13 +250,13 @@ export default function EventSheet({ roomId, defaultValue, onSubmit, submitLabel
                           member.id === paidByMember && 'mx-1 border-zinc-900 first:ml-0 last:mr-0',
                         )}
                       >
-                        <Avatar mini name={getMemberName(member)}></Avatar>
+                        <Avatar mini noNegative name={getMemberName(member)}></Avatar>
                       </Clickable>
                     )),
                   ]
                 ) : (
                   <div className="rounded-full border-2 border-zinc-900 p-[2px]">
-                    <Avatar mini name={user.name}></Avatar>
+                    <Avatar mini noNegative name={user.name}></Avatar>
                   </div>
                 )}
               </div>
@@ -285,11 +285,11 @@ export default function EventSheet({ roomId, defaultValue, onSubmit, submitLabel
                   }
                 }}
               >
-                <Avatar mini name={getMemberName(member)}></Avatar>
+                <Avatar mini noNegative name={getMemberName(member)}></Avatar>
               </Clickable>
             )) ?? (
               <div className="rounded-full border-2 border-zinc-900 p-[2px]">
-                <Avatar mini name={user.name}></Avatar>
+                <Avatar mini noNegative name={user.name}></Avatar>
               </div>
             )}
           </div>

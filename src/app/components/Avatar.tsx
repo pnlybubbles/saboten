@@ -6,9 +6,10 @@ interface Props {
   name: string | null
   className?: string
   mini?: boolean | 'xs'
+  noNegative?: boolean
 }
 
-export default function Avatar({ name, className, mini }: Props) {
+export default function Avatar({ name, className, mini, noNegative }: Props) {
   const hashed = useMemo(() => (name ? stringToHash(name) : null), [name])
 
   return (
@@ -17,6 +18,7 @@ export default function Avatar({ name, className, mini }: Props) {
         'grid items-center justify-items-center rounded-full text-lg font-bold text-white',
         mini ? (mini === 'xs' ? 'size-7 text-xs' : 'size-10') : 'size-12 ',
         hashed !== null ? COLORS[hashed % COLORS.length] : 'bg-zinc-400',
+        !noNegative && '-mx-1',
         className,
       )}
     >
