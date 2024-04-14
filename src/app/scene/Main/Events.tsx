@@ -62,7 +62,15 @@ function Item({ id, label, payments, members, roomId, createdAt }: Event & Props
               : displayCurrency({ currency: 'JPY', amount: 0 }))}
           ></CurrencyText>
           <span className="text-zinc-400"> / </span>
-          <span className="text-xs text-zinc-400">{members.length}人</span>
+          {members[0] ? (
+            <span className="inline-flex max-w-10 text-xs text-zinc-400">
+              <div className="truncate">
+                {members.length > 1 ? `${members.length}人` : getMemberName(members[0].memberId)}
+              </div>
+            </span>
+          ) : (
+            <span className="text-xs text-error">0人</span>
+          )}
         </div>
       </Clickable>
       {id && (
