@@ -80,7 +80,7 @@ function Item({ id, label, payments, members, roomId, createdAt }: Event & Props
         disabled={id === null}
       >
         <div className="grid grid-cols-[auto_1fr] gap-4">
-          <div className="grid grid-flow-col items-center gap-1">
+          <div className="grid grid-flow-col items-center gap-[6px]">
             <div className="flex items-center">
               <Spinner
                 className={clsx(
