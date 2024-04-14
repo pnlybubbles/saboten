@@ -21,7 +21,10 @@ import useRoomCurrencyRate from '@app/hooks/useRoomCurrencyRate'
 
 type EventPayloadDefault =
   | (Omit<Extract<EventPayload, { type: 'payment' }>, 'paidByMemberId'> & { paidByMemberId: string | null })
-  | (Omit<Extract<EventPayload, { type: 'transfer' }>, 'paidByMemberId'> & { paidByMemberId: string | null })
+  | (Omit<Extract<EventPayload, { type: 'transfer' }>, 'paidByMemberId' | 'transferToMemberId'> & {
+      paidByMemberId: string | null
+      transferToMemberId: string | null
+    })
 
 interface Props extends SheetProps {
   roomId: string | null
@@ -46,7 +49,9 @@ export default function EventSheet({ roomId, defaultValue, onSubmit, submitLabel
       defaultValue?.type === 'payment'
         ? defaultValue.memberIds
         : defaultValue?.type === 'transfer'
-          ? [defaultValue.transferToMemberId]
+          ? defaultValue.transferToMemberId // 歯抜けデータの場合はnullになる場合がある
+            ? [defaultValue.transferToMemberId]
+            : []
           : eventMembersCandidate,
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [
@@ -62,6 +67,7 @@ export default function EventSheet({ roomId, defaultValue, onSubmit, submitLabel
       type: defaultValue?.type ?? 'payment',
       label: defaultValue?.label ?? '',
       amount: defaultValue?.amount ? (defaultValue.amount / 10 ** defaultCurrencyDigits).toString() : '',
+      // 歯抜けデータの場合はnullになる場合がある
       paidByMember: defaultValue?.paidByMemberId === undefined ? userMemberId : defaultValue.paidByMemberId,
       eventMembers: defaultEventMembers,
       currency: defaultCurrency,

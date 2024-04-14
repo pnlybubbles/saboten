@@ -40,17 +40,24 @@ function Item({ id, label, payments, members, roomId, createdAt }: Event & Props
         ? payments[1] &&
           payments[0].currency === payments[1].currency &&
           payments[0].amount + payments[1].amount === 0 &&
-          members[0] &&
-          members.length === 1 &&
-          (payments[0].amount < 0
-            ? payments[0].paidByMemberId === members[0].memberId
-            : payments[1].paidByMemberId === members[0].memberId)
+          // メンバーが1人の場合は正常系。負の支払いがある場合は支払いの自身の打消が行われているので、支払い元と計上先が同一
+          (members.length === 1 && members[0]
+            ? payments[0].amount < 0
+              ? payments[0].paidByMemberId === members[0].memberId
+              : payments[1].paidByMemberId === members[0].memberId
+            : // メンバーが0人の場合は何らかのケースで部屋から退室している
+              members.length === 0
+              ? payments[0].amount < 0
+                ? payments[0].paidByMemberId === null
+                : payments[1].paidByMemberId === null
+              : false)
           ? {
               type: 'transfer' as const,
               label,
               amount: payments[0].amount < 0 ? payments[1].amount : payments[0].amount,
               currency: payments[0].currency,
-              transferToMemberId: members[0].memberId,
+              // 退室などを起因とした歯抜けのデータがある場合は、不完全な状態でフォームを復元させる
+              transferToMemberId: members[0]?.memberId ?? null,
               paidByMemberId: payments[0].amount < 0 ? payments[1].paidByMemberId : payments[0].paidByMemberId,
             }
           : {
@@ -89,7 +96,10 @@ function Item({ id, label, payments, members, roomId, createdAt }: Event & Props
             {payload?.type === 'transfer' && (
               <>
                 <Icon.ChevronsRight size={20} className="text-zinc-400"></Icon.ChevronsRight>
-                <Avatar mini name={getMemberName(payload.transferToMemberId)}></Avatar>
+                <Avatar
+                  mini
+                  name={payload.transferToMemberId ? getMemberName(payload.transferToMemberId) : null}
+                ></Avatar>
               </>
             )}
           </div>
