@@ -103,7 +103,8 @@ export default function EventSheet({ roomId, defaultValue, onSubmit, submitLabel
       if (fractionDigits > currencyDigits) return null
     }
     // 整数に変換
-    return amountNumeric * 10 ** currencyDigits
+    // ex: 1.1 * 100 = 110.00000000000001 ~ 110
+    return Math.trunc(amountNumeric * 10 ** currencyDigits)
   }, [amount, currency])
 
   const editCurrencySheet = usePresent()
