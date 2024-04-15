@@ -104,7 +104,8 @@ export default function EventSheet({ roomId, defaultValue, onSubmit, submitLabel
     }
     // 整数に変換
     // ex: 1.1 * 100 = 110.00000000000001 ~ 110
-    return Math.trunc(amountNumeric * 10 ** currencyDigits)
+    // ex: 4.1 * 100 = 409.99999999999994 ~ 410
+    return Math.round(amountNumeric * 10 ** currencyDigits)
   }, [amount, currency])
 
   const editCurrencySheet = usePresent()
