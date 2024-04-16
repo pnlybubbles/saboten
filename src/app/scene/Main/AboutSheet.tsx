@@ -1,3 +1,4 @@
+import Logo from '@app/components/Logo'
 import type { SheetProps } from '@app/components/Sheet'
 import Sheet from '@app/components/Sheet'
 import * as Icon from 'lucide-react'
@@ -6,7 +7,7 @@ export default function AboutSheet({ ...present }: SheetProps) {
   return (
     <Sheet {...present}>
       <div className="grid gap-4">
-        <div className="font-bold">SABOTEN</div>
+        <Logo />
         <div className="grid justify-items-start gap-2 text-xs">
           <div className="text-xs">
             バグ報告、フィードバック、困ったことなどありましたら管理者のSNSまでお願いします。

@@ -7,6 +7,7 @@ import * as Icon from 'lucide-react'
 import usePresent from '@app/hooks/usePresent'
 import AboutSheet from '../Main/AboutSheet'
 import Clickable from '@app/components/Clickable'
+import Logo from '@app/components/Logo'
 
 interface Props {
   roomId: string | null
@@ -21,7 +22,7 @@ export default function Start({ roomId, onProceed }: Props) {
   return (
     <div className="grid gap-6 p-8">
       <div className="grid grid-cols-[1fr_auto]">
-        <div className="text-2xl font-bold text-primary">SABOTEN</div>
+        <Logo />
         <Clickable
           onClick={aboutSheet.open}
           className="grid w-8 items-center justify-items-center transition active:scale-90"
