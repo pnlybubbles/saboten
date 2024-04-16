@@ -166,8 +166,8 @@ function RecentRooms(props: { onEnter?: () => void }) {
   }
 
   return (
-    <div className="grid gap-2">
-      <div className="text-xs font-bold">最近の旅</div>
+    <div>
+      <div className="mb-4 text-xs font-bold">最近の旅</div>
       {userRooms.map(({ id, title }) => (
         <RecentRoomItem roomId={id} title={title} key={id} {...props}></RecentRoomItem>
       ))}
@@ -192,7 +192,7 @@ function RecentRoomItem({ roomId, title, onEnter }: { roomId: string; title: str
     <Clickable {...(onEnter && { onClick: onEnter })} div>
       <Link
         to={`/${roomId}`}
-        className="grid grid-flow-col items-center justify-between gap-1 rounded-lg bg-surface px-5 py-4 transition active:scale-95"
+        className="grid grid-flow-col items-center justify-between gap-1 py-2 transition active:scale-95"
       >
         <div className={clsx('text-sm', displayTitle === '' && 'text-zinc-400')}>
           {displayTitle === '' ? 'No title' : displayTitle}
