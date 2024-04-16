@@ -34,6 +34,7 @@ export default function Start({ roomId, onProceed }: Props) {
       <div>
         <div>シンプルな割り勘アプリ</div>
         <div>旅のお金を記録してかんたんに精算</div>
+        <div>URLを共有して友達と一緒に書き込めます</div>
       </div>
       {roomId !== null && (
         <div className="grid grid-cols-[auto_1fr] items-center gap-1 rounded-lg bg-secondary p-4 text-xs font-bold text-primary">
