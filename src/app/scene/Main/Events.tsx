@@ -104,7 +104,7 @@ function Item({ id, label, payments, members, roomId, createdAt }: Event & Props
             )}
           </div>
           <div>
-            <div className="font-bold">{label}</div>
+            <div className="text-sm font-bold">{label}</div>
             <div className="text-xs text-zinc-400">{formatDate(createdAt)}</div>
           </div>
         </div>

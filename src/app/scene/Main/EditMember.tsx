@@ -50,7 +50,7 @@ export default function EditMember({ roomId, ...sheet }: Props) {
             <li key={v.id} className="grid grid-flow-col grid-cols-[auto_1fr_auto] items-center gap-4">
               <Avatar mini name={getMemberName(v)}></Avatar>
               <div className="grid grid-flow-col items-center justify-start gap-2">
-                <div className="font-bold">{getMemberName(v)}</div>
+                <div className="text-sm font-bold">{getMemberName(v)}</div>
                 {v.user && <Badge>{v.user.id === user?.id ? '自分' : '参加済み'}</Badge>}
               </div>
               <Clickable

@@ -194,7 +194,7 @@ function RecentRoomItem({ roomId, title, onEnter }: { roomId: string; title: str
         to={`/${roomId}`}
         className="grid grid-flow-col items-center justify-between gap-1 rounded-lg bg-surface px-5 py-4 transition active:scale-95"
       >
-        <div className={clsx('font-bold', displayTitle === '' && 'text-zinc-400')}>
+        <div className={clsx('text-sm', displayTitle === '' && 'text-zinc-400')}>
           {displayTitle === '' ? 'No title' : displayTitle}
         </div>
         <div className="flex pl-2">

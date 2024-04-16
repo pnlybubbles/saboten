@@ -298,7 +298,7 @@ export default function EventSheet({ roomId, defaultValue, onSubmit, submitLabel
                             }}
                             className={clsx(
                               'box-content rounded-full border-2 p-[2px] transition-[margin,opacity,border-color] active:scale-90 disabled:opacity-30',
-                              'mx-1 w-10 opacity-100 first:ml-0 last:mr-0',
+                              'mx-1 w-9 opacity-100 first:ml-0 last:mr-0',
                               'border-zinc-900',
                             )}
                           >
@@ -324,9 +324,9 @@ export default function EventSheet({ roomId, defaultValue, onSubmit, submitLabel
                         className={clsx(
                           'box-content rounded-full border-2 border-transparent p-[2px] transition-[margin,opacity,border-color] active:scale-90 disabled:opacity-30',
                           paidByMemberEditMode || member.id === paidByMember
-                            ? 'w-10 opacity-100'
-                            : // width: 2.5rem + border: 2px * 2 + padding: 2px * 2
-                              'ml-[calc(-2.5rem-8px)] opacity-0',
+                            ? 'w-9 opacity-100'
+                            : // width: 2.25rem + border: 2px * 2 + padding: 2px * 2
+                              'ml-[calc(-2.25rem-8px)] opacity-0',
                           member.id === paidByMember && 'mx-1 border-zinc-900 first:ml-0 last:mr-0',
                         )}
                       >
