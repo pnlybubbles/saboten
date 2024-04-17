@@ -1,3 +1,14 @@
-export default function Logo() {
-  return <div className="my-2 w-min bg-zinc-950 px-4 text-[1em] font-bold leading-[1em] text-white">SABOTEN</div>
+import clsx from 'clsx'
+
+export default function Logo({ big }: { big?: boolean }) {
+  return (
+    <div
+      className={clsx(
+        'w-min bg-zinc-950 px-[1em] text-[1em] font-bold leading-[1em] text-white',
+        big ? 'my-3 origin-left scale-[1.5]' : 'my-2',
+      )}
+    >
+      SABOTEN
+    </div>
+  )
 }

@@ -22,7 +22,7 @@ export default function Start({ roomId, onProceed }: Props) {
   return (
     <div className="grid gap-6 p-8">
       <div className="grid grid-cols-[1fr_auto]">
-        <Logo />
+        <Logo big />
         <Clickable
           onClick={aboutSheet.open}
           className="grid w-8 items-center justify-items-center transition active:scale-90"
