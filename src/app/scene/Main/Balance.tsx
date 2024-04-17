@@ -18,7 +18,7 @@ interface Props {
 }
 
 export default function Balance({ roomId }: Props) {
-  const [, { getMemberName }] = useRoomMember(roomId)
+  const [members, { getMemberName }] = useRoomMember(roomId)
   const [rawEvents] = useEvents(roomId)
   const [, { displayCurrency, displayCurrencySum, availableCurrencyFor }] = useRoomCurrencyRate(roomId)
 
@@ -113,22 +113,25 @@ export default function Balance({ roomId }: Props) {
     {} as { [code: string]: { fraction: number; max: number; maxMemberId: string } },
   )
 
-  const balances = Object.entries(balanceByMemberId).map(([memberId, balanceByCurrency]) => {
-    const fractionConsidieredBalanceByCurrency = Object.fromEntries(
-      Object.entries(balanceByCurrency).map(([code, { paid, assets }]) => {
-        // 最大の支払額を持っているユーザーで端数の調整
-        // 例: 1000円 を 3人 で割り勘しているケースでは、
-        // 支払っている人が 334円 の端数込みが自分の消費、
-        // それ以外の2人が 333円 を建て替えてもらっている状態になる
-        const aggregated = assetsAggregatedByCalculatedBalance[code]
-        if (aggregated?.maxMemberId !== memberId) {
-          return [code, { paid, assets: Math.round(assets) }] as const
-        }
-        return [code, { paid, assets: Math.round(assets) - aggregated.fraction }] as const
-      }),
-    )
-    return [memberId, fractionConsidieredBalanceByCurrency] as const
-  })
+  const memberIds = members?.map((v) => v.id).filter(isNonNullable) ?? []
+  const balances = Object.entries(balanceByMemberId)
+    .map(([memberId, balanceByCurrency]) => {
+      const fractionConsideredBalanceByCurrency = Object.fromEntries(
+        Object.entries(balanceByCurrency).map(([code, { paid, assets }]) => {
+          // 最大の支払額を持っているユーザーで端数の調整
+          // 例: 1000円 を 3人 で割り勘しているケースでは、
+          // 支払っている人が 334円 の端数込みが自分の消費、
+          // それ以外の2人が 333円 を建て替えてもらっている状態になる
+          const aggregated = assetsAggregatedByCalculatedBalance[code]
+          if (aggregated?.maxMemberId !== memberId) {
+            return [code, { paid, assets: Math.round(assets) }] as const
+          }
+          return [code, { paid, assets: Math.round(assets) - aggregated.fraction }] as const
+        }),
+      )
+      return [memberId, fractionConsideredBalanceByCurrency] as const
+    })
+    .sort(([a], [b]) => memberIds.indexOf(a) - memberIds.indexOf(b))
 
   const [currencyRateSheetProps, setCurrencyRateSheetProps] = useState<{
     currency: string
