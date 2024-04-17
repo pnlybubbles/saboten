@@ -245,7 +245,7 @@ export default function Balance({ roomId }: Props) {
           )}
           {isPresentTip && (
             <Tips onClick={toggleTip} type={Icon.PiggyBank}>
-              <span className="font-bold">黒文字</span>は使った合計金額、
+              <span className="font-bold">黒文字</span>は支払った合計金額、
               <span className="font-bold text-lime-600">緑文字</span>
               は多く支払いすぎている金額、<span className="font-bold text-rose-500">赤文字</span>
               は誰かに建て替えてもらっている金額になります。
