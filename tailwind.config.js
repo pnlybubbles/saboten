@@ -10,6 +10,7 @@ export default {
         secondary: '#fbedeb',
         error: 'rgb(203 42 47)',
         surface: 'rgb(245 245 245 / 1)',
+        backdrop: 'rgb(251 251 250 / 1)',
       },
       spacing: {
         18: '4.5rem',

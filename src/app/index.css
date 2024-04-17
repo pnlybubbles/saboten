@@ -9,7 +9,7 @@
   }
 
   body {
-    background-color: rgb(251 251 250 / 1);
+    @apply bg-backdrop;
     font-family: Avenir, sans-serif;
     user-select: none;
   }

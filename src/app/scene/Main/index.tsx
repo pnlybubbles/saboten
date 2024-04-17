@@ -199,7 +199,7 @@ function RecentRoomItem({ roomId, title, onEnter }: { roomId: string; title: str
         </div>
         <div className="flex pl-2">
           {members?.map((member) => (
-            <Avatar className="ml-[-0.5rem] ring-2 ring-surface" mini="xs" name={member.name} key={member.id}></Avatar>
+            <Avatar className="ring-backdrop ml-[-0.5rem] ring-2" mini="xs" name={member.name} key={member.id}></Avatar>
           ))}
         </div>
       </Link>
