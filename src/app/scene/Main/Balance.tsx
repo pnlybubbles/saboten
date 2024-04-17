@@ -101,7 +101,7 @@ export default function Balance({ roomId }: Props) {
         acc[code]!.fraction += Math.round(assets)
         // 最大の支払金額を持っているユーザーをチェックする
         // 仕様として、端数は最大の支払金額を持っているユーザーにまとめることで
-        // 割り勘している各ユーザーごとの支払金額をできるだけ均等に保つことができてシンプルになる
+        // 割り勘している各ユーザーごとの支払金額をできるだけ均等に保つことができてシンプルになるケースが多い
         // ただし、最大の支払いをしている人は端数だけ損してしまうが、シンプルさを優先する
         if (acc[code]!.max < assets) {
           acc[code]!.max = assets
@@ -116,12 +116,15 @@ export default function Balance({ roomId }: Props) {
   const balances = Object.entries(balanceByMemberId).map(([memberId, balanceByCurrency]) => {
     const fractionConsidieredBalanceByCurrency = Object.fromEntries(
       Object.entries(balanceByCurrency).map(([code, { paid, assets }]) => {
+        // 最大の支払額を持っているユーザーで端数の調整
+        // 例: 1000円 を 3人 で割り勘しているケースでは、
+        // 支払っている人が 334円 の端数込みが自分の消費、
+        // それ以外の2人が 333円 を建て替えてもらっている状態になる
         const aggregated = assetsAggregatedByCalculatedBalance[code]
         if (aggregated?.maxMemberId !== memberId) {
-          return [code, { paid, assets }] as const
+          return [code, { paid, assets: Math.round(assets) }] as const
         }
-        // 端数の調整
-        return [code, { paid, assets: assets - aggregated.fraction }] as const
+        return [code, { paid, assets: Math.round(assets) - aggregated.fraction }] as const
       }),
     )
     return [memberId, fractionConsidieredBalanceByCurrency] as const
@@ -234,10 +237,12 @@ export default function Balance({ roomId }: Props) {
                     )}
                   ></CurrencyText>
                 </React.Fragment>,
+                // 通貨ごとの内訳 (表示用通貨に変換可能なもの)
                 ...Object.entries(balanceByCurrency)
                   .filter(([currency]) => availableCurrency.includes(currency))
                   .sort(([a], [b]) => (a === primaryCurrency ? -1 : b === primaryCurrency ? 1 : 0))
                   .map(([currency, balance], _, array) =>
+                    // 唯一使われている通貨が表示用通貨の場合は表示しない
                     array.length <= 1 && currency === primaryCurrency ? null : (
                       <React.Fragment key={`${memberId}_${currency}`}>
                         <div className="text-xs opacity-0">{getMemberName(memberId)}</div>
@@ -255,6 +260,7 @@ export default function Balance({ roomId }: Props) {
                       </React.Fragment>
                     ),
                   ),
+                // 通貨ごとの内訳 (変換不可能なもの)
                 ...Object.entries(balanceByCurrency)
                   .filter(([currency]) => !availableCurrency.includes(currency))
                   .sort(([a], [b]) => (a === primaryCurrency ? -1 : b === primaryCurrency ? 1 : 0))
