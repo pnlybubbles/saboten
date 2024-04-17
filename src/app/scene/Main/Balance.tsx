@@ -93,7 +93,39 @@ export default function Balance({ roomId }: Props) {
     {} as { [memberId: string]: { [code: string]: { paid: number; assets: number } } },
   )
 
-  const balances = Object.entries(balanceByMemberId)
+  const assetsAggregatedByCalculatedBalance = Object.entries(balanceByMemberId).reduce(
+    (acc, [memberId, v]) => {
+      for (const [code, { assets }] of Object.entries(v)) {
+        acc[code] ??= { fraction: 0, max: assets, maxMemberId: memberId }
+        // 各+-の値が表示される金額と一致するように四捨五入して、累計値を出すことで端数を計算する
+        acc[code]!.fraction += Math.round(assets)
+        // 最大の支払金額を持っているユーザーをチェックする
+        // 仕様として、端数は最大の支払金額を持っているユーザーにまとめることで
+        // 割り勘している各ユーザーごとの支払金額をできるだけ均等に保つことができてシンプルになる
+        // ただし、最大の支払いをしている人は端数だけ損してしまうが、シンプルさを優先する
+        if (acc[code]!.max < assets) {
+          acc[code]!.max = assets
+          acc[code]!.maxMemberId = memberId
+        }
+      }
+      return acc
+    },
+    {} as { [code: string]: { fraction: number; max: number; maxMemberId: string } },
+  )
+
+  const balances = Object.entries(balanceByMemberId).map(([memberId, balanceByCurrency]) => {
+    const fractionConsidieredBalanceByCurrency = Object.fromEntries(
+      Object.entries(balanceByCurrency).map(([code, { paid, assets }]) => {
+        const aggregated = assetsAggregatedByCalculatedBalance[code]
+        if (aggregated?.maxMemberId !== memberId) {
+          return [code, { paid, assets }] as const
+        }
+        // 端数の調整
+        return [code, { paid, assets: assets - aggregated.fraction }] as const
+      }),
+    )
+    return [memberId, fractionConsidieredBalanceByCurrency] as const
+  })
 
   const [currencyRateSheetProps, setCurrencyRateSheetProps] = useState<{
     currency: string
