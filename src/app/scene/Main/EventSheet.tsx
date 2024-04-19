@@ -18,6 +18,7 @@ import { useMemo } from 'react'
 import unreachable from '@app/util/unreachable'
 import * as Icon from 'lucide-react'
 import useRoomCurrencyRate from '@app/hooks/useRoomCurrencyRate'
+import Tab from '@app/components/Tab'
 
 type EventPayloadDefault =
   | (Omit<Extract<EventPayload, { type: 'payment' }>, 'paidByMemberId'> & { paidByMemberId: string | null })
@@ -216,26 +217,15 @@ export default function EventSheet({ roomId, defaultValue, onSubmit, submitLabel
   return (
     <Sheet {...sheet}>
       <div className="grid gap-4">
-        <div className="grid grid-flow-col gap-3 justify-self-start text-xs font-bold">
-          <Clickable
-            onClick={() => setTab('payment')}
-            className={clsx(
-              'w-20 rounded-xl bg-surface py-2 transition',
-              tab === 'payment' ? 'border-2 border-zinc-900 text-zinc-900' : 'text-zinc-400',
-            )}
-          >
-            支払い
-          </Clickable>
-          <Clickable
-            onClick={() => setTab('transfer')}
-            className={clsx(
-              'w-20 rounded-xl bg-surface py-2 transition',
-              tab === 'transfer' ? 'border-2 border-zinc-900 text-zinc-900' : 'text-zinc-400',
-            )}
-          >
-            送金
-          </Clickable>
-        </div>
+        <Tab
+          options={[
+            { label: '支払い', value: 'payment' },
+            { label: '送金', value: 'transfer' },
+          ]}
+          value={tab}
+          onChange={setTab}
+          className="w-20"
+        ></Tab>
         <TextField label="イベントの名前" name="label" value={label} onChange={dirty(setLabel)} />
         <div className="grid grid-cols-[auto_1fr] gap-3">
           <div
