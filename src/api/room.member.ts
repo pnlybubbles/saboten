@@ -76,6 +76,21 @@ const roomMember = new Hono<Env>()
     },
   )
   .post(
+    '/rename',
+    auth,
+    zValidator('json', z.object({ roomId: z.string().uuid(), memberId: z.string().uuid(), name: z.string() })),
+    async (c) => {
+      const db = drizzle(c.env.DB, { schema })
+      const { roomId, memberId, name } = c.req.valid('json')
+      await db.update(schema.roomMember).set({ name }).where(eq(schema.roomMember.id, memberId))
+      const members = await db.query.roomMember.findMany({
+        where: (member) => eq(member.roomId, roomId),
+        with: { user: { columns: { id: true, name: true } } },
+      })
+      return c.json(members.map(serializeCreatedAt))
+    },
+  )
+  .post(
     '/join',
     auth,
     zValidator('json', z.object({ roomId: z.string().uuid(), memberId: z.string().uuid().nullable() })),

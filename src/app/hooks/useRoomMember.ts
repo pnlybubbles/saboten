@@ -107,6 +107,40 @@ export default function useRoomMember(roomId: string | null) {
     [roomId, setState],
   )
 
+  const renameMember = useCallback(
+    (memberId: string, name: string) =>
+      setState(
+        (current) => {
+          if (current == null) {
+            return current
+          }
+          const index = current.findIndex((v) => v.id === memberId)
+          if (index === -1) {
+            // リネームしようと思ってたものが既に無い。なんもしない
+            return current
+          }
+          return [...current.slice(0, index), { ...current[index]!, name }, ...current.slice(index + 1)]
+        },
+        async () => {
+          if (roomId === null) {
+            // TODO: 部屋ができていないのにメンバーのリネームは不可能
+            // メンバー追加&部屋作成はキューイングされるので、roomId=nullのクロージャに入ってる間にキューに入った場合はエラーになる
+            throw new Error('No room to remove member')
+          }
+          const members = await ok(rpc.api.room.member.rename.$post({ json: { roomId: roomId, memberId, name } }))
+          const desc = roomLocalStorageDescriptor(roomId)
+          const current = desc.get()
+          if (current === null) {
+            // この時点でデータがキャッシュサれていないのは流石にエラー
+            throw new Error('No cache')
+          }
+          desc.set({ ...current, members })
+          return members.map((v) => ({ ...v, tmpId: genTmpId() }))
+        },
+      ),
+    [roomId, setState],
+  )
+
   const joinMember = useCallback(
     (user: User, memberId: string | null) =>
       setState(
@@ -155,9 +189,19 @@ export default function useRoomMember(roomId: string | null) {
     [getMember, user],
   )
 
-  return [state, { addMember, removeMember, getMemberName, getMember, joinMember }] as const
+  return [state, { addMember, removeMember, renameMember, getMemberName, getMember, joinMember }] as const
 }
 
 export const deriveMemberName = (user: User | null, member: Pick<Member, 'user' | 'name'>) => {
-  return (user && member.user?.id === user.id ? user.name : undefined) ?? member.user?.name ?? member.name
+  // 下の `validMemberName` と同じロジック
+  // メンバー名が存在するケースはそれを優先して使う
+  if (member.name !== null && member.name !== '') {
+    return member.name
+  }
+  // メンバー名がリセットした場合はユーザー指定のニックネームを使う
+  return (user && member.user?.id === user.id ? user.name : undefined) ?? member.user?.name ?? null
+}
+
+export const validMemberName = (member: Pick<Member, 'name'>) => {
+  return member.name !== null && member.name !== ''
 }

@@ -1,5 +1,4 @@
 import Avatar from '@app/components/Avatar'
-import Badge from '@app/components/Badge'
 import Button from '@app/components/Button'
 import Clickable from '@app/components/Clickable'
 import type { SheetProps } from '@app/components/Sheet'
@@ -11,6 +10,7 @@ import useUser from '@app/hooks/useUser'
 import genTmpId from '@app/util/genTmpId'
 import { useState } from 'react'
 import * as Icon from 'lucide-react'
+import RenameButton from './RenameButton'
 
 interface Props extends SheetProps {
   roomId: string | null
@@ -47,18 +47,24 @@ export default function EditMember({ roomId, ...sheet }: Props) {
         <div className="font-bold">メンバー管理</div>
         <ul className="grid gap-4">
           {displayableMembers.map((v) => (
-            <li key={v.id} className="grid grid-flow-col grid-cols-[auto_1fr_auto] items-center gap-4">
-              <Avatar mini name={getMemberName(v)}></Avatar>
-              <div className="grid grid-flow-col items-center justify-start gap-2">
-                <div className="text-sm font-bold">{getMemberName(v)}</div>
-                {v.user && <Badge>{v.user.id === user?.id ? '自分' : '参加済み'}</Badge>}
-              </div>
+            <li key={v.id} className="grid grid-flow-col grid-cols-[1fr_auto] items-center gap-4">
+              <RenameButton roomId={roomId} memberId={v.id}>
+                <div className="grid grid-flow-col justify-start gap-4">
+                  <Avatar mini name={getMemberName(v)}></Avatar>
+                  <div className="grid grid-flow-col items-center justify-start gap-2">
+                    <div className="text-sm font-bold">{getMemberName(v)}</div>
+                    {v.user && (
+                      <span className="text-xs text-zinc-400">{v.user.id === user?.id ? '自分' : '参加済み'}</span>
+                    )}
+                  </div>
+                </div>
+              </RenameButton>
               <Clickable
                 disabled={v.id === null}
                 onClick={() => handleRemove(v)}
                 className="grid size-8 items-center justify-items-center transition active:scale-90 disabled:opacity-30"
               >
-                <Icon.UserMinus size={20}></Icon.UserMinus>
+                {v.user && v.user.id === user?.id ? <Icon.LogOut size={20} /> : <Icon.UserMinus size={20} />}
               </Clickable>
             </li>
           ))}
