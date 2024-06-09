@@ -38,7 +38,7 @@ export default function Popover({ menu, align = 'left', className, icon, childre
     const target = ref.current
     if (!target) return
     const handler = (e: TouchEvent) => e.preventDefault()
-    target.addEventListener('touchmove', (e) => e, { passive: false })
+    target.addEventListener('touchmove', handler, { passive: false })
     return () => target.removeEventListener('touchmove', handler)
   }, [])
 
