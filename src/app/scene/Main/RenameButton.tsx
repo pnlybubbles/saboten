@@ -14,7 +14,11 @@ import { useState } from 'react'
 type Props = React.PropsWithChildren<{ roomId: string | null; memberId: string | null; className?: string }>
 
 export default function RenameButton({ memberId, roomId, ...rest }: Props & ContainerProps) {
-  if (roomId === null || memberId === null) {
+  if (roomId === null) {
+    return rest.children
+  }
+
+  if (memberId === null) {
     return <RenameIconContainer {...rest} disabled></RenameIconContainer>
   }
 
