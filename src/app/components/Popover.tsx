@@ -16,7 +16,7 @@ export default function Popover({ menu, align = 'left', className, icon, childre
   const { isPresent, onPresent, close, open } = usePresent()
 
   const longPressToOpen = useRef<ReturnType<typeof setTimeout> | undefined>()
-  const longPressState = useRef<boolean>(false)
+  const [longPressState, setLongPressState] = useState(false)
 
   const refs = useRef<React.RefObject<HTMLClickableElement>[]>(menu.map(() => createRef<HTMLClickableElement>()))
 
@@ -27,7 +27,7 @@ export default function Popover({ menu, align = 'left', className, icon, childre
 
   const pressToOpen = () => {
     open()
-    longPressState.current = true
+    setLongPressState(true)
   }
 
   const [highlighted, setHighlighted] = useState<number | null>(null)
@@ -47,6 +47,7 @@ export default function Popover({ menu, align = 'left', className, icon, childre
       <Button
         ref={ref}
         icon={icon}
+        className={clsx(longPressState && 'scale-90')}
         onClick={() => onPresent((v) => !v)}
         onTouchMove={(e) => {
           const touch = e.touches[0]
@@ -58,7 +59,7 @@ export default function Popover({ menu, align = 'left', className, icon, childre
           if (touch.pageY > bounding.bottom && touch.pageX > bounding.left && touch.pageX < bounding.right) {
             pressToOpen()
           }
-          if (!longPressState.current) return
+          if (!longPressState) return
           for (const ref of refs.current) {
             if (!ref.current) continue
             const menuBounding = ref.current.getBoundingClientRect()
@@ -74,9 +75,9 @@ export default function Popover({ menu, align = 'left', className, icon, childre
         }}
         onTouchEnd={() => {
           clearTimeout(longPressToOpen.current)
-          if (longPressState.current) {
-            longPressState.current = false
+          if (longPressState) {
             close()
+            setLongPressState(false)
             if (highlighted === null) return
             menu[highlighted]?.action()
             setHighlighted(null)
