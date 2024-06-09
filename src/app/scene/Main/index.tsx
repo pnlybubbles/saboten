@@ -85,7 +85,7 @@ export default function Main({ roomId }: Props) {
       >
         <div className={clsx('grid min-h-screen grid-rows-[auto_auto_1fr]', drawer.isPresent && 'pointer-events-none')}>
           <div className="sticky -top-36 z-[1] grid gap-4 overflow-hidden rounded-b-[44px] bg-white p-8 pb-6 shadow-float">
-            <div className="grid grid-cols-[1fr_auto_auto] justify-start gap-3">
+            <div className="grid grid-cols-[1fr_auto] justify-start gap-3">
               <Button
                 variant="primary"
                 onClick={(e) => {
@@ -105,12 +105,17 @@ export default function Main({ roomId }: Props) {
                   </div>
                 }
               ></Button>
-              <Button
-                className={clsx(roomId ? 'scale-100 opacity-100' : 'pointer-events-none scale-50 opacity-0')}
-                onClick={settingsSheet.open}
-                icon={<Icon.Settings size={20}></Icon.Settings>}
-              ></Button>
-              <Button onClick={editMemberSheet.open} icon={<Icon.Users size={20} />}></Button>
+              <div className="flex justify-end">
+                <Button onClick={editMemberSheet.open} icon={<Icon.Users size={20} />}></Button>
+                <Button
+                  className={clsx(
+                    'transition-[margin,opacity,transform]',
+                    roomId ? 'ml-3 scale-100 opacity-100' : 'pointer-events-none -ml-12 scale-50 opacity-0',
+                  )}
+                  onClick={settingsSheet.open}
+                  icon={<Icon.Settings size={20}></Icon.Settings>}
+                ></Button>
+              </div>
             </div>
             <div className="group">
               <TitleInput defaultValue={title} onChange={setTitle}></TitleInput>
