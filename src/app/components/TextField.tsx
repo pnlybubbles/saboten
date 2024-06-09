@@ -26,7 +26,7 @@ export default forwardRef<HTMLInputElement, Props>(function TextField(
         type="text"
         className={clsx(
           'peer w-full bg-transparent px-5 text-base text-zinc-900 outline-none',
-          label ? 'h-[2.75rem]' : 'h-full',
+          label ? 'h-11' : 'h-full',
         )}
         placeholder=" "
         disabled={disabled}

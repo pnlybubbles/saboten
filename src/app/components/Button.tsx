@@ -44,7 +44,7 @@ export default function Button({
       <div
         className={clsx(
           'grid items-center justify-items-center transition-opacity',
-          loading ? 'opacity-[0]' : 'opacity-[1]',
+          loading ? 'opacity-0' : 'opacity-100',
         )}
       >
         {icon ? (
@@ -63,7 +63,7 @@ export default function Button({
       <Spinner
         className={clsx(
           'pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transition-opacity',
-          loading ? 'opacity-[1]' : 'opacity-[0]',
+          loading ? 'opacity-100' : 'opacity-0',
         )}
       />
     </Clickable>

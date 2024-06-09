@@ -47,7 +47,7 @@ export default function Join({ roomId }: { roomId: string }) {
             onClick={() => member.id && setSelectedMember(member.id)}
             key={member.id ?? member.tmpId}
             className={clsx(
-              'm-[-0.5rem] grid grid-flow-col items-center justify-start gap-4 rounded-lg border-2 border-transparent px-3 py-2 text-left transition active:scale-95',
+              '-m-2 grid grid-flow-col items-center justify-start gap-4 rounded-lg border-2 border-transparent px-3 py-2 text-left transition active:scale-95',
               selectedMember === member.id && 'border-zinc-900',
             )}
           >
@@ -61,7 +61,7 @@ export default function Join({ roomId }: { roomId: string }) {
         <Clickable
           onClick={() => setSelectedMember(null)}
           className={clsx(
-            'm-[-0.5rem] grid grid-cols-[auto_1fr] items-center gap-4 rounded-lg border-2 border-transparent px-3 py-2 text-left transition active:scale-95',
+            '-m-2 grid grid-cols-[auto_1fr] items-center gap-4 rounded-lg border-2 border-transparent px-3 py-2 text-left transition active:scale-95',
             selectedMember === null && 'border-zinc-900',
           )}
         >

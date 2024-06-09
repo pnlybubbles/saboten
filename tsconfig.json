@@ -13,8 +13,8 @@
     "jsx": "react-jsx",
     "baseUrl": ".",
     "paths": {
-      "@*": ["./src/*"],
-    },
+      "@*": ["./src/*"]
+    }
   },
   "include": [],
   "references": [
@@ -22,6 +22,6 @@
     { "path": "./src/api" },
     { "path": "./src/app" },
     { "path": "./src/db" },
-    { "path": "./src/util" },
-  ],
+    { "path": "./src/util" }
+  ]
 }

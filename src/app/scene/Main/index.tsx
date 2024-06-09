@@ -84,7 +84,7 @@ export default function Main({ roomId }: Props) {
         div
       >
         <div className={clsx('grid min-h-screen grid-rows-[auto_auto_1fr]', drawer.isPresent && 'pointer-events-none')}>
-          <div className="sticky top-[-9rem] z-[1] grid gap-4 overflow-hidden rounded-b-[44px] bg-white p-8 pb-6 shadow-float">
+          <div className="sticky -top-36 z-[1] grid gap-4 overflow-hidden rounded-b-[44px] bg-white p-8 pb-6 shadow-float">
             <div className="grid grid-cols-[1fr_auto_auto] justify-start gap-3">
               <Button
                 variant="primary"
@@ -117,7 +117,7 @@ export default function Main({ roomId }: Props) {
               {(title === undefined || title.length === 0) && (
                 <Tips
                   type={Icon.PlaneTakeoff}
-                  className="mt-[-0.5rem] h-6 text-zinc-400 transition-[opacity,margin,height] group-focus-within:mt-0 group-focus-within:h-0 group-focus-within:opacity-0"
+                  className="-mt-2 h-6 text-zinc-400 transition-[opacity,margin,height] group-focus-within:mt-0 group-focus-within:h-0 group-focus-within:opacity-0"
                 >
                   タイトルを入力して旅をはじめよう！
                 </Tips>
@@ -199,7 +199,7 @@ function RecentRoomItem({ roomId, title, onEnter }: { roomId: string; title: str
         </div>
         <div className="flex pl-2">
           {members?.map((member) => (
-            <Avatar className="ring-backdrop ml-[-0.5rem] ring-2" mini="xs" name={member.name} key={member.id}></Avatar>
+            <Avatar className="-ml-2 ring-2 ring-backdrop" mini="xs" name={member.name} key={member.id}></Avatar>
           ))}
         </div>
       </Link>

@@ -230,7 +230,7 @@ export default function EventSheet({ roomId, defaultValue, onSubmit, submitLabel
         <div className="grid grid-cols-[auto_1fr] gap-3">
           <div
             className={clsx(
-              'grid h-18 grid-flow-row content-between rounded-xl bg-surface px-5 pb-[0.625rem] pt-[0.85rem] transition',
+              'grid h-18 grid-flow-row content-between rounded-xl bg-surface px-5 pb-2.5 pt-[0.85rem] transition',
               editCurrencySheet.isPresent && 'shadow-focus',
             )}
             onClick={editCurrencySheet.open}
