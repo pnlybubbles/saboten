@@ -1,18 +1,24 @@
 import isSP from '@app/util/isSP'
 import noop from '@app/util/noop'
 import type React from 'react'
+import { forwardRef } from 'react'
 
 export type Props = Pick<React.ComponentPropsWithoutRef<'button'>, 'disabled' | 'className' | 'children'> & {
   onClick?: React.EventHandler<React.SyntheticEvent<unknown>>
   div?: boolean
+  onTouchStart?: React.TouchEventHandler<HTMLElement>
+  onTouchEnd?: React.TouchEventHandler<HTMLElement>
+  onTouchMove?: React.TouchEventHandler<HTMLElement>
 }
 
-export default function Clickable({ onClick, disabled, div, ...rest }: Props) {
+export type HTMLClickableElement = HTMLButtonElement & HTMLDivElement
+
+export default forwardRef<HTMLClickableElement, Props>(function Clickable({ onClick, disabled, div, ...rest }, ref) {
   const props = {
+    ...(isSP && { onTouchEnd: noop }),
     ...rest,
     disabled,
     ...(!disabled && { onClick }),
-    ...(isSP && { onTouchEnd: noop }),
   }
-  return div ? <div {...props}></div> : <button {...props}></button>
-}
+  return div ? <div {...props} ref={ref}></div> : <button {...props} ref={ref}></button>
+})

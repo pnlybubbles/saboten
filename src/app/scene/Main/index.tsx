@@ -22,6 +22,7 @@ import Clickable from '@app/components/Clickable'
 import SettingsSheet from './SettingsSheet'
 import * as Icon from 'lucide-react'
 import AboutSheet from './AboutSheet'
+import Popover from '@app/components/Popover'
 
 interface Props {
   roomId: string | null
@@ -49,6 +50,16 @@ export default function Main({ roomId }: Props) {
       document.body.style.overflow = ''
     }
   }, [drawer.isPresent])
+
+  const handleShare = async () => {
+    const url = location.href
+    const text = `旅のお金を記録してかんたんに精算 - SABOTEN`
+    if (typeof navigator.share !== 'undefined') {
+      await navigator.share({ url, text })
+    } else {
+      await navigator.clipboard.writeText(url)
+    }
+  }
 
   return (
     <div className={clsx('relative z-0 w-full', drawer.isPresent && 'overflow-hidden')}>
@@ -107,14 +118,18 @@ export default function Main({ roomId }: Props) {
               ></Button>
               <div className="flex justify-end">
                 <Button onClick={editMemberSheet.open} icon={<Icon.Users size={20} />}></Button>
-                <Button
+                <Popover
                   className={clsx(
                     'transition-[margin,opacity,transform]',
                     roomId ? 'ml-3 scale-100 opacity-100' : 'pointer-events-none -ml-12 scale-50 opacity-0',
                   )}
-                  onClick={settingsSheet.open}
-                  icon={<Icon.Settings size={20}></Icon.Settings>}
-                ></Button>
+                  icon={<Icon.Donut size={20} />}
+                  align="right"
+                  menu={[
+                    { label: '招待リンク', icon: <Icon.Share size={16} />, action: () => void handleShare() },
+                    { label: '設定', icon: <Icon.Settings size={16} />, action: settingsSheet.open },
+                  ]}
+                />
               </div>
             </div>
             <div className="group">

@@ -1,7 +1,8 @@
 import clsx from 'clsx'
 import Spinner from './Spinner'
-import type { Props as ClickableProps } from './Clickable'
+import type { Props as ClickableProps, HTMLClickableElement } from './Clickable'
 import Clickable from './Clickable'
+import { forwardRef } from 'react'
 
 export type Variant = 'default' | 'primary' | 'secondary' | 'danger'
 
@@ -15,20 +16,15 @@ interface OwnProps {
 
 type Props = ClickableProps & OwnProps
 
-export default function Button({
-  variant = 'default',
-  mini = false,
-  className,
-  disabled,
-  icon,
-  loading,
-  children,
-  ...props
-}: Props) {
+export default forwardRef<HTMLClickableElement, Props>(function Button(
+  { variant = 'default', mini = false, className, disabled, icon, loading, children, ...props }: Props,
+  ref,
+) {
   const style = toBackground(variant)
 
   return (
     <Clickable
+      ref={ref}
       className={clsx(
         className,
         'relative select-none rounded-full font-bold transition',
@@ -68,7 +64,7 @@ export default function Button({
       />
     </Clickable>
   )
-}
+})
 
 const toBackground = (variant: Variant) =>
   clsx(
