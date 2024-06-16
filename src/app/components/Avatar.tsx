@@ -44,7 +44,7 @@ export default function Avatar({ name, className, mini, noNegative }: Props) {
           {head}
         </div>
       )}
-      <span className="absolute">{head}</span>
+      <span className={clsx('absolute', emoji && 'transform-gpu')}>{head}</span>
     </div>
   )
 }
