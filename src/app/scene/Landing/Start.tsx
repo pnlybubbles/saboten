@@ -20,7 +20,7 @@ export default function Start({ roomId, onProceed }: Props) {
   const aboutSheet = usePresent()
 
   return (
-    <div className="grid gap-6 p-8">
+    <div className="mx-auto grid max-w-screen-sm gap-6 p-8">
       <div className="grid grid-cols-[1fr_auto]">
         <Logo big />
         <Clickable
