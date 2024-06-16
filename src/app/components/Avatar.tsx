@@ -1,3 +1,4 @@
+import isEmoji from '@app/util/isEmoji'
 import stringToHash from '@app/util/stringToHash'
 import clsx from 'clsx'
 import { useMemo } from 'react'
@@ -22,17 +23,24 @@ export default function Avatar({ name, className, mini, noNegative }: Props) {
     return Array.from(segmenter.segment(name))[0]?.segment ?? UNKNOWN_NAME
   }, [name])
 
+  const emoji = isEmoji(head)
+
   return (
     <div
       className={clsx(
-        'grid items-center justify-items-center rounded-full text-lg font-bold',
+        'relative grid items-center justify-items-center overflow-hidden rounded-full text-lg font-bold [container-type:size]',
         mini ? (mini === 'xs' ? 'size-7 text-xs' : 'size-9 text-sm') : 'size-12 text-sm',
-        hashed !== null ? COLORS[hashed % COLORS.length] : 'bg-zinc-400 text-zinc-100',
+        emoji ? 'bg-white' : hashed !== null ? COLORS[hashed % COLORS.length] : 'bg-zinc-400 text-zinc-100',
         !noNegative && '-mx-1',
         className,
       )}
     >
-      {head}
+      {emoji && (
+        <div className={clsx('absolute scale-[10] blur-[10cqh] brightness-125 saturate-50 [font-size:100cqh]')}>
+          {head}
+        </div>
+      )}
+      <span className="absolute">{head}</span>
     </div>
   )
 }
