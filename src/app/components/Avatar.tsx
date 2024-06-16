@@ -36,7 +36,7 @@ export default function Avatar({ name, className, mini, noNegative }: Props) {
       )}
     >
       {emoji && (
-        <div className={clsx('absolute scale-[10] blur-[10cqh] brightness-125 saturate-50 [font-size:100cqh]')}>
+        <div className={clsx('absolute scale-[14] blur-[10cqh] brightness-150 saturate-50 [font-size:100cqh]')}>
           {head}
         </div>
       )}
