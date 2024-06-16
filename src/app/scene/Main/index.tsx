@@ -65,7 +65,7 @@ export default function Main({ roomId }: Props) {
     <div className={clsx('relative z-0 w-full', drawer.isPresent && 'overflow-hidden')}>
       <div
         className={clsx(
-          'fixed right-full top-0 h-full w-3/4 overflow-y-auto transition duration-300',
+          'fixed right-full top-0 h-full w-3/4 overflow-y-auto transition duration-300 md:left-[calc(max((100%-600px-640px)/2,1rem))] md:right-auto md:w-[300px] md:translate-x-0',
           drawer.isPresent && 'translate-x-full',
         )}
       >
@@ -90,14 +90,23 @@ export default function Main({ roomId }: Props) {
         </div>
       </div>
       <Clickable
-        className={clsx('w-full transition duration-300', drawer.isPresent && 'translate-x-3/4')}
+        className={clsx(
+          'w-full transition duration-300 md:ml-[calc(max((100%-600px-640px)/2,1rem)+300px)] md:w-[calc(min(100%-300px-2rem,640px))] md:translate-x-0',
+          drawer.isPresent && 'translate-x-3/4',
+        )}
         onClick={drawer.close}
         div
       >
-        <div className={clsx('grid min-h-screen grid-rows-[auto_auto_1fr]', drawer.isPresent && 'pointer-events-none')}>
+        <div
+          className={clsx(
+            'grid min-h-screen grid-rows-[auto_auto_1fr] md:pointer-events-auto',
+            drawer.isPresent && 'pointer-events-none',
+          )}
+        >
           <div className="sticky -top-36 z-[1] grid gap-4 overflow-hidden rounded-b-[44px] bg-white p-8 pb-6 shadow-float">
             <div className="grid grid-cols-[1fr_auto] justify-start gap-3">
               <Button
+                className="transition md:pointer-events-none md:scale-50 md:opacity-0"
                 variant="primary"
                 onClick={(e) => {
                   e.stopPropagation()
