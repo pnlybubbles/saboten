@@ -267,7 +267,7 @@ export default function EventSheet({ roomId, defaultValue, onSubmit, submitLabel
           <TextField
             label={tab === 'payment' ? '支払った金額' : '送金した金額'}
             name="amount"
-            type="number"
+            type="float"
             inputMode="decimal"
             value={amount}
             onChange={dirty(setAmount)}

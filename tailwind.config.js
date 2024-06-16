@@ -20,6 +20,7 @@ export default {
         emboss: '0 0 0 1px rgb(0 0 0 / .08), 0 2px 2px rgba(0 13 32 / .04)',
         border: '0 0 0 1px rgb(0 0 0 / .08)',
         focus: 'inset 0 0 0 2px rgb(24 24 27)',
+        invalid: 'inset 0 0 0 2px rgb(203 42 47), 0 0 var(--shadow-spread, 20px) -6px rgba(203 42 47 / .8)',
       },
     },
   },

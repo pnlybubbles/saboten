@@ -18,3 +18,28 @@
     outline: none;
   }
 }
+
+@property --shadow-spread {
+  syntax: '<length>';
+  initial-value: 0;
+  inherits: false;
+}
+
+@keyframes shadow-spread {
+  0% {
+    --shadow-spread: 0;
+  }
+
+  1% {
+    --shadow-spread: 24px;
+  }
+
+  100% {
+    --shadow-spread: 0;
+  }
+}
+
+.shadow-spread {
+  animation: shadow-spread 2s;
+  animation-timing-function: cubic-bezier(0, 0.3, 0, 0);
+}
