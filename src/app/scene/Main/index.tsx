@@ -164,7 +164,9 @@ export default function Main({ roomId }: Props) {
             onSubmit={addEvent}
             submitLabel="追加"
           ></EventSheet>
-          <div className="p-8">{roomId === null ? <RecentRooms></RecentRooms> : <Events roomId={roomId}></Events>}</div>
+          <div className="p-8">
+            {roomId === null ? <RecentRooms className="md:hidden" /> : <Events roomId={roomId}></Events>}
+          </div>
           <div className={'pointer-events-none sticky bottom-0 left-0 w-full self-end'}>
             {noEvent && <div className="h-12 w-full bg-gradient-to-t from-zinc-50"></div>}
             <div className={clsx('grid justify-items-center gap-2 pb-8 pt-2', noEvent && 'bg-zinc-50')}>
@@ -187,7 +189,7 @@ export default function Main({ roomId }: Props) {
   )
 }
 
-function RecentRooms(props: { onEnter?: () => void }) {
+function RecentRooms({ className, ...props }: { onEnter?: () => void; className?: string }) {
   const [userRooms] = useUserRooms()
 
   if (userRooms === null || userRooms.length === 0) {
@@ -195,7 +197,7 @@ function RecentRooms(props: { onEnter?: () => void }) {
   }
 
   return (
-    <div>
+    <div className={className}>
       <div className="mb-4 text-xs font-bold">最近の旅</div>
       {userRooms.map(({ id, title }) => (
         <RecentRoomItem roomId={id} title={title} key={id} {...props}></RecentRoomItem>
