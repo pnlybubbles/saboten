@@ -9,8 +9,18 @@ interface Props {
   noNegative?: boolean
 }
 
+const UNKNOWN_NAME = '?'
+
 export default function Avatar({ name, className, mini, noNegative }: Props) {
   const hashed = useMemo(() => (name ? stringToHash(name) : null), [name])
+
+  const head = useMemo(() => {
+    if (name === null) return UNKNOWN_NAME
+    // 文字列を書記素単位で分割して最初の1つを取り出す
+    // 例: "あいうえお" -> "あ", "🌵🍎" -> "🌵", "🏴󠁧󠁢󠁥󠁮󠁧󠁿🇯🇵" -> "🏴󠁧󠁢󠁥󠁮󠁧󠁿"
+    const segmenter = new Intl.Segmenter('ja', { granularity: 'grapheme' })
+    return Array.from(segmenter.segment(name))[0]?.segment ?? UNKNOWN_NAME
+  }, [name])
 
   return (
     <div
@@ -22,7 +32,7 @@ export default function Avatar({ name, className, mini, noNegative }: Props) {
         className,
       )}
     >
-      {name ? name[0] : '?'}
+      {head}
     </div>
   )
 }
