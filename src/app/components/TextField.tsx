@@ -29,9 +29,10 @@ export default forwardRef<HTMLInputElement, Props>(function TextField(
             .trim()
             // コンマの削除
             .replace(/,/g, '')
-            // 先頭の0を削除, 小数点以下の末尾の0を削除
-            // 0.1 のゼロは残す, 最後の小数点 1. は残す
-            .replace(/^0+(?!\.)|(?<=\..*?)0+$/g, '')
+            // 先頭の0を削除。 0.1 のゼロは残す
+            .replace(/^0+(?!\.)/g, '')
+            // 小数点以下の末尾の0を削除。最後の小数点 1. は残す
+            .replace(/(\.\d*?)0+$/g, '$1')
         )
       }
       return v
