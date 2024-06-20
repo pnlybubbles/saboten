@@ -103,7 +103,7 @@ export default function Main({ roomId }: Props) {
             drawer.isPresent && 'pointer-events-none',
           )}
         >
-          <div className="sticky -top-36 z-[1] grid gap-4 overflow-hidden rounded-b-[44px] bg-white p-8 pb-6 shadow-float">
+          <div className="shadow-float-effect sticky -top-36 z-[1] grid gap-4 rounded-b-[44px] bg-white p-8 pb-6">
             <div className="grid grid-cols-[1fr_auto] justify-start gap-3">
               <Button
                 className="transition md:pointer-events-none md:scale-50 md:opacity-0"

@@ -29,7 +29,17 @@ export default forwardRef<HTMLClickableElement, Props>(function Button(
         className,
         'relative select-none rounded-full font-bold transition',
         mini ? 'h-7 text-xs' : 'h-12 text-base',
-        icon ? (children == null ? 'w-12 p-0' : 'w-full pl-5 pr-6') : 'w-full px-6',
+        icon
+          ? children == null
+            ? mini
+              ? 'w-7 p-0'
+              : 'w-12 p-0'
+            : mini
+              ? 'w-full pl-3 pr-4'
+              : 'w-full pl-5 pr-6'
+          : mini
+            ? 'px-4'
+            : 'w-full px-6',
         loading ? 'cursor-not-allowed' : 'disabled:cursor-not-allowed disabled:opacity-30',
         !loading && !disabled && (icon && children == null ? 'active:scale-90' : 'active:scale-95'),
         style,
