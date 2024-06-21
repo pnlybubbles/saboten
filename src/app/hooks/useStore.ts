@@ -1,4 +1,5 @@
 import log from '@app/util/log'
+import noop from '@app/util/noop'
 import { useCallback, useSyncExternalStore } from 'react'
 
 class Store<T> {
@@ -44,6 +45,7 @@ class Store<T> {
     const next =
       typeof mutation === 'function' ? (mutation as (current: T | undefined) => T | undefined)(this.cache) : mutation
     if (next === undefined) {
+      // mutation が関数のケースではcurrentによっては値をセットしないケースもあるので、undefinedの場合は何もしない
       return Promise.resolve()
     }
     this.updateCache(next)
@@ -86,7 +88,12 @@ class Store<T> {
 }
 
 export function createStore<T, Args extends unknown[] = []>(
-  cacheKey: (...args: Args) => string,
+  /**
+   * NOTE: nullの場合はキャッシュしない
+   * TODO: キャッシュキーがないケースを想定する必要はなさそう
+   * そもそも状態が更新できないので意味が薄いので、キーなしでアクションを実行するのはやめたい
+   */
+  cacheKey: (...args: Args) => string | null,
   /**
    * NOTE: undefinedはキャッシュがない状態を意味するのでrefetchが行われて無限ループしてしまう
    */
@@ -106,13 +113,17 @@ export function createStore<T, Args extends unknown[] = []>(
   }
 }
 
-export default function useStore<T, Args extends unknown[]>(
-  store: ReturnType<typeof createStore<T, Args>>,
-  ...args: Args
-) {
+function retrieveStoreRecord<T, Args extends unknown[]>(store: ReturnType<typeof createStore<T, Args>>, ...args: Args) {
   const cacheKey = store.cacheKey(...args)
+
+  // キャッシュキーがnullの場合はキャッシュしない
+  if (cacheKey === null) {
+    return null
+  }
+
   const cachedRecord = store.cache.get(cacheKey)
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+
+  // キャッシュヒットすれば使う。なければ新しく作る
   const record =
     cachedRecord ??
     new Store(
@@ -121,16 +132,32 @@ export default function useStore<T, Args extends unknown[]>(
       (value, label) => log('Store', `${label} (${cacheKey.slice(0, 10)})`, value),
     )
 
+  // キャッシュヒットしなかった場合はキャッシュに入れる
   if (cachedRecord === undefined) {
     store.cache.set(cacheKey, record)
   }
 
+  return record
+}
+
+export default function useStore<T, Args extends unknown[]>(
+  ...parameters: Parameters<typeof retrieveStoreRecord<T, Args>>
+) {
+  const record = retrieveStoreRecord(...parameters)
+
   const state = useSyncExternalStore(
-    useCallback((cb) => record.subscribe(cb), [record]),
-    () => record.get(),
+    // キャッシュキーがない場合はデータストアの購読をしない
+    useCallback((cb) => record?.subscribe(cb) ?? noop, [record]),
+    () => record?.get(),
   )
 
-  const setState = useCallback((...args: Parameters<typeof record.set>) => record.set(...args), [record])
+  const setState = useCallback(
+    // キャッシュキーがない場合はデータをステートの更新をせずactionだけを走らせる
+    // TODO: そもそもキャッシュキーがない場合にローカルでの状態更新を行うのは難しい。初期化処理すら行われていなくてキャッシュキーが確定していないケースでは描画を遅延するべき
+    (...args: Parameters<NonNullable<typeof record>['set']>) =>
+      record?.set(...args) ?? args[1]?.().then(noop) ?? Promise.resolve(),
+    [record],
+  )
 
   return [state, setState] as const
 }

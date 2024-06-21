@@ -12,7 +12,7 @@ import ok from '@app/util/ok'
 const transform = (room: Room) => room.currencyRate.map((v) => ({ ...v, createdAt: parseISO(v.createdAt) }))
 
 const roomCurrencyRateStore = createStore(
-  (roomId: string | null) => ROOM_LOCAL_STORAGE_KEY(roomId ?? 'tmp'),
+  (roomId: string | null) => (roomId ? ROOM_LOCAL_STORAGE_KEY(roomId) : null),
   (roomId: string | null) => {
     if (roomId === null) {
       return Promise.resolve([])

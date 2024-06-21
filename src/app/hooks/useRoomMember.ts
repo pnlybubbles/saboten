@@ -13,7 +13,7 @@ import ok from '@app/util/ok'
 const transform = (room: Room) => room.members.map((v) => ({ ...v, id: v.id as string | null, tmpId: genTmpId() }))
 
 const roomMemberStore = createStore(
-  (roomId: string | null) => ROOM_LOCAL_STORAGE_KEY(roomId ?? 'tmp'),
+  (roomId: string | null) => (roomId ? ROOM_LOCAL_STORAGE_KEY(roomId) : null),
   (roomId: string | null) => {
     if (roomId === null) {
       return Promise.resolve(null)

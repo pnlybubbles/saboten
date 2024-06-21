@@ -10,7 +10,7 @@ import ok from '@app/util/ok'
 const transform = (room: Room) => room.title
 
 const roomTitleStore = createStore(
-  (roomId: string | null) => ROOM_LOCAL_STORAGE_KEY(roomId ?? 'tmp'),
+  (roomId: string | null) => (roomId ? ROOM_LOCAL_STORAGE_KEY(roomId) : null),
   (roomId: string | null) => {
     if (roomId === null) {
       return Promise.resolve('')
