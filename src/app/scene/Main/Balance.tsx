@@ -197,7 +197,7 @@ export default function Balance({ roomId }: Props) {
               className="text-3xl font-bold"
               {...displayCurrencySum(rateConvertibleTotalCurrencyValue, primaryCurrency)}
             ></CurrencyText>
-            {rateMissingTotalCurrencyValue.length > 0 && <span className="ml-1 mr-2 text-3xl font-bold">+?</span>}
+            {rateMissingTotalCurrencyValue.length > 0 && <span className="ml-1 mr-2 text-3xl font-bold">+</span>}
             <span className="mt-1 inline-block">
               {rateMissingTotalCurrencyValue.map(({ currency, amount }) => (
                 <CurrencyText
