@@ -309,7 +309,7 @@ export default function Balance({ roomId }: Props) {
                     .sort(([a], [b]) => (a === primaryCurrency ? -1 : b === primaryCurrency ? 1 : 0))
                     .map(([currency, balance]) => (
                       <React.Fragment key={`${memberId}_${currency}`}>
-                        <div className="text-sm font-bold">{getMemberName(memberId)}</div>
+                        <div className="text-sm font-bold opacity-0">{getMemberName(memberId)}</div>
                         <CurrencyText
                           className="text-right"
                           {...displayCurrency({ amount: balance.paid, currency })}
