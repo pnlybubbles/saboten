@@ -2,18 +2,18 @@ import useDirty from '@app/hooks/useDirty'
 import { useCallback, useRef, useState } from 'react'
 
 export default function TitleInput({
-  defaultValue,
+  defaultValue = '',
   onChange,
 }: {
   defaultValue: string | undefined
   onChange: (title: string) => void
 }) {
   const ref = useRef<HTMLInputElement>(null)
-  const [title, setTitle] = useState(defaultValue ?? '')
+  const [title, setTitle] = useState(defaultValue)
 
   const { setDirty, clearDirty } = useDirty(
     useCallback(() => {
-      setTitle(defaultValue ?? '')
+      setTitle(defaultValue)
     }, [defaultValue]),
   )
 
