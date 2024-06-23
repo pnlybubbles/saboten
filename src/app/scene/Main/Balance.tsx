@@ -2,7 +2,7 @@ import Button from '@app/components/Button'
 import useEvents from '@app/hooks/useEvents'
 import useRoomCurrencyRate from '@app/hooks/useRoomCurrencyRate'
 import useRoomMember from '@app/hooks/useRoomMember'
-import React, { useReducer, useRef, useState } from 'react'
+import React, { useMemo, useReducer, useRef, useState } from 'react'
 import CurrencyRateSheet from './CurrencyRateSheet'
 import usePresent from '@app/hooks/usePresent'
 import CurrencyText from '@app/components/CurrencyText'
@@ -24,115 +24,150 @@ export default function Balance({ roomId }: Props) {
   const [, { displayCurrency, displayCurrencySum, availableCurrencyFor }] = useRoomCurrencyRate(roomId)
 
   // 支払い者が離脱している場合は累計の計算から除外する
-  const events =
-    rawEvents?.map((v) => ({
-      ...v,
-      payments: v.payments
-        .map((payment) =>
-          payment.paidByMemberId !== null ? { ...payment, paidByMemberId: payment.paidByMemberId } : null,
-        )
-        .filter(isNonNullable),
-    })) ?? []
+  const events = useMemo(
+    () =>
+      rawEvents?.map((v) => ({
+        ...v,
+        payments: v.payments
+          .map((payment) =>
+            payment.paidByMemberId !== null ? { ...payment, paidByMemberId: payment.paidByMemberId } : null,
+          )
+          .filter(isNonNullable),
+      })) ?? [],
+    [rawEvents],
+  )
 
-  const totalByCurrency = events.reduce(
-    (acc, v) => {
-      for (const payment of v.payments) {
-        acc[payment.currency] ??= 0
-        acc[payment.currency] += payment.amount
-      }
-      return acc
-    },
-    {} as { [code: string]: number },
+  const totalByCurrency = useMemo(
+    () =>
+      events.reduce(
+        (acc, v) => {
+          for (const payment of v.payments) {
+            acc[payment.currency] ??= 0
+            acc[payment.currency] += payment.amount
+          }
+          return acc
+        },
+        {} as { [code: string]: number },
+      ),
+    [events],
   )
 
   const primaryCurrency =
     (totalByCurrency['JPY'] === undefined || totalByCurrency['JPY'] === 0 ? Object.keys(totalByCurrency)[0] : null) ??
     'JPY'
 
-  const totalCurrencyValue = Object.entries(totalByCurrency).map(([currency, amount]) => ({ currency, amount }))
-
-  const availableCurrency = availableCurrencyFor(primaryCurrency)
-
-  const rateMissingTotalCurrencyValue = totalCurrencyValue.filter(
-    ({ currency }) => !availableCurrency.includes(currency),
+  const totalCurrencyValue = useMemo(
+    () => Object.entries(totalByCurrency).map(([currency, amount]) => ({ currency, amount })),
+    [totalByCurrency],
   )
 
-  const rateConvertibleTotalCurrencyValue = Object.entries(totalByCurrency)
-    .map(([currency, amount]) => ({ currency, amount }))
-    .filter(({ currency }) => availableCurrency.includes(currency))
-
-  const balanceByMemberId = (events ?? []).reduce(
-    (acc, v) => {
-      const sumByCurrency: { [code: string]: number } = {}
-      for (const { paidByMemberId, currency, amount } of v.payments) {
-        acc[paidByMemberId] ??= {}
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        acc[paidByMemberId]![currency] ??= { paid: 0, assets: 0 }
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        acc[paidByMemberId]![currency]!.paid += amount
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        acc[paidByMemberId]![currency]!.assets += amount
-
-        sumByCurrency[currency] ??= 0
-        sumByCurrency[currency] += amount
-      }
-
-      for (const [code, sum] of Object.entries(sumByCurrency)) {
-        const div = sum / v.members.length
-
-        for (const { memberId } of v.members) {
-          acc[memberId] ??= {}
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-          acc[memberId]![code] ??= { paid: 0, assets: 0 }
-          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-          acc[memberId]![code]!.assets -= div
-        }
-      }
-
-      return acc
-    },
-    {} as { [memberId: string]: { [code: string]: { paid: number; assets: number } } },
+  const availableCurrency = useMemo(
+    () => availableCurrencyFor(primaryCurrency),
+    [availableCurrencyFor, primaryCurrency],
   )
 
-  const assetsAggregatedByCalculatedBalance = Object.entries(balanceByMemberId).reduce(
-    (acc, [memberId, v]) => {
-      for (const [code, { assets }] of Object.entries(v)) {
-        acc[code] ??= { fraction: 0, max: assets, maxMemberId: memberId }
-        // 各+-の値が表示される金額と一致するように四捨五入して、累計値を出すことで端数を計算する
-        acc[code]!.fraction += Math.round(assets)
-        // 最大の支払金額を持っているユーザーをチェックする
-        // 仕様として、端数は最大の支払金額を持っているユーザーにまとめることで
-        // 割り勘している各ユーザーごとの支払金額をできるだけ均等に保つことができてシンプルになるケースが多い
-        // ただし、最大の支払いをしている人は端数だけ損してしまうが、シンプルさを優先する
-        if (acc[code]!.max < assets) {
-          acc[code]!.max = assets
-          acc[code]!.maxMemberId = memberId
-        }
-      }
-      return acc
-    },
-    {} as { [code: string]: { fraction: number; max: number; maxMemberId: string } },
+  const rateMissingTotalCurrencyValue = useMemo(
+    () => totalCurrencyValue.filter(({ currency }) => !availableCurrency.includes(currency)),
+    [availableCurrency, totalCurrencyValue],
   )
 
-  const memberIds = members?.map((v) => v.id).filter(isNonNullable) ?? []
-  const balances = Object.entries(balanceByMemberId)
-    .map(([memberId, balanceByCurrency]) => {
-      const fractionConsideredBalanceByCurrency = Object.fromEntries(
-        Object.entries(balanceByCurrency).map(([code, { paid, assets }]) => {
-          // 最大の支払額を持っているユーザーで端数の調整
-          // 例: 1000円 を 3人 で割り勘しているケースでは、
-          // 支払っている人が 334円 の端数込みが自分の消費、
-          // それ以外の2人が 333円 を建て替えてもらっている状態になる
-          const aggregated = assetsAggregatedByCalculatedBalance[code]
-          if (aggregated?.maxMemberId !== memberId) {
-            return [code, { paid, assets: Math.round(assets) }] as const
+  const rateMissingCurrency = useMemo(
+    () => rateMissingTotalCurrencyValue.map(({ currency }) => currency),
+    [rateMissingTotalCurrencyValue],
+  )
+
+  const rateConvertibleTotalCurrencyValue = useMemo(
+    () =>
+      Object.entries(totalByCurrency)
+        .map(([currency, amount]) => ({ currency, amount }))
+        .filter(({ currency }) => availableCurrency.includes(currency)),
+    [availableCurrency, totalByCurrency],
+  )
+
+  const balanceByMemberId = useMemo(
+    () =>
+      (events ?? []).reduce(
+        (acc, v) => {
+          const sumByCurrency: { [code: string]: number } = {}
+          for (const { paidByMemberId, currency, amount } of v.payments) {
+            acc[paidByMemberId] ??= {}
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            acc[paidByMemberId]![currency] ??= { paid: 0, assets: 0 }
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            acc[paidByMemberId]![currency]!.paid += amount
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            acc[paidByMemberId]![currency]!.assets += amount
+
+            sumByCurrency[currency] ??= 0
+            sumByCurrency[currency] += amount
           }
-          return [code, { paid, assets: Math.round(assets) - aggregated.fraction }] as const
-        }),
-      )
-      return [memberId, fractionConsideredBalanceByCurrency] as const
-    })
-    .sort(([a], [b]) => memberIds.indexOf(a) - memberIds.indexOf(b))
+
+          for (const [code, sum] of Object.entries(sumByCurrency)) {
+            const div = sum / v.members.length
+
+            for (const { memberId } of v.members) {
+              acc[memberId] ??= {}
+              // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+              acc[memberId]![code] ??= { paid: 0, assets: 0 }
+              // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+              acc[memberId]![code]!.assets -= div
+            }
+          }
+
+          return acc
+        },
+        {} as { [memberId: string]: { [code: string]: { paid: number; assets: number } } },
+      ),
+    [events],
+  )
+
+  const assetsAggregatedByCalculatedBalance = useMemo(
+    () =>
+      Object.entries(balanceByMemberId).reduce(
+        (acc, [memberId, v]) => {
+          for (const [code, { assets }] of Object.entries(v)) {
+            acc[code] ??= { fraction: 0, max: assets, maxMemberId: memberId }
+            // 各+-の値が表示される金額と一致するように四捨五入して、累計値を出すことで端数を計算する
+            acc[code]!.fraction += Math.round(assets)
+            // 最大の支払金額を持っているユーザーをチェックする
+            // 仕様として、端数は最大の支払金額を持っているユーザーにまとめることで
+            // 割り勘している各ユーザーごとの支払金額をできるだけ均等に保つことができてシンプルになるケースが多い
+            // ただし、最大の支払いをしている人は端数だけ損してしまうが、シンプルさを優先する
+            if (acc[code]!.max < assets) {
+              acc[code]!.max = assets
+              acc[code]!.maxMemberId = memberId
+            }
+          }
+          return acc
+        },
+        {} as { [code: string]: { fraction: number; max: number; maxMemberId: string } },
+      ),
+    [balanceByMemberId],
+  )
+
+  const memberIds = useMemo(() => members?.map((v) => v.id).filter(isNonNullable) ?? [], [members])
+  const balances = useMemo(
+    () =>
+      Object.entries(balanceByMemberId)
+        .map(([memberId, balanceByCurrency]) => {
+          const fractionConsideredBalanceByCurrency = Object.fromEntries(
+            Object.entries(balanceByCurrency).map(([code, { paid, assets }]) => {
+              // 最大の支払額を持っているユーザーで端数の調整
+              // 例: 1000円 を 3人 で割り勘しているケースでは、
+              // 支払っている人が 334円 の端数込みが自分の消費、
+              // それ以外の2人が 333円 を建て替えてもらっている状態になる
+              const aggregated = assetsAggregatedByCalculatedBalance[code]
+              if (aggregated?.maxMemberId !== memberId) {
+                return [code, { paid, assets: Math.round(assets) }] as const
+              }
+              return [code, { paid, assets: Math.round(assets) - aggregated.fraction }] as const
+            }),
+          )
+          return [memberId, fractionConsideredBalanceByCurrency] as const
+        })
+        .sort(([a], [b]) => memberIds.indexOf(a) - memberIds.indexOf(b)),
+    [assetsAggregatedByCalculatedBalance, balanceByMemberId, memberIds],
+  )
 
   const [currencyRateSheetProps, setCurrencyRateSheetProps] = useState<{
     currency: string
@@ -332,6 +367,7 @@ export default function Balance({ roomId }: Props) {
             roomId={roomId}
             balances={balances}
             primaryCurrency={primaryCurrency}
+            rateMissingCurrency={rateMissingCurrency}
           ></Reimburse>
         )}
       </div>
