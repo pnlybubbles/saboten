@@ -27,7 +27,7 @@ type Balances = (readonly [
 
 export default function Remburse({ roomId, balances, primaryCurrency, rateMissingCurrency, ...sheet }: Props) {
   const [, { getMemberName }] = useRoomMember(roomId)
-  const [, { unsafe__convertCurrencyValue, displayCurrency }] = useRoomCurrencyRate(roomId)
+  const [, { convertCurrencyValue, displayCurrency }] = useRoomCurrencyRate(roomId)
 
   const transactions = useMemo(() => {
     if (!sheet.isPresent) return null
@@ -36,11 +36,10 @@ export default function Remburse({ roomId, balances, primaryCurrency, rateMissin
       // 負債が大きい順にDESC
       const initialAssets = balances.map(([memberId, balanceByCurrency]) => {
         const assets = Object.entries(balanceByCurrency)
-          .map(([code, { assets }]) =>
-            unsafe__convertCurrencyValue({ amount: assets, currency: code }, transactionCurrency),
-          )
+          .map(([code, { assets }]) => convertCurrencyValue({ amount: assets, currency: code }, transactionCurrency))
+          // transactionCurrency に変換できない通貨は無視 (rateMissingCurrencyの方でそれぞれ拾う)
           .filter(isNonNullable)
-          .reduce((acc, v) => acc + v, 0)
+          .reduce((acc, v) => acc + v.amount, 0)
         return { memberId, assets }
       })
 
@@ -66,7 +65,7 @@ export default function Remburse({ roomId, balances, primaryCurrency, rateMissin
 
       return transactions
     })
-  }, [balances, primaryCurrency, rateMissingCurrency, sheet.isPresent, unsafe__convertCurrencyValue])
+  }, [balances, convertCurrencyValue, primaryCurrency, rateMissingCurrency, sheet.isPresent])
 
   return (
     <Sheet {...sheet}>

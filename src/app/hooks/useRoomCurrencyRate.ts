@@ -120,39 +120,44 @@ export default function useRoomCurrencyRate(roomId: string | null) {
   )
 
   const convertCurrencyValue = useCallback(
-    ({ amount, currency }: CurrencyValue, displayAsCurrency: string) => {
-      if (displayAsCurrency !== currency) {
-        const current = state?.find((v) => v.currency === currency && v.toCurrency === displayAsCurrency)
-        if (current === undefined) {
-          return null
-        }
-        const digits = cc.code(displayAsCurrency)?.digits
-        if (digits === undefined) {
-          return null
-        }
-        return (amount * current.rate) / 10 ** digits
+    ({ amount, currency }: CurrencyValue, targetCurrency: string) => {
+      if (targetCurrency === currency) {
+        return { amount, currency }
       }
-      const digits = cc.code(currency)?.digits
-      if (digits === undefined) {
+      const current = state?.find((v) => v.currency === currency && v.toCurrency === targetCurrency)
+      if (current === undefined) {
         return null
       }
-      return amount / 10 ** digits
+      return { amount: amount * current.rate, currency: targetCurrency }
     },
     [state],
   )
 
-  const displayCurrency = useCallback(
-    (value: CurrencyValue, displayAsCurrency: string = value.currency): DisplayCurrencyValue => {
-      return formatDisplayCurrencyValue(convertCurrencyValue(value, displayAsCurrency), displayAsCurrency)
+  const convertCurrencyValueToRaw = useCallback(
+    (value: CurrencyValue, displayAsCurrency: string) => {
+      const displayValue = convertCurrencyValue(value, displayAsCurrency)
+      if (displayValue === null) return null
+      const digits = cc.code(displayValue.currency)?.digits
+      if (digits === undefined) {
+        return null
+      }
+      return displayValue.amount / 10 ** digits
     },
     [convertCurrencyValue],
+  )
+
+  const displayCurrency = useCallback(
+    (value: CurrencyValue, displayAsCurrency: string = value.currency): DisplayCurrencyValue => {
+      return formatDisplayCurrencyValue(convertCurrencyValueToRaw(value, displayAsCurrency), displayAsCurrency)
+    },
+    [convertCurrencyValueToRaw],
   )
 
   const displayCurrencySum = useCallback(
     (value: CurrencyValue[], displayAsCurrency: string): DisplayCurrencyValue => {
       const sum = value.reduce(
         (acc, value) => {
-          const converted = convertCurrencyValue(value, displayAsCurrency)
+          const converted = convertCurrencyValueToRaw(value, displayAsCurrency)
           return acc !== null && converted !== null ? acc + converted : null
         },
         0 as number | null,
@@ -160,7 +165,7 @@ export default function useRoomCurrencyRate(roomId: string | null) {
 
       return formatDisplayCurrencyValue(sum, displayAsCurrency)
     },
-    [convertCurrencyValue],
+    [convertCurrencyValueToRaw],
   )
 
   const availableCurrencyFor = useCallback(
@@ -179,7 +184,7 @@ export default function useRoomCurrencyRate(roomId: string | null) {
       displayCurrency,
       displayCurrencySum,
       availableCurrencyFor,
-      unsafe__convertCurrencyValue: convertCurrencyValue,
+      convertCurrencyValue,
     },
   ] as const
 }
