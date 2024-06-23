@@ -173,5 +173,15 @@ export default function useRoomCurrencyRate(roomId: string | null) {
     ...(state?.filter((v) => v.toCurrency === displayCurrency).map((v) => v.currency) ?? []),
   ]
 
-  return [state, { updateRate, removeRate, displayCurrency, displayCurrencySum, availableCurrencyFor }] as const
+  return [
+    state,
+    {
+      updateRate,
+      removeRate,
+      displayCurrency,
+      displayCurrencySum,
+      availableCurrencyFor,
+      unsafe__convertCurrencyValue: convertCurrencyValue,
+    },
+  ] as const
 }

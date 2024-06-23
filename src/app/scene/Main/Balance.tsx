@@ -325,7 +325,14 @@ export default function Balance({ roomId }: Props) {
         >
           精算
         </Button>
-        <Reimburse {...reimburseSheet}></Reimburse>
+        {roomId && (
+          <Reimburse
+            {...reimburseSheet}
+            roomId={roomId}
+            balances={balances}
+            primaryCurrency={primaryCurrency}
+          ></Reimburse>
+        )}
       </div>
     </div>
   )
