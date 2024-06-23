@@ -299,11 +299,15 @@ export default function Balance({ roomId }: Props) {
           </div>
         </div>
       </div>
-      <div className="absolute -bottom-6 right-2 grid translate-y-1/2 grid-flow-col gap-3">
+      <div
+        className={clsx(
+          'absolute -bottom-6 right-2 grid translate-y-1/2 grid-flow-col gap-3 transition',
+          showDetail ? 'opacity-100' : 'pointer-events-none opacity-0',
+        )}
+      >
         <Button
           mini
           variant="secondary"
-          className={clsx(showDetail ? 'opacity-100' : 'pointer-events-none opacity-0')}
           onClick={(e) => {
             e.stopPropagation()
             toggleTip()
@@ -313,7 +317,6 @@ export default function Balance({ roomId }: Props) {
         <Button
           mini
           variant="secondary"
-          className={clsx(showDetail ? 'opacity-100' : 'pointer-events-none opacity-0')}
           onClick={(e) => {
             e.stopPropagation()
             reimburseSheet.open()
