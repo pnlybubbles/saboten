@@ -140,7 +140,8 @@ export default function Balance({ roomId }: Props) {
   }>()
   const currencyRateSheet = usePresent()
 
-  const [showDetail, setShowDetail] = useState(false)
+  const [showDetail_, setShowDetail] = useState(false)
+  const showDetail = showDetail_ && totalCurrencyValue.length > 0
 
   const ref = useRef<HTMLDivElement>(null)
   const { height } = useResizeObserver(ref)
