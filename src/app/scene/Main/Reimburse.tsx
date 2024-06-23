@@ -26,7 +26,7 @@ type Balances = (readonly [
 ])[]
 
 export default function Remburse({ roomId, balances, primaryCurrency, rateMissingCurrency, ...sheet }: Props) {
-  const [, { getMemberName }] = useRoomMember(roomId)
+  const [, { getMemberName, isMe }] = useRoomMember(roomId)
   const [, { convertCurrencyValue, displayCurrency }] = useRoomCurrencyRate(roomId)
 
   const transactions = useMemo(() => {
@@ -74,9 +74,15 @@ export default function Remburse({ roomId, balances, primaryCurrency, rateMissin
         <div className="grid grid-cols-[auto_auto_auto_1fr] items-center gap-x-[6px] gap-y-2">
           {transactions?.map((tx) => (
             <Fragment key={`${tx.from}_${tx.to}_${tx.amount}`}>
-              <div className="text-sm font-bold">{getMemberName(tx.from)}</div>
+              <div className="grid grid-flow-col items-center justify-start gap-2">
+                <span className="text-sm font-bold">{getMemberName(tx.from)}</span>
+                {isMe(tx.from) && <span className="text-xs text-zinc-400">自分</span>}
+              </div>
               <Icon.ChevronsRight size={20} className="text-zinc-400"></Icon.ChevronsRight>
-              <div className="text-sm font-bold">{getMemberName(tx.to)}</div>
+              <div className="grid grid-flow-col items-center justify-start gap-2">
+                <span className="text-sm font-bold">{getMemberName(tx.to)}</span>
+                {isMe(tx.to) && <span className="text-xs text-zinc-400">自分</span>}
+              </div>
               <CurrencyText {...displayCurrency({ currency: tx.currency, amount: tx.amount })}></CurrencyText>
             </Fragment>
           ))}

@@ -189,7 +189,12 @@ export default function useRoomMember(roomId: string | null) {
     [getMember, user],
   )
 
-  return [state, { addMember, removeMember, renameMember, getMemberName, getMember, joinMember }] as const
+  const isMe = useCallback(
+    (memberId: string) => user?.id && getMember(memberId)?.user?.id === user.id,
+    [getMember, user?.id],
+  )
+
+  return [state, { addMember, removeMember, renameMember, getMemberName, getMember, joinMember, isMe }] as const
 }
 
 export const deriveMemberName = (user: User | null, member: Pick<Member, 'user' | 'name'>) => {
