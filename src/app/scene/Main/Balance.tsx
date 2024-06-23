@@ -181,7 +181,7 @@ export default function Balance({ roomId }: Props) {
   const ref = useRef<HTMLDivElement>(null)
   const { height } = useResizeObserver(ref)
 
-  const [isPresentTip, toggleTip] = useReducer((v) => !v, true)
+  const [isPresentTip, toggleTip] = useReducer((v) => !v, false)
 
   const reimburseSheet = usePresent()
 
@@ -357,7 +357,25 @@ export default function Balance({ roomId }: Props) {
             e.stopPropagation()
             reimburseSheet.open()
           }}
-          icon={<Icon.ReceiptJapaneseYen size={16} />}
+          icon={
+            primaryCurrency === 'JPY' ? (
+              <Icon.ReceiptJapaneseYen size={16} />
+            ) : primaryCurrency === 'USD' ? (
+              <Icon.Receipt size={16} />
+            ) : primaryCurrency === 'EUR' ? (
+              <Icon.ReceiptEuro size={16} />
+            ) : primaryCurrency === 'GBP' ? (
+              <Icon.ReceiptPoundSterling size={16} />
+            ) : primaryCurrency === 'INR' ? (
+              <Icon.ReceiptIndianRupee size={16} />
+            ) : primaryCurrency === 'RUB' ? (
+              <Icon.ReceiptRussianRuble size={16} />
+            ) : primaryCurrency === 'CHF' ? (
+              <Icon.ReceiptSwissFranc size={16} />
+            ) : (
+              <Icon.Receipt size={16} />
+            )
+          }
         >
           精算
         </Button>
