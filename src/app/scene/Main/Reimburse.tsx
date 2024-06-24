@@ -7,6 +7,10 @@ import { Fragment, useMemo } from 'react'
 import * as Icon from 'lucide-react'
 import CurrencyText from '@app/components/CurrencyText'
 import Tips from '@app/components/Tips'
+import Clickable from '@app/components/Clickable'
+import EventSheet from './EventSheet'
+import usePresent from '@app/hooks/usePresent'
+import useEvents from '@app/hooks/useEvents'
 
 type Props = SheetProps & {
   roomId: string
@@ -25,9 +29,11 @@ type Balances = (readonly [
   },
 ])[]
 
+type Transaction = { from: string; to: string; amount: number; currency: string }
+
 export default function Remburse({ roomId, balances, primaryCurrency, rateMissingCurrency, ...sheet }: Props) {
   const [, { getMemberName, isMe }] = useRoomMember(roomId)
-  const [, { convertCurrencyValue, displayCurrency }] = useRoomCurrencyRate(roomId)
+  const [, { convertCurrencyValue }] = useRoomCurrencyRate(roomId)
 
   const transactions = useMemo(() => {
     if (!sheet.isPresent) return null
@@ -44,7 +50,7 @@ export default function Remburse({ roomId, balances, primaryCurrency, rateMissin
       })
 
       let notBalanced = initialAssets
-      const transactions: { from: string; to: string; amount: number; currency: string }[] = []
+      const transactions: Transaction[] = []
 
       // eslint-disable-next-line no-constant-condition
       while (true) {
@@ -83,7 +89,9 @@ export default function Remburse({ roomId, balances, primaryCurrency, rateMissin
                 <span className="text-sm font-bold">{getMemberName(tx.to)}</span>
                 {isMe(tx.to) && <span className="text-xs text-zinc-400">自分</span>}
               </div>
-              <CurrencyText {...displayCurrency({ currency: tx.currency, amount: tx.amount })}></CurrencyText>
+              <div className="grid justify-end">
+                <TransactionItem tx={tx} roomId={roomId}></TransactionItem>
+              </div>
             </Fragment>
           ))}
         </div>
@@ -94,5 +102,35 @@ export default function Remburse({ roomId, balances, primaryCurrency, rateMissin
         )}
       </div>
     </Sheet>
+  )
+}
+
+function TransactionItem({ tx, roomId }: { tx: Transaction; roomId: string }) {
+  const present = usePresent()
+  const [, { displayCurrency }] = useRoomCurrencyRate(roomId)
+  const [, { addEvent }] = useEvents(roomId)
+
+  return (
+    <>
+      <Clickable className="grid grid-flow-col items-center gap-2 transition active:scale-90" onClick={present.open}>
+        <CurrencyText {...displayCurrency({ currency: tx.currency, amount: tx.amount })}></CurrencyText>
+        <Icon.CheckCircle2 size={16} className="text-zinc-400"></Icon.CheckCircle2>
+      </Clickable>
+      <EventSheet
+        {...present}
+        roomId={roomId}
+        defaultValue={{
+          type: 'transfer',
+          amount: tx.amount,
+          currency: tx.currency,
+          label: '精算',
+          paidByMemberId: tx.from,
+          transferToMemberId: tx.to,
+        }}
+        onSubmit={addEvent}
+        submitLabel="精算を記録"
+        hideTypeTab
+      ></EventSheet>
+    </>
   )
 }

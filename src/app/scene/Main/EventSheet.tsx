@@ -33,11 +33,20 @@ interface Props extends SheetProps {
   onSubmit: (payload: EventPayloadAddPhase) => Promise<void>
   submitLabel: string
   onRemove?: () => void
+  hideTypeTab?: boolean
 }
 
 const FREQUENTLY_USED_CURRENCY_CODES = ['JPY', 'USD', 'EUR']
 
-export default function EventSheet({ roomId, defaultValue, onSubmit, submitLabel, onRemove, ...sheet }: Props) {
+export default function EventSheet({
+  roomId,
+  defaultValue,
+  onSubmit,
+  submitLabel,
+  onRemove,
+  hideTypeTab,
+  ...sheet
+}: Props) {
   const [user] = useUser()
   const [members, { getMemberName }] = useRoomMember(roomId)
   const userMemberId = user ? members?.find((v) => v.user?.id === user.id)?.id ?? null : null
@@ -217,15 +226,17 @@ export default function EventSheet({ roomId, defaultValue, onSubmit, submitLabel
   return (
     <Sheet {...sheet}>
       <div className="grid gap-4">
-        <Tab
-          options={[
-            { label: '支払い', value: 'payment' },
-            { label: '送金', value: 'transfer' },
-          ]}
-          value={tab}
-          onChange={setTab}
-          className="w-20"
-        ></Tab>
+        {!hideTypeTab && (
+          <Tab
+            options={[
+              { label: '支払い', value: 'payment' },
+              { label: '送金', value: 'transfer' },
+            ]}
+            value={tab}
+            onChange={setTab}
+            className="w-20"
+          ></Tab>
+        )}
         <TextField label="イベントの名前" name="label" value={label} onChange={dirty(setLabel)} />
         <div className="grid grid-cols-[auto_1fr] gap-3">
           <div
