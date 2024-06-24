@@ -101,7 +101,7 @@ export default function Remburse({ roomId, balances, primaryCurrency, rateMissin
                     onClick={() => (setTx(tx), present.open())}
                   >
                     <CurrencyText {...displayCurrency({ currency: tx.currency, amount: tx.amount })}></CurrencyText>
-                    <Icon.CheckCircle2 size={16} className="text-zinc-400"></Icon.CheckCircle2>
+                    {/* <Icon.CheckCircle2 size={16} className="text-zinc-400"></Icon.CheckCircle2> */}
                   </Clickable>
                 </div>
               </Fragment>
