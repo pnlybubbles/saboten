@@ -159,8 +159,8 @@ export default function Main({ roomId }: Props) {
           <EventSheet
             {...createEventSheet}
             roomId={roomId}
-            // roomIdが変化したらフォームのデータをリセットするために再マウントさせる
-            key={roomId}
+            // roomIdが変化したらフォームのデータをリセットする
+            id={roomId ?? undefined}
             onSubmit={addEvent}
             submitLabel="追加"
           ></EventSheet>
