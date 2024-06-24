@@ -25,5 +25,11 @@ export default function useDirty(reset: () => void) {
     isDirty.current = false
   }, [])
 
-  return { isDirty, setDirty, clearDirty, dirty } as const
+  const resetIfCleared = useCallback(() => {
+    if (!isDirty.current) {
+      reset()
+    }
+  }, [reset])
+
+  return { isDirty, setDirty, clearDirty, dirty, resetIfCleared } as const
 }

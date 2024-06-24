@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import Button from '@app/components/Button'
 import type { SheetProps } from '@app/components/Sheet'
 import Sheet from '@app/components/Sheet'
@@ -34,6 +34,7 @@ interface Props extends SheetProps {
   submitLabel: string
   onRemove?: () => void
   hideTypeTab?: boolean
+  id?: string | undefined
 }
 
 const FREQUENTLY_USED_CURRENCY_CODES = ['JPY', 'USD', 'EUR']
@@ -45,6 +46,7 @@ export default function EventSheet({
   submitLabel,
   onRemove,
   hideTypeTab,
+  id,
   ...sheet
 }: Props) {
   const [user] = useUser()
@@ -54,24 +56,22 @@ export default function EventSheet({
   const defaultCurrency = defaultValue?.currency ?? 'JPY'
   const defaultCurrencyDigits = cc.code(defaultCurrency)?.digits ?? 0
   const eventMembersCandidate = useMemo(() => members?.map((v) => v.id).filter(isNonNullable) ?? [], [members])
+  const defaultEventMembersTmp =
+    defaultValue?.type === 'payment'
+      ? defaultValue.memberIds
+      : defaultValue?.type === 'transfer'
+        ? defaultValue.transferToMemberId // 歯抜けデータの場合はnullになる場合がある
+        : eventMembersCandidate
   const defaultEventMembers = useMemo(
     () =>
-      defaultValue?.type === 'payment'
-        ? defaultValue.memberIds
-        : defaultValue?.type === 'transfer'
-          ? defaultValue.transferToMemberId // 歯抜けデータの場合はnullになる場合がある
-            ? [defaultValue.transferToMemberId]
-            : []
-          : eventMembersCandidate,
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [
-      defaultValue?.type,
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-      defaultValue && 'memberIds' in defaultValue && defaultValue.memberIds,
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-      defaultValue && 'transferToMemberId' in defaultValue && defaultValue.transferToMemberId,
-    ],
+      defaultEventMembersTmp === null
+        ? []
+        : typeof defaultEventMembersTmp === 'string'
+          ? [defaultEventMembersTmp]
+          : defaultEventMembersTmp,
+    [defaultEventMembersTmp],
   )
+
   const defaultFormValue = useMemo(
     () => ({
       type: defaultValue?.type ?? 'payment',
@@ -121,25 +121,40 @@ export default function EventSheet({
   const editCurrencySheet = usePresent()
   const [paidByMemberEditMode, setPaidByMemberEditMode] = useState(false)
 
-  const { dirty, clearDirty } = useDirty(
+  const { dirty, clearDirty, resetIfCleared } = useDirty(
     useCallback(() => {
-      if (!sheet.isPresent) {
-        return
-      }
+      setTab(defaultFormValue.type)
       setLabel(defaultFormValue.label)
       setCurrency(defaultFormValue.currency)
       setAmount(defaultFormValue.amount)
       setPaidByMember(defaultFormValue.paidByMember)
       setEventMembers(defaultFormValue.eventMembers)
+      setPaidByMemberEditMode(false)
     }, [
       defaultFormValue.amount,
       defaultFormValue.currency,
       defaultFormValue.eventMembers,
       defaultFormValue.label,
       defaultFormValue.paidByMember,
-      sheet.isPresent,
+      defaultFormValue.type,
     ]),
   )
+
+  useEffect(() => {
+    // シートを閉じるときにリセットしないのは、アニメーション中にリセットされてしまって見た目が悪いため
+    // シートが開いたときに編集済みでなければデフォルトに戻す
+    if (sheet.isPresent) {
+      resetIfCleared()
+    }
+  }, [resetIfCleared, sheet.isPresent])
+
+  useEffect(() => {
+    // 指定されているidが変化した場合は状態を強制的にリセットする
+    if (id) {
+      clearDirty()
+      resetIfCleared()
+    }
+  }, [clearDirty, id, resetIfCleared])
 
   const transferToMember = eventMembers.filter((v) => v !== paidByMember)[0]
 
@@ -233,7 +248,7 @@ export default function EventSheet({
               { label: '送金', value: 'transfer' },
             ]}
             value={tab}
-            onChange={setTab}
+            onChange={dirty(setTab)}
             className="w-20"
           ></Tab>
         )}
