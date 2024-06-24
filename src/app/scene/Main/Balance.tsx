@@ -350,35 +350,37 @@ export default function Balance({ roomId }: Props) {
           }}
           icon={<Icon.HelpCircle size={16} />}
         ></Button>
-        <Button
-          mini
-          variant="secondary"
-          onClick={(e) => {
-            e.stopPropagation()
-            reimburseSheet.open()
-          }}
-          icon={
-            primaryCurrency === 'JPY' ? (
-              <Icon.ReceiptJapaneseYen size={16} />
-            ) : primaryCurrency === 'USD' ? (
-              <Icon.Receipt size={16} />
-            ) : primaryCurrency === 'EUR' ? (
-              <Icon.ReceiptEuro size={16} />
-            ) : primaryCurrency === 'GBP' ? (
-              <Icon.ReceiptPoundSterling size={16} />
-            ) : primaryCurrency === 'INR' ? (
-              <Icon.ReceiptIndianRupee size={16} />
-            ) : primaryCurrency === 'RUB' ? (
-              <Icon.ReceiptRussianRuble size={16} />
-            ) : primaryCurrency === 'CHF' ? (
-              <Icon.ReceiptSwissFranc size={16} />
-            ) : (
-              <Icon.Receipt size={16} />
-            )
-          }
-        >
-          精算
-        </Button>
+        {members && members.length > 1 && (
+          <Button
+            mini
+            variant="secondary"
+            onClick={(e) => {
+              e.stopPropagation()
+              reimburseSheet.open()
+            }}
+            icon={
+              primaryCurrency === 'JPY' ? (
+                <Icon.ReceiptJapaneseYen size={16} />
+              ) : primaryCurrency === 'USD' ? (
+                <Icon.Receipt size={16} />
+              ) : primaryCurrency === 'EUR' ? (
+                <Icon.ReceiptEuro size={16} />
+              ) : primaryCurrency === 'GBP' ? (
+                <Icon.ReceiptPoundSterling size={16} />
+              ) : primaryCurrency === 'INR' ? (
+                <Icon.ReceiptIndianRupee size={16} />
+              ) : primaryCurrency === 'RUB' ? (
+                <Icon.ReceiptRussianRuble size={16} />
+              ) : primaryCurrency === 'CHF' ? (
+                <Icon.ReceiptSwissFranc size={16} />
+              ) : (
+                <Icon.Receipt size={16} />
+              )
+            }
+          >
+            精算
+          </Button>
+        )}
         {roomId && (
           <Reimburse
             {...reimburseSheet}
