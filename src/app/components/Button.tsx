@@ -28,12 +28,12 @@ export default forwardRef<HTMLClickableElement, Props>(function Button(
       className={clsx(
         className,
         'relative select-none rounded-full font-bold transition',
-        mini ? 'h-7 text-xs' : 'h-12 text-base',
+        mini ? 'h-7 text-xs' : 'h-11.5 text-base',
         icon
           ? children == null
             ? mini
               ? 'w-7 p-0'
-              : 'w-12 p-0'
+              : 'w-11.5 p-0'
             : mini
               ? 'w-full pl-3 pr-4'
               : 'w-full pl-5 pr-6'

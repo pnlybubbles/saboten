@@ -29,7 +29,7 @@ export default function Avatar({ name, className, mini, noNegative }: Props) {
     <div
       className={clsx(
         'relative grid items-center justify-items-center overflow-hidden rounded-full text-lg font-bold [container-type:size]',
-        mini ? (mini === 'xs' ? 'size-7 text-xs' : 'size-9 text-sm') : 'size-12 text-sm',
+        mini ? (mini === 'xs' ? 'size-7 text-xs' : 'size-9 text-sm') : 'size-11.5 text-sm',
         emoji ? 'bg-white' : hashed !== null ? COLORS[hashed % COLORS.length] : 'bg-zinc-400 text-zinc-100',
         !noNegative && '-mx-1',
         className,

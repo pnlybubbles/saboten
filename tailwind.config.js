@@ -13,6 +13,9 @@ export default {
         backdrop: 'rgb(251 251 250 / 1)',
       },
       spacing: {
+        // 周囲に32pxの余白を持ったときに、46pxの高さを持つ要素にfullな角丸半径を適用すると、iPhone15ディスプレイの角丸半径55pxが得られる
+        11.5: '2.875rem',
+        // テキストフィールドの基本の高さ
         18: '4.5rem',
       },
       boxShadow: {
