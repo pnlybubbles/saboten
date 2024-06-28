@@ -117,7 +117,7 @@ export default function Remburse({ roomId, balances, primaryCurrency, rateMissin
           </div>
         )}
         {transactionIncludesRateMissingCurrency && (
-          <Tips type={Icon.PiggyBank}>
+          <Tips type="default">
             変換レートが設定されていない通貨 ({rateMissingCurrency.join(', ')}) は、各通貨での精算方法を表示しています。
           </Tips>
         )}
