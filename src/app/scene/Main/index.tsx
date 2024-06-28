@@ -65,7 +65,7 @@ export default function Main({ roomId }: Props) {
     <div className={clsx('relative z-0 w-full', drawer.isPresent && 'overflow-hidden')}>
       <div
         className={clsx(
-          'fixed right-full top-0 h-full w-3/4 overflow-y-auto transition duration-300 md:left-[calc(max((100%-600px-640px)/2,1rem))] md:right-auto md:w-[300px] md:translate-x-0',
+          'fixed right-full top-0 h-full w-3/4 overflow-y-auto transition duration-300 md:left-[calc(max((100%-600px-640px)/2,env(safe-area-inset-left,1rem)))] md:right-auto md:w-[300px] md:translate-x-0',
           drawer.isPresent && 'translate-x-full',
         )}
       >
@@ -91,7 +91,7 @@ export default function Main({ roomId }: Props) {
       </div>
       <Clickable
         className={clsx(
-          'w-full transition duration-300 md:ml-[calc(max((100%-600px-640px)/2,1rem)+300px)] md:w-[calc(min(100%-300px-2rem,640px))] md:translate-x-0',
+          'w-full transition duration-300 md:ml-[calc(max((100%-600px-640px)/2,env(safe-area-inset-left,1rem))+300px)] md:w-[calc(min(100%-300px-env(safe-area-inset-left,1rem)-env(safe-area-inset-right,1rem),640px))] md:translate-x-0',
           drawer.isPresent && 'translate-x-3/4',
         )}
         onClick={drawer.close}
