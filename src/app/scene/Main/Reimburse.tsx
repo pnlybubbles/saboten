@@ -75,6 +75,9 @@ export default function Remburse({ roomId, balances, primaryCurrency, rateMissin
     })
   }, [balances, convertCurrencyValue, primaryCurrency, rateMissingCurrency, sheet.isPresent])
 
+  const transactionIncludesRateMissingCurrency =
+    transactions?.find((v) => rateMissingCurrency.includes(v.currency)) != null
+
   const present = usePresent()
   const [tx, setTx] = useState<Transaction>()
 
@@ -113,7 +116,7 @@ export default function Remburse({ roomId, balances, primaryCurrency, rateMissin
             全員の精算が完了しました！
           </div>
         )}
-        {rateMissingCurrency.length > 0 && (
+        {transactionIncludesRateMissingCurrency && (
           <Tips type={Icon.PiggyBank}>
             変換レートが設定されていない通貨 ({rateMissingCurrency.join(', ')}) は、各通貨での精算方法を表示しています。
           </Tips>
