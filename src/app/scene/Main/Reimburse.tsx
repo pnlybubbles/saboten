@@ -12,6 +12,7 @@ import EventSheet from './EventSheet'
 import usePresent from '@app/hooks/usePresent'
 import useEvents from '@app/hooks/useEvents'
 import { v4 as uuid } from 'uuid'
+import SafeAreaPadding from '@app/components/SafeAreaPadding'
 
 type Props = SheetProps & {
   roomId: string
@@ -122,6 +123,7 @@ export default function Remburse({ roomId, balances, primaryCurrency, rateMissin
           </Tips>
         )}
       </div>
+      <SafeAreaPadding />
       {tx && (
         <EventSheet
           {...present}

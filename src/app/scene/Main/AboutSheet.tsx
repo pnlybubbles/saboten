@@ -1,4 +1,5 @@
 import Logo from '@app/components/Logo'
+import SafeAreaPadding from '@app/components/SafeAreaPadding'
 import type { SheetProps } from '@app/components/Sheet'
 import Sheet from '@app/components/Sheet'
 import * as Icon from 'lucide-react'
@@ -44,6 +45,7 @@ export default function AboutSheet({ ...present }: SheetProps) {
           </a>
         </div>
       </div>
+      <SafeAreaPadding />
     </Sheet>
   )
 }
