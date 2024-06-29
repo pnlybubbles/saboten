@@ -30,8 +30,8 @@ export default function App() {
   )
 }
 
-// const OLD_URL = 'https://saboten.pnly.xyz'
-const OLD_URL = 'http://localhost:8080'
+// const OLD_URL = 'http://localhost:8080'
+const OLD_URL = 'https://saboten.pnly.xyz'
 const NEW_URL = 'https://saboten.app'
 
 function Routing() {
