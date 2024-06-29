@@ -1,7 +1,7 @@
 import { createLocalStorageDescriptor } from '@app/util/createLocalStorageDescriptor'
 import { z } from 'zod'
 import { useLocalStorage } from './useLocalStorage'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import COMPRESSED_UUID_SCHEMA from '@util/COMPRESSED_UUID_SCHEMA'
 import { userRoomsLocalStorageDescriptor } from './useUserRooms'
 import { roomLocalStorageDescriptor } from './useRoomLocalStorage'
@@ -63,6 +63,8 @@ export default function useUser() {
     return fetched
   }
 
+  const [refreshed, setRefreshed] = useState(false)
+
   useEffect(() => {
     if (!ready) {
       return
@@ -74,6 +76,8 @@ export default function useUser() {
       task = ok(rpc.api.user.refresh.$post({ json: {} }))
       const fetched = await task
 
+      setRefreshed(true)
+
       if (!('error' in fetched)) {
         setUserInStorage(fetched)
       } else {
@@ -82,7 +86,7 @@ export default function useUser() {
     })()
   }, [ready, setUserInStorage])
 
-  return [user, { setUser, restoreUser, removeUser, ready }] as const
+  return [user, { setUser, restoreUser, removeUser, ready, refreshed }] as const
 }
 
 export type User = NonNullable<ReturnType<typeof useUser>[0]>
