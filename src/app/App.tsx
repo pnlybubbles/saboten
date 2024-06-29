@@ -53,7 +53,7 @@ function Routing() {
     const secret = COMPRESSED_UUID_SCHEMA.safeParse(s)
     const fail = () => {
       alert('ユーザー移行に失敗しました。旧URLで合言葉をコピーして手動で移行してください。')
-      location.href = OLD_URL
+      location.href = `${OLD_URL}/${roomId ?? ''}`
     }
     // sパラメータが不正
     if (!secret.success) {
@@ -68,9 +68,9 @@ function Routing() {
         return fail()
       }
       // 成功
-      navigate('/', { replace: true })
+      navigate(`/${roomId ?? ''}`, { replace: true })
     })()
-  }, [isOldApp, navigate, restoreUser, s, userMigrationProcedure])
+  }, [isOldApp, navigate, restoreUser, roomId, s, userMigrationProcedure])
 
   const userMigrationPresent = usePresent()
 
@@ -81,7 +81,7 @@ function Routing() {
     if (!refreshed) return
     // セッションなしの場合は無言でリダイレクト
     if (user === null) {
-      location.href = NEW_URL
+      location.href = `${NEW_URL}/${roomId ?? ''}`
       return
     }
     // セッションありの場合は移行するかのモーダルを出す
@@ -141,13 +141,13 @@ function Routing() {
 
   return (
     <>
-      <UserMigrationSheet {...userMigrationPresent} secret={user.secret} />
+      <UserMigrationSheet {...userMigrationPresent} secret={user.secret} roomId={roomId} />
       <Main roomId={roomId} />
     </>
   )
 }
 
-function UserMigrationSheet({ secret, ...present }: SheetProps & { secret: string }) {
+function UserMigrationSheet({ secret, roomId, ...present }: SheetProps & { secret: string; roomId?: string }) {
   return (
     <Sheet {...present}>
       <div className="grid gap-4">
@@ -161,7 +161,7 @@ function UserMigrationSheet({ secret, ...present }: SheetProps & { secret: strin
         </Tips>
         <Button
           onClick={() => {
-            location.href = `${NEW_URL}/?s=${encodeURIComponent(secret)}`
+            location.href = `${NEW_URL}/${roomId ?? ''}?s=${encodeURIComponent(secret)}`
           }}
         >
           新しいURLに移動
