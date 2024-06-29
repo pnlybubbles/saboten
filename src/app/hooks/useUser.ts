@@ -82,7 +82,7 @@ export default function useUser() {
     })()
   }, [ready, setUserInStorage])
 
-  return [user, { setUser, restoreUser, removeUser }] as const
+  return [user, { setUser, restoreUser, removeUser, ready }] as const
 }
 
 export type User = NonNullable<ReturnType<typeof useUser>[0]>

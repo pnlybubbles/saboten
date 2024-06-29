@@ -22,9 +22,14 @@ export default function App() {
 }
 
 function Routing() {
-  const [user] = useUser()
+  const [user, { ready }] = useUser()
   const { roomId = null } = useParams()
   const [members] = useRoomMember(roomId)
+
+  if (!ready) {
+    // ローカルストレージの読み込みが終わるまで待つ
+    return null
+  }
 
   if (user === null) {
     return <Landing roomId={roomId}></Landing>
