@@ -234,8 +234,7 @@ export default function EventSheet({
   }
 
   if (user === null) {
-    // TODO: loading
-    return <div>ユーザーのニックネーム設定が必要です</div>
+    return null
   }
 
   return (
