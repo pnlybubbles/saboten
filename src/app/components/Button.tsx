@@ -4,7 +4,7 @@ import type { Props as ClickableProps, HTMLClickableElement } from './Clickable'
 import Clickable from './Clickable'
 import { forwardRef } from 'react'
 
-export type Variant = 'default' | 'primary' | 'secondary' | 'danger'
+export type Variant = 'default' | 'primary' | 'secondary' | 'danger' | 'transparent'
 
 interface OwnProps {
   variant?: Variant
@@ -84,5 +84,7 @@ const toBackground = (variant: Variant) =>
         ? 'text-main bg-white shadow-emboss'
         : variant === 'secondary'
           ? 'text-main bg-white shadow-border'
-          : 'text-white bg-main',
+          : variant === 'transparent'
+            ? 'text-zinc-400 bg-transparent'
+            : 'text-white bg-main',
   )

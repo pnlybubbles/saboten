@@ -81,7 +81,7 @@ function Routing() {
     if (!refreshed) return
     // セッションなしの場合は無言でリダイレクト
     if (user === null) {
-      location.href = NEW_URL
+      // location.href = NEW_URL
       return
     }
     // セッションありの場合は移行するかのモーダルを出す

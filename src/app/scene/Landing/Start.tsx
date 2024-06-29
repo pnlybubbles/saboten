@@ -6,7 +6,6 @@ import { useNavigate } from 'react-router-dom'
 import * as Icon from 'lucide-react'
 import usePresent from '@app/hooks/usePresent'
 import AboutSheet from '../Main/AboutSheet'
-import Clickable from '@app/components/Clickable'
 import Logo from '@app/components/Logo'
 
 interface Props {
@@ -21,16 +20,7 @@ export default function Start({ roomId, onProceed }: Props) {
 
   return (
     <div className="mx-auto grid max-w-screen-sm gap-6 p-8">
-      <div className="grid grid-cols-[1fr_auto]">
-        <Logo big />
-        <Clickable
-          onClick={aboutSheet.open}
-          className="grid w-8 items-center justify-items-center transition active:scale-90"
-        >
-          <Icon.Construction size={20} />
-        </Clickable>
-        <AboutSheet {...aboutSheet}></AboutSheet>
-      </div>
+      <Logo big />
       <div>
         <div>シンプルな割り勘アプリ</div>
         <div>旅のお金を記録してかんたんに精算</div>
@@ -57,6 +47,10 @@ export default function Start({ roomId, onProceed }: Props) {
           <Button onClick={() => navigate('/')}>参加しない</Button>
         </>
       )}
+      <div className="grid justify-center">
+        <Button variant="transparent" onClick={aboutSheet.open} icon={<Icon.TrafficCone size={20} />}></Button>
+        <AboutSheet {...aboutSheet}></AboutSheet>
+      </div>
     </div>
   )
 }
