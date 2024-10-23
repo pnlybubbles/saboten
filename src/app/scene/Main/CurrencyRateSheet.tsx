@@ -60,7 +60,7 @@ export default function CurrencyRateSheet({ currency, toCurrency, roomId, defaul
         </div>
         <TextField
           label={toCurrency}
-          type="number"
+          type="float"
           inputMode="decimal"
           value={inputRate}
           onChange={dirty(setInputRate)}
