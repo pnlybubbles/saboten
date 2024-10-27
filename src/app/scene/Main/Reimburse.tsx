@@ -98,18 +98,18 @@ export default function Remburse({ roomId, balances, primaryCurrency, rateMissin
                     <span className="text-sm font-bold">{getMemberName(tx.from)}</span>
                     {isMe(tx.from) && <span className="text-xs text-zinc-400">自分</span>}
                   </div>
-                  <Icon.ChevronsRight size={20} className="text-zinc-400"></Icon.ChevronsRight>
+                  <Icon.ArrowBigRight size={20} className="text-zinc-400"></Icon.ArrowBigRight>
                   <div className="grid grid-flow-col items-center justify-start gap-2">
                     <span className="text-sm font-bold">{getMemberName(tx.to)}</span>
                     {isMe(tx.to) && <span className="text-xs text-zinc-400">自分</span>}
                   </div>
                   <div className="grid justify-end">
                     <Clickable
-                      className="grid grid-flow-col items-center gap-2 transition active:scale-90"
+                      className="grid grid-flow-col items-center gap-1 transition active:scale-90"
                       onClick={() => (setTx(tx), present.open())}
                     >
                       <CurrencyText {...displayCurrency({ currency: tx.currency, amount: tx.amount })}></CurrencyText>
-                      {/* <Icon.CheckCircle2 size={16} className="text-zinc-400"></Icon.CheckCircle2> */}
+                      <Icon.ChevronRight size={16} className="text-zinc-300"></Icon.ChevronRight>
                     </Clickable>
                   </div>
                 </Fragment>
@@ -147,7 +147,6 @@ export default function Remburse({ roomId, balances, primaryCurrency, rateMissin
           </div>
         )}
       </div>
-      <SafeAreaPadding />
       {tx && (
         <EventSheet
           {...present}
