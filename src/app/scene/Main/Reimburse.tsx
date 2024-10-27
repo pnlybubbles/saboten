@@ -13,6 +13,7 @@ import usePresent from '@app/hooks/usePresent'
 import useEvents from '@app/hooks/useEvents'
 import { v4 as uuid } from 'uuid'
 import SafeAreaPadding from '@app/components/SafeAreaPadding'
+import Button from '@app/components/Button'
 
 type Props = SheetProps & {
   roomId: string
@@ -82,45 +83,68 @@ export default function Remburse({ roomId, balances, primaryCurrency, rateMissin
   const present = usePresent()
   const [tx, setTx] = useState<Transaction>()
 
+  const [copied, setCopied] = useState<null | NodeJS.Timeout>(null)
+
   return (
     <Sheet {...sheet}>
       <div className="grid gap-4">
         <div className="text-xs font-bold text-zinc-400">精算方法</div>
         {transactions && transactions.length > 0 ? (
-          <div className="grid grid-cols-[auto_auto_auto_1fr] items-center gap-x-[6px] gap-y-2">
-            {transactions.map((tx) => (
-              <Fragment key={tx.id}>
-                <div className="grid grid-flow-col items-center justify-start gap-2">
-                  <span className="text-sm font-bold">{getMemberName(tx.from)}</span>
-                  {isMe(tx.from) && <span className="text-xs text-zinc-400">自分</span>}
-                </div>
-                <Icon.ChevronsRight size={20} className="text-zinc-400"></Icon.ChevronsRight>
-                <div className="grid grid-flow-col items-center justify-start gap-2">
-                  <span className="text-sm font-bold">{getMemberName(tx.to)}</span>
-                  {isMe(tx.to) && <span className="text-xs text-zinc-400">自分</span>}
-                </div>
-                <div className="grid justify-end">
-                  <Clickable
-                    className="grid grid-flow-col items-center gap-2 transition active:scale-90"
-                    onClick={() => (setTx(tx), present.open())}
-                  >
-                    <CurrencyText {...displayCurrency({ currency: tx.currency, amount: tx.amount })}></CurrencyText>
-                    {/* <Icon.CheckCircle2 size={16} className="text-zinc-400"></Icon.CheckCircle2> */}
-                  </Clickable>
-                </div>
-              </Fragment>
-            ))}
-          </div>
+          <>
+            <div className="grid grid-cols-[auto_auto_auto_1fr] items-center gap-x-[6px] gap-y-2">
+              {transactions.map((tx) => (
+                <Fragment key={tx.id}>
+                  <div className="grid grid-flow-col items-center justify-start gap-2">
+                    <span className="text-sm font-bold">{getMemberName(tx.from)}</span>
+                    {isMe(tx.from) && <span className="text-xs text-zinc-400">自分</span>}
+                  </div>
+                  <Icon.ChevronsRight size={20} className="text-zinc-400"></Icon.ChevronsRight>
+                  <div className="grid grid-flow-col items-center justify-start gap-2">
+                    <span className="text-sm font-bold">{getMemberName(tx.to)}</span>
+                    {isMe(tx.to) && <span className="text-xs text-zinc-400">自分</span>}
+                  </div>
+                  <div className="grid justify-end">
+                    <Clickable
+                      className="grid grid-flow-col items-center gap-2 transition active:scale-90"
+                      onClick={() => (setTx(tx), present.open())}
+                    >
+                      <CurrencyText {...displayCurrency({ currency: tx.currency, amount: tx.amount })}></CurrencyText>
+                      {/* <Icon.CheckCircle2 size={16} className="text-zinc-400"></Icon.CheckCircle2> */}
+                    </Clickable>
+                  </div>
+                </Fragment>
+              ))}
+            </div>
+            {transactionIncludesRateMissingCurrency && (
+              <Tips type="default">
+                変換レートが設定されていない通貨 ({rateMissingCurrency.join(', ')})
+                は、各通貨での精算方法を表示しています。
+              </Tips>
+            )}
+            <div className="grid justify-end">
+              <Button
+                mini
+                variant="secondary"
+                icon={copied ? <Icon.Check size={16} /> : <Icon.Copy size={14} className="mx-px" />}
+                onClick={() => {
+                  const reimburseText = transactions
+                    .map((tx) => `${getMemberName(tx.from)} → ${getMemberName(tx.to)} ${displayCurrency(tx).value}`)
+                    .join('\n')
+                  void navigator.clipboard.writeText(reimburseText).then(() => {
+                    if (copied) clearTimeout(copied)
+                    setCopied(setTimeout(() => setCopied(null), 3000))
+                  })
+                }}
+              >
+                精算方法をコピー
+              </Button>
+            </div>
+          </>
         ) : (
           <div className="ml-[4px] grid h-12 grid-flow-col items-center justify-start gap-1 rounded-xl border-2 border-dotted border-zinc-400 px-4 text-xs text-zinc-400">
             <Icon.Beer size={16}></Icon.Beer>
             全員の精算が完了しました！
           </div>
-        )}
-        {transactionIncludesRateMissingCurrency && (
-          <Tips type="default">
-            変換レートが設定されていない通貨 ({rateMissingCurrency.join(', ')}) は、各通貨での精算方法を表示しています。
-          </Tips>
         )}
       </div>
       <SafeAreaPadding />
