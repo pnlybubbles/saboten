@@ -12,7 +12,6 @@ import EventSheet from './EventSheet'
 import usePresent from '@app/hooks/usePresent'
 import useEvents from '@app/hooks/useEvents'
 import { v4 as uuid } from 'uuid'
-import SafeAreaPadding from '@app/components/SafeAreaPadding'
 import Button from '@app/components/Button'
 
 type Props = SheetProps & {
