@@ -7,16 +7,26 @@ import useDirty from '@app/hooks/useDirty'
 import useRoomCurrencyRate from '@app/hooks/useRoomCurrencyRate'
 import cc from 'currency-codes'
 import { useCallback, useState } from 'react'
+import * as Icon from 'lucide-react'
+import clsx from 'clsx'
 
 interface Props extends SheetProps {
   defaultRate?: number
   roomId: string | null
   currency: string
   toCurrency: string
+  removable?: boolean
 }
 
-export default function CurrencyRateSheet({ currency, toCurrency, roomId, defaultRate, ...sheet }: Props) {
-  const [, { updateRate, displayCurrency }] = useRoomCurrencyRate(roomId)
+export default function CurrencyRateSheet({
+  currency,
+  toCurrency,
+  roomId,
+  defaultRate,
+  removable = false,
+  ...sheet
+}: Props) {
+  const [, { updateRate, removeRate, displayCurrency }] = useRoomCurrencyRate(roomId)
   const currencyRecord = cc.code(currency)
   const toCurrencyDigits = cc.code(toCurrency)?.digits
   const defaultInputRate =
@@ -47,6 +57,12 @@ export default function CurrencyRateSheet({ currency, toCurrency, roomId, defaul
     sheet.onPresent(false)
   }
 
+  const handleRemove = () => {
+    clearDirty()
+    void removeRate({ currency, toCurrency })
+    sheet.onPresent(false)
+  }
+
   return (
     <Sheet {...sheet}>
       <div className="grid gap-4">
@@ -65,9 +81,12 @@ export default function CurrencyRateSheet({ currency, toCurrency, roomId, defaul
           value={inputRate}
           onChange={dirty(setInputRate)}
         ></TextField>
-        <Button onClick={handleUpdate} disabled={inputRate === ''}>
-          設定
-        </Button>
+        <div className={clsx('grid gap-2', removable && 'grid-cols-[auto_1fr]')}>
+          {removable && <Button onClick={handleRemove} icon={<Icon.Trash2 size={20} />} variant="danger"></Button>}
+          <Button onClick={handleUpdate} disabled={inputRate === ''}>
+            設定
+          </Button>
+        </div>
       </div>
     </Sheet>
   )

@@ -106,6 +106,7 @@ function CurrencyRateItem({ currency, toCurrency, rate, roomId }: CurrencyRatePa
         toCurrency={toCurrency}
         defaultRate={rate}
         roomId={roomId}
+        removable
         {...currencyRateSheet}
       ></CurrencyRateSheet>
     </>
