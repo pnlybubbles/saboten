@@ -147,8 +147,16 @@ export default function useRoomCurrencyRate(roomId: string | null) {
   )
 
   const displayCurrency = useCallback(
-    (value: CurrencyValue, displayAsCurrency: string = value.currency): DisplayCurrencyValue => {
-      return formatDisplayCurrencyValue(convertCurrencyValueToRaw(value, displayAsCurrency), displayAsCurrency)
+    (
+      value: CurrencyValue,
+      displayAsCurrency: string = value.currency,
+      forceFraction: boolean = false,
+    ): DisplayCurrencyValue => {
+      return formatDisplayCurrencyValue(
+        convertCurrencyValueToRaw(value, displayAsCurrency),
+        displayAsCurrency,
+        forceFraction,
+      )
     },
     [convertCurrencyValueToRaw],
   )
@@ -189,7 +197,7 @@ export default function useRoomCurrencyRate(roomId: string | null) {
   ] as const
 }
 
-const formatDisplayCurrencyValue = (raw: number | null, displayAsCurrency: string) => {
+const formatDisplayCurrencyValue = (raw: number | null, displayAsCurrency: string, forceFraction: boolean = false) => {
   if (raw === null) {
     return { value: '?', sign: true, invalid: true }
   }
@@ -197,7 +205,7 @@ const formatDisplayCurrencyValue = (raw: number | null, displayAsCurrency: strin
   const negative = raw < 0
 
   return {
-    value: formatCurrencyNumber(negative ? -raw : raw, displayAsCurrency),
+    value: formatCurrencyNumber(negative ? -raw : raw, displayAsCurrency, forceFraction),
     sign: !negative,
     invalid: false,
   }

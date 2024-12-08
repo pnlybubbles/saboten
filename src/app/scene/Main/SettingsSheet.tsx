@@ -96,7 +96,7 @@ function CurrencyRateItem({ currency, toCurrency, rate, roomId }: CurrencyRatePa
           ></CurrencyText>
           <span className="text-xs font-bold text-zinc-400">{` = `}</span>
           <CurrencyText
-            {...displayCurrency({ amount: rate * 10 ** currencyDigits, currency: toCurrency })}
+            {...displayCurrency({ amount: rate * 10 ** currencyDigits, currency: toCurrency }, undefined, true)}
             className="font-bold"
           ></CurrencyText>
         </div>
