@@ -17,8 +17,8 @@ import Clickable from '@app/components/Clickable'
 import { useMemo } from 'react'
 import unreachable from '@app/util/unreachable'
 import * as Icon from 'lucide-react'
-import useRoomCurrencyRate from '@app/hooks/useRoomCurrencyRate'
 import Tab from '@app/components/Tab'
+import useEvents from '@app/hooks/useEvents'
 
 type EventPayloadDefault =
   | (Omit<Extract<EventPayload, { type: 'payment' }>, 'paidByMemberId'> & { paidByMemberId: string | null })
@@ -225,8 +225,11 @@ export default function EventSheet({
     sheet.onPresent(false)
   }
 
-  const [roomCurrencyRate] = useRoomCurrencyRate(roomId)
-  const recentlyUsedCurrencyCodes = useMemo(() => roomCurrencyRate?.map((v) => v.currency) ?? [], [roomCurrencyRate])
+  const [events] = useEvents(roomId)
+  const recentlyUsedCurrencyCodes = useMemo(
+    () => events?.flatMap((v) => v.payments.map((w) => w.currency)).filter(isUnique) ?? [],
+    [events],
+  )
 
   const handleSelectCurrency = (code: string) => {
     setCurrency(code)
