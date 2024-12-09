@@ -44,6 +44,16 @@ export default function AboutSheet({ ...present }: SheetProps) {
             <span>github.com/pnlybubbles/saboten</span>
           </a>
         </div>
+        <div className="grid justify-center">
+          <a href="https://ko-fi.com/W7W3RWI1X" target="_blank" rel="noreferrer">
+            <img
+              height="32"
+              className="h-8 border-0"
+              src="https://storage.ko-fi.com/cdn/kofi3.png?v=6"
+              alt="Buy Me a Coffee at ko-fi.com"
+            />
+          </a>
+        </div>
       </div>
       <SafeAreaPadding />
     </Sheet>
