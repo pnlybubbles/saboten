@@ -98,6 +98,25 @@ const room = new Hono<Env>()
     await db.delete(schema.room).where(and(eq(schema.room.id, roomId)))
     return c.json({})
   })
+  .post(
+    '/archive',
+    auth,
+    zValidator('json', z.object({ roomId: z.string().uuid(), value: z.boolean() })),
+    async (c) => {
+      const db = drizzle(c.env.DB)
+      const { userId } = c.var
+      const { roomId, value } = c.req.valid('json')
+      const [row] = await db
+        .select()
+        .from(schema.roomMember)
+        .where(and(eq(schema.roomMember.roomId, roomId), eq(schema.roomMember.userId, userId)))
+      if (row === undefined) {
+        throw new HTTPException(403, { message: 'Only member can archive the room' })
+      }
+      await db.update(schema.room).set({ archive: value }).where(eq(schema.room.id, roomId))
+      return c.json({ roomId, archive: value })
+    },
+  )
   .route('/member', roomMember)
   .route('/currencyRate', roomCurrencyRate)
 

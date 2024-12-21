@@ -8,6 +8,7 @@ import { z } from 'zod'
 const ROOM_SCHEMA = z.object({
   id: z.string(),
   title: z.string(),
+  archive: z.boolean(),
   members: z.array(
     z.object({
       id: z.string().uuid(),
