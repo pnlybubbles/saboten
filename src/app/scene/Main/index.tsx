@@ -251,10 +251,13 @@ function RecentRooms({ className, ...props }: { onEnter?: () => void; className?
           <RecentRoomItem roomId={id} title={title} key={id} {...props}></RecentRoomItem>
         ))}
       <Clickable
-        className="-ml-1 mb-4 mt-6 grid grid-flow-col items-center justify-start gap-1 text-xs font-bold first:mt-2"
+        className="-ml-1 mb-4 mt-6 grid grid-flow-col items-center justify-start gap-1 text-xs font-bold transition first:mt-2 active:scale-90"
         onClick={() => archive.onPresent((v) => !v)}
       >
-        <Icon.ChevronRight size={16} className={clsx(archive.isPresent && 'rotate-90')}></Icon.ChevronRight>
+        <Icon.ChevronRight
+          size={16}
+          className={clsx('transition', archive.isPresent && 'rotate-90')}
+        ></Icon.ChevronRight>
         <div>アーカイブ</div>
       </Clickable>
       {archive.isPresent &&
