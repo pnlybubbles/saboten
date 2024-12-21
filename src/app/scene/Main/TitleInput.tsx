@@ -1,13 +1,16 @@
 import useDirty from '@app/hooks/useDirty'
+import clsx from 'clsx'
 import { useCallback, useRef, useState } from 'react'
 
 export default function TitleInput({
   defaultValue = '',
   onChange,
+  className,
   disabled,
 }: {
   defaultValue: string | undefined
   onChange: (title: string) => void
+  className?: string
   disabled?: boolean
 }) {
   const ref = useRef<HTMLInputElement>(null)
@@ -21,7 +24,10 @@ export default function TitleInput({
 
   return (
     <div
-      className="transition active:scale-95 active:focus-within:scale-100 aria-disabled:active:scale-100"
+      className={clsx(
+        'transition active:scale-95 active:focus-within:scale-100 aria-disabled:active:scale-100',
+        className,
+      )}
       aria-disabled={disabled}
     >
       <input

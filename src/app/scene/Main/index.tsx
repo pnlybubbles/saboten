@@ -154,7 +154,7 @@ export default function Main({ roomId }: Props) {
                 >
                   <Icon.FlagTriangleRight />
                 </div>
-                <TitleInput defaultValue={title} onChange={setTitle} disabled={archived}></TitleInput>
+                <TitleInput defaultValue={title} onChange={setTitle} disabled={archived} className="grow"></TitleInput>
               </div>
               {(title === undefined || title.length === 0) && (
                 <Tips
