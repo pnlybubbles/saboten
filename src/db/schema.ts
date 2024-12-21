@@ -65,6 +65,7 @@ export const room = sqliteTable('Room', {
   id: text('id').notNull().primaryKey(),
   createdAt: text('createdAt').notNull().default(NOW),
   title: text('title').notNull().default(''),
+  archive: integer('archive', { mode: 'boolean' }).notNull().default(false),
 })
 
 export const roomRelations = relations(room, ({ many }) => ({

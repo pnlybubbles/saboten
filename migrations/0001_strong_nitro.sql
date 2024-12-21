@@ -1,0 +1,1 @@
+ALTER TABLE Room ADD `archive` integer DEFAULT false NOT NULL;

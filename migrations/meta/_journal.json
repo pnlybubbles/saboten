@@ -8,6 +8,13 @@
       "when": 1707464381655,
       "tag": "0000_aromatic_korvac",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1734802446644,
+      "tag": "0001_strong_nitro",
+      "breakpoints": true
     }
   ]
 }
