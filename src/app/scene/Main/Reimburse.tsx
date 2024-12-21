@@ -13,6 +13,7 @@ import usePresent from '@app/hooks/usePresent'
 import useEvents from '@app/hooks/useEvents'
 import { v4 as uuid } from 'uuid'
 import Button from '@app/components/Button'
+import useRoomArchived from '@app/hooks/useRoomArchive'
 
 type Props = SheetProps & {
   roomId: string
@@ -84,6 +85,8 @@ export default function Remburse({ roomId, balances, primaryCurrency, rateMissin
 
   const [copied, setCopied] = useState<null | NodeJS.Timeout>(null)
 
+  const [archived] = useRoomArchived(roomId)
+
   return (
     <Sheet {...sheet}>
       <div className="grid gap-4">
@@ -104,11 +107,12 @@ export default function Remburse({ roomId, balances, primaryCurrency, rateMissin
                   </div>
                   <div className="grid justify-end">
                     <Clickable
-                      className="grid grid-flow-col items-center gap-1 transition active:scale-90"
+                      className="grid grid-flow-col items-center gap-1 transition active:scale-90 disabled:active:scale-100"
                       onClick={() => (setTx(tx), present.open())}
+                      disabled={archived}
                     >
                       <CurrencyText {...displayCurrency({ currency: tx.currency, amount: tx.amount })}></CurrencyText>
-                      <Icon.ChevronRight size={16} className="text-zinc-300"></Icon.ChevronRight>
+                      {!archived && <Icon.ChevronRight size={16} className="text-zinc-300"></Icon.ChevronRight>}
                     </Clickable>
                   </div>
                 </Fragment>
