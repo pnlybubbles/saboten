@@ -8,7 +8,7 @@ import type { RPCResponseType } from '@app/util/rpc'
 import rpc from '@app/util/rpc'
 import ok from '@app/util/ok'
 
-const USER_ROOMS_STORAGE = z.array(z.object({ id: z.string(), title: z.string() }))
+const USER_ROOMS_STORAGE = z.array(z.object({ id: z.string(), title: z.string(), archive: z.boolean() }))
 
 export const USER_ROOMS_LOCAL_STORAGE_KEY = (userId: string) => `user_rooms_${userId}`
 

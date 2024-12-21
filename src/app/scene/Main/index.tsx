@@ -227,6 +227,7 @@ export default function Main({ roomId }: Props) {
 
 function RecentRooms({ className, ...props }: { onEnter?: () => void; className?: string }) {
   const [userRooms] = useUserRooms()
+  const archive = usePresent()
 
   if (userRooms === null || userRooms.length === 0) {
     return null
@@ -234,10 +235,23 @@ function RecentRooms({ className, ...props }: { onEnter?: () => void; className?
 
   return (
     <div className={className}>
-      <div className="mb-4 text-xs font-bold">最近の旅</div>
-      {userRooms.map(({ id, title }) => (
-        <RecentRoomItem roomId={id} title={title} key={id} {...props}></RecentRoomItem>
-      ))}
+      <div className="mb-4 mt-6 text-xs font-bold first:mt-2">最近の旅</div>
+      {userRooms
+        .filter((v) => !v.archive)
+        .map(({ id, title }) => (
+          <RecentRoomItem roomId={id} title={title} key={id} {...props}></RecentRoomItem>
+        ))}
+      <Clickable
+        className="-ml-1 mb-4 mt-6 grid grid-flow-col items-center justify-start gap-1 text-xs font-bold first:mt-2"
+        onClick={() => archive.onPresent((v) => !v)}
+      >
+        <Icon.ChevronRight size={16} className={clsx(archive.isPresent && 'rotate-90')}></Icon.ChevronRight>
+        <div>アーカイブ</div>
+      </Clickable>
+      {archive.isPresent &&
+        userRooms
+          .filter((v) => v.archive)
+          .map(({ id, title }) => <RecentRoomItem roomId={id} title={title} key={id} {...props}></RecentRoomItem>)}
     </div>
   )
 }

@@ -37,7 +37,7 @@ const room = new Hono<Env>()
     const db = drizzle(c.env.DB)
     const { userId } = c.var
     const rooms = await db
-      .select({ id: schema.room.id, title: schema.room.title })
+      .select({ id: schema.room.id, title: schema.room.title, archive: schema.room.archive })
       .from(schema.room)
       .innerJoin(schema.roomMember, eq(schema.room.id, schema.roomMember.roomId))
       .where(eq(schema.roomMember.userId, userId))
