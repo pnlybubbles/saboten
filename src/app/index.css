@@ -17,6 +17,11 @@
   [vaul-drawer] {
     outline: none;
   }
+
+  /* iOS safari disabled input has opacity */
+  input:disabled {
+    opacity: 1;
+  }
 }
 
 @layer utilities {
