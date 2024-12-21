@@ -394,8 +394,9 @@ export default function EventSheet({
                           : tab === 'transfer'
                             ? // 送金イベントの場合は最初の選択のみ使う
                               transferToMember === member.id
-                            : unreachable(tab)) &&
-                        'border-zinc-900',
+                            : unreachable(tab))
+                        ? 'border-zinc-900'
+                        : 'group-aria-disabled:hidden',
                     )}
                     onClick={() => {
                       if (member.id === null) {
