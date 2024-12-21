@@ -15,7 +15,7 @@ import useUserRooms from '@app/hooks/useUserRooms'
 import { Link } from 'react-router-dom'
 import useRoomLocalStorage from '@app/hooks/useRoomLocalStorage'
 import { deriveMemberName } from '@app/hooks/useRoomMember'
-import { useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import Tips from '@app/components/Tips'
 import clsx from 'clsx'
 import Clickable from '@app/components/Clickable'
@@ -23,6 +23,7 @@ import SettingsSheet from './SettingsSheet'
 import * as Icon from 'lucide-react'
 import AboutSheet from './AboutSheet'
 import Popover from '@app/components/Popover'
+import useRoomArchived from '@app/hooks/useRoomArchive'
 
 interface Props {
   roomId: string | null
@@ -39,6 +40,8 @@ export default function Main({ roomId }: Props) {
   const aboutSheet = usePresent()
   const noEvent = events == null || events.length === 0
   const drawer = usePresent()
+  const [archived] = useRoomArchived(roomId)
+  const [unarchiveTips, setUnarchiveTips] = useState(false)
 
   useEffect(() => {
     if (drawer.isPresent) {
@@ -168,20 +171,53 @@ export default function Main({ roomId }: Props) {
             {roomId === null ? <RecentRooms className="md:hidden" /> : <Events roomId={roomId}></Events>}
           </div>
           <div className={'pointer-events-none sticky bottom-0 left-0 w-full self-end'}>
-            {noEvent && <div className="h-12 w-full bg-gradient-to-t from-zinc-50"></div>}
-            <div className={clsx('grid justify-items-center gap-2 pb-8 pt-2', noEvent && 'bg-zinc-50')}>
-              {noEvent && (
-                <Tips type={Icon.PawPrint} className="text-zinc-400">
-                  最初のイベントを追加しよう！
-                </Tips>
-              )}
-              <Clickable
-                className="pointer-events-auto grid size-16 select-none grid-flow-col items-center justify-items-center gap-1 rounded-full bg-white shadow-float transition active:scale-90"
-                onClick={createEventSheet.open}
-              >
-                <Icon.Plus size={24}></Icon.Plus>
-              </Clickable>
-            </div>
+            {archived ? (
+              <>
+                <div
+                  className={clsx(
+                    'h-12 w-full bg-gradient-to-t from-zinc-50 transition',
+                    !unarchiveTips && 'opacity-0',
+                  )}
+                ></div>
+                <div
+                  className={clsx(
+                    'grid justify-items-center gap-2 pb-8 pt-2 transition',
+                    unarchiveTips && 'bg-zinc-50',
+                  )}
+                >
+                  <Tips
+                    type={Icon.Settings}
+                    className={clsx('text-zinc-400 transition', !unarchiveTips && 'translate-y-4 opacity-0')}
+                  >
+                    アーカイブを解除するとイベントを追加できます
+                  </Tips>
+                  <Clickable
+                    className="pointer-events-auto grid w-max grid-flow-col gap-[2px] rounded-full bg-white py-2 pl-[14px] pr-4 text-xs font-bold text-zinc-400 shadow-float transition active:scale-90"
+                    onClick={() => setUnarchiveTips((v) => !v)}
+                  >
+                    <Icon.FlagTriangleRight size={16} />
+                    <div>アーカイブ済み</div>
+                  </Clickable>
+                </div>
+              </>
+            ) : (
+              <>
+                {noEvent && <div className="h-12 w-full bg-gradient-to-t from-zinc-50"></div>}
+                <div className={clsx('grid justify-items-center gap-2 pb-8 pt-2', noEvent && 'bg-zinc-50')}>
+                  {noEvent && (
+                    <Tips type={Icon.PawPrint} className="text-zinc-400">
+                      最初のイベントを追加しよう！
+                    </Tips>
+                  )}
+                  <Clickable
+                    className="pointer-events-auto grid size-16 select-none grid-flow-col items-center justify-items-center gap-1 rounded-full bg-white shadow-float transition active:scale-90"
+                    onClick={createEventSheet.open}
+                  >
+                    <Icon.Plus size={24}></Icon.Plus>
+                  </Clickable>
+                </div>
+              </>
+            )}
           </div>
         </div>
       </Clickable>
