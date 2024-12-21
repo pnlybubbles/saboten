@@ -98,7 +98,7 @@ export default forwardRef<HTMLInputElement, Props>(function TextField(
   return (
     <label
       className={clsx(
-        'relative grid items-end rounded-xl transition aria-disabled:opacity-40',
+        'relative grid items-end rounded-xl transition aria-disabled:pointer-events-none aria-disabled:opacity-40',
         label ? 'h-18' : 'h-14',
         inputError ? 'bg-error/5 shadow-invalid' : 'bg-surface focus-within:shadow-focus',
         inputError && inputErrorAnimation && 'shadow-spread',

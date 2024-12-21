@@ -19,6 +19,8 @@ import unreachable from '@app/util/unreachable'
 import * as Icon from 'lucide-react'
 import Tab from '@app/components/Tab'
 import useEvents from '@app/hooks/useEvents'
+import useRoomArchived from '@app/hooks/useRoomArchive'
+import Tips from '@app/components/Tips'
 
 type EventPayloadDefault =
   | (Omit<Extract<EventPayload, { type: 'payment' }>, 'paidByMemberId'> & { paidByMemberId: string | null })
@@ -231,6 +233,8 @@ export default function EventSheet({
     [events],
   )
 
+  const [archived] = useRoomArchived(roomId)
+
   const handleSelectCurrency = (code: string) => {
     setCurrency(code)
     editCurrencySheet.close()
@@ -251,17 +255,19 @@ export default function EventSheet({
             ]}
             value={tab}
             onChange={dirty(setTab)}
+            disabled={archived}
             className="w-20"
           ></Tab>
         )}
-        <TextField label="イベントの名前" name="label" value={label} onChange={dirty(setLabel)} />
+        <TextField label="イベントの名前" name="label" value={label} onChange={dirty(setLabel)} disabled={archived} />
         <div className="grid grid-cols-[auto_1fr] gap-3">
           <div
             className={clsx(
-              'grid h-18 grid-flow-row content-between rounded-xl bg-surface px-5 pb-2.5 pt-[0.85rem] transition',
+              'grid h-18 grid-flow-row content-between rounded-xl bg-surface px-5 pb-2.5 pt-[0.85rem] transition aria-disabled:opacity-40',
               editCurrencySheet.isPresent && 'shadow-focus',
             )}
             onClick={editCurrencySheet.open}
+            aria-disabled={archived}
           >
             <div className="text-xs font-bold text-zinc-400">通貨</div>
             <div className="text-base">{currency}</div>
@@ -299,6 +305,8 @@ export default function EventSheet({
             inputMode="decimal"
             value={amount}
             onChange={dirty(setAmount)}
+            disabled={archived}
+            className="group"
           >
             <div className="flex">
               <div className="w-4 bg-gradient-to-l from-surface"></div>
@@ -346,6 +354,7 @@ export default function EventSheet({
                             : // width: 2.25rem + border: 2px * 2 + padding: 2px * 2
                               'pointer-events-none ml-[calc(-2.25rem-8px)] opacity-0',
                           member.id === paidByMember && 'mx-1 border-zinc-900 first:ml-0 last:mr-0',
+                          'group-aria-disabled:border-transparent',
                         )}
                       >
                         <Avatar mini noNegative name={getMemberName(member)}></Avatar>
@@ -361,7 +370,10 @@ export default function EventSheet({
             </div>
           </TextField>
         </div>
-        <div className="grid gap-3 rounded-xl bg-surface px-5 py-4">
+        <div
+          className="group grid gap-3 rounded-xl bg-surface px-5 py-4 aria-disabled:pointer-events-none aria-disabled:opacity-40"
+          aria-disabled={archived}
+        >
           <div className="text-xs font-bold text-zinc-400">
             {tab === 'payment' ? '割り勘するメンバー' : '送金先のメンバー'}
           </div>
@@ -374,6 +386,7 @@ export default function EventSheet({
                     disabled={member.id === null}
                     className={clsx(
                       'rounded-full border-2 border-transparent p-[2px] transition active:scale-90 disabled:opacity-30',
+                      'group-aria-disabled:border-transparent',
                       member.id &&
                         (tab === 'payment'
                           ? // 支払いのイベントの場合は複数選択可能
@@ -415,8 +428,10 @@ export default function EventSheet({
             </div>
           </div>
         </div>
-        <div className={clsx('grid gap-2', onRemove && 'grid-cols-[auto_1fr]')}>
-          {onRemove && <Button onClick={onRemove} icon={<Icon.Trash2 size={20} />} variant="danger"></Button>}
+        <div className={clsx('grid gap-2', onRemove && !archived && 'grid-cols-[auto_1fr]')}>
+          {onRemove && !archived && (
+            <Button onClick={onRemove} icon={<Icon.Trash2 size={20} />} variant="danger"></Button>
+          )}
           <Button
             onClick={handleSubmit}
             disabled={
@@ -424,13 +439,17 @@ export default function EventSheet({
               validatedAmountValue === null ||
               (eventMembersCandidate.length > 0 && eventMembers.length === 0) ||
               (tab === 'transfer' && transferToMember === undefined) ||
-              (roomId !== null && paidByMember === null)
+              (roomId !== null && paidByMember === null) ||
+              archived
             }
             loading={busy}
           >
-            {submitLabel}
+            {archived ? 'アーカイブ済み' : submitLabel}
           </Button>
         </div>
+        <Tips type={Icon.FlagTriangleRight} className={clsx(!archived && 'hidden')}>
+          設定からアーカイブを解除することで編集できるようになります。
+        </Tips>
       </div>
     </Sheet>
   )

@@ -62,7 +62,7 @@ export default function SettingsSheet({ roomId, ...sheet }: Props) {
             ? 'アーカイブを解除すると記録の編集ができるようになります。'
             : '完了済みとしてマークします。アーカイブを解除するまで記録の編集がロックされます。'}
         </Tips>
-        <Button loading={busy} onClick={() => setArchived(!archived)}>
+        <Button disabled={busy} onClick={() => setArchived(!archived)}>
           {archived ? 'アーカイブ解除' : 'アーカイブ'}
         </Button>
         {currencyRate && currencyRate.length > 0 && (
