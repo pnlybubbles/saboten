@@ -7,7 +7,7 @@ import type { CurrencyRatePayload } from '@app/hooks/useRoomCurrencyRate'
 import useRoomCurrencyRate from '@app/hooks/useRoomCurrencyRate'
 import { roomLocalStorageDescriptor } from '@app/hooks/useRoomLocalStorage'
 import useUser from '@app/hooks/useUser'
-import { userRoomsLocalStorageDescriptor } from '@app/hooks/useUserRooms'
+import useUserRooms, { userRoomsLocalStorageDescriptor } from '@app/hooks/useUserRooms'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import cc from 'currency-codes'
@@ -48,6 +48,7 @@ export default function SettingsSheet({ roomId, ...sheet }: Props) {
   const [currencyRate] = useRoomCurrencyRate(roomId)
 
   const [archived, setArchived] = useRoomArchived(roomId)
+  const [, { revalidate }] = useUserRooms()
 
   return (
     <Sheet {...sheet}>
@@ -62,7 +63,14 @@ export default function SettingsSheet({ roomId, ...sheet }: Props) {
             ? 'アーカイブを解除すると記録の編集ができるようになります。'
             : '完了済みとしてマークします。アーカイブを解除するまで記録の編集がロックされます。'}
         </Tips>
-        <Button disabled={busy} onClick={() => setArchived(!archived)}>
+        <Button
+          disabled={busy}
+          onClick={async () => {
+            await setArchived(!archived)
+            // TODO: 独立したステートになっているので、再取得してOUと整合を取る
+            void revalidate()
+          }}
+        >
           {archived ? 'アーカイブ解除' : 'アーカイブ'}
         </Button>
         {currencyRate && currencyRate.length > 0 && (
