@@ -15,7 +15,7 @@ import CurrencyRateSheet from './CurrencyRateSheet'
 import usePresent from '@app/hooks/usePresent'
 import Clickable from '@app/components/Clickable'
 import rpc from '@app/util/rpc'
-import useRoomArchive from '@app/hooks/useRoomArchive'
+import useRoomArchived from '@app/hooks/useRoomArchive'
 
 interface Props extends SheetProps {
   roomId: string
@@ -47,7 +47,7 @@ export default function SettingsSheet({ roomId, ...sheet }: Props) {
 
   const [currencyRate] = useRoomCurrencyRate(roomId)
 
-  const [archive, setArchive] = useRoomArchive(roomId)
+  const [archived, setArchived] = useRoomArchived(roomId)
 
   return (
     <Sheet {...sheet}>
@@ -58,12 +58,12 @@ export default function SettingsSheet({ roomId, ...sheet }: Props) {
           削除
         </Button>
         <Tips>
-          {archive
+          {archived
             ? 'アーカイブを解除すると記録の編集ができるようになります。'
             : '完了済みとしてマークします。アーカイブを解除するまで記録の編集がロックされます。'}
         </Tips>
-        <Button loading={busy} onClick={() => setArchive(!archive)}>
-          {archive ? 'アーカイブ解除' : 'アーカイブ'}
+        <Button loading={busy} onClick={() => setArchived(!archived)}>
+          {archived ? 'アーカイブ解除' : 'アーカイブ'}
         </Button>
         {currencyRate && currencyRate.length > 0 && (
           <>

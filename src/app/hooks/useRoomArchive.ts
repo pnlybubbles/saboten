@@ -25,7 +25,7 @@ const roomArchiveStore = createStore(
   },
 )
 
-export default function useRoomArchive(roomId: string | null) {
+export default function useRoomArchived(roomId: string | null) {
   const [state, setState] = useStore(roomArchiveStore, roomId)
 
   const setArchive = useCallback(
@@ -47,5 +47,5 @@ export default function useRoomArchive(roomId: string | null) {
     [roomId, setState],
   )
 
-  return [state, setArchive] as const
+  return [state ?? false, setArchive] as const
 }
