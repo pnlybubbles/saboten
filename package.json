@@ -69,7 +69,7 @@
     "db:migrate": "drizzle-kit generate:sqlite",
     "db:studio": "drizzle-kit studio",
     "deploy": "run-s 'deploy:*'",
-    "deploy:db": "wrangler d1 migrations apply saboten",
+    "deploy:db": "wrangler d1 migrations apply saboten --remote",
     "deploy:worker": "wrangler deploy",
     "deploy:app": "vite build && wrangler pages deploy dist",
     "fmt": "run-p 'fmt:*'",
