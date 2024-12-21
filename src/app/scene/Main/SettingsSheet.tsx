@@ -16,6 +16,7 @@ import usePresent from '@app/hooks/usePresent'
 import Clickable from '@app/components/Clickable'
 import rpc from '@app/util/rpc'
 import useRoomArchived from '@app/hooks/useRoomArchive'
+import * as Icon from 'lucide-react'
 
 interface Props extends SheetProps {
   roomId: string
@@ -58,7 +59,7 @@ export default function SettingsSheet({ roomId, ...sheet }: Props) {
         <Button variant="danger" loading={busy} onClick={handleRemove}>
           削除
         </Button>
-        <Tips>
+        <Tips type={Icon.FlagTriangleRight}>
           {archived
             ? 'アーカイブを解除すると記録の編集ができるようになります。'
             : '完了済みとしてマークします。アーカイブを解除するまで記録の編集がロックされます。'}

@@ -149,7 +149,7 @@ export default function Main({ roomId }: Props) {
                 <div
                   className={clsx(
                     'pointer-events-none text-zinc-400 transition-[width,opacity]',
-                    archived ? 'w-8 pr-2' : 'w-0 opacity-0',
+                    archived ? 'w-7 pr-1' : 'w-0 opacity-0',
                   )}
                 >
                   <Icon.FlagTriangleRight />
@@ -196,16 +196,15 @@ export default function Main({ roomId }: Props) {
                   )}
                 >
                   <Tips
-                    type={Icon.Settings}
+                    type={Icon.FlagTriangleRight}
                     className={clsx('text-zinc-400 transition', !unarchiveTips && 'translate-y-4 opacity-0')}
                   >
                     アーカイブを解除するとイベントを追加できます
                   </Tips>
                   <Clickable
-                    className="pointer-events-auto grid w-max grid-flow-col gap-[2px] rounded-full bg-white py-2 pl-[14px] pr-4 text-xs font-bold text-zinc-400 shadow-float transition active:scale-90"
+                    className="pointer-events-auto grid w-max grid-flow-col gap-[2px] rounded-full bg-white px-4 py-2 text-xs font-bold text-zinc-400 shadow-float transition active:scale-90"
                     onClick={() => setUnarchiveTips((v) => !v)}
                   >
-                    <Icon.FlagTriangleRight size={16} />
                     <div>アーカイブ済み</div>
                   </Clickable>
                 </div>
