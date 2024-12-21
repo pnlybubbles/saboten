@@ -4,9 +4,11 @@ import { useCallback, useRef, useState } from 'react'
 export default function TitleInput({
   defaultValue = '',
   onChange,
+  disabled,
 }: {
   defaultValue: string | undefined
   onChange: (title: string) => void
+  disabled?: boolean
 }) {
   const ref = useRef<HTMLInputElement>(null)
   const [title, setTitle] = useState(defaultValue)
@@ -18,7 +20,10 @@ export default function TitleInput({
   )
 
   return (
-    <div className="transition active:scale-95 active:focus-within:scale-100">
+    <div
+      className="transition active:scale-95 active:focus-within:scale-100 aria-disabled:active:scale-100"
+      aria-disabled={disabled}
+    >
       <input
         ref={ref}
         value={title}
@@ -38,6 +43,7 @@ export default function TitleInput({
         }
         placeholder="No title"
         name="title"
+        disabled={disabled}
       />
     </div>
   )

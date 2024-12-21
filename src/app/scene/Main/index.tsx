@@ -145,7 +145,17 @@ export default function Main({ roomId }: Props) {
               </div>
             </div>
             <div className="group">
-              <TitleInput defaultValue={title} onChange={setTitle}></TitleInput>
+              <div className="flex items-center">
+                <div
+                  className={clsx(
+                    'pointer-events-none text-zinc-400 transition-[width,opacity]',
+                    archived ? 'w-8 pr-2' : 'w-0 opacity-0',
+                  )}
+                >
+                  <Icon.FlagTriangleRight />
+                </div>
+                <TitleInput defaultValue={title} onChange={setTitle} disabled={archived}></TitleInput>
+              </div>
               {(title === undefined || title.length === 0) && (
                 <Tips
                   type={Icon.PlaneTakeoff}
