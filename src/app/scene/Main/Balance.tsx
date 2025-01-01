@@ -186,7 +186,7 @@ export default function Balance({ roomId }: Props) {
   const reimburseSheet = usePresent()
 
   return (
-    <div className="relative">
+    <div className="relative z-0">
       <div className="-mx-1 -mb-6 grid overflow-hidden px-1 after:block after:h-6 after:overflow-hidden after:rounded-b-xl after:bg-gradient-to-b after:from-transparent after:to-white">
         <Clickable
           onClick={() => totalCurrencyValue.length > 0 && setShowDetail((v) => !v)}

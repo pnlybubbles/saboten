@@ -1,22 +1,13 @@
 import Button from '@app/components/Button'
-import CurrencyText from '@app/components/CurrencyText'
 import type { SheetProps } from '@app/components/Sheet'
 import Sheet from '@app/components/Sheet'
 import Tips from '@app/components/Tips'
-import type { CurrencyRatePayload } from '@app/hooks/useRoomCurrencyRate'
-import useRoomCurrencyRate from '@app/hooks/useRoomCurrencyRate'
 import { roomLocalStorageDescriptor } from '@app/hooks/useRoomLocalStorage'
 import useUser from '@app/hooks/useUser'
-import useUserRooms, { userRoomsLocalStorageDescriptor } from '@app/hooks/useUserRooms'
+import { userRoomsLocalStorageDescriptor } from '@app/hooks/useUserRooms'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import cc from 'currency-codes'
-import CurrencyRateSheet from './CurrencyRateSheet'
-import usePresent from '@app/hooks/usePresent'
-import Clickable from '@app/components/Clickable'
 import rpc from '@app/util/rpc'
-import useRoomArchived from '@app/hooks/useRoomArchive'
-import * as Icon from 'lucide-react'
 
 interface Props extends SheetProps {
   roomId: string
@@ -46,89 +37,15 @@ export default function SettingsSheet({ roomId, ...sheet }: Props) {
     }
   }
 
-  const [currencyRate] = useRoomCurrencyRate(roomId)
-
-  const [archived, setArchived] = useRoomArchived(roomId)
-  const [, { revalidate }] = useUserRooms()
-
   return (
     <Sheet {...sheet}>
       <div className="grid gap-4">
-        <div className="font-bold">旅の記録</div>
+        <div className="font-bold">記録を削除</div>
         <Tips type="warning">すべての記録を削除します。参加しているメンバーは記録を参照できなくなります。</Tips>
         <Button variant="danger" loading={busy} onClick={handleRemove}>
           削除
         </Button>
-        <Tips type={Icon.FlagTriangleRight}>
-          {archived
-            ? 'アーカイブを解除すると記録の編集ができるようになります。'
-            : '完了済みとしてマークします。アーカイブを解除するまで記録の編集がロックされます。'}
-        </Tips>
-        <Button
-          disabled={busy}
-          onClick={async () => {
-            await setArchived(!archived)
-            // TODO: 独立したステートになっているので、再取得してOUと整合を取る
-            void revalidate()
-          }}
-        >
-          {archived ? 'アーカイブ解除' : 'アーカイブ'}
-        </Button>
-        {currencyRate && currencyRate.length > 0 && (
-          <>
-            <div className="font-bold">通貨レート</div>
-            <div className="grid gap-2">
-              {currencyRate?.map((v) => (
-                <CurrencyRateItem key={`${v.currency}_${v.toCurrency}`} {...v} roomId={roomId}></CurrencyRateItem>
-              ))}
-            </div>
-          </>
-        )}
       </div>
     </Sheet>
-  )
-}
-
-function CurrencyRateItem({ currency, toCurrency, rate, roomId }: CurrencyRatePayload & { roomId: string }) {
-  const [, { displayCurrency }] = useRoomCurrencyRate(roomId)
-  const currencyRateSheet = usePresent()
-
-  const currencyRecord = cc.code(currency)
-  const toCurrencyDigits = cc.code(toCurrency)?.digits
-
-  if (currencyRecord === undefined || toCurrencyDigits === undefined) {
-    return null
-  }
-
-  const currencyDigits = currencyRecord.digits
-
-  return (
-    <>
-      <Clickable
-        onClick={currencyRateSheet.open}
-        className="grid grid-flow-col justify-between rounded-lg bg-surface p-4 transition active:scale-95"
-      >
-        <div className="font-bold">{`${currency} / ${toCurrency}`}</div>
-        <div>
-          <CurrencyText
-            {...displayCurrency({ amount: 10 ** currencyDigits, currency })}
-            className="text-xs font-bold text-zinc-400"
-          ></CurrencyText>
-          <span className="text-xs font-bold text-zinc-400">{` = `}</span>
-          <CurrencyText
-            {...displayCurrency({ amount: rate * 10 ** currencyDigits, currency: toCurrency }, undefined, true)}
-            className="font-bold"
-          ></CurrencyText>
-        </div>
-      </Clickable>
-      <CurrencyRateSheet
-        currency={currency}
-        toCurrency={toCurrency}
-        defaultRate={rate}
-        roomId={roomId}
-        removable
-        {...currencyRateSheet}
-      ></CurrencyRateSheet>
-    </>
   )
 }

@@ -19,11 +19,10 @@ import { useEffect, useMemo, useState } from 'react'
 import Tips from '@app/components/Tips'
 import clsx from 'clsx'
 import Clickable from '@app/components/Clickable'
-import SettingsSheet from './SettingsSheet'
 import * as Icon from 'lucide-react'
 import AboutSheet from './AboutSheet'
-import Popover from '@app/components/Popover'
 import useRoomArchived from '@app/hooks/useRoomArchive'
+import ActionMenu from './ActionMenu'
 
 interface Props {
   roomId: string | null
@@ -34,7 +33,6 @@ export default function Main({ roomId }: Props) {
   const [title, setTitle] = useRoomTitle(roomId)
   const [events, { addEvent }] = useEvents(roomId)
   const [user] = useUser()
-  const settingsSheet = usePresent()
   const editMemberSheet = usePresent()
   const editUserSheet = usePresent()
   const aboutSheet = usePresent()
@@ -53,16 +51,6 @@ export default function Main({ roomId }: Props) {
       document.body.style.overflow = ''
     }
   }, [drawer.isPresent])
-
-  const handleShare = async () => {
-    const url = location.href
-    const text = `旅のお金を記録してかんたんに精算 - SABOTEN`
-    if (typeof navigator.share !== 'undefined') {
-      await navigator.share({ url, text })
-    } else {
-      await navigator.clipboard.writeText(url)
-    }
-  }
 
   return (
     <div className={clsx('relative z-0 w-full', drawer.isPresent && 'overflow-hidden')}>
@@ -107,7 +95,7 @@ export default function Main({ roomId }: Props) {
           )}
         >
           <div className="shadow-float-effect sticky -top-36 z-[1] grid gap-4 rounded-b-[44px] bg-white p-8 pb-6">
-            <div className="grid grid-cols-[1fr_auto] justify-start gap-3">
+            <div className="z-10 grid grid-cols-[1fr_auto] justify-start gap-3">
               <Button
                 className="transition md:pointer-events-none md:scale-50 md:opacity-0"
                 variant="primary"
@@ -130,18 +118,7 @@ export default function Main({ roomId }: Props) {
               ></Button>
               <div className="flex justify-end">
                 <Button onClick={editMemberSheet.open} icon={<Icon.Users size={20} />}></Button>
-                <Popover
-                  className={clsx(
-                    'transition-[margin,opacity,transform]',
-                    roomId ? 'ml-3 scale-100 opacity-100' : 'pointer-events-none -ml-12 scale-50 opacity-0',
-                  )}
-                  icon={<Icon.Donut size={20} />}
-                  align="right"
-                  menu={[
-                    { label: '招待リンク', icon: <Icon.Share size={16} />, action: () => void handleShare() },
-                    { label: '設定', icon: <Icon.Settings size={16} />, action: settingsSheet.open },
-                  ]}
-                />
+                <ActionMenu roomId={roomId} />
               </div>
             </div>
             <div className="group">
@@ -168,7 +145,6 @@ export default function Main({ roomId }: Props) {
             <Balance roomId={roomId}></Balance>
           </div>
           <EditMember roomId={roomId} {...editMemberSheet}></EditMember>
-          {roomId && <SettingsSheet roomId={roomId} {...settingsSheet}></SettingsSheet>}
           <EventSheet
             {...createEventSheet}
             roomId={roomId}
