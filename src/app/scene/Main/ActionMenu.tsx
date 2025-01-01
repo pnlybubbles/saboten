@@ -6,6 +6,7 @@ import DeleteSheet from './DeleteSheet'
 import ArchiveSheet from './ArchiveSheet'
 import useRoomCurrencyRate from '@app/hooks/useRoomCurrencyRate'
 import CurrencyRateListSheet from './CurrencyRateListSheet'
+import useRoomArchived from '@app/hooks/useRoomArchive'
 
 interface Props {
   roomId: string | null
@@ -23,6 +24,7 @@ export default function ActionMenu({ roomId }: Props) {
   }
 
   const [currencyRate] = useRoomCurrencyRate(roomId)
+  const [archived] = useRoomArchived(roomId)
 
   const deleteSheet = usePresent()
   const archiveSheet = usePresent()
@@ -42,8 +44,12 @@ export default function ActionMenu({ roomId }: Props) {
           ...(currencyRate && currencyRate.length > 0
             ? [{ label: '通貨レート', icon: <Icon.CircleDollarSign size={16} />, action: currencyRateSheet.open }]
             : []),
-          { label: 'アーカイブ', icon: <Icon.FlagTriangleRight size={16} />, action: archiveSheet.open },
-          { label: '削除', icon: <Icon.Trash2 size={16} />, action: deleteSheet.open },
+          {
+            label: archived ? 'アーカイブ解除' : 'アーカイブ',
+            icon: <Icon.FlagTriangleRight size={16} />,
+            action: archiveSheet.open,
+          },
+          { label: '削除', icon: <Icon.Trash2 size={16} />, destructive: true, action: deleteSheet.open },
         ]}
       />
       {roomId && <DeleteSheet roomId={roomId} {...deleteSheet}></DeleteSheet>}

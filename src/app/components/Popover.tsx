@@ -6,7 +6,7 @@ import type { HTMLClickableElement } from './Clickable'
 import Clickable from './Clickable'
 
 type Props = React.PropsWithChildren<{
-  menu: { label: string; icon?: React.ReactNode; action: () => void }[]
+  menu: { label: string; icon?: React.ReactNode; action: () => void; destructive?: boolean }[]
   align?: 'left' | 'right'
   icon?: React.ReactNode
   className?: string
@@ -93,7 +93,7 @@ export default function Popover({ menu, align = 'left', className, icon, childre
           isPresent ? 'scale-100 opacity-100' : 'pointer-events-none scale-75 opacity-0',
         )}
       >
-        {menu.map(({ label, action, icon }, i) => (
+        {menu.map(({ label, action, icon, destructive }, i) => (
           <Clickable
             onClick={() => {
               close()
@@ -104,6 +104,7 @@ export default function Popover({ menu, align = 'left', className, icon, childre
             className={clsx(
               'grid grid-cols-[1fr_auto] items-center gap-6 whitespace-nowrap border-b px-4 py-3 text-start text-sm transition last:border-none active:bg-zinc-100',
               i === highlighted && 'bg-zinc-100',
+              destructive && 'text-error',
             )}
           >
             <div>{label}</div>

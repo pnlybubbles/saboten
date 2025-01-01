@@ -17,10 +17,10 @@ export default function ArchiveSheet({ roomId, ...sheet }: Props) {
   return (
     <Sheet {...sheet}>
       <div className="grid gap-4">
-        <div className="font-bold">記録をアーカイブ</div>
+        <div className="font-bold">記録のアーカイブ</div>
         <Tips type={Icon.FlagTriangleRight}>
           {archived
-            ? 'アーカイブを解除すると記録の編集ができるようになります。'
+            ? 'この記録はアーカイブされています。アーカイブを解除すると記録の編集ができるようになります。'
             : '完了済みとしてマークします。アーカイブを解除するまで記録の編集がロックされます。'}
         </Tips>
         <Button
