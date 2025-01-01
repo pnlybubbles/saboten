@@ -25,6 +25,7 @@ export default function ArchiveSheet({ roomId, ...sheet }: Props) {
         </Tips>
         <Button
           onClick={async () => {
+            sheet.onPresent(false)
             await setArchived(!archived)
             // TODO: 独立したステートになっているので、再取得してOUと整合を取る
             void revalidate()
