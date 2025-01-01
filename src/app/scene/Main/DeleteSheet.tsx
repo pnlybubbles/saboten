@@ -13,7 +13,7 @@ interface Props extends SheetProps {
   roomId: string
 }
 
-export default function SettingsSheet({ roomId, ...sheet }: Props) {
+export default function DeleteSheet({ roomId, ...sheet }: Props) {
   const [user] = useUser()
   const [busy, setBusy] = useState(false)
   const navigate = useNavigate()

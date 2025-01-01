@@ -2,7 +2,7 @@ import Popover from '@app/components/Popover'
 import * as Icon from 'lucide-react'
 import clsx from 'clsx'
 import usePresent from '@app/hooks/usePresent'
-import SettingsSheet from './SettingsSheet'
+import DeleteSheet from './DeleteSheet'
 import ArchiveSheet from './ArchiveSheet'
 import useRoomCurrencyRate from '@app/hooks/useRoomCurrencyRate'
 import CurrencyRateListSheet from './CurrencyRateListSheet'
@@ -46,7 +46,7 @@ export default function ActionMenu({ roomId }: Props) {
           { label: '削除', icon: <Icon.Trash2 size={16} />, action: deleteSheet.open },
         ]}
       />
-      {roomId && <SettingsSheet roomId={roomId} {...deleteSheet}></SettingsSheet>}
+      {roomId && <DeleteSheet roomId={roomId} {...deleteSheet}></DeleteSheet>}
       {roomId && <ArchiveSheet roomId={roomId} {...archiveSheet}></ArchiveSheet>}
       {roomId && <CurrencyRateListSheet roomId={roomId} {...currencyRateSheet}></CurrencyRateListSheet>}
     </>
