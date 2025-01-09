@@ -20,8 +20,6 @@ export default {
       },
       boxShadow: {
         float: '0 0 0 1px rgb(0 0 0 / .08), 0 4px 4px rgba(0 13 32 / .04)',
-        'float-high':
-          '0 0 0 1px rgb(0 0 0 / .08), 0 20px 25px -5px rgb(0 13 32 / .1), 0 8px 10px -6px rgb(0 13 32 / .1)',
         emboss: '0 0 0 1px rgb(0 0 0 / .08), 0 2px 2px rgba(0 13 32 / .04)',
         border: '0 0 0 1px rgb(0 0 0 / .08)',
         focus: 'inset 0 0 0 2px rgb(24 24 27)',

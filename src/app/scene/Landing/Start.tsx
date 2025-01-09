@@ -48,10 +48,27 @@ export default function Start({ roomId, onProceed }: Props) {
           <Button onClick={() => navigate('/')}>参加しない</Button>
         </>
       )}
-      <div className="grid justify-center py-2">
-        <Icon.Asterisk size={20} className="text-zinc-400" />
-      </div>
+      <Divider aster />
       <ScreenShots></ScreenShots>
+      <a className="grid gap-3" href="https://note.com/pnly/n/ne276c3d6dfcc" target="_blank" rel="noreferrer">
+        <div className="grid gap-1 text-xs text-zinc-400">
+          <div className="font-bold">もっと知りたい</div>
+          <div>このアプリを作った想いを綴りました。</div>
+        </div>
+        <div className="overflow-hidden rounded-xl bg-white shadow-float">
+          <img src="/assets/note-thumb.webp" alt="sabotenを開いているiPhoneの画像" className="aspect-[1200/630]" />
+          <div className="grid gap-2 p-4">
+            <div className="text-sm">N番煎じの割り勘アプリを作った話｜pnly</div>
+            <div className="line-clamp-2 text-xs text-zinc-400">
+              煎じれば煎じるほど、キリッと苦くて渋い方が美味い。みんなで支払いを記録して割り勘の計算をしてくれるアプリ。できました。旅する人のための、ちょっと便利なアプリです。
+            </div>
+            <div className="grid grid-flow-col items-center justify-start gap-1 text-xs font-bold text-zinc-400">
+              <img src="/assets/note.svg" alt="note icon" className="size-4 rounded-[4px] border border-zinc-200" />
+              <div>note.com</div>
+            </div>
+          </div>
+        </div>
+      </a>
       <div className="grid justify-center">
         <Button variant="transparent" onClick={aboutSheet.open} icon={<Icon.TrafficCone size={20} />}></Button>
         <AboutSheet {...aboutSheet}></AboutSheet>
