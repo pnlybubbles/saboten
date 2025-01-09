@@ -7,6 +7,7 @@ import * as Icon from 'lucide-react'
 import usePresent from '@app/hooks/usePresent'
 import AboutSheet from '../Main/AboutSheet'
 import Logo from '@app/components/Logo'
+import ScreenShots from './Screenshots'
 
 interface Props {
   roomId: string | null
@@ -43,10 +44,14 @@ export default function Start({ roomId, onProceed }: Props) {
       <Button onClick={() => onProceed('restore')}>{roomId ? '合言葉を入力して参加' : '合言葉を入力'}</Button>
       {roomId !== null && (
         <>
-          <Divider></Divider>
+          <Divider />
           <Button onClick={() => navigate('/')}>参加しない</Button>
         </>
       )}
+      <div className="grid justify-center py-2">
+        <Icon.Asterisk size={20} className="text-zinc-400" />
+      </div>
+      <ScreenShots></ScreenShots>
       <div className="grid justify-center">
         <Button variant="transparent" onClick={aboutSheet.open} icon={<Icon.TrafficCone size={20} />}></Button>
         <AboutSheet {...aboutSheet}></AboutSheet>

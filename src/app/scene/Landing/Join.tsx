@@ -11,6 +11,8 @@ import unreachable from '@app/util/unreachable'
 import clsx from 'clsx'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import * as Icon from 'lucide-react'
+import ScreenShots from './Screenshots'
 
 export default function Join({ roomId }: { roomId: string }) {
   const [roomTitle] = useRoomTitle(roomId)
@@ -83,6 +85,10 @@ export default function Join({ roomId }: { roomId: string }) {
       </Button>
       <Divider></Divider>
       <Button onClick={() => navigate('/')}>参加しない</Button>
+      <div className="grid justify-center py-2">
+        <Icon.Asterisk size={20} className="text-zinc-400" />
+      </div>
+      <ScreenShots></ScreenShots>
     </div>
   )
 }

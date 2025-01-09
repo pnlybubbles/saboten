@@ -4,14 +4,12 @@
 
 @layer base {
   html {
-    -webkit-font-smoothing: antialiased;
     -webkit-tap-highlight-color: transparent;
   }
 
   body {
-    @apply bg-backdrop;
+    @apply select-none bg-backdrop tracking-wide antialiased;
     font-family: Avenir, sans-serif;
-    user-select: none;
   }
 
   [vaul-drawer] {
