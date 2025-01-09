@@ -56,7 +56,11 @@ export default function Start({ roomId, onProceed }: Props) {
           <div>このアプリを作った想いを綴りました。</div>
         </div>
         <div className="overflow-hidden rounded-xl bg-white shadow-float">
-          <img src="/assets/note-thumb.webp" alt="sabotenを開いているiPhoneの画像" className="aspect-[1200/630]" />
+          <img
+            src="/assets/note-thumb.webp"
+            alt="sabotenを開いているiPhoneの画像"
+            className="aspect-[1200/630] object-cover"
+          />
           <div className="grid gap-2 p-4">
             <div className="text-sm">N番煎じの割り勘アプリを作った話｜pnly</div>
             <div className="line-clamp-2 text-xs text-zinc-400">
