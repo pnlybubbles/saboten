@@ -4,9 +4,10 @@ import clsx from 'clsx'
 import usePresent from '@app/hooks/usePresent'
 import DeleteSheet from './DeleteSheet'
 import ArchiveSheet from './ArchiveSheet'
-import useRoomCurrencyRate from '@app/hooks/useRoomCurrencyRate'
 import CurrencySettingSheet from './CurrencySettingSheet'
 import useRoomArchived from '@app/hooks/useRoomArchive'
+import useEvents, { deriveUsedCurrency } from '@app/hooks/useEvents'
+import { useMemo } from 'react'
 
 interface Props {
   roomId: string | null
@@ -23,7 +24,8 @@ export default function ActionMenu({ roomId }: Props) {
     }
   }
 
-  const [currencyRate] = useRoomCurrencyRate(roomId)
+  const [events] = useEvents(roomId)
+  const usedCurrency = useMemo(() => deriveUsedCurrency(events ?? []), [events])
   const [archived] = useRoomArchived(roomId)
 
   const deleteSheet = usePresent()
@@ -41,7 +43,7 @@ export default function ActionMenu({ roomId }: Props) {
         align="right"
         menu={[
           { label: '招待リンク', icon: <Icon.Share size={16} />, action: () => void handleShare() },
-          ...(currencyRate && currencyRate.length > 0
+          ...(usedCurrency.length > 1
             ? [{ label: '通貨レート', icon: <Icon.CircleDollarSign size={16} />, action: currencyRateSheet.open }]
             : []),
           {
