@@ -4,7 +4,7 @@ import clsx from 'clsx'
 import usePresent from '@app/hooks/usePresent'
 import DeleteSheet from './DeleteSheet'
 import ArchiveSheet from './ArchiveSheet'
-import CurrencySettingSheet from './CurrencySettingSheet'
+import CurrencySettingSheet, { DEFAULT_PRIMARY_CURRENCY } from './CurrencySettingSheet'
 import useRoomArchived from '@app/hooks/useRoomArchive'
 import useEvents, { deriveUsedCurrency } from '@app/hooks/useEvents'
 import { useMemo } from 'react'
@@ -43,7 +43,7 @@ export default function ActionMenu({ roomId }: Props) {
         align="right"
         menu={[
           { label: '招待リンク', icon: <Icon.Share size={16} />, action: () => void handleShare() },
-          ...(usedCurrency.length > 1
+          ...(usedCurrency.length > 1 || usedCurrency[0] !== DEFAULT_PRIMARY_CURRENCY
             ? [{ label: '通貨レート', icon: <Icon.CircleDollarSign size={16} />, action: currencyRateSheet.open }]
             : []),
           {
