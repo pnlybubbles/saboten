@@ -157,7 +157,7 @@ function UserMigrationSheet({ secret, roomId, ...present }: SheetProps & { secre
           <Icon.Sparkles size={18} />
         </div>
         <Tips type={Icon.Backpack}>
-          SABOTENのURLが新しくなりました！いままでの旅の記録をそのまま移行することができます。
+          SABOTENのURLが新しくなりました！いままでの記録をそのまま移行することができます。
         </Tips>
         <Button
           onClick={() => {

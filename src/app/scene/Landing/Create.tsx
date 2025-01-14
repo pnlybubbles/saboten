@@ -31,7 +31,7 @@ export default function Create({ onBack }: Props) {
       </div>
       <TextField label="ニックネーム" name="name" value={name} onChange={setName} disabled={busy} />
       <Button onClick={create} loading={busy} variant="primary">
-        旅をはじめる
+        記録をはじめる
       </Button>
       <Divider></Divider>
       <Button onClick={onBack}>戻る</Button>

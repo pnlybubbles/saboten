@@ -78,7 +78,7 @@ function RenameButtonInternal({ roomId, memberId, ...rest }: { roomId: string; m
           {notJoined ? null : mode === 'reset' ? (
             <Tips>ユーザーが個別に設定したニックネームが使用されます</Tips>
           ) : (
-            <Tips>この旅の記録でのみ使用される名前を設定します</Tips>
+            <Tips>この記録でのみ使用される名前を設定します</Tips>
           )}
           <Button
             disabled={mode === 'rename' && name === ''}

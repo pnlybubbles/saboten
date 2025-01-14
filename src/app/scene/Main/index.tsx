@@ -74,7 +74,7 @@ export default function Main({ roomId }: Props) {
           </div>
           <Link to="/">
             <Button variant="primary" icon={<Icon.Plane size={20}></Icon.Plane>} onClick={drawer.close}>
-              旅をはじめる
+              記録をはじめる
             </Button>
           </Link>
           <RecentRooms onEnter={drawer.close}></RecentRooms>
@@ -138,7 +138,7 @@ export default function Main({ roomId }: Props) {
                   type={Icon.PlaneTakeoff}
                   className="-mt-2 h-6 text-zinc-400 transition-[opacity,margin,height] group-focus-within:mt-0 group-focus-within:h-0 group-focus-within:opacity-0"
                 >
-                  タイトルを入力して旅をはじめよう！
+                  タイトルを入力して記録をはじめよう！
                 </Tips>
               )}
             </div>
@@ -220,7 +220,7 @@ function RecentRooms({ className, ...props }: { onEnter?: () => void; className?
 
   return (
     <div className={className}>
-      <div className="mb-4 mt-6 text-xs font-bold first:mt-2">最近の旅</div>
+      <div className="mb-4 mt-6 text-xs font-bold first:mt-2">最近の記録</div>
       {userRooms
         .filter((v) => !v.archive)
         .map(({ id, title }) => (

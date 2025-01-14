@@ -19,7 +19,7 @@ export default function DeleteSheet({ roomId, ...sheet }: Props) {
   const navigate = useNavigate()
 
   const handleRemove = async () => {
-    if (!confirm('旅の記録を削除します。よろしいですか？')) {
+    if (!confirm('記録を削除します。よろしいですか？')) {
       return
     }
     setBusy(true)
