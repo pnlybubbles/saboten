@@ -11,7 +11,7 @@ import * as Icon from 'lucide-react'
 import clsx from 'clsx'
 
 interface Props extends SheetProps {
-  defaultRate?: number
+  defaultRate?: number | undefined
   roomId: string | null
   currency: string
   toCurrency: string
