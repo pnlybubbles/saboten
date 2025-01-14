@@ -68,7 +68,12 @@ export default function Main({ roomId }: Props) {
             <Clickable onClick={editUserSheet.open} className="text-left font-bold transition active:scale-95">
               {user?.name}
             </Clickable>
-            <Button variant="transparent" onClick={aboutSheet.open} icon={<Icon.TrafficCone size={20} />}></Button>
+            <Button
+              variant="transparent"
+              onClick={aboutSheet.open}
+              icon={<Icon.TrafficCone size={20} />}
+              className="mr-[-13px]"
+            ></Button>
             <EditUser {...editUserSheet}></EditUser>
             <AboutSheet {...aboutSheet}></AboutSheet>
           </div>
