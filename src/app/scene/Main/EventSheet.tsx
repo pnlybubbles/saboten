@@ -11,16 +11,15 @@ import Avatar from '@app/components/Avatar'
 import clsx from 'clsx'
 import useDirty from '@app/hooks/useDirty'
 import isUnique from '@app/util/isUnique'
-import usePresent from '@app/hooks/usePresent'
 import cc from 'currency-codes'
 import Clickable from '@app/components/Clickable'
 import { useMemo } from 'react'
 import unreachable from '@app/util/unreachable'
 import * as Icon from 'lucide-react'
 import Tab from '@app/components/Tab'
-import useEvents from '@app/hooks/useEvents'
 import useRoomArchived from '@app/hooks/useRoomArchive'
 import Tips from '@app/components/Tips'
+import CurrencyPicker from '@app/components/CurrencyPicker'
 
 type EventPayloadDefault =
   | (Omit<Extract<EventPayload, { type: 'payment' }>, 'paidByMemberId'> & { paidByMemberId: string | null })
@@ -38,8 +37,6 @@ interface Props extends SheetProps {
   hideTypeTab?: boolean
   id?: string | undefined
 }
-
-const FREQUENTLY_USED_CURRENCY_CODES = ['JPY', 'USD', 'EUR']
 
 export default function EventSheet({
   roomId,
@@ -120,7 +117,6 @@ export default function EventSheet({
     return Math.round(amountNumeric * 10 ** currencyDigits)
   }, [amount, currency])
 
-  const editCurrencySheet = usePresent()
   const [paidByMemberEditMode, setPaidByMemberEditMode] = useState(false)
 
   const { dirty, clearDirty, resetIfCleared } = useDirty(
@@ -227,18 +223,7 @@ export default function EventSheet({
     sheet.onPresent(false)
   }
 
-  const [events] = useEvents(roomId)
-  const recentlyUsedCurrencyCodes = useMemo(
-    () => events?.flatMap((v) => v.payments.map((w) => w.currency)).filter(isUnique) ?? [],
-    [events],
-  )
-
   const [archived] = useRoomArchived(roomId)
-
-  const handleSelectCurrency = (code: string) => {
-    setCurrency(code)
-    editCurrencySheet.close()
-  }
 
   if (user === null) {
     return null
@@ -261,43 +246,16 @@ export default function EventSheet({
         )}
         <TextField label="イベントの名前" name="label" value={label} onChange={dirty(setLabel)} disabled={archived} />
         <div className="grid grid-cols-[auto_1fr] gap-3">
-          <div
-            className={clsx(
-              'grid h-18 grid-flow-row content-between rounded-xl bg-surface px-5 pb-2.5 pt-[0.85rem] transition aria-disabled:opacity-40',
-              editCurrencySheet.isPresent && 'shadow-focus',
-            )}
-            onClick={editCurrencySheet.open}
-            aria-disabled={archived}
+          <CurrencyPicker
+            roomId={roomId}
+            value={currency}
+            onChange={setCurrency}
+            className="grid h-18 grid-flow-row content-between rounded-xl bg-surface px-5 pb-2.5 pt-[0.85rem] text-start transition disabled:opacity-40 aria-expanded:shadow-focus"
+            disabled={archived}
           >
             <div className="text-xs font-bold text-zinc-400">通貨</div>
             <div className="text-base">{currency}</div>
-          </div>
-          <Sheet {...editCurrencySheet}>
-            <div className="grid gap-2">
-              <div className="text-xs font-bold">よく使う</div>
-              <div className="grid grid-cols-[auto_auto_1fr] items-stretch">
-                {[...recentlyUsedCurrencyCodes, ...FREQUENTLY_USED_CURRENCY_CODES].filter(isUnique).map((code) => (
-                  <EditCurrencyItem
-                    key={code}
-                    code={code}
-                    onClick={() => handleSelectCurrency(code)}
-                    active={currency === code}
-                  ></EditCurrencyItem>
-                ))}
-              </div>
-              <div className="text-xs font-bold">すべて</div>
-              <div className="grid grid-cols-[auto_auto_1fr] items-stretch">
-                {cc.codes().map((code) => (
-                  <EditCurrencyItem
-                    key={code}
-                    code={code}
-                    onClick={() => handleSelectCurrency(code)}
-                    active={currency === code}
-                  ></EditCurrencyItem>
-                ))}
-              </div>
-            </div>
-          </Sheet>
+          </CurrencyPicker>
           <TextField
             label={tab === 'payment' ? '支払った金額' : '送金した金額'}
             name="amount"
@@ -453,21 +411,5 @@ export default function EventSheet({
         </Tips>
       </div>
     </Sheet>
-  )
-}
-
-function EditCurrencyItem({ code, onClick, active }: { code: string; onClick: () => void; active: boolean }) {
-  return (
-    <>
-      <div className="grid items-center pr-2">
-        <Icon.Check size={20} className={active ? 'opacity-100' : 'opacity-0'} />
-      </div>
-      <Clickable className="grid items-center text-left" onClick={onClick}>
-        <div>{code}</div>
-      </Clickable>
-      <Clickable className="py-1 pl-2 text-left text-zinc-400" onClick={onClick}>
-        {cc.code(code)?.currency}
-      </Clickable>
-    </>
   )
 }

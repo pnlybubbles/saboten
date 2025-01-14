@@ -3,13 +3,14 @@ import noop from '@app/util/noop'
 import type React from 'react'
 import { forwardRef } from 'react'
 
-export type Props = Pick<React.ComponentPropsWithoutRef<'button'>, 'disabled' | 'className' | 'children'> & {
-  onClick?: React.EventHandler<React.SyntheticEvent<unknown>>
-  div?: boolean
-  onTouchStart?: React.TouchEventHandler<HTMLElement>
-  onTouchEnd?: React.TouchEventHandler<HTMLElement>
-  onTouchMove?: React.TouchEventHandler<HTMLElement>
-}
+export type Props = Pick<React.ComponentPropsWithoutRef<'button'>, 'disabled' | 'className' | 'children'> &
+  React.AriaAttributes & {
+    onClick?: React.EventHandler<React.SyntheticEvent<unknown>>
+    div?: boolean
+    onTouchStart?: React.TouchEventHandler<HTMLElement>
+    onTouchEnd?: React.TouchEventHandler<HTMLElement>
+    onTouchMove?: React.TouchEventHandler<HTMLElement>
+  }
 
 export type HTMLClickableElement = HTMLButtonElement & HTMLDivElement
 

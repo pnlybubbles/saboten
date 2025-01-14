@@ -10,6 +10,7 @@ import rpc from '@app/util/rpc'
 import ok from '@app/util/ok'
 import useRoomMember from './useRoomMember'
 import unreachable from '@app/util/unreachable'
+import isUnique from '@app/util/isUnique'
 
 const transform = (room: Room) =>
   room.events.map((v) => ({
@@ -264,3 +265,7 @@ export default function useEvents(roomId: string | null) {
 }
 
 export type Event = NonNullable<ReturnType<typeof useEvents>[0]>[number]
+
+export function deriveUsedCurrency(events: Event[]) {
+  return events.flatMap((event) => event.payments.map((payment) => payment.currency)).filter(isUnique)
+}
