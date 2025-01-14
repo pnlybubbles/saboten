@@ -29,7 +29,7 @@ export default function useRoomCurrency(roomId: string | null) {
   const [state, setState] = useStore(roomCurrencyStore, roomId)
 
   const setCurrency = useCallback(
-    (value: string) =>
+    (value: string | null) =>
       setState(value, async () => {
         if (roomId === null) {
           // TODO: 部屋ができていないのにルーム通貨の設定は不可能

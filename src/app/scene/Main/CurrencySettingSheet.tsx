@@ -40,18 +40,33 @@ export default function CurrencySettingSheet({ roomId, ...sheet }: Props) {
   return (
     <Sheet {...sheet}>
       <div className="grid gap-4">
-        <CurrencyPicker
-          roomId={roomId}
-          value={roomCurrency}
-          onChange={setRoomCurrency}
-          className="grid h-18 grid-flow-row content-between rounded-xl bg-surface px-5 pb-2.5 pt-[0.85rem] text-start transition disabled:opacity-40 aria-expanded:shadow-focus"
-        >
-          <div className="text-xs font-bold text-zinc-400">基準の通貨</div>
-          <div className="grid grid-flow-col justify-start gap-2">
-            <div className="text-base">{roomCurrency === null ? '未設定' : roomCurrency}</div>
-            {roomCurrency !== null && <div className="truncate text-zinc-400">{cc.code(roomCurrency)?.currency}</div>}
-          </div>
-        </CurrencyPicker>
+        <div className="relative grid">
+          <CurrencyPicker
+            roomId={roomId}
+            value={roomCurrency}
+            onChange={setRoomCurrency}
+            className="grid h-18 grid-flow-col items-stretch rounded-xl bg-surface px-5 pb-2.5 pt-[0.85rem] text-start transition disabled:opacity-40 aria-expanded:shadow-focus"
+          >
+            <div className="grid grid-flow-row content-between">
+              <div className="text-xs font-bold text-zinc-400">基準の通貨</div>
+              <div className="grid grid-flow-col justify-start gap-2">
+                <div className="text-base">{roomCurrency === null ? '未設定' : roomCurrency}</div>
+                {roomCurrency !== null && (
+                  <div className="truncate text-zinc-400">{cc.code(roomCurrency)?.currency}</div>
+                )}
+              </div>
+            </div>
+            <div className="w-5"></div>
+          </CurrencyPicker>
+          {roomCurrency !== null && (
+            <Clickable
+              className="absolute right-2 top-1/2 -translate-y-1/2 self-center p-3 transition active:scale-90"
+              onClick={() => setRoomCurrency(null)}
+            >
+              <Icon.XCircle size={20} />
+            </Clickable>
+          )}
+        </div>
         {usedCurrencyRate && (
           <>
             <div className="text-xs font-bold text-zinc-400">通貨レート</div>
@@ -97,7 +112,7 @@ function CurrencyRateItem({
     <>
       <Clickable
         onClick={currencyRateSheet.open}
-        className="grid grid-flow-col grid-cols-[auto_1fr] gap-2 rounded-lg bg-surface p-4 transition active:scale-95"
+        className="grid grid-flow-col grid-cols-[auto_1fr] gap-2 rounded-lg bg-surface px-5 py-4 transition active:scale-95"
       >
         <div>{`${currency} / ${toCurrency}`}</div>
         <div className="text-end">

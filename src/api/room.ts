@@ -121,7 +121,7 @@ const room = new Hono<Env>()
   .post(
     '/currency',
     auth,
-    zValidator('json', z.object({ roomId: z.string().uuid(), value: CURRENCY_CODE_SCHEMA })),
+    zValidator('json', z.object({ roomId: z.string().uuid(), value: CURRENCY_CODE_SCHEMA.nullable() })),
     async (c) => {
       const db = drizzle(c.env.DB)
       const { userId } = c.var
