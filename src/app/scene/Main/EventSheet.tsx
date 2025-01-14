@@ -20,6 +20,8 @@ import Tab from '@app/components/Tab'
 import useRoomArchived from '@app/hooks/useRoomArchive'
 import Tips from '@app/components/Tips'
 import CurrencyPicker from '@app/components/CurrencyPicker'
+import useRoomCurrency from '@app/hooks/useRoomCurrency'
+import { DEFAULT_PRIMARY_CURRENCY } from './CurrencySettingSheet'
 
 type EventPayloadDefault =
   | (Omit<Extract<EventPayload, { type: 'payment' }>, 'paidByMemberId'> & { paidByMemberId: string | null })
@@ -52,7 +54,8 @@ export default function EventSheet({
   const [members, { getMemberName }] = useRoomMember(roomId)
   const userMemberId = user ? members?.find((v) => v.user?.id === user.id)?.id ?? null : null
 
-  const defaultCurrency = defaultValue?.currency ?? 'JPY'
+  const [roomCurrency] = useRoomCurrency(roomId)
+  const defaultCurrency = defaultValue?.currency ?? roomCurrency ?? DEFAULT_PRIMARY_CURRENCY
   const defaultCurrencyDigits = cc.code(defaultCurrency)?.digits ?? 0
   const eventMembersCandidate = useMemo(() => members?.map((v) => v.id).filter(isNonNullable) ?? [], [members])
   const defaultEventMembersTmp =

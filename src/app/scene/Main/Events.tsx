@@ -13,6 +13,7 @@ import Clickable from '@app/components/Clickable'
 import unreachable from '@app/util/unreachable'
 import { useMemo } from 'react'
 import * as Icon from 'lucide-react'
+import { DEFAULT_PRIMARY_CURRENCY } from './CurrencySettingSheet'
 
 interface Props {
   roomId: string | null
@@ -112,7 +113,7 @@ function Item({ id, label, payments, members, roomId, createdAt }: Event & Props
           <CurrencyText
             {...(payload
               ? displayCurrency({ currency: payload.currency, amount: payload.amount })
-              : displayCurrency({ currency: 'JPY', amount: 0 }))}
+              : displayCurrency({ currency: DEFAULT_PRIMARY_CURRENCY, amount: 0 }))}
           ></CurrencyText>
           {payload?.type !== 'transfer' && (
             <>
