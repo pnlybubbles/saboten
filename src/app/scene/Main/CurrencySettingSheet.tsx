@@ -47,21 +47,15 @@ export default function CurrencySettingSheet({ roomId, ...sheet }: Props) {
           <>
             <div className="text-xs font-bold text-zinc-400">通貨レート</div>
             <div className="grid gap-2">
-              {currencyRateToRoomCurrency
-                .filter((v) => usedCurrency.includes(v.currency))
-                .map((v) => (
-                  <CurrencyRateItem key={`${v.currency}_${v.toCurrency}`} {...v} roomId={roomId}></CurrencyRateItem>
-                ))}
-              {usedCurrency
-                .filter((v) => !currencyRateToRoomCurrency.map((v) => v.currency).includes(v))
-                .map((currency) => (
-                  <CurrencyRateItem
-                    key={`${currency}_${roomCurrency}`}
-                    currency={currency}
-                    toCurrency={roomCurrency}
-                    roomId={roomId}
-                  ></CurrencyRateItem>
-                ))}
+              {usedCurrency.map((currency) => (
+                <CurrencyRateItem
+                  key={`${currency}_${roomCurrency}`}
+                  currency={currency}
+                  toCurrency={roomCurrency}
+                  rate={currencyRateToRoomCurrency.find((v) => v.currency === currency)?.rate}
+                  roomId={roomId}
+                ></CurrencyRateItem>
+              ))}
             </div>
           </>
         )}
@@ -78,7 +72,7 @@ function CurrencyRateItem({
 }: {
   currency: string
   toCurrency: string
-  rate?: number
+  rate?: number | undefined
   roomId: string
 }) {
   const [, { displayCurrency }] = useRoomCurrencyRate(roomId)
