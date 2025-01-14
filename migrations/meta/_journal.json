@@ -15,6 +15,13 @@
       "when": 1734802446644,
       "tag": "0001_strong_nitro",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1736875178820,
+      "tag": "0002_flat_archangel",
+      "breakpoints": true
     }
   ]
 }
