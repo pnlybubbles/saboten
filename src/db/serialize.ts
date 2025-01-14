@@ -6,6 +6,7 @@ type Room = {
   title: string
   createdAt: string
   archive: boolean
+  currency: string | null
   members: {
     id: string
     name: string

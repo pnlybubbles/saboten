@@ -12,6 +12,7 @@ import serializeRoom from '../db/serialize'
 import { HTTPException } from 'hono/http-exception'
 import roomMember from './room.member'
 import roomCurrencyRate from './room.currencyRate'
+import { CURRENCY_CODE_SCHEMA } from '@util/currency'
 
 const room = new Hono<Env>()
   .get('/item', zValidator('query', z.object({ id: z.string().uuid() })), async (c) => {
@@ -115,6 +116,25 @@ const room = new Hono<Env>()
       }
       await db.update(schema.room).set({ archive: value }).where(eq(schema.room.id, roomId))
       return c.json({ roomId, archive: value })
+    },
+  )
+  .post(
+    '/currency',
+    auth,
+    zValidator('json', z.object({ roomId: z.string().uuid(), value: CURRENCY_CODE_SCHEMA })),
+    async (c) => {
+      const db = drizzle(c.env.DB)
+      const { userId } = c.var
+      const { roomId, value: currency } = c.req.valid('json')
+      const [row] = await db
+        .select()
+        .from(schema.roomMember)
+        .where(and(eq(schema.roomMember.roomId, roomId), eq(schema.roomMember.userId, userId)))
+      if (row === undefined) {
+        throw new HTTPException(403, { message: 'Only member can update the currency' })
+      }
+      await db.update(schema.room).set({ currency }).where(eq(schema.room.id, roomId))
+      return c.json({ roomId, currency })
     },
   )
   .route('/member', roomMember)
