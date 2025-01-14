@@ -12,6 +12,8 @@ import useResizeObserver from '@app/hooks/useResizeObserver'
 import * as Icon from 'lucide-react'
 import Tips from '@app/components/Tips'
 import Reimburse from './Reimburse'
+import useRoomCurrency from '@app/hooks/useRoomCurrency'
+import { DEFAULT_PRIMARY_CURRENCY } from './CurrencySettingSheet'
 
 interface Props {
   roomId: string | null
@@ -51,9 +53,14 @@ export default function Balance({ roomId }: Props) {
     [events],
   )
 
+  const [roomCurrency] = useRoomCurrency(roomId)
+
   const primaryCurrency =
-    (totalByCurrency['JPY'] === undefined || totalByCurrency['JPY'] === 0 ? Object.keys(totalByCurrency)[0] : null) ??
-    'JPY'
+    roomCurrency ??
+    (totalByCurrency[DEFAULT_PRIMARY_CURRENCY] === undefined || totalByCurrency[DEFAULT_PRIMARY_CURRENCY] === 0
+      ? Object.keys(totalByCurrency)[0]
+      : null) ??
+    DEFAULT_PRIMARY_CURRENCY
 
   const totalCurrencyValue = useMemo(
     () => Object.entries(totalByCurrency).map(([currency, amount]) => ({ currency, amount })),
