@@ -63,13 +63,15 @@ export default function CurrencyRateSheet({
     sheet.onPresent(false)
   }
 
+  const base = displayCurrency({ amount: 10 ** currencyDigits, currency })
+
   return (
     <Sheet {...sheet}>
       <div className="grid gap-4">
         <div className="grid gap-1">
           <div className="font-bold">
-            <span>{`${currency} `}</span>
-            <CurrencyText {...displayCurrency({ amount: 10 ** currencyDigits, currency })}></CurrencyText>
+            {!base.value.startsWith(currency) && <span>{`${currency} `}</span>}
+            <CurrencyText {...base}></CurrencyText>
             <span>{` =`}</span>
           </div>
           <div className="text-xs">{currencyRecord.currency}</div>
