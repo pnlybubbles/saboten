@@ -5,7 +5,7 @@ import usePresent from '@app/hooks/usePresent'
 import DeleteSheet from './DeleteSheet'
 import ArchiveSheet from './ArchiveSheet'
 import useRoomCurrencyRate from '@app/hooks/useRoomCurrencyRate'
-import CurrencyRateListSheet from './CurrencyRateListSheet'
+import CurrencySettingSheet from './CurrencySettingSheet'
 import useRoomArchived from '@app/hooks/useRoomArchive'
 
 interface Props {
@@ -54,7 +54,7 @@ export default function ActionMenu({ roomId }: Props) {
       />
       {roomId && <DeleteSheet roomId={roomId} {...deleteSheet}></DeleteSheet>}
       {roomId && <ArchiveSheet roomId={roomId} {...archiveSheet}></ArchiveSheet>}
-      {roomId && <CurrencyRateListSheet roomId={roomId} {...currencyRateSheet}></CurrencyRateListSheet>}
+      {roomId && <CurrencySettingSheet roomId={roomId} {...currencyRateSheet}></CurrencySettingSheet>}
     </>
   )
 }

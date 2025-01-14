@@ -12,7 +12,7 @@ interface Props extends SheetProps {
   roomId: string
 }
 
-export default function CurrencyRateListSheet({ roomId, ...sheet }: Props) {
+export default function CurrencySettingSheet({ roomId, ...sheet }: Props) {
   const [currencyRate] = useRoomCurrencyRate(roomId)
 
   return (
