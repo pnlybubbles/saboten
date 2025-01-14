@@ -11,6 +11,7 @@ import useRoomCurrency from '@app/hooks/useRoomCurrency'
 import useEvents, { deriveUsedCurrency } from '@app/hooks/useEvents'
 import { useMemo } from 'react'
 import * as Icon from 'lucide-react'
+import Tips from '@app/components/Tips'
 
 interface Props extends SheetProps {
   roomId: string
@@ -22,10 +23,18 @@ export default function CurrencySettingSheet({ roomId, ...sheet }: Props) {
   const [currencyRate = []] = useRoomCurrencyRate(roomId)
   const [roomCurrency, setRoomCurrency] = useRoomCurrency(roomId)
   const [events] = useEvents(roomId)
-  const currencyRateToRoomCurrency = currencyRate.filter((v) => v.toCurrency === roomCurrency)
-  const usedCurrency = useMemo(
-    () => deriveUsedCurrency(events ?? []).filter((v) => v !== roomCurrency),
-    [events, roomCurrency],
+  const usedCurrencyRate = useMemo(
+    () =>
+      roomCurrency === null
+        ? null
+        : deriveUsedCurrency(events ?? [])
+            .filter((v) => v !== roomCurrency)
+            .map((currency) => ({
+              currency,
+              toCurrency: roomCurrency,
+              rate: currencyRate.find((w) => w.toCurrency === roomCurrency && w.currency === currency)?.rate,
+            })),
+    [currencyRate, events, roomCurrency],
   )
 
   return (
@@ -43,21 +52,18 @@ export default function CurrencySettingSheet({ roomId, ...sheet }: Props) {
             {roomCurrency !== null && <div className="text-zinc-400">{cc.code(roomCurrency)?.currency}</div>}
           </div>
         </CurrencyPicker>
-        {roomCurrency && (
+        {usedCurrencyRate && (
           <>
             <div className="text-xs font-bold text-zinc-400">通貨レート</div>
             <div className="grid gap-2">
-              {usedCurrency.map((currency) => (
-                <CurrencyRateItem
-                  key={`${currency}_${roomCurrency}`}
-                  currency={currency}
-                  toCurrency={roomCurrency}
-                  rate={currencyRateToRoomCurrency.find((v) => v.currency === currency)?.rate}
-                  roomId={roomId}
-                ></CurrencyRateItem>
+              {usedCurrencyRate.map((v) => (
+                <CurrencyRateItem key={`${v.currency}_${v.toCurrency}`} {...v} roomId={roomId}></CurrencyRateItem>
               ))}
             </div>
           </>
+        )}
+        {usedCurrencyRate?.find((v) => v.rate === undefined) && (
+          <Tips type="warning">通貨レートが設定されていない場合は、通貨ごとに計算が行われて個別に表記されます。</Tips>
         )}
       </div>
     </Sheet>
