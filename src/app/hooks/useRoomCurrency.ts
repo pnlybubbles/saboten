@@ -8,7 +8,7 @@ import ok from '@app/util/ok'
 
 const transform = (room: Room) => room.currency
 
-const roomArchiveStore = createStore(
+const roomCurrencyStore = createStore(
   (roomId: string | null) => (roomId ? ROOM_LOCAL_STORAGE_KEY(roomId) : null),
   (roomId: string | null) => {
     if (roomId === null) {
@@ -18,7 +18,7 @@ const roomArchiveStore = createStore(
   },
   (roomId: string | null) => {
     if (roomId === null) {
-      return false
+      return null
     }
     const room = roomLocalStorageDescriptor(roomId).get()
     return room ? transform(room) : undefined
@@ -26,13 +26,13 @@ const roomArchiveStore = createStore(
 )
 
 export default function useRoomCurrency(roomId: string | null) {
-  const [state, setState] = useStore(roomArchiveStore, roomId)
+  const [state, setState] = useStore(roomCurrencyStore, roomId)
 
   const setCurrency = useCallback(
     (value: string) =>
       setState(value, async () => {
         if (roomId === null) {
-          // TODO: 部屋ができていないのにアーカイブは不可能
+          // TODO: 部屋ができていないのにルーム通貨の設定は不可能
           throw new Error('No room to remove member')
         }
         const { currency } = await ok(rpc.api.room.currency.$post({ json: { roomId, value } }))
@@ -47,5 +47,5 @@ export default function useRoomCurrency(roomId: string | null) {
     [roomId, setState],
   )
 
-  return [state ?? false, setCurrency] as const
+  return [state ?? null, setCurrency] as const
 }
