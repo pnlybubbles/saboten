@@ -220,7 +220,11 @@ function RecentRooms({ className, ...props }: { onEnter?: () => void; className?
 
   return (
     <div className={className}>
-      <div className="mb-4 mt-6 text-xs font-bold first:mt-2">最近の記録</div>
+      {userRooms.filter((v) => !v.archive).length > 0 && (
+        <div className="mb-4 mt-6 grid grid-flow-col grid-cols-[1fr] first:mt-2">
+          <div className="text-xs font-bold">最近の記録</div>
+        </div>
+      )}
       {userRooms
         .filter((v) => !v.archive)
         .map(({ id, title }) => (
