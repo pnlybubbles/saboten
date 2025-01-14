@@ -9,6 +9,7 @@ const ROOM_SCHEMA = z.object({
   id: z.string(),
   title: z.string(),
   archive: z.boolean(),
+  currency: CURRENCY_CODE_SCHEMA.nullable(),
   members: z.array(
     z.object({
       id: z.string().uuid(),
