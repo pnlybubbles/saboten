@@ -49,7 +49,7 @@ export default function CurrencySettingSheet({ roomId, ...sheet }: Props) {
           <div className="text-xs font-bold text-zinc-400">基準の通貨</div>
           <div className="grid grid-flow-col justify-start gap-2">
             <div className="text-base">{roomCurrency === null ? '未設定' : roomCurrency}</div>
-            {roomCurrency !== null && <div className="text-zinc-400">{cc.code(roomCurrency)?.currency}</div>}
+            {roomCurrency !== null && <div className="truncate text-zinc-400">{cc.code(roomCurrency)?.currency}</div>}
           </div>
         </CurrencyPicker>
         {usedCurrencyRate && (
