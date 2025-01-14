@@ -3,7 +3,6 @@ import useEvents from '@app/hooks/useEvents'
 import useRoomCurrencyRate from '@app/hooks/useRoomCurrencyRate'
 import useRoomMember from '@app/hooks/useRoomMember'
 import React, { useMemo, useReducer, useRef, useState } from 'react'
-import CurrencyRateSheet from './CurrencyRateSheet'
 import usePresent from '@app/hooks/usePresent'
 import CurrencyText from '@app/components/CurrencyText'
 import clsx from 'clsx'
@@ -169,12 +168,6 @@ export default function Balance({ roomId }: Props) {
     [assetsAggregatedByCalculatedBalance, balanceByMemberId, memberIds],
   )
 
-  const [currencyRateSheetProps, setCurrencyRateSheetProps] = useState<{
-    currency: string
-    toCurrency: string
-  }>()
-  const currencyRateSheet = usePresent()
-
   const [showDetail_, setShowDetail] = useState(false)
   const showDetail = showDetail_ && totalCurrencyValue.length > 0
 
@@ -226,35 +219,6 @@ export default function Balance({ roomId }: Props) {
           style={height ? { height } : {}}
         >
           <div ref={ref} className="grid gap-4 before:block">
-            {rateMissingTotalCurrencyValue.map(({ currency }) => (
-              <div
-                key={currency}
-                className="grid grid-cols-[auto_1fr] gap-1 rounded-lg p-4 text-xs text-error shadow-emboss"
-              >
-                <Icon.AlertCircle size={20} className="mt-[-3px]" />
-                <div className="grid gap-2">
-                  <div>{`${currency} を ${primaryCurrency} に変換するレートが設定されていないため、通貨別に表記しています`}</div>
-                  <div className="grid grid-flow-col justify-end gap-2">
-                    {/* <Button mini variant="secondary">
-                  今はしない
-                </Button> */}
-                    <Button
-                      mini
-                      onClick={() => {
-                        setCurrencyRateSheetProps({ currency, toCurrency: primaryCurrency })
-                        currencyRateSheet.open()
-                      }}
-                      variant="secondary"
-                    >
-                      設定
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            ))}
-            {currencyRateSheetProps && (
-              <CurrencyRateSheet roomId={roomId} {...currencyRateSheetProps} {...currencyRateSheet}></CurrencyRateSheet>
-            )}
             {balances.length > 0 && (
               <div className="grid grid-cols-[1fr_auto_auto] items-center gap-x-2 gap-y-1">
                 {balances.map(([memberId, balanceByCurrency]) => [
