@@ -265,7 +265,7 @@ export default function Remburse({ roomId, balances, primaryCurrency, rateMissin
         <Tab
           options={[
             { label: '最小回数で精算', value: 'minimum' },
-            { label: 'わかりやすい精算', value: 'party' },
+            { label: '単純な精算', value: 'party' },
           ]}
           value={tab}
           onChange={setTab}
