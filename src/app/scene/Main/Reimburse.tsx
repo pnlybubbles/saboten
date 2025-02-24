@@ -353,7 +353,9 @@ export default function Remburse({ roomId, balances, primaryCurrency, rateMissin
                 variant="secondary"
                 icon={copied ? <Icon.Check size={16} /> : <Icon.Copy size={14} className="mx-px" />}
                 onClick={() => {
-                  const reimburseText = transactions
+                  const reimburseText = (
+                    tab === 'minimum' ? transactions : tab === 'party' ? transactionsByParty : unreachable(tab)
+                  )
                     .map((tx) => `${getMemberName(tx.from)} → ${getMemberName(tx.to)} ${displayCurrency(tx).value}`)
                     .join('\n')
                   void navigator.clipboard.writeText(reimburseText).then(() => {
