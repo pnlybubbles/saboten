@@ -1,5 +1,5 @@
 import type { Event } from '@app/hooks/useEvents'
-import useEvents from '@app/hooks/useEvents'
+import useEvents, { semanticEventPayload } from '@app/hooks/useEvents'
 import useRoomMember from '@app/hooks/useRoomMember'
 import EventSheet from './EventSheet'
 import usePresent from '@app/hooks/usePresent'
@@ -35,43 +35,7 @@ function Item({ id, label, payments, members, roomId, createdAt }: Event & Props
   const [, { updateEvent, removeEvent }] = useEvents(roomId)
   const [, { displayCurrency }] = useRoomCurrencyRate(roomId)
 
-  const payload = useMemo(
-    () =>
-      payments[0]
-        ? payments[1] &&
-          payments[0].currency === payments[1].currency &&
-          payments[0].amount + payments[1].amount === 0 &&
-          // メンバーが1人の場合は正常系。負の支払いがある場合は支払いの自身の打消が行われているので、支払い元と計上先が同一
-          (members.length === 1 && members[0]
-            ? payments[0].amount < 0
-              ? payments[0].paidByMemberId === members[0].memberId
-              : payments[1].paidByMemberId === members[0].memberId
-            : // メンバーが0人の場合は何らかのケースで部屋から退室している
-              members.length === 0
-              ? payments[0].amount < 0
-                ? payments[0].paidByMemberId === null
-                : payments[1].paidByMemberId === null
-              : false)
-          ? {
-              type: 'transfer' as const,
-              label,
-              amount: payments[0].amount < 0 ? payments[1].amount : payments[0].amount,
-              currency: payments[0].currency,
-              // 退室などを起因とした歯抜けのデータがある場合は、不完全な状態でフォームを復元させる
-              transferToMemberId: members[0]?.memberId ?? null,
-              paidByMemberId: payments[0].amount < 0 ? payments[1].paidByMemberId : payments[0].paidByMemberId,
-            }
-          : {
-              type: 'payment' as const,
-              label,
-              amount: payments[0].amount,
-              currency: payments[0].currency,
-              memberIds: members.map((v) => v.memberId),
-              paidByMemberId: payments[0].paidByMemberId,
-            }
-        : undefined,
-    [label, members, payments],
-  )
+  const payload = useMemo(() => semanticEventPayload({ payments, label, members }), [label, members, payments])
 
   return (
     <>

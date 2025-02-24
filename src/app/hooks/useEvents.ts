@@ -11,6 +11,7 @@ import ok from '@app/util/ok'
 import useRoomMember from './useRoomMember'
 import unreachable from '@app/util/unreachable'
 import isUnique from '@app/util/isUnique'
+import isNonNullable from '@app/util/isNonNullable'
 
 const transform = (room: Room) =>
   room.events.map((v) => ({
@@ -268,4 +269,56 @@ export type Event = NonNullable<ReturnType<typeof useEvents>[0]>[number]
 
 export function deriveUsedCurrency(events: Event[]) {
   return events.flatMap((event) => event.payments.map((payment) => payment.currency)).filter(isUnique)
+}
+
+/**
+ * 支払い者が離脱している場合は累計の計算から除外する
+ */
+export function filterEventsForAggregation(events: Event[] | null | undefined) {
+  return (
+    events?.map((v) => ({
+      ...v,
+      payments: v.payments
+        .map((payment) =>
+          payment.paidByMemberId !== null ? { ...payment, paidByMemberId: payment.paidByMemberId } : null,
+        )
+        .filter(isNonNullable),
+    })) ?? []
+  )
+}
+
+export function semanticEventPayload({ payments, label, members }: Pick<Event, 'payments' | 'label' | 'members'>) {
+  return payments[0]
+    ? payments[1] &&
+      payments[0].currency === payments[1].currency &&
+      payments[0].amount + payments[1].amount === 0 &&
+      // メンバーが1人の場合は正常系。負の支払いがある場合は支払いの自身の打消が行われているので、支払い元と計上先が同一
+      (members.length === 1 && members[0]
+        ? payments[0].amount < 0
+          ? payments[0].paidByMemberId === members[0].memberId
+          : payments[1].paidByMemberId === members[0].memberId
+        : // メンバーが0人の場合は何らかのケースで部屋から退室している
+          members.length === 0
+          ? payments[0].amount < 0
+            ? payments[0].paidByMemberId === null
+            : payments[1].paidByMemberId === null
+          : false)
+      ? {
+          type: 'transfer' as const,
+          label,
+          amount: payments[0].amount < 0 ? payments[1].amount : payments[0].amount,
+          currency: payments[0].currency,
+          // 退室などを起因とした歯抜けのデータがある場合は、不完全な状態でフォームを復元させる
+          transferToMemberId: members[0]?.memberId ?? null,
+          paidByMemberId: payments[0].amount < 0 ? payments[1].paidByMemberId : payments[0].paidByMemberId,
+        }
+      : {
+          type: 'payment' as const,
+          label,
+          amount: payments[0].amount,
+          currency: payments[0].currency,
+          memberIds: members.map((v) => v.memberId),
+          paidByMemberId: payments[0].paidByMemberId,
+        }
+    : undefined
 }

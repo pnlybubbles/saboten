@@ -7,3 +7,6 @@ minify=true
 binding = "DB" # available in your Worker on env.DB
 database_name = "saboten"
 database_id = "71c42205-323c-4602-9f3a-72d2deea4823"
+
+# [observability]
+# enabled = true

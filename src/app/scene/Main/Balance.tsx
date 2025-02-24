@@ -1,5 +1,5 @@
 import Button from '@app/components/Button'
-import useEvents from '@app/hooks/useEvents'
+import useEvents, { filterEventsForAggregation } from '@app/hooks/useEvents'
 import useRoomCurrencyRate from '@app/hooks/useRoomCurrencyRate'
 import useRoomMember from '@app/hooks/useRoomMember'
 import React, { useMemo, useReducer, useRef, useState } from 'react'
@@ -24,19 +24,7 @@ export default function Balance({ roomId }: Props) {
   const [rawEvents] = useEvents(roomId)
   const [, { displayCurrency, displayCurrencySum, availableCurrencyFor }] = useRoomCurrencyRate(roomId)
 
-  // 支払い者が離脱している場合は累計の計算から除外する
-  const events = useMemo(
-    () =>
-      rawEvents?.map((v) => ({
-        ...v,
-        payments: v.payments
-          .map((payment) =>
-            payment.paidByMemberId !== null ? { ...payment, paidByMemberId: payment.paidByMemberId } : null,
-          )
-          .filter(isNonNullable),
-      })) ?? [],
-    [rawEvents],
-  )
+  const events = useMemo(() => filterEventsForAggregation(rawEvents), [rawEvents])
 
   const totalByCurrency = useMemo(
     () =>

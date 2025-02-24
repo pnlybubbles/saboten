@@ -120,15 +120,15 @@ export default function useRoomCurrencyRate(roomId: string | null) {
   )
 
   const convertCurrencyValue = useCallback(
-    ({ amount, currency }: CurrencyValue, targetCurrency: string) => {
+    <T extends CurrencyValue>({ amount, currency, ...rest }: T, targetCurrency: string) => {
       if (targetCurrency === currency) {
-        return { amount, currency }
+        return { amount, currency, ...rest }
       }
       const current = state?.find((v) => v.currency === currency && v.toCurrency === targetCurrency)
       if (current === undefined) {
         return null
       }
-      return { amount: amount * current.rate, currency: targetCurrency }
+      return { amount: amount * current.rate, currency: targetCurrency, ...rest }
     },
     [state],
   )
@@ -150,12 +150,12 @@ export default function useRoomCurrencyRate(roomId: string | null) {
     (
       value: CurrencyValue,
       displayAsCurrency: string = value.currency,
-      forceFraction: boolean = false,
+      forceFraction: boolean | number = false,
     ): DisplayCurrencyValue => {
       return formatDisplayCurrencyValue(
         convertCurrencyValueToRaw(value, displayAsCurrency),
         displayAsCurrency,
-        forceFraction,
+        typeof forceFraction === 'number' ? (cc.code(displayAsCurrency)?.digits ?? 0) + forceFraction : forceFraction,
       )
     },
     [convertCurrencyValueToRaw],
@@ -197,7 +197,11 @@ export default function useRoomCurrencyRate(roomId: string | null) {
   ] as const
 }
 
-const formatDisplayCurrencyValue = (raw: number | null, displayAsCurrency: string, forceFraction: boolean = false) => {
+const formatDisplayCurrencyValue = (
+  raw: number | null,
+  displayAsCurrency: string,
+  forceFraction: boolean | number = false,
+) => {
   if (raw === null) {
     return { value: '?', sign: true, invalid: true }
   }
