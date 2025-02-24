@@ -271,7 +271,16 @@ export default function Remburse({ roomId, balances, primaryCurrency, rateMissin
           onChange={setTab}
           disabled={archived}
         ></Tab>
-        {tab === 'party' && <Tips>建て替えてもらった相手との間で精算を行います。</Tips>}
+        {tab === 'party' && (
+          <Tips type={Icon.HelpCircle}>
+            支払いをしてもらっている相手との間で精算します。貸し借り内訳をイベントごとに確認できます。
+          </Tips>
+        )}
+        {transactionIncludesRateMissingCurrency && (
+          <Tips>
+            変換レートが設定されていない通貨 ({rateMissingCurrency.join(', ')}) は、各通貨での精算方法を表示しています。
+          </Tips>
+        )}
         {transactions && transactionsByParty && transactions.length > 0 ? (
           <>
             {tab === 'minimum' ? (
@@ -341,12 +350,6 @@ export default function Remburse({ roomId, balances, primaryCurrency, rateMissin
               </div>
             ) : (
               unreachable(tab)
-            )}
-            {transactionIncludesRateMissingCurrency && (
-              <Tips type="default">
-                変換レートが設定されていない通貨 ({rateMissingCurrency.join(', ')})
-                は、各通貨での精算方法を表示しています。
-              </Tips>
             )}
             <div className="grid justify-end">
               <Button
