@@ -271,6 +271,7 @@ export default function Remburse({ roomId, balances, primaryCurrency, rateMissin
           onChange={setTab}
           disabled={archived}
         ></Tab>
+        {tab === 'party' && <Tips>建て替えてもらった相手との間で精算を行います。</Tips>}
         {transactions && transactionsByParty && transactions.length > 0 ? (
           <>
             {tab === 'minimum' ? (
