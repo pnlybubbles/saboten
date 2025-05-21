@@ -338,7 +338,7 @@ export default function EventSheet({
           <div className="text-xs font-bold text-zinc-400">
             {tab === 'payment' ? '割り勘するメンバー' : '送金先のメンバー'}
           </div>
-          <div className="ml-[-4px] grid grid-flow-col justify-start gap-1">
+          <div className="ml-[-4px] flex flex-wrap justify-start gap-1">
             {members?.map(
               (member) =>
                 (tab !== 'transfer' || member.id !== paidByMember) && (
