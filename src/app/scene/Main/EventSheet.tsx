@@ -122,6 +122,8 @@ export default function EventSheet({
 
   const [paidByMemberEditMode, setPaidByMemberEditMode] = useState(false)
 
+  const memberOverflowed = (members?.length ?? 0) > 6
+
   const { dirty, clearDirty, resetIfCleared } = useDirty(
     useCallback(() => {
       setTab(defaultFormValue.type)
@@ -270,8 +272,19 @@ export default function EventSheet({
             className="group"
           >
             <div className="flex">
-              <div className="w-4 bg-gradient-to-l from-surface"></div>
-              <div className="mr-[-4px] flex justify-end bg-surface">
+              <div className={clsx('w-4 bg-gradient-to-l from-surface', memberOverflowed && 'hidden')}></div>
+              <div
+                className={clsx(
+                  'z-[1] mr-[-4px] flex p-0 transition',
+                  memberOverflowed
+                    ? [
+                        'flex-wrap',
+                        paidByMemberEditMode &&
+                          'translate-x-2 translate-y-2 rounded-[1.875rem] bg-white p-2 shadow-float',
+                      ]
+                    : 'bg-surface',
+                )}
+              >
                 {members ? (
                   [
                     ...(paidByMember === null && !paidByMemberEditMode
@@ -314,7 +327,10 @@ export default function EventSheet({
                             ? 'w-9 opacity-100'
                             : // width: 2.25rem + border: 2px * 2 + padding: 2px * 2
                               'pointer-events-none ml-[calc(-2.25rem-8px)] opacity-0',
-                          member.id === paidByMember && 'mx-1 border-zinc-900 first:ml-0 last:mr-0',
+                          member.id === paidByMember && [
+                            'border-zinc-900',
+                            paidByMemberEditMode && 'mx-1 first:ml-0 last:mr-0',
+                          ],
                           'group-aria-disabled:border-transparent',
                         )}
                       >
@@ -332,7 +348,7 @@ export default function EventSheet({
           </TextField>
         </div>
         <div
-          className="group grid gap-3 rounded-xl bg-surface px-5 py-4 aria-disabled:pointer-events-none aria-disabled:opacity-40"
+          className="group relative grid gap-3 rounded-xl bg-surface px-5 py-4 aria-disabled:pointer-events-none aria-disabled:opacity-40"
           aria-disabled={archived}
         >
           <div className="text-xs font-bold text-zinc-400">
