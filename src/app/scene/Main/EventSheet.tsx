@@ -274,15 +274,21 @@ export default function EventSheet({
             <div className="flex">
               <div className={clsx('w-4 bg-gradient-to-l from-surface', memberOverflowed && 'hidden')}></div>
               <div
+                onClick={(e) => {
+                  if (!memberOverflowed || !paidByMemberEditMode) return
+                  e.stopPropagation()
+                  e.preventDefault()
+                  setPaidByMemberEditMode(false)
+                }}
                 className={clsx(
-                  'z-[1] mr-[-4px] flex p-0 transition',
+                  'z-[1] flex p-0 transition-transform',
                   memberOverflowed
                     ? [
-                        'flex-wrap',
+                        '-mr-1 flex-wrap',
                         paidByMemberEditMode &&
-                          'translate-x-2 translate-y-2 rounded-[1.875rem] bg-white p-2 shadow-float',
+                          '-mr-3 max-w-[14.75rem] translate-y-2 rounded-[1.875rem] bg-white p-2 shadow-float',
                       ]
-                    : 'bg-surface',
+                    : '-mr-1 bg-surface',
                 )}
               >
                 {members ? (
@@ -322,14 +328,15 @@ export default function EventSheet({
                         }}
                         disabled={member.id === null}
                         className={clsx(
-                          'box-content rounded-full border-2 border-transparent p-[2px] transition-[margin,opacity,border-color,transform] active:scale-90 disabled:opacity-30',
+                          'box-content rounded-full border-2 border-transparent p-[2px] active:scale-90 disabled:opacity-30',
+                          memberOverflowed ? null : 'transition-[margin,opacity,border-color,transform]',
                           paidByMemberEditMode || member.id === paidByMember
                             ? 'w-9 opacity-100'
                             : // width: 2.25rem + border: 2px * 2 + padding: 2px * 2
                               'pointer-events-none ml-[calc(-2.25rem-8px)] opacity-0',
                           member.id === paidByMember && [
                             'border-zinc-900',
-                            paidByMemberEditMode && 'mx-1 first:ml-0 last:mr-0',
+                            paidByMemberEditMode && !memberOverflowed && 'mx-1 first:ml-0 last:mr-0',
                           ],
                           'group-aria-disabled:border-transparent',
                         )}
