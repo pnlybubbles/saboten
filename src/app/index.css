@@ -8,7 +8,7 @@
   }
 
   body {
-    @apply bg-backdrop tracking-wide antialiased select-none;
+    @reference bg-backdrop tracking-wide antialiased select-none;
     font-family: Avenir, sans-serif;
   }
 
@@ -24,7 +24,7 @@
 
 @layer utilities {
   .shadow-float-effect {
-    @apply shadow-border;
+    @reference shadow-border;
     filter: drop-shadow(0 4px 4px rgba(0 13 32 / 0.04));
   }
 }
