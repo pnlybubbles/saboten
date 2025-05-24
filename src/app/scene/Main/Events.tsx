@@ -89,7 +89,7 @@ function Item({ id, label, payments, members, roomId, createdAt }: Event & Props
                   </div>
                 </span>
               ) : (
-                <span className="text-xs text-error">0人</span>
+                <span className="text-error text-xs">0人</span>
               )}
             </>
           )}

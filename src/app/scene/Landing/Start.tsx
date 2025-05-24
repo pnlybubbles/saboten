@@ -28,7 +28,7 @@ export default function Start({ roomId, onProceed }: Props) {
         <div>URLを共有して友達と一緒に書き込めます</div>
       </div>
       {roomId !== null && (
-        <div className="grid grid-cols-[auto_1fr] items-center gap-1 rounded-lg bg-secondary p-4 text-xs font-bold text-primary">
+        <div className="bg-secondary text-primary grid grid-cols-[auto_1fr] items-center gap-1 rounded-lg p-4 text-xs font-bold">
           <Icon.Users size={20}></Icon.Users>
           <div>{`"${roomTitle ?? '読込中...'}" に招待されました`}</div>
         </div>
@@ -55,7 +55,7 @@ export default function Start({ roomId, onProceed }: Props) {
           <div className="font-bold">もっと知りたい</div>
           <div>このアプリを作った想いを綴りました。</div>
         </div>
-        <div className="overflow-hidden rounded-xl bg-white shadow-float">
+        <div className="shadow-float overflow-hidden rounded-xl bg-white">
           <img
             src="/assets/note-thumb.webp"
             alt="sabotenを開いているiPhoneの画像"

@@ -31,7 +31,7 @@ export default function DeleteSheet({ roomId, ...sheet }: Props) {
         desc.set(desc.get()?.filter((v) => v.id !== roomId))
       }
       sheet.onPresent(false)
-      navigate('/')
+      void navigate('/')
     } finally {
       setBusy(false)
     }

@@ -56,7 +56,7 @@ export default function Main({ roomId }: Props) {
     <div className={clsx('relative z-0 w-full', drawer.isPresent && 'overflow-hidden')}>
       <div
         className={clsx(
-          'fixed right-full top-0 h-full w-3/4 overflow-y-auto transition duration-300 md:left-[calc(max((100%-600px-640px)/2,env(safe-area-inset-left,1rem)))] md:right-auto md:w-[300px] md:translate-x-0',
+          'fixed top-0 right-full h-full w-3/4 overflow-y-auto transition duration-300 md:right-auto md:left-[calc(max((100%-600px-640px)/2,env(safe-area-inset-left,1rem)))] md:w-[300px] md:translate-x-0',
           drawer.isPresent && 'translate-x-full',
         )}
       >
@@ -112,11 +112,11 @@ export default function Main({ roomId }: Props) {
                   <div className="relative size-5">
                     <Icon.Menu
                       size={20}
-                      className={clsx('absolute left-0 top-0', !drawer.isPresent ? 'opacity-100' : 'opacity-0')}
+                      className={clsx('absolute top-0 left-0', !drawer.isPresent ? 'opacity-100' : 'opacity-0')}
                     ></Icon.Menu>
                     <Icon.X
                       size={20}
-                      className={clsx('absolute left-0 top-0', drawer.isPresent ? 'opacity-100' : 'opacity-0')}
+                      className={clsx('absolute top-0 left-0', drawer.isPresent ? 'opacity-100' : 'opacity-0')}
                     ></Icon.X>
                   </div>
                 }
@@ -172,7 +172,7 @@ export default function Main({ roomId }: Props) {
                 ></div>
                 <div
                   className={clsx(
-                    'grid justify-items-center gap-2 pb-8 pt-2 transition',
+                    'grid justify-items-center gap-2 pt-2 pb-8 transition',
                     unarchiveTips && 'bg-zinc-50',
                   )}
                 >
@@ -183,7 +183,7 @@ export default function Main({ roomId }: Props) {
                     アーカイブを解除するとイベントを追加できます
                   </Tips>
                   <Clickable
-                    className="pointer-events-auto grid w-max grid-flow-col gap-[2px] rounded-full bg-white px-4 py-2 text-xs font-bold text-zinc-400 shadow-float transition active:scale-90"
+                    className="shadow-float pointer-events-auto grid w-max grid-flow-col gap-[2px] rounded-full bg-white px-4 py-2 text-xs font-bold text-zinc-400 transition active:scale-90"
                     onClick={() => setUnarchiveTips((v) => !v)}
                   >
                     <div>アーカイブ済み</div>
@@ -193,14 +193,14 @@ export default function Main({ roomId }: Props) {
             ) : (
               <>
                 {noEvent && <div className="h-12 w-full bg-gradient-to-t from-zinc-50"></div>}
-                <div className={clsx('grid justify-items-center gap-2 pb-8 pt-2', noEvent && 'bg-zinc-50')}>
+                <div className={clsx('grid justify-items-center gap-2 pt-2 pb-8', noEvent && 'bg-zinc-50')}>
                   {noEvent && (
                     <Tips type={Icon.PawPrint} className="text-zinc-400">
                       最初のイベントを追加しよう！
                     </Tips>
                   )}
                   <Clickable
-                    className="pointer-events-auto grid size-16 select-none grid-flow-col place-items-center gap-1 rounded-full bg-white shadow-float transition active:scale-90"
+                    className="shadow-float pointer-events-auto grid size-16 grid-flow-col place-items-center gap-1 rounded-full bg-white transition select-none active:scale-90"
                     onClick={createEventSheet.open}
                   >
                     <Icon.Plus size={24}></Icon.Plus>
@@ -226,7 +226,7 @@ function RecentRooms({ className, ...props }: { onEnter?: () => void; className?
   return (
     <div className={className}>
       {userRooms.filter((v) => !v.archive).length > 0 && (
-        <div className="mb-4 mt-6 grid grid-flow-col grid-cols-[1fr] first:mt-2">
+        <div className="mt-6 mb-4 grid grid-flow-col grid-cols-[1fr] first:mt-2">
           <div className="text-xs font-bold">最近の記録</div>
         </div>
       )}
@@ -236,7 +236,7 @@ function RecentRooms({ className, ...props }: { onEnter?: () => void; className?
           <RecentRoomItem roomId={id} title={title} key={id} {...props}></RecentRoomItem>
         ))}
       <Clickable
-        className="-ml-1 mb-4 mt-6 grid grid-flow-col items-center justify-start gap-1 text-xs font-bold transition first:mt-2 active:scale-90"
+        className="mt-6 mb-4 -ml-1 grid grid-flow-col items-center justify-start gap-1 text-xs font-bold transition first:mt-2 active:scale-90"
         onClick={() => archive.onPresent((v) => !v)}
       >
         <Icon.ChevronRight
@@ -277,7 +277,7 @@ function RecentRoomItem({ roomId, title, onEnter }: { roomId: string; title: str
         </div>
         <div className="flex pl-2">
           {members?.map((member) => (
-            <Avatar className="-ml-2 ring-2 ring-backdrop" mini="xs" name={member.name} key={member.id}></Avatar>
+            <Avatar className="ring-backdrop -ml-2 ring-2" mini="xs" name={member.name} key={member.id}></Avatar>
           ))}
         </div>
       </Link>

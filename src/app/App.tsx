@@ -68,7 +68,7 @@ function Routing() {
         return fail()
       }
       // 成功
-      navigate(`/${roomId ?? ''}`, { replace: true })
+      void navigate(`/${roomId ?? ''}`, { replace: true })
     })()
   }, [isOldApp, navigate, restoreUser, roomId, s, userMigrationProcedure])
 

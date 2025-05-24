@@ -255,7 +255,7 @@ export default function EventSheet({
             roomId={roomId}
             value={currency}
             onChange={setCurrency}
-            className="grid h-18 grid-flow-row content-between rounded-xl bg-surface px-5 pb-2.5 pt-[0.85rem] text-start transition disabled:opacity-40 aria-expanded:shadow-focus"
+            className="bg-surface aria-expanded:shadow-focus grid h-18 grid-flow-row content-between rounded-xl px-5 pt-[0.85rem] pb-2.5 text-start transition disabled:opacity-40"
             disabled={archived}
           >
             <div className="text-xs font-bold text-zinc-400">通貨</div>
@@ -272,7 +272,7 @@ export default function EventSheet({
             className="group"
           >
             <div className="flex">
-              <div className={clsx('w-4 bg-gradient-to-l from-surface', memberOverflowed && 'hidden')}></div>
+              <div className={clsx('from-surface w-4 bg-gradient-to-l', memberOverflowed && 'hidden')}></div>
               <div
                 onClick={(e) => {
                   if (!memberOverflowed || !paidByMemberEditMode) return
@@ -286,9 +286,9 @@ export default function EventSheet({
                     ? [
                         '-mr-1 flex-wrap',
                         paidByMemberEditMode &&
-                          '-mr-3 max-w-[14.75rem] translate-y-2 rounded-[1.875rem] bg-white p-2 shadow-float',
+                          'shadow-float -mr-3 max-w-[14.75rem] translate-y-2 rounded-[1.875rem] bg-white p-2',
                       ]
-                    : '-mr-1 bg-surface',
+                    : 'bg-surface -mr-1',
                 )}
               >
                 {members ? (
@@ -355,7 +355,7 @@ export default function EventSheet({
           </TextField>
         </div>
         <div
-          className="group relative grid gap-3 rounded-xl bg-surface px-5 py-4 aria-disabled:pointer-events-none aria-disabled:opacity-40"
+          className="group bg-surface relative grid gap-3 rounded-xl px-5 py-4 aria-disabled:pointer-events-none aria-disabled:opacity-40"
           aria-disabled={archived}
         >
           <div className="text-xs font-bold text-zinc-400">

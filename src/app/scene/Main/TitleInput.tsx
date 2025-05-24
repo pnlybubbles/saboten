@@ -45,7 +45,7 @@ export default function TitleInput({
           onChange(title)
         }}
         className={
-          'h-16 w-full rounded-xl bg-transparent px-0 text-2xl outline-none transition-[padding,background-color,border-color] focus:bg-surface focus:px-5 active:scale-100'
+          'focus:bg-surface h-16 w-full rounded-xl bg-transparent px-0 text-2xl transition-[padding,background-color,border-color] outline-none focus:px-5 active:scale-100'
         }
         placeholder="No title"
         name="title"
