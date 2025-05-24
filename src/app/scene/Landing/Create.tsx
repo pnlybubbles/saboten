@@ -24,7 +24,7 @@ export default function Create({ onBack }: Props) {
   }
 
   return (
-    <div className="mx-auto grid max-w-screen-sm gap-6 p-8">
+    <div className="mx-auto grid max-w-(--breakpoint-sm) gap-6 p-8">
       <div className="grid gap-2">
         <div className="font-bold">自分のニックネームを設定します</div>
         <Tips type="warning">個人情報は入力しないでください</Tips>

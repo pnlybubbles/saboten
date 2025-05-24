@@ -20,7 +20,7 @@ export default function Start({ roomId, onProceed }: Props) {
   const aboutSheet = usePresent()
 
   return (
-    <div className="mx-auto grid max-w-screen-sm gap-6 p-8">
+    <div className="mx-auto grid max-w-(--breakpoint-sm) gap-6 p-8">
       <Logo big />
       <div>
         <div>シンプルな割り勘アプリ</div>
@@ -59,7 +59,7 @@ export default function Start({ roomId, onProceed }: Props) {
           <img
             src="/assets/note-thumb.webp"
             alt="sabotenを開いているiPhoneの画像"
-            className="aspect-[1200/630] object-cover"
+            className="aspect-1200/630 object-cover"
           />
           <div className="grid gap-2 p-4">
             <div className="text-sm">N番煎じの割り勘アプリを作った話｜pnly</div>

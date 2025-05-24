@@ -272,7 +272,7 @@ export default function EventSheet({
             className="group"
           >
             <div className="flex">
-              <div className={clsx('from-surface w-4 bg-gradient-to-l', memberOverflowed && 'hidden')}></div>
+              <div className={clsx('from-surface w-4 bg-linear-to-l', memberOverflowed && 'hidden')}></div>
               <div
                 onClick={(e) => {
                   if (!memberOverflowed || !paidByMemberEditMode) return
@@ -281,12 +281,12 @@ export default function EventSheet({
                   setPaidByMemberEditMode(false)
                 }}
                 className={clsx(
-                  'z-[1] flex p-0 transition-transform',
+                  'z-1 flex p-0 transition-transform',
                   memberOverflowed
                     ? [
                         '-mr-1 flex-wrap',
                         paidByMemberEditMode &&
-                          'shadow-float -mr-3 max-w-[14.75rem] translate-y-2 rounded-[1.875rem] bg-white p-2',
+                          'shadow-float -mr-3 max-w-59 translate-y-2 rounded-[1.875rem] bg-white p-2',
                       ]
                     : 'bg-surface -mr-1',
                 )}

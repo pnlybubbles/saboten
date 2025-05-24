@@ -28,7 +28,7 @@ export default function Avatar({ name, className, mini, noNegative }: Props) {
   return (
     <div
       className={clsx(
-        '[container-type:size] relative grid place-items-center overflow-hidden rounded-full text-lg font-bold',
+        '@container-[size] relative grid place-items-center overflow-hidden rounded-full text-lg font-bold',
         mini ? (mini === 'xs' ? 'size-7 text-xs' : 'size-9 text-sm') : 'size-11.5 text-sm',
         emoji ? 'bg-white' : hashed !== null ? COLORS[hashed % COLORS.length] : 'bg-zinc-400 text-zinc-100',
         !noNegative && '-mx-1',
@@ -38,7 +38,7 @@ export default function Avatar({ name, className, mini, noNegative }: Props) {
       {emoji && (
         <div
           className={clsx(
-            'absolute scale-[16] transform-gpu [font-size:100cqh] blur-[10cqh] brightness-150 saturate-50',
+            'absolute scale-[16] transform-gpu text-[100cqh] blur-[10cqh] brightness-150 saturate-50',
           )}
         >
           {head}

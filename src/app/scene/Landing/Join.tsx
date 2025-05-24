@@ -37,7 +37,7 @@ export default function Join({ roomId }: { roomId: string }) {
   }
 
   return (
-    <div className="mx-auto grid max-w-screen-sm gap-6 p-8">
+    <div className="mx-auto grid max-w-(--breakpoint-sm) gap-6 p-8">
       <div className="font-bold">{`"${roomTitle ?? '読込中...'}"に参加します`}</div>
       <div className="text-xs">
         すでにメンバーが設定されている場合には、自分にあたるメンバーを選択して参加することができます

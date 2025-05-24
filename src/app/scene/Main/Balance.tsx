@@ -175,10 +175,10 @@ export default function Balance({ roomId }: Props) {
 
   return (
     <div className="relative z-0">
-      <div className="-mx-1 -mb-6 grid overflow-hidden px-1 after:block after:h-6 after:overflow-hidden after:rounded-b-xl after:bg-gradient-to-b after:from-transparent after:to-white">
+      <div className="-mx-1 -mb-6 grid overflow-hidden px-1 after:block after:h-6 after:overflow-hidden after:rounded-b-xl after:bg-linear-to-b after:from-transparent after:to-white">
         <Clickable
           onClick={() => totalCurrencyValue.length > 0 && setShowDetail((v) => !v)}
-          className="group z-[1] grid grid-flow-col items-center justify-between bg-gradient-to-t from-transparent to-white"
+          className="group z-1 grid grid-flow-col items-center justify-between bg-linear-to-t from-transparent to-white"
         >
           <div className="text-left transition group-active:scale-95">
             <CurrencyText
@@ -190,7 +190,7 @@ export default function Balance({ roomId }: Props) {
               {rateMissingTotalCurrencyValue.map(({ currency, amount }) => (
                 <CurrencyText
                   key={currency}
-                  className="[&:not(:last-child)]:mr-2"
+                  className="not-last:mr-2"
                   {...displayCurrency({ amount, currency })}
                 ></CurrencyText>
               ))}
@@ -209,7 +209,7 @@ export default function Balance({ roomId }: Props) {
         <div
           className={clsx(
             'relative transition-[height,opacity] duration-300',
-            !showDetail && 'pointer-events-none !h-0 opacity-0',
+            !showDetail && 'pointer-events-none h-0! opacity-0',
           )}
           style={height ? { height } : {}}
         >

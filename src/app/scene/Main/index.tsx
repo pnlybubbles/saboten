@@ -99,7 +99,7 @@ export default function Main({ roomId }: Props) {
             drawer.isPresent && 'pointer-events-none',
           )}
         >
-          <div className="shadow-float-effect sticky -top-36 z-[1] grid gap-4 rounded-b-[44px] bg-white p-8 pb-6">
+          <div className="shadow-float-effect sticky -top-36 z-1 grid gap-4 rounded-b-[44px] bg-white p-8 pb-6">
             <div className="z-10 grid grid-cols-[1fr_auto] justify-start gap-3">
               <Button
                 className="transition md:pointer-events-none md:scale-50 md:opacity-0"
@@ -166,7 +166,7 @@ export default function Main({ roomId }: Props) {
               <>
                 <div
                   className={clsx(
-                    'h-12 w-full bg-gradient-to-t from-zinc-50 transition',
+                    'h-12 w-full bg-linear-to-t from-zinc-50 transition',
                     !unarchiveTips && 'opacity-0',
                   )}
                 ></div>
@@ -192,7 +192,7 @@ export default function Main({ roomId }: Props) {
               </>
             ) : (
               <>
-                {noEvent && <div className="h-12 w-full bg-gradient-to-t from-zinc-50"></div>}
+                {noEvent && <div className="h-12 w-full bg-linear-to-t from-zinc-50"></div>}
                 <div className={clsx('grid justify-items-center gap-2 pt-2 pb-8', noEvent && 'bg-zinc-50')}>
                   {noEvent && (
                     <Tips type={Icon.PawPrint} className="text-zinc-400">
