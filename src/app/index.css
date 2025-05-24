@@ -1,6 +1,5 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+@config "../../tailwind.config.js";
 
 @layer base {
   html {
@@ -8,7 +7,7 @@
   }
 
   body {
-    @reference bg-backdrop tracking-wide antialiased select-none;
+    @apply bg-backdrop tracking-wide antialiased select-none;
     font-family: Avenir, sans-serif;
   }
 
@@ -24,7 +23,7 @@
 
 @layer utilities {
   .shadow-float-effect {
-    @reference shadow-border;
+    @apply shadow-border;
     filter: drop-shadow(0 4px 4px rgba(0 13 32 / 0.04));
   }
 }
