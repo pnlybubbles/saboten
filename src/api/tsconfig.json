@@ -1,7 +1,9 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "types": ["@cloudflare/workers-types/2023-07-01"]
+    "types": ["@cloudflare/workers-types/2023-07-01"],
+    "composite": true
   },
-  "include": ["**/*", "../db/serialize.ts"]
+  "include": ["**/*"],
+  "references": [{ "path": "../util" }, { "path": "../db" }]
 }
