@@ -3,19 +3,23 @@ import fs from 'fs'
 import path from 'path'
 
 const config = {
+  dialect: 'sqlite',
   schema: './src/db/schema.ts',
   out: './migrations',
 } satisfies Config
 
 const remoteConfig = {
   ...config,
-  driver: 'd1',
-  dbCredentials: { wranglerConfigPath: 'wrangler.toml', dbName: 'saboten' },
+  driver: 'd1-http',
+  dbCredentials: {
+    accountId: process.env['CLOUDFLARE_ACCOUNT_ID']!,
+    databaseId: process.env['CLOUDFLARE_DATABASE_ID']!,
+    token: process.env['CLOUDFLARE_D1_TOKEN']!,
+  },
 } satisfies Config
 
 const localConfig = {
   ...config,
-  driver: 'better-sqlite',
   dbCredentials: {
     url: getSqliteFile('./.wrangler/state/v3/d1/miniflare-D1DatabaseObject'),
   },
