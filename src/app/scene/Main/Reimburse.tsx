@@ -128,12 +128,12 @@ export default function Remburse({ roomId, balances, primaryCurrency, rateMissin
 
       for (const { currency, amount, event } of transactionsByEvent[to]?.[from] ?? []) {
         detailsByCurrency[currency] ??= []
-        detailsByCurrency[currency]!.push({ event, amount, currency })
+        detailsByCurrency[currency].push({ event, amount, currency })
       }
 
       for (const { currency, amount, event } of transactionsByEvent[from]?.[to] ?? []) {
         detailsByCurrency[currency] ??= []
-        detailsByCurrency[currency]!.push({ event, amount: -amount, currency })
+        detailsByCurrency[currency].push({ event, amount: -amount, currency })
       }
 
       for (const [currency, details] of Object.entries(detailsByCurrency)) {
@@ -159,10 +159,10 @@ export default function Remburse({ roomId, balances, primaryCurrency, rateMissin
       (acc, tx) => {
         acc[tx.to] ??= {}
         acc[tx.to]![tx.currency] ??= 0
-        acc[tx.to]![tx.currency] += tx.amount
+        acc[tx.to]![tx.currency]! += tx.amount
         acc[tx.from] ??= {}
         acc[tx.from]![tx.currency] ??= 0
-        acc[tx.from]![tx.currency] -= tx.amount
+        acc[tx.from]![tx.currency]! -= tx.amount
         return acc
       },
       {} as { [memberId: string]: { [currency: string]: number } },
@@ -177,7 +177,7 @@ export default function Remburse({ roomId, balances, primaryCurrency, rateMissin
         const fraction = (assetsAggregatedByTransactions[memberId]?.[currency] ?? 0) - assets
         if (fraction != 0) {
           assetsFractionsInTransactions[currency] ??= []
-          assetsFractionsInTransactions[currency]!.push({ memberId, fraction })
+          assetsFractionsInTransactions[currency].push({ memberId, fraction })
         }
       }
     }
@@ -250,7 +250,7 @@ export default function Remburse({ roomId, balances, primaryCurrency, rateMissin
   const present = usePresent()
   const [tx, setTx] = useState<Transaction>()
 
-  const [copied, setCopied] = useState<null | NodeJS.Timeout>(null)
+  const [copied, setCopied] = useState<null | ReturnType<typeof setTimeout>>(null)
 
   const [archived] = useRoomArchived(roomId)
 
@@ -337,12 +337,12 @@ export default function Remburse({ roomId, balances, primaryCurrency, rateMissin
                       onClick={() => (setTxDetail(tx), txDetailPresent.open())}
                     >
                       {tx.details.slice(0, 10).map(({ event }) => (
-                        <div key={event.id} className="max-w-24 truncate rounded-full bg-surface px-3 py-1">
+                        <div key={event.id} className="bg-surface max-w-24 truncate rounded-full px-3 py-1">
                           {event.label}
                         </div>
                       ))}
                       {tx.details.length > 10 && (
-                        <div className="rounded-full bg-surface px-3 py-1">他{tx.details.length - 10}</div>
+                        <div className="bg-surface rounded-full px-3 py-1">他{tx.details.length - 10}</div>
                       )}
                     </Clickable>
                   </Fragment>

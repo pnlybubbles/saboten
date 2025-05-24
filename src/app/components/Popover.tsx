@@ -15,10 +15,10 @@ type Props = React.PropsWithChildren<{
 export default function Popover({ menu, align = 'left', className, icon, children }: Props) {
   const { isPresent, onPresent, close, open } = usePresent()
 
-  const longPressToOpen = useRef<ReturnType<typeof setTimeout> | undefined>()
+  const longPressToOpen = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
   const [longPressState, setLongPressState] = useState(false)
 
-  const refs = useRef<React.RefObject<HTMLClickableElement>[]>(menu.map(() => createRef<HTMLClickableElement>()))
+  const refs = useRef<React.RefObject<HTMLClickableElement | null>[]>(menu.map(() => createRef<HTMLClickableElement>()))
 
   useEffect(() => {
     window.addEventListener('click', close)
@@ -88,7 +88,7 @@ export default function Popover({ menu, align = 'left', className, icon, childre
       </Button>
       <div
         className={clsx(
-          'absolute top-[90%] grid overflow-hidden rounded-xl bg-white shadow-float transition',
+          'shadow-float absolute top-[90%] grid overflow-hidden rounded-xl bg-white transition',
           align === 'left' ? 'left-[-10%] origin-top-left' : 'right-[-10%] origin-top-right',
           isPresent ? 'scale-100 opacity-100' : 'pointer-events-none scale-75 opacity-0',
         )}
@@ -102,7 +102,7 @@ export default function Popover({ menu, align = 'left', className, icon, childre
             key={label}
             ref={refs.current[i]}
             className={clsx(
-              'grid grid-cols-[1fr_auto] items-center gap-6 whitespace-nowrap border-b px-4 py-3 text-start text-sm transition last:border-none active:bg-zinc-100',
+              'grid grid-cols-[1fr_auto] items-center gap-6 border-b px-4 py-3 text-start text-sm whitespace-nowrap transition last:border-none active:bg-zinc-100',
               i === highlighted && 'bg-zinc-100',
               destructive && 'text-error',
             )}

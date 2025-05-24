@@ -32,7 +32,7 @@ export default function Balance({ roomId }: Props) {
         (acc, v) => {
           for (const payment of v.payments) {
             acc[payment.currency] ??= 0
-            acc[payment.currency] += payment.amount
+            acc[payment.currency]! += payment.amount
           }
           return acc
         },
@@ -86,11 +86,11 @@ export default function Balance({ roomId }: Props) {
           for (const { paidByMemberId, currency, amount } of v.payments) {
             acc[paidByMemberId] ??= {}
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            acc[paidByMemberId]![currency] ??= { paid: 0, assets: 0 }
+            acc[paidByMemberId][currency] ??= { paid: 0, assets: 0 }
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            acc[paidByMemberId]![currency]!.paid += amount
+            acc[paidByMemberId][currency].paid += amount
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            acc[paidByMemberId]![currency]!.assets += amount
+            acc[paidByMemberId][currency].assets += amount
 
             sumByCurrency[currency] ??= 0
             sumByCurrency[currency] += amount
@@ -102,9 +102,9 @@ export default function Balance({ roomId }: Props) {
             for (const { memberId } of v.members) {
               acc[memberId] ??= {}
               // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-              acc[memberId]![code] ??= { paid: 0, assets: 0 }
+              acc[memberId][code] ??= { paid: 0, assets: 0 }
               // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-              acc[memberId]![code]!.assets -= div
+              acc[memberId][code].assets -= div
             }
           }
 
@@ -122,14 +122,14 @@ export default function Balance({ roomId }: Props) {
           for (const [code, { assets }] of Object.entries(v)) {
             acc[code] ??= { fraction: 0, max: assets, maxMemberId: memberId }
             // 各+-の値が表示される金額と一致するように四捨五入して、累計値を出すことで端数を計算する
-            acc[code]!.fraction += Math.round(assets)
+            acc[code].fraction += Math.round(assets)
             // 最大の支払金額を持っているユーザーをチェックする
             // 仕様として、端数は最大の支払金額を持っているユーザーにまとめることで
             // 割り勘している各ユーザーごとの支払金額をできるだけ均等に保つことができてシンプルになるケースが多い
             // ただし、最大の支払いをしている人は端数だけ損してしまうが、シンプルさを優先する
-            if (acc[code]!.max < assets) {
-              acc[code]!.max = assets
-              acc[code]!.maxMemberId = memberId
+            if (acc[code].max < assets) {
+              acc[code].max = assets
+              acc[code].maxMemberId = memberId
             }
           }
           return acc
@@ -185,7 +185,7 @@ export default function Balance({ roomId }: Props) {
               className="text-3xl font-bold"
               {...displayCurrencySum(rateConvertibleTotalCurrencyValue, primaryCurrency)}
             ></CurrencyText>
-            {rateMissingTotalCurrencyValue.length > 0 && <span className="ml-1 mr-2 text-3xl font-bold">+</span>}
+            {rateMissingTotalCurrencyValue.length > 0 && <span className="mr-2 ml-1 text-3xl font-bold">+</span>}
             <span className="mt-1 inline-block">
               {rateMissingTotalCurrencyValue.map(({ currency, amount }) => (
                 <CurrencyText
@@ -296,7 +296,7 @@ export default function Balance({ roomId }: Props) {
       </div>
       <div
         className={clsx(
-          'absolute -bottom-6 right-2 grid translate-y-1/2 grid-flow-col gap-3 transition',
+          'absolute right-2 -bottom-6 grid translate-y-1/2 grid-flow-col gap-3 transition',
           showDetail ? 'opacity-100' : 'pointer-events-none opacity-0',
         )}
       >
