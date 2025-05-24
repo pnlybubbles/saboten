@@ -52,7 +52,7 @@ export default function EventSheet({
 }: Props) {
   const [user] = useUser()
   const [members, { getMemberName }] = useRoomMember(roomId)
-  const userMemberId = user ? members?.find((v) => v.user?.id === user.id)?.id ?? null : null
+  const userMemberId = user ? (members?.find((v) => v.user?.id === user.id)?.id ?? null) : null
 
   const [roomCurrency] = useRoomCurrency(roomId)
   const defaultCurrency = defaultValue?.currency ?? roomCurrency ?? DEFAULT_PRIMARY_CURRENCY

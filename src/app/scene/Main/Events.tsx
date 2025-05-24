@@ -55,7 +55,7 @@ function Item({ id, label, payments, members, roomId, createdAt }: Event & Props
               ></Spinner>
               <Avatar
                 mini
-                name={payload?.paidByMemberId ? getMemberName(payload.paidByMemberId) ?? null : null}
+                name={payload?.paidByMemberId ? (getMemberName(payload.paidByMemberId) ?? null) : null}
               ></Avatar>
             </div>
             {payload?.type === 'transfer' && (

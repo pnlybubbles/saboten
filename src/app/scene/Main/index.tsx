@@ -200,7 +200,7 @@ export default function Main({ roomId }: Props) {
                     </Tips>
                   )}
                   <Clickable
-                    className="pointer-events-auto grid size-16 select-none grid-flow-col items-center justify-items-center gap-1 rounded-full bg-white shadow-float transition active:scale-90"
+                    className="pointer-events-auto grid size-16 select-none grid-flow-col place-items-center gap-1 rounded-full bg-white shadow-float transition active:scale-90"
                     onClick={createEventSheet.open}
                   >
                     <Icon.Plus size={24}></Icon.Plus>

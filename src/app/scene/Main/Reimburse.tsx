@@ -436,7 +436,10 @@ function TxDetailItem({ detail, roomId }: { detail: TransactionDetail; roomId: s
 
   return (
     <>
-      <Avatar mini="xs" name={payload?.paidByMemberId ? getMemberName(payload.paidByMemberId) ?? null : null}></Avatar>
+      <Avatar
+        mini="xs"
+        name={payload?.paidByMemberId ? (getMemberName(payload.paidByMemberId) ?? null) : null}
+      ></Avatar>
       <div className="text-xs font-bold">{detail.event.label}</div>
       <div className="justify-self-end text-xs text-zinc-400">
         <CurrencyText

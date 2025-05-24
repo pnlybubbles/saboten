@@ -78,7 +78,7 @@ export default forwardRef<HTMLInputElement, Props>(function TextField(
   }
 
   useEffect(() => {
-    setInputValue((v) => (value !== normalizer(v) ? value ?? '' : v))
+    setInputValue((v) => (value !== normalizer(v) ? (value ?? '') : v))
   }, [inputValue, normalizer, value])
 
   const [inputErrorAnimation, setInputErrorAnimation] = useState(false)

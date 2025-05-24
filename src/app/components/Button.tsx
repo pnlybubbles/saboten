@@ -47,12 +47,7 @@ export default forwardRef<HTMLClickableElement, Props>(function Button(
       disabled={disabled || loading}
       {...props}
     >
-      <div
-        className={clsx(
-          'grid items-center justify-items-center transition-opacity',
-          loading ? 'opacity-0' : 'opacity-100',
-        )}
-      >
+      <div className={clsx('grid place-items-center transition-opacity', loading ? 'opacity-0' : 'opacity-100')}>
         {icon ? (
           children == null ? (
             icon

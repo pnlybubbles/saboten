@@ -63,7 +63,7 @@ export default function EditMember({ roomId, ...sheet }: Props) {
                 <Clickable
                   disabled={v.id === null}
                   onClick={() => handleRemove(v)}
-                  className="grid size-8 items-center justify-items-center transition active:scale-90 disabled:opacity-30"
+                  className="grid size-8 place-items-center transition active:scale-90 disabled:opacity-30"
                 >
                   {v.user && v.user.id === user?.id ? <Icon.LogOut size={20} /> : <Icon.UserMinus size={20} />}
                 </Clickable>
