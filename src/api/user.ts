@@ -24,7 +24,7 @@ const user = new Hono<Env>()
       return c.json(withCompressedSecret(user))
     } else {
       const user = first(await db.insert(schema.user).values({ id: uuid(), secret: uuid(), name }).returning())
-      setCookie(c, 'id', user.id, { maxAge: 60 * 60 * 24 * 365 * 2 })
+      setCookie(c, 'id', user.id, { maxAge: 60 * 60 * 24 * 400 })
       return c.json(withCompressedSecret(user))
     }
   })
@@ -43,7 +43,7 @@ const user = new Hono<Env>()
       const [user] = await db.select().from(schema.user).where(eq(schema.user.id, userId))
       if (user) {
         // ユーザーが見つかったらcookieを延長
-        setCookie(c, 'id', userId, { maxAge: 60 * 60 * 24 * 365 * 2 })
+        setCookie(c, 'id', userId, { maxAge: 60 * 60 * 24 * 400 })
       } else {
         // ユーザーが見つからないのであればcookieを削除する
         deleteCookie(c, 'id')
