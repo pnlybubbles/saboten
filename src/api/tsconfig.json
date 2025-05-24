@@ -3,5 +3,5 @@
   "compilerOptions": {
     "types": ["@cloudflare/workers-types/2023-07-01"]
   },
-  "include": ["**/*", "../db/serialize.ts", "../db/uuid.ts"]
+  "include": ["**/*", "../db/serialize.ts"]
 }
