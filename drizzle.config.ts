@@ -8,24 +8,30 @@ const config = {
   out: './migrations',
 } satisfies Config
 
-const remoteConfig = {
-  ...config,
-  driver: 'd1-http',
-  dbCredentials: {
-    accountId: process.env['CLOUDFLARE_ACCOUNT_ID']!,
-    databaseId: process.env['CLOUDFLARE_DATABASE_ID']!,
-    token: process.env['CLOUDFLARE_D1_TOKEN']!,
-  },
-} satisfies Config
+const remoteConfig = () => {
+  console.log('Using remote D1 database')
+  return {
+    ...config,
+    driver: 'd1-http',
+    dbCredentials: {
+      accountId: process.env['CLOUDFLARE_ACCOUNT_ID']!,
+      databaseId: process.env['CLOUDFLARE_DATABASE_ID']!,
+      token: process.env['CLOUDFLARE_D1_TOKEN']!,
+    },
+  } satisfies Config
+}
 
-const localConfig = {
-  ...config,
-  dbCredentials: {
-    url: getSqliteFile('./.wrangler/state/v3/d1/miniflare-D1DatabaseObject'),
-  },
-} satisfies Config
+const localConfig = () => {
+  console.log('Using local SQLite database')
+  return {
+    ...config,
+    dbCredentials: {
+      url: getSqliteFile('./.wrangler/state/v3/d1/miniflare-D1DatabaseObject'),
+    },
+  } satisfies Config
+}
 
-export default process.env['NODE_ENV'] === 'production' ? remoteConfig : localConfig
+export default process.env['NODE_ENV'] === 'production' ? remoteConfig() : localConfig()
 
 function getSqliteFile(dir: string) {
   const files = fs.readdirSync(dir)
