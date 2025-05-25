@@ -50,6 +50,7 @@
     "wrangler": "^4.16.1"
   },
   "scripts": {
+    "clean": "rm -rf dist src/*/dist",
     "dev": "run-p 'dev:*'",
     "dev:worker": "wrangler dev",
     "dev:app": "vite",
