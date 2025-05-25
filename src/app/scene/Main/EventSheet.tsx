@@ -247,7 +247,7 @@ export default function EventSheet({
             onChange={dirty(setTab)}
             disabled={archived}
             className="w-20"
-          ></Tab>
+           />
         )}
         <TextField label="イベントの名前" name="label" value={label} onChange={dirty(setLabel)} disabled={archived} />
         <div className="grid grid-cols-[auto_1fr] gap-3">
@@ -272,7 +272,7 @@ export default function EventSheet({
             className="group"
           >
             <div className="flex">
-              <div className={clsx('from-surface w-4 bg-linear-to-l', memberOverflowed && 'hidden')}></div>
+              <div className={clsx('from-surface w-4 bg-linear-to-l', memberOverflowed && 'hidden')} />
               <div
                 onClick={(e) => {
                   if (!memberOverflowed || !paidByMemberEditMode) return
@@ -308,7 +308,7 @@ export default function EventSheet({
                               'border-zinc-900',
                             )}
                           >
-                            <Avatar mini noNegative name={null}></Avatar>
+                            <Avatar mini noNegative name={null} />
                           </Clickable>,
                         ]
                       : []),
@@ -341,13 +341,13 @@ export default function EventSheet({
                           'group-aria-disabled:border-transparent',
                         )}
                       >
-                        <Avatar mini noNegative name={getMemberName(member)}></Avatar>
+                        <Avatar mini noNegative name={getMemberName(member)} />
                       </Clickable>
                     )),
                   ]
                 ) : (
                   <div className="rounded-full border-2 border-zinc-900 p-[2px]">
-                    <Avatar mini noNegative name={user.name}></Avatar>
+                    <Avatar mini noNegative name={user.name} />
                   </div>
                 )}
               </div>
@@ -399,13 +399,13 @@ export default function EventSheet({
                       }
                     }}
                   >
-                    <Avatar mini noNegative name={getMemberName(member)}></Avatar>
+                    <Avatar mini noNegative name={getMemberName(member)} />
                   </Clickable>
                 ),
             ) ??
               (tab === 'transfer' ? null : (
                 <div className="rounded-full border-2 border-zinc-900 p-[2px]">
-                  <Avatar mini noNegative name={user.name}></Avatar>
+                  <Avatar mini noNegative name={user.name} />
                 </div>
               ))}
             <div className="ml-[4px] hidden h-12 items-center rounded-xl border-2 border-dotted border-zinc-400 px-4 text-xs text-zinc-400 first:grid">
@@ -415,7 +415,7 @@ export default function EventSheet({
         </div>
         <div className={clsx('grid gap-2', onRemove && !archived && 'grid-cols-[auto_1fr]')}>
           {onRemove && !archived && (
-            <Button onClick={onRemove} icon={<Icon.Trash2 size={20} />} variant="danger"></Button>
+            <Button onClick={onRemove} icon={<Icon.Trash2 size={20} />} variant="danger" />
           )}
           <Button
             onClick={handleSubmit}

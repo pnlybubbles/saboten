@@ -18,7 +18,7 @@ import Tips from './components/Tips'
 const router = createBrowserRouter([
   {
     path: '/:roomId?',
-    element: <Routing></Routing>,
+    element: <Routing />,
   },
 ])
 
@@ -92,7 +92,7 @@ function Routing() {
   if (userMigrationProcedure) {
     return (
       <div className="grid h-screen content-center justify-items-center gap-2">
-        <Spinner></Spinner>
+        <Spinner />
         <div className="grid grid-flow-col gap-4 text-zinc-400">
           <Icon.PartyPopper size={18} />
           <div className="font-bold">saboten.app</div>
@@ -114,7 +114,7 @@ function Routing() {
   }
 
   if (user === null) {
-    return <Landing roomId={roomId}></Landing>
+    return <Landing roomId={roomId} />
   }
 
   if (roomId === null || members === null) {
@@ -129,14 +129,14 @@ function Routing() {
   if (members === undefined) {
     return (
       <div className="grid h-screen content-center justify-items-center gap-2">
-        <Spinner></Spinner>
+        <Spinner />
         <div className="text-sm font-bold text-zinc-400">読込中...</div>
       </div>
     )
   }
 
   if (members.find((v) => v.user?.id === user.id) === undefined) {
-    return <Join roomId={roomId}></Join>
+    return <Join roomId={roomId} />
   }
 
   return (

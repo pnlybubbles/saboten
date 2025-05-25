@@ -63,7 +63,7 @@ export default function Main({ roomId }: Props) {
         <div className="grid gap-6 p-8">
           <div className="grid grid-cols-[auto_1fr_auto] items-center justify-start gap-4">
             <Clickable onClick={editUserSheet.open} className="transition active:scale-90">
-              <Avatar name={user?.name ?? null}></Avatar>
+              <Avatar name={user?.name ?? null} />
             </Clickable>
             <Clickable onClick={editUserSheet.open} className="text-left font-bold transition active:scale-95">
               {user?.name}
@@ -73,16 +73,16 @@ export default function Main({ roomId }: Props) {
               onClick={aboutSheet.open}
               icon={<Icon.TrafficCone size={20} />}
               className="mr-[-13px]"
-            ></Button>
-            <EditUser {...editUserSheet}></EditUser>
-            <AboutSheet {...aboutSheet}></AboutSheet>
+             />
+            <EditUser {...editUserSheet} />
+            <AboutSheet {...aboutSheet} />
           </div>
           <Link to="/">
-            <Button variant="primary" icon={<Icon.Plane size={20}></Icon.Plane>} onClick={drawer.close}>
+            <Button variant="primary" icon={<Icon.Plane size={20} />} onClick={drawer.close}>
               記録をはじめる
             </Button>
           </Link>
-          <RecentRooms onEnter={drawer.close}></RecentRooms>
+          <RecentRooms onEnter={drawer.close} />
         </div>
       </div>
       <Clickable
@@ -113,16 +113,16 @@ export default function Main({ roomId }: Props) {
                     <Icon.Menu
                       size={20}
                       className={clsx('absolute top-0 left-0', !drawer.isPresent ? 'opacity-100' : 'opacity-0')}
-                    ></Icon.Menu>
+                     />
                     <Icon.X
                       size={20}
                       className={clsx('absolute top-0 left-0', drawer.isPresent ? 'opacity-100' : 'opacity-0')}
-                    ></Icon.X>
+                     />
                   </div>
                 }
-              ></Button>
+               />
               <div className="flex justify-end">
-                <Button onClick={editMemberSheet.open} icon={<Icon.Users size={20} />}></Button>
+                <Button onClick={editMemberSheet.open} icon={<Icon.Users size={20} />} />
                 <ActionMenu roomId={roomId} />
               </div>
             </div>
@@ -136,7 +136,7 @@ export default function Main({ roomId }: Props) {
                 >
                   <Icon.FlagTriangleRight />
                 </div>
-                <TitleInput defaultValue={title} onChange={setTitle} disabled={archived} className="grow"></TitleInput>
+                <TitleInput defaultValue={title} onChange={setTitle} disabled={archived} className="grow" />
               </div>
               {(title === undefined || title.length === 0) && (
                 <Tips
@@ -147,9 +147,9 @@ export default function Main({ roomId }: Props) {
                 </Tips>
               )}
             </div>
-            <Balance roomId={roomId}></Balance>
+            <Balance roomId={roomId} />
           </div>
-          <EditMember roomId={roomId} {...editMemberSheet}></EditMember>
+          <EditMember roomId={roomId} {...editMemberSheet} />
           <EventSheet
             {...createEventSheet}
             roomId={roomId}
@@ -157,16 +157,16 @@ export default function Main({ roomId }: Props) {
             id={roomId ?? undefined}
             onSubmit={addEvent}
             submitLabel="追加"
-          ></EventSheet>
+           />
           <div className="p-8">
-            {roomId === null ? <RecentRooms className="md:hidden" /> : <Events roomId={roomId}></Events>}
+            {roomId === null ? <RecentRooms className="md:hidden" /> : <Events roomId={roomId} />}
           </div>
           <div className={'pointer-events-none sticky bottom-0 left-0 w-full self-end'}>
             {archived ? (
               <>
                 <div
                   className={clsx('h-12 w-full bg-linear-to-t from-zinc-50 transition', !unarchiveTips && 'opacity-0')}
-                ></div>
+                 />
                 <div
                   className={clsx(
                     'grid justify-items-center gap-2 pt-2 pb-8 transition',
@@ -189,7 +189,7 @@ export default function Main({ roomId }: Props) {
               </>
             ) : (
               <>
-                {noEvent && <div className="h-12 w-full bg-linear-to-t from-zinc-50"></div>}
+                {noEvent && <div className="h-12 w-full bg-linear-to-t from-zinc-50" />}
                 <div className={clsx('grid justify-items-center gap-2 pt-2 pb-8', noEvent && 'bg-zinc-50')}>
                   {noEvent && (
                     <Tips type={Icon.PawPrint} className="text-zinc-400">
@@ -200,7 +200,7 @@ export default function Main({ roomId }: Props) {
                     className="shadow-float pointer-events-auto grid size-16 grid-flow-col place-items-center gap-1 rounded-full bg-white transition select-none active:scale-90"
                     onClick={createEventSheet.open}
                   >
-                    <Icon.Plus size={24}></Icon.Plus>
+                    <Icon.Plus size={24} />
                   </Clickable>
                 </div>
               </>
@@ -230,7 +230,7 @@ function RecentRooms({ className, ...props }: { onEnter?: () => void; className?
       {userRooms
         .filter((v) => !v.archive)
         .map(({ id, title }) => (
-          <RecentRoomItem roomId={id} title={title} key={id} {...props}></RecentRoomItem>
+          <RecentRoomItem roomId={id} title={title} key={id} {...props} />
         ))}
       <Clickable
         className="mt-6 mb-4 -ml-1 grid grid-flow-col items-center justify-start gap-1 text-xs font-bold transition first:mt-2 active:scale-90"
@@ -239,13 +239,13 @@ function RecentRooms({ className, ...props }: { onEnter?: () => void; className?
         <Icon.ChevronRight
           size={16}
           className={clsx('transition', archive.isPresent && 'rotate-90')}
-        ></Icon.ChevronRight>
+         />
         <div>アーカイブ</div>
       </Clickable>
       {archive.isPresent &&
         userRooms
           .filter((v) => v.archive)
-          .map(({ id, title }) => <RecentRoomItem roomId={id} title={title} key={id} {...props}></RecentRoomItem>)}
+          .map(({ id, title }) => <RecentRoomItem roomId={id} title={title} key={id} {...props} />)}
     </div>
   )
 }
@@ -274,7 +274,7 @@ function RecentRoomItem({ roomId, title, onEnter }: { roomId: string; title: str
         </div>
         <div className="flex pl-2">
           {members?.map((member) => (
-            <Avatar className="ring-backdrop -ml-2 ring-2" mini="xs" name={member.name} key={member.id}></Avatar>
+            <Avatar className="ring-backdrop -ml-2 ring-2" mini="xs" name={member.name} key={member.id} />
           ))}
         </div>
       </Link>

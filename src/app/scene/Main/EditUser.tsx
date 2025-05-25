@@ -44,14 +44,14 @@ export default function EditUser({ ...sheet }: SheetProps) {
           </div>
         )}
         <Button onClick={secretSheet.open}>ユーザー切り替え・削除</Button>
-        <UserResetSheet {...secretSheet}></UserResetSheet>
+        <UserResetSheet {...secretSheet} />
         <TextField
           label="ニックネーム"
           name="name"
           value={name}
           onChange={dirty(setName)}
           onBlur={handleSubmit}
-        ></TextField>
+         />
       </div>
     </Sheet>
   )

@@ -56,7 +56,7 @@ export default function CurrencySettingSheet({ roomId, ...sheet }: Props) {
                 )}
               </div>
             </div>
-            <div className="w-5"></div>
+            <div className="w-5" />
           </CurrencyPicker>
           {roomCurrency !== null && (
             <Clickable
@@ -72,7 +72,7 @@ export default function CurrencySettingSheet({ roomId, ...sheet }: Props) {
             <div className="text-xs font-bold text-zinc-400">通貨レート</div>
             <div className="grid gap-2">
               {usedCurrencyRate.map((v) => (
-                <CurrencyRateItem key={`${v.currency}_${v.toCurrency}`} {...v} roomId={roomId}></CurrencyRateItem>
+                <CurrencyRateItem key={`${v.currency}_${v.toCurrency}`} {...v} roomId={roomId} />
               ))}
             </div>
           </>
@@ -119,18 +119,18 @@ function CurrencyRateItem({
           <CurrencyText
             {...displayCurrency({ amount: 10 ** currencyDigits, currency })}
             className="text-xs font-bold text-zinc-400"
-          ></CurrencyText>
+           />
           <span className="text-xs font-bold text-zinc-400">{` = `}</span>
           {rate ? (
             <CurrencyText
               {...displayCurrency({ amount: rate * 10 ** currencyDigits, currency: toCurrency }, undefined, true)}
-            ></CurrencyText>
+             />
           ) : (
             <span>?</span>
           )}
         </div>
         {rate === undefined && (
-          <Icon.AlertCircle size={20} className="text-error inline-block self-center"></Icon.AlertCircle>
+          <Icon.AlertCircle size={20} className="text-error inline-block self-center" />
         )}
       </Clickable>
       <CurrencyRateSheet
@@ -140,7 +140,7 @@ function CurrencyRateItem({
         roomId={roomId}
         removable
         {...currencyRateSheet}
-      ></CurrencyRateSheet>
+       />
     </>
   )
 }

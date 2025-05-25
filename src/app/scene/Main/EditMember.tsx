@@ -50,7 +50,7 @@ export default function EditMember({ roomId, ...sheet }: Props) {
             <li key={v.id} className="grid grid-flow-col grid-cols-[1fr_auto] items-center gap-4">
               <RenameButton roomId={roomId} memberId={v.id}>
                 <div className="grid grid-flow-col justify-start gap-4">
-                  <Avatar mini name={getMemberName(v)}></Avatar>
+                  <Avatar mini name={getMemberName(v)} />
                   <div className="grid grid-flow-col items-center justify-start gap-2">
                     <div className="text-sm font-bold">{getMemberName(v)}</div>
                     {v.user && (

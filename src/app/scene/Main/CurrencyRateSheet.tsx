@@ -71,7 +71,7 @@ export default function CurrencyRateSheet({
         <div className="grid gap-1">
           <div className="font-bold">
             {!base.value.startsWith(currency) && <span>{`${currency} `}</span>}
-            <CurrencyText {...base}></CurrencyText>
+            <CurrencyText {...base} />
             <span>{` =`}</span>
           </div>
           <div className="text-xs">{currencyRecord.currency}</div>
@@ -82,9 +82,9 @@ export default function CurrencyRateSheet({
           inputMode="decimal"
           value={inputRate}
           onChange={dirty(setInputRate)}
-        ></TextField>
+         />
         <div className={clsx('grid gap-2', removable && 'grid-cols-[auto_1fr]')}>
-          {removable && <Button onClick={handleRemove} icon={<Icon.Trash2 size={20} />} variant="danger"></Button>}
+          {removable && <Button onClick={handleRemove} icon={<Icon.Trash2 size={20} />} variant="danger" />}
           <Button onClick={handleUpdate} disabled={inputRate === ''}>
             設定
           </Button>

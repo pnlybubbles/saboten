@@ -29,7 +29,7 @@ export default function Start({ roomId, onProceed }: Props) {
       </div>
       {roomId !== null && (
         <div className="bg-secondary text-primary grid grid-cols-[auto_1fr] items-center gap-1 rounded-lg p-4 text-xs font-bold">
-          <Icon.Users size={20}></Icon.Users>
+          <Icon.Users size={20} />
           <div>{`"${roomTitle ?? '読込中...'}" に招待されました`}</div>
         </div>
       )}
@@ -49,7 +49,7 @@ export default function Start({ roomId, onProceed }: Props) {
         </>
       )}
       <Divider aster />
-      <ScreenShots></ScreenShots>
+      <ScreenShots />
       <a className="grid gap-3" href="https://note.com/pnly/n/ne276c3d6dfcc" target="_blank" rel="noreferrer">
         <div className="grid gap-1 text-xs text-zinc-400">
           <div className="font-bold">もっと知りたい</div>
@@ -74,8 +74,8 @@ export default function Start({ roomId, onProceed }: Props) {
         </div>
       </a>
       <div className="grid justify-center">
-        <Button variant="transparent" onClick={aboutSheet.open} icon={<Icon.TrafficCone size={20} />}></Button>
-        <AboutSheet {...aboutSheet}></AboutSheet>
+        <Button variant="transparent" onClick={aboutSheet.open} icon={<Icon.TrafficCone size={20} />} />
+        <AboutSheet {...aboutSheet} />
       </div>
     </div>
   )

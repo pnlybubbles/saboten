@@ -19,10 +19,10 @@ export default function RenameButton({ memberId, roomId, ...rest }: Props & Cont
   }
 
   if (memberId === null) {
-    return <RenameIconContainer {...rest} disabled></RenameIconContainer>
+    return <RenameIconContainer {...rest} disabled />
   }
 
-  return <RenameButtonInternal roomId={roomId} memberId={memberId} {...rest}></RenameButtonInternal>
+  return <RenameButtonInternal roomId={roomId} memberId={memberId} {...rest} />
 }
 
 interface ContainerProps {
@@ -34,7 +34,7 @@ function RenameIconContainer({ children, disabled }: ContainerProps) {
   return (
     <div className="grid grid-flow-col items-center justify-start gap-2">
       {children}
-      <Icon.PencilLine size={16} className={clsx(disabled && 'opacity-30', 'text-zinc-400')}></Icon.PencilLine>
+      <Icon.PencilLine size={16} className={clsx(disabled && 'opacity-30', 'text-zinc-400')} />
     </div>
   )
 }
@@ -52,7 +52,7 @@ function RenameButtonInternal({ roomId, memberId, ...rest }: { roomId: string; m
   return (
     <>
       <Clickable onClick={present.open} className="transition active:scale-95 disabled:opacity-30">
-        <RenameIconContainer {...rest}></RenameIconContainer>
+        <RenameIconContainer {...rest} />
       </Clickable>
       <Sheet {...present}>
         <div className="grid gap-4">
@@ -66,12 +66,12 @@ function RenameButtonInternal({ roomId, memberId, ...rest }: { roomId: string; m
               ]}
               value={mode}
               onChange={setMode}
-            ></Tab>
+             />
           )}
           {mode === 'rename' ? (
-            <TextField label="新しい名前" value={name} onChange={setName}></TextField>
+            <TextField label="新しい名前" value={name} onChange={setName} />
           ) : mode === 'reset' ? (
-            <TextField label="新しい名前" value={member?.user?.name ?? ''} disabled></TextField>
+            <TextField label="新しい名前" value={member?.user?.name ?? ''} disabled />
           ) : (
             unreachable(mode)
           )}

@@ -21,5 +21,5 @@ export default forwardRef<HTMLClickableElement, Props>(function Clickable({ onCl
     disabled,
     ...(!disabled && { onClick }),
   }
-  return div ? <div {...props} ref={ref}></div> : <button type="button" {...props} ref={ref}></button>
+  return div ? <div {...props} ref={ref} /> : <button type="button" {...props} ref={ref} />
 })

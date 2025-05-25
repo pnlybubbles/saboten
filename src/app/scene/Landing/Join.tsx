@@ -52,7 +52,7 @@ export default function Join({ roomId }: { roomId: string }) {
               selectedMember === member.id && 'border-zinc-900',
             )}
           >
-            <Avatar mini name={getMemberName(member)}></Avatar>
+            <Avatar mini name={getMemberName(member)} />
             <div className="grid grid-flow-col items-center gap-2">
               <div className="text-sm font-bold">{getMemberName(member)}</div>
               {member.user && <span className="text-xs text-zinc-400">参加済み</span>}
@@ -66,7 +66,7 @@ export default function Join({ roomId }: { roomId: string }) {
             selectedMember === null && 'border-zinc-900',
           )}
         >
-          <Avatar mini name={null}></Avatar>
+          <Avatar mini name={null} />
           <div className="text-sm font-bold">新しいメンバーとして参加</div>
         </Clickable>
       </div>
@@ -82,10 +82,10 @@ export default function Join({ roomId }: { roomId: string }) {
       >
         参加
       </Button>
-      <Divider></Divider>
+      <Divider />
       <Button onClick={() => navigate('/')}>参加しない</Button>
       <Divider aster />
-      <ScreenShots></ScreenShots>
+      <ScreenShots />
     </div>
   )
 }

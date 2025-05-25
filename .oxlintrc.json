@@ -17,6 +17,8 @@
     "eslint/no-fallthrough": "error",
     "eslint/require-await": "warn",
     "unicorn/escape-case": "warn",
-    "unicorn/explicit-length-check": "warn"
+    "unicorn/explicit-length-check": "warn",
+    // Style
+    "react/self-closing-comp": "warn"
   }
 }

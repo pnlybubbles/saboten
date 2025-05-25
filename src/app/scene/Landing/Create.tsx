@@ -33,7 +33,7 @@ export default function Create({ onBack }: Props) {
       <Button onClick={create} loading={busy} variant="primary">
         記録をはじめる
       </Button>
-      <Divider></Divider>
+      <Divider />
       <Button onClick={onBack}>戻る</Button>
     </div>
   )
