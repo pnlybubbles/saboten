@@ -106,8 +106,8 @@ export default function EventSheet({
     const currencyDigits = cc.code(currency)?.digits
     if (currencyDigits === undefined) return null
     if (amount === '') return null
-    const amountNumeric = parseFloat(amount)
-    if (isNaN(amountNumeric) || amountNumeric === 0) return null
+    const amountNumeric = Number.parseFloat(amount)
+    if (Number.isNaN(amountNumeric) || amountNumeric === 0) return null
     // 通貨単位によって有効な少数桁数をチェックする
     const dot = amount.indexOf('.')
     if (dot !== -1) {

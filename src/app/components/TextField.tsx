@@ -45,7 +45,7 @@ export default forwardRef<HTMLInputElement, Props>(function TextField(
       if (type === 'float') {
         // コンマを含んでいたら正しくコンマの位置を矯正してあげる
         if (str.includes(',')) {
-          return Intl.NumberFormat('ja-JP').format(parseFloat(normalizer(str)))
+          return Intl.NumberFormat('ja-JP').format(Number.parseFloat(normalizer(str)))
         }
         // コンマを含んでいない場合は数値として矯正するのみ
         return normalizer(str)

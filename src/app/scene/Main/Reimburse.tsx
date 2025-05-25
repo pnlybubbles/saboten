@@ -175,7 +175,7 @@ export default function Remburse({ roomId, balances, primaryCurrency, rateMissin
     for (const [memberId, balanceByCurrency] of balances) {
       for (const [currency, { assets }] of Object.entries(balanceByCurrency)) {
         const fraction = (assetsAggregatedByTransactions[memberId]?.[currency] ?? 0) - assets
-        if (fraction != 0) {
+        if (fraction !== 0) {
           assetsFractionsInTransactions[currency] ??= []
           assetsFractionsInTransactions[currency].push({ memberId, fraction })
         }

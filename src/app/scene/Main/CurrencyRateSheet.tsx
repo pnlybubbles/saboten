@@ -52,7 +52,7 @@ export default function CurrencyRateSheet({
     void updateRate({
       currency,
       toCurrency,
-      rate: (parseFloat(inputRate) * 10 ** toCurrencyDigits) / 10 ** currencyDigits,
+      rate: (Number.parseFloat(inputRate) * 10 ** toCurrencyDigits) / 10 ** currencyDigits,
     })
     sheet.onPresent(false)
   }

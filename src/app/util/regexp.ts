@@ -1,7 +1,7 @@
 /**
  * 半角空白を含む。改行,タブなど制御文字を含まない
  */
-export const PRINTABLE_ASCII_REGEXP = /^[\x20-\x7e]*$/
+export const PRINTABLE_ASCII_REGEXP = /^[\x20-\x7E]*$/
 
 /**
  * 浮動小数点
