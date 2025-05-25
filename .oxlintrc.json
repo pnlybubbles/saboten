@@ -5,6 +5,7 @@
     "eslint/no-var": "error",
     "eslint/unicode-bom": "error",
     "oxc/bad-bitwise-operator": "error",
+    "typescript/no-import-type-side-effects": "error",
     "react/button-has-type": "error",
     "react/rules-of-hooks": "error",
     "react/exhaustive-deps": "warn",
