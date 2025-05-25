@@ -6,4 +6,3 @@ dist
 .wrangler
 tsconfig.node.tsbuildinfo
 tsconfig.tsbuildinfo
-*.d.ts

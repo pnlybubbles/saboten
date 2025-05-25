@@ -9,13 +9,14 @@
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
     "resolveJsonModule": true,
+    "composite": true,
     "emitDeclarationOnly": true,
-    "declaration": true,
     "jsx": "react-jsx",
     "baseUrl": ".",
     "paths": {
       "@*": ["./src/*"]
-    }
+    },
+    "outDir": "${configDir}/dist"
   },
   "include": [],
   "references": [

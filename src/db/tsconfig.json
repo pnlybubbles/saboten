@@ -1,8 +1,6 @@
 {
   "extends": "../../tsconfig.json",
-  "compilerOptions": {
-    "composite": true
-  },
+  "compilerOptions": {},
   "include": ["**/*"],
   "references": [{ "path": "../util" }]
 }

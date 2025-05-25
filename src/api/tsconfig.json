@@ -1,8 +1,7 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "types": ["@cloudflare/workers-types/2023-07-01"],
-    "composite": true
+    "types": ["@cloudflare/workers-types/2023-07-01"]
   },
   "include": ["**/*"],
   "references": [{ "path": "../util" }, { "path": "../db" }]
