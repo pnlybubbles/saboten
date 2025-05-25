@@ -165,10 +165,7 @@ export default function Main({ roomId }: Props) {
             {archived ? (
               <>
                 <div
-                  className={clsx(
-                    'h-12 w-full bg-linear-to-t from-zinc-50 transition',
-                    !unarchiveTips && 'opacity-0',
-                  )}
+                  className={clsx('h-12 w-full bg-linear-to-t from-zinc-50 transition', !unarchiveTips && 'opacity-0')}
                 ></div>
                 <div
                   className={clsx(
