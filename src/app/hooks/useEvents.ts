@@ -102,7 +102,7 @@ export default function useEvents(roomId: string | null) {
     (event: EventPayloadAddPhase) =>
       setState(
         (current) => {
-          if (current == undefined || event.paidByMemberId === null) {
+          if (current == null || event.paidByMemberId === null) {
             // ルームが未作成の場合にはoptimistic updateしない
             return current
           }
@@ -154,7 +154,7 @@ export default function useEvents(roomId: string | null) {
     (event: EventPayload & { id: string }) =>
       setState(
         (current) => {
-          if (current == undefined) {
+          if (current == null) {
             return current
           }
           const index = current.findIndex((v) => v.id === event.id)
@@ -214,7 +214,7 @@ export default function useEvents(roomId: string | null) {
     (eventId: string) =>
       setState(
         (current) => {
-          if (current == undefined) {
+          if (current == null) {
             return current
           }
           const index = current.findIndex((v) => v.id === eventId)

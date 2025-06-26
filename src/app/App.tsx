@@ -1,6 +1,6 @@
 import useUser from './hooks/useUser'
 import Main from './scene/Main'
-import { RouterProvider, createBrowserRouter, useParams, useSearchParams, useNavigate } from 'react-router-dom'
+import { RouterProvider, createBrowserRouter, useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import useRoomMember from './hooks/useRoomMember'
 import Landing from './scene/Landing'
 import Spinner from './components/Spinner'
@@ -18,7 +18,7 @@ import Tips from './components/Tips'
 const router = createBrowserRouter([
   {
     path: '/:roomId?',
-    element: <Routing></Routing>,
+    element: <Routing />,
   },
 ])
 
@@ -68,7 +68,7 @@ function Routing() {
         return fail()
       }
       // 成功
-      navigate(`/${roomId ?? ''}`, { replace: true })
+      void navigate(`/${roomId ?? ''}`, { replace: true })
     })()
   }, [isOldApp, navigate, restoreUser, roomId, s, userMigrationProcedure])
 
@@ -92,7 +92,7 @@ function Routing() {
   if (userMigrationProcedure) {
     return (
       <div className="grid h-screen content-center justify-items-center gap-2">
-        <Spinner></Spinner>
+        <Spinner />
         <div className="grid grid-flow-col gap-4 text-zinc-400">
           <Icon.PartyPopper size={18} />
           <div className="font-bold">saboten.app</div>
@@ -114,7 +114,7 @@ function Routing() {
   }
 
   if (user === null) {
-    return <Landing roomId={roomId}></Landing>
+    return <Landing roomId={roomId} />
   }
 
   if (roomId === null || members === null) {
@@ -129,14 +129,14 @@ function Routing() {
   if (members === undefined) {
     return (
       <div className="grid h-screen content-center justify-items-center gap-2">
-        <Spinner></Spinner>
+        <Spinner />
         <div className="text-sm font-bold text-zinc-400">読込中...</div>
       </div>
     )
   }
 
   if (members.find((v) => v.user?.id === user.id) === undefined) {
-    return <Join roomId={roomId}></Join>
+    return <Join roomId={roomId} />
   }
 
   return (

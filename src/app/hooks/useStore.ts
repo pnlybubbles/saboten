@@ -10,7 +10,7 @@ class Store<T> {
 
   constructor(
     private fetcher: () => Promise<T>,
-    initialCache?: T | undefined,
+    initialCache?: T,
     private onUpdate?: (value: unknown, label: string) => void,
   ) {
     // 初回はrevalidateする

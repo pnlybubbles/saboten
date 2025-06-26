@@ -128,12 +128,12 @@ export default function Remburse({ roomId, balances, primaryCurrency, rateMissin
 
       for (const { currency, amount, event } of transactionsByEvent[to]?.[from] ?? []) {
         detailsByCurrency[currency] ??= []
-        detailsByCurrency[currency]!.push({ event, amount, currency })
+        detailsByCurrency[currency].push({ event, amount, currency })
       }
 
       for (const { currency, amount, event } of transactionsByEvent[from]?.[to] ?? []) {
         detailsByCurrency[currency] ??= []
-        detailsByCurrency[currency]!.push({ event, amount: -amount, currency })
+        detailsByCurrency[currency].push({ event, amount: -amount, currency })
       }
 
       for (const [currency, details] of Object.entries(detailsByCurrency)) {
@@ -159,10 +159,10 @@ export default function Remburse({ roomId, balances, primaryCurrency, rateMissin
       (acc, tx) => {
         acc[tx.to] ??= {}
         acc[tx.to]![tx.currency] ??= 0
-        acc[tx.to]![tx.currency] += tx.amount
+        acc[tx.to]![tx.currency]! += tx.amount
         acc[tx.from] ??= {}
         acc[tx.from]![tx.currency] ??= 0
-        acc[tx.from]![tx.currency] -= tx.amount
+        acc[tx.from]![tx.currency]! -= tx.amount
         return acc
       },
       {} as { [memberId: string]: { [currency: string]: number } },
@@ -175,9 +175,9 @@ export default function Remburse({ roomId, balances, primaryCurrency, rateMissin
     for (const [memberId, balanceByCurrency] of balances) {
       for (const [currency, { assets }] of Object.entries(balanceByCurrency)) {
         const fraction = (assetsAggregatedByTransactions[memberId]?.[currency] ?? 0) - assets
-        if (fraction != 0) {
+        if (fraction !== 0) {
           assetsFractionsInTransactions[currency] ??= []
-          assetsFractionsInTransactions[currency]!.push({ memberId, fraction })
+          assetsFractionsInTransactions[currency].push({ memberId, fraction })
         }
       }
     }
@@ -250,7 +250,7 @@ export default function Remburse({ roomId, balances, primaryCurrency, rateMissin
   const present = usePresent()
   const [tx, setTx] = useState<Transaction>()
 
-  const [copied, setCopied] = useState<null | NodeJS.Timeout>(null)
+  const [copied, setCopied] = useState<null | ReturnType<typeof setTimeout>>(null)
 
   const [archived] = useRoomArchived(roomId)
 
@@ -270,7 +270,7 @@ export default function Remburse({ roomId, balances, primaryCurrency, rateMissin
           value={tab}
           onChange={setTab}
           disabled={archived}
-        ></Tab>
+         />
         {tab === 'party' && (
           <Tips type={Icon.HelpCircle}>
             支払いをしてもらっている相手との間で精算します。貸し借り内訳をイベントごとに確認できます。
@@ -291,7 +291,7 @@ export default function Remburse({ roomId, balances, primaryCurrency, rateMissin
                       <span className="text-sm font-bold">{getMemberName(tx.from)}</span>
                       {isMe(tx.from) && <span className="text-xs text-zinc-400">自分</span>}
                     </div>
-                    <Icon.ArrowBigRight size={20} className="text-zinc-400"></Icon.ArrowBigRight>
+                    <Icon.ArrowBigRight size={20} className="text-zinc-400" />
                     <div className="grid grid-flow-col items-center justify-start gap-2">
                       <span className="text-sm font-bold">{getMemberName(tx.to)}</span>
                       {isMe(tx.to) && <span className="text-xs text-zinc-400">自分</span>}
@@ -302,8 +302,8 @@ export default function Remburse({ roomId, balances, primaryCurrency, rateMissin
                         onClick={() => (setTx(tx), present.open())}
                         disabled={archived}
                       >
-                        <CurrencyText {...displayCurrency(tx)}></CurrencyText>
-                        {!archived && <Icon.ChevronRight size={16} className="text-zinc-300"></Icon.ChevronRight>}
+                        <CurrencyText {...displayCurrency(tx)} />
+                        {!archived && <Icon.ChevronRight size={16} className="text-zinc-300" />}
                       </Clickable>
                     </div>
                   </Fragment>
@@ -317,7 +317,7 @@ export default function Remburse({ roomId, balances, primaryCurrency, rateMissin
                       <span className="text-sm font-bold">{getMemberName(tx.from)}</span>
                       {isMe(tx.from) && <span className="text-xs text-zinc-400">自分</span>}
                     </div>
-                    <Icon.ArrowBigRight size={20} className="text-zinc-400"></Icon.ArrowBigRight>
+                    <Icon.ArrowBigRight size={20} className="text-zinc-400" />
                     <div className="grid grid-flow-col items-center justify-start gap-2">
                       <span className="text-sm font-bold">{getMemberName(tx.to)}</span>
                       {isMe(tx.to) && <span className="text-xs text-zinc-400">自分</span>}
@@ -328,8 +328,8 @@ export default function Remburse({ roomId, balances, primaryCurrency, rateMissin
                         onClick={() => (setTx(tx), present.open())}
                         disabled={archived}
                       >
-                        <CurrencyText {...displayCurrency(tx)}></CurrencyText>
-                        {!archived && <Icon.ChevronRight size={16} className="text-zinc-300"></Icon.ChevronRight>}
+                        <CurrencyText {...displayCurrency(tx)} />
+                        {!archived && <Icon.ChevronRight size={16} className="text-zinc-300" />}
                       </Clickable>
                     </div>
                     <Clickable
@@ -337,12 +337,12 @@ export default function Remburse({ roomId, balances, primaryCurrency, rateMissin
                       onClick={() => (setTxDetail(tx), txDetailPresent.open())}
                     >
                       {tx.details.slice(0, 10).map(({ event }) => (
-                        <div key={event.id} className="max-w-24 truncate rounded-full bg-surface px-3 py-1">
+                        <div key={event.id} className="bg-surface max-w-24 truncate rounded-full px-3 py-1">
                           {event.label}
                         </div>
                       ))}
                       {tx.details.length > 10 && (
-                        <div className="rounded-full bg-surface px-3 py-1">他{tx.details.length - 10}</div>
+                        <div className="bg-surface rounded-full px-3 py-1">他{tx.details.length - 10}</div>
                       )}
                     </Clickable>
                   </Fragment>
@@ -374,7 +374,7 @@ export default function Remburse({ roomId, balances, primaryCurrency, rateMissin
           </>
         ) : (
           <div className="ml-[4px] grid h-12 grid-flow-col items-center justify-start gap-1 rounded-xl border-2 border-dotted border-zinc-400 px-4 text-xs text-zinc-400">
-            <Icon.Beer size={16}></Icon.Beer>
+            <Icon.Beer size={16} />
             全員の精算が完了しました！
           </div>
         )}
@@ -406,20 +406,20 @@ export default function Remburse({ roomId, balances, primaryCurrency, rateMissin
                 <span className="text-sm font-bold">{getMemberName(txDetail.from)}</span>
                 {isMe(txDetail.from) && <span className="text-xs text-zinc-400">自分</span>}
               </div>
-              <Icon.ArrowBigRight size={20} className="text-zinc-400"></Icon.ArrowBigRight>
+              <Icon.ArrowBigRight size={20} className="text-zinc-400" />
               <div className="grid grid-flow-col items-center justify-start gap-2">
                 <span className="text-sm font-bold">{getMemberName(txDetail.to)}</span>
                 {isMe(txDetail.to) && <span className="text-xs text-zinc-400">自分</span>}
               </div>
               <div className="grid justify-end">
                 <div className="grid grid-flow-col items-center gap-1 transition active:scale-90 disabled:active:scale-100">
-                  <CurrencyText {...displayCurrency(txDetail)}></CurrencyText>
+                  <CurrencyText {...displayCurrency(txDetail)} />
                 </div>
               </div>
             </div>
             <div className="grid grid-flow-row grid-cols-[auto_1fr_auto_auto] items-center gap-x-3 gap-y-2">
               {txDetail.details.map((event) => (
-                <TxDetailItem key={event.event.id} detail={event} roomId={roomId}></TxDetailItem>
+                <TxDetailItem key={event.event.id} detail={event} roomId={roomId} />
               ))}
             </div>
           </div>
@@ -436,12 +436,15 @@ function TxDetailItem({ detail, roomId }: { detail: TransactionDetail; roomId: s
 
   return (
     <>
-      <Avatar mini="xs" name={payload?.paidByMemberId ? getMemberName(payload.paidByMemberId) ?? null : null}></Avatar>
+      <Avatar
+        mini="xs"
+        name={payload?.paidByMemberId ? (getMemberName(payload.paidByMemberId) ?? null) : null}
+       />
       <div className="text-xs font-bold">{detail.event.label}</div>
       <div className="justify-self-end text-xs text-zinc-400">
         <CurrencyText
           {...(payload ? displayCurrency(payload) : displayCurrency({ currency: DEFAULT_PRIMARY_CURRENCY, amount: 0 }))}
-        ></CurrencyText>
+         />
         {payload?.type !== 'transfer' && (
           <>
             <span className="text-zinc-400"> / </span>
@@ -459,7 +462,7 @@ function TxDetailItem({ detail, roomId }: { detail: TransactionDetail; roomId: s
           </>
         )}
       </div>
-      <CurrencyText color {...displayCurrency(detail, undefined, 1)}></CurrencyText>
+      <CurrencyText color {...displayCurrency(detail, undefined, 1)} />
     </>
   )
 }

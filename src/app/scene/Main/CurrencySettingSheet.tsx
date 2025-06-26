@@ -45,7 +45,7 @@ export default function CurrencySettingSheet({ roomId, ...sheet }: Props) {
             roomId={roomId}
             value={roomCurrency}
             onChange={setRoomCurrency}
-            className="grid h-18 grid-flow-col items-stretch rounded-xl bg-surface px-5 pb-2.5 pt-[0.85rem] text-start transition disabled:opacity-40 aria-expanded:shadow-focus"
+            className="bg-surface aria-expanded:shadow-focus grid h-18 grid-flow-col items-stretch rounded-xl px-5 pt-[0.85rem] pb-2.5 text-start transition disabled:opacity-40"
           >
             <div className="grid grid-flow-row content-between">
               <div className="text-xs font-bold text-zinc-400">基準の通貨</div>
@@ -56,11 +56,11 @@ export default function CurrencySettingSheet({ roomId, ...sheet }: Props) {
                 )}
               </div>
             </div>
-            <div className="w-5"></div>
+            <div className="w-5" />
           </CurrencyPicker>
           {roomCurrency !== null && (
             <Clickable
-              className="absolute right-2 top-1/2 -translate-y-1/2 self-center p-3 transition active:scale-90"
+              className="absolute top-1/2 right-2 -translate-y-1/2 self-center p-3 transition active:scale-90"
               onClick={() => setRoomCurrency(null)}
             >
               <Icon.XCircle size={20} />
@@ -72,7 +72,7 @@ export default function CurrencySettingSheet({ roomId, ...sheet }: Props) {
             <div className="text-xs font-bold text-zinc-400">通貨レート</div>
             <div className="grid gap-2">
               {usedCurrencyRate.map((v) => (
-                <CurrencyRateItem key={`${v.currency}_${v.toCurrency}`} {...v} roomId={roomId}></CurrencyRateItem>
+                <CurrencyRateItem key={`${v.currency}_${v.toCurrency}`} {...v} roomId={roomId} />
               ))}
             </div>
           </>
@@ -112,25 +112,25 @@ function CurrencyRateItem({
     <>
       <Clickable
         onClick={currencyRateSheet.open}
-        className="grid grid-flow-col grid-cols-[auto_1fr] gap-2 rounded-lg bg-surface px-5 py-4 transition active:scale-95"
+        className="bg-surface grid grid-flow-col grid-cols-[auto_1fr] gap-2 rounded-lg px-5 py-4 transition active:scale-95"
       >
         <div>{`${currency} / ${toCurrency}`}</div>
         <div className="text-end">
           <CurrencyText
             {...displayCurrency({ amount: 10 ** currencyDigits, currency })}
             className="text-xs font-bold text-zinc-400"
-          ></CurrencyText>
+           />
           <span className="text-xs font-bold text-zinc-400">{` = `}</span>
           {rate ? (
             <CurrencyText
               {...displayCurrency({ amount: rate * 10 ** currencyDigits, currency: toCurrency }, undefined, true)}
-            ></CurrencyText>
+             />
           ) : (
             <span>?</span>
           )}
         </div>
         {rate === undefined && (
-          <Icon.AlertCircle size={20} className="inline-block self-center text-error"></Icon.AlertCircle>
+          <Icon.AlertCircle size={20} className="text-error inline-block self-center" />
         )}
       </Clickable>
       <CurrencyRateSheet
@@ -140,7 +140,7 @@ function CurrencyRateItem({
         roomId={roomId}
         removable
         {...currencyRateSheet}
-      ></CurrencyRateSheet>
+       />
     </>
   )
 }

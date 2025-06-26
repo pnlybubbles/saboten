@@ -9,7 +9,7 @@ export default function useEnterNewRoom() {
 
   return useCallback(
     (roomId: string) => {
-      navigate(`/${roomId}`)
+      void navigate(`/${roomId}`)
       void revalidate()
     },
     [navigate, revalidate],

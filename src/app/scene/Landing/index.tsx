@@ -19,7 +19,7 @@ export default function Landing({ roomId }: Props) {
   }, [location.pathname])
 
   return stage === 'start' ? (
-    <Start roomId={roomId} onProceed={setStage}></Start>
+    <Start roomId={roomId} onProceed={setStage} />
   ) : stage === 'create' ? (
     roomId ? (
       <Join roomId={roomId} />

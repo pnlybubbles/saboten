@@ -45,7 +45,7 @@ export default forwardRef<HTMLInputElement, Props>(function TextField(
       if (type === 'float') {
         // コンマを含んでいたら正しくコンマの位置を矯正してあげる
         if (str.includes(',')) {
-          return Intl.NumberFormat('ja-JP').format(parseFloat(normalizer(str)))
+          return Intl.NumberFormat('ja-JP').format(Number.parseFloat(normalizer(str)))
         }
         // コンマを含んでいない場合は数値として矯正するのみ
         return normalizer(str)
@@ -78,7 +78,7 @@ export default forwardRef<HTMLInputElement, Props>(function TextField(
   }
 
   useEffect(() => {
-    setInputValue((v) => (value !== normalizer(v) ? value ?? '' : v))
+    setInputValue((v) => (value !== normalizer(v) ? (value ?? '') : v))
   }, [inputValue, normalizer, value])
 
   const [inputErrorAnimation, setInputErrorAnimation] = useState(false)
@@ -124,7 +124,7 @@ export default forwardRef<HTMLInputElement, Props>(function TextField(
         onBlur={handleBlur}
       />
       {label && (
-        <div className="pointer-events-none absolute left-5 top-0 grid h-[2.70rem] items-center text-xs font-bold text-zinc-400 transition-[font-size,height] peer-placeholder-shown:h-full peer-placeholder-shown:text-base peer-focus:h-[2.70rem] peer-focus:text-xs">
+        <div className="pointer-events-none absolute top-0 left-5 grid h-[2.70rem] items-center text-xs font-bold text-zinc-400 transition-[font-size,height] peer-placeholder-shown:h-full peer-placeholder-shown:text-base peer-focus:h-[2.70rem] peer-focus:text-xs">
           {label}
         </div>
       )}

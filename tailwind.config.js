@@ -11,6 +11,7 @@ export default {
         error: 'rgb(203 42 47)',
         surface: 'rgb(245 245 245 / 1)',
         backdrop: 'rgb(251 251 250 / 1)',
+        separator: 'rgba(0 0 0 / .08)',
       },
       spacing: {
         // 周囲に32pxの余白を持ったときに、46pxの高さを持つ要素にfullな角丸半径を適用すると、iPhone15ディスプレイの角丸半径55pxが得られる

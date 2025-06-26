@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react-swc'
 import tsconfigPaths from 'vite-tsconfig-paths'
+import tailwindcss from '@tailwindcss/vite'
 
 export default defineConfig({
   root: 'src/app',
@@ -9,6 +10,7 @@ export default defineConfig({
     emptyOutDir: true,
   },
   plugins: [
+    tailwindcss(),
     react(),
     tsconfigPaths({
       // デフォルトではルートの src/app の tsconfig.json から依存関係を解決しつつ他プロジェクトの tsconfig を読みに行く挙動になっている

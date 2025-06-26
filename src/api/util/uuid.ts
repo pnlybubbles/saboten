@@ -14,7 +14,7 @@ export function uuidToCompressedPrintableString(uuid: string) {
   for (let i = 0; i < binary.length; i++) {
     const len2HexString = hexString.slice(i * stride, (i + 1) * stride)
     // 2 CodeUnit分 を 16 を基数にしてint化
-    binary[i] = parseInt(len2HexString, 16)
+    binary[i] = Number.parseInt(len2HexString, 16)
   }
   // バイナリ文字列にする必要性があるので、文字列型に変換
   const binaryString = String.fromCharCode(...Array.from(binary))

@@ -17,7 +17,7 @@ export default function Tab<T extends string>({ options, value, onChange, disabl
           key={option.value}
           onClick={() => onChange(option.value)}
           className={clsx(
-            'rounded-xl bg-surface px-4 py-2 transition active:scale-90 disabled:opacity-40',
+            'bg-surface rounded-xl px-4 py-2 transition active:scale-90 disabled:opacity-40',
             !disabled && value === option.value ? 'border-2 border-zinc-900 text-zinc-900' : 'text-zinc-400',
             disabled && value !== option.value && 'hidden',
             className,

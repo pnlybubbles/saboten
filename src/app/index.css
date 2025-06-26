@@ -1,6 +1,5 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+@config "../../tailwind.config.js";
 
 @layer base {
   html {
@@ -8,7 +7,7 @@
   }
 
   body {
-    @apply select-none bg-backdrop tracking-wide antialiased;
+    @apply bg-backdrop tracking-wide antialiased select-none;
     font-family: Avenir, sans-serif;
   }
 

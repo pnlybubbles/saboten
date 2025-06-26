@@ -50,7 +50,7 @@ export default function EditMember({ roomId, ...sheet }: Props) {
             <li key={v.id} className="grid grid-flow-col grid-cols-[1fr_auto] items-center gap-4">
               <RenameButton roomId={roomId} memberId={v.id}>
                 <div className="grid grid-flow-col justify-start gap-4">
-                  <Avatar mini name={getMemberName(v)}></Avatar>
+                  <Avatar mini name={getMemberName(v)} />
                   <div className="grid grid-flow-col items-center justify-start gap-2">
                     <div className="text-sm font-bold">{getMemberName(v)}</div>
                     {v.user && (
@@ -63,7 +63,7 @@ export default function EditMember({ roomId, ...sheet }: Props) {
                 <Clickable
                   disabled={v.id === null}
                   onClick={() => handleRemove(v)}
-                  className="grid size-8 items-center justify-items-center transition active:scale-90 disabled:opacity-30"
+                  className="grid size-8 place-items-center transition active:scale-90 disabled:opacity-30"
                 >
                   {v.user && v.user.id === user?.id ? <Icon.LogOut size={20} /> : <Icon.UserMinus size={20} />}
                 </Clickable>

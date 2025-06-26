@@ -54,9 +54,9 @@ export default function ActionMenu({ roomId }: Props) {
           { label: '削除', icon: <Icon.Trash2 size={16} />, destructive: true, action: deleteSheet.open },
         ]}
       />
-      {roomId && <DeleteSheet roomId={roomId} {...deleteSheet}></DeleteSheet>}
-      {roomId && <ArchiveSheet roomId={roomId} {...archiveSheet}></ArchiveSheet>}
-      {roomId && <CurrencySettingSheet roomId={roomId} {...currencyRateSheet}></CurrencySettingSheet>}
+      {roomId && <DeleteSheet roomId={roomId} {...deleteSheet} />}
+      {roomId && <ArchiveSheet roomId={roomId} {...archiveSheet} />}
+      {roomId && <CurrencySettingSheet roomId={roomId} {...currencyRateSheet} />}
     </>
   )
 }

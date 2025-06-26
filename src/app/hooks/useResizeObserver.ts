@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 
 type Size = { width: number | undefined; height: number | undefined }
 
-export default function useResizeObserver(ref: React.RefObject<HTMLElement>) {
+export default function useResizeObserver(ref: React.RefObject<HTMLElement | null>) {
   const [size, setSize] = useState<Size>({
     width: undefined,
     height: undefined,

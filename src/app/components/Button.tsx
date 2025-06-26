@@ -27,7 +27,7 @@ export default forwardRef<HTMLClickableElement, Props>(function Button(
       ref={ref}
       className={clsx(
         className,
-        'relative select-none rounded-full font-bold transition',
+        'relative rounded-full font-bold transition select-none',
         mini ? 'h-7 text-xs' : 'h-11.5 text-base',
         icon
           ? children == null
@@ -35,8 +35,8 @@ export default forwardRef<HTMLClickableElement, Props>(function Button(
               ? 'w-7 p-0'
               : 'w-11.5 p-0'
             : mini
-              ? 'w-full pl-3 pr-4'
-              : 'w-full pl-5 pr-6'
+              ? 'w-full pr-4 pl-3'
+              : 'w-full pr-6 pl-5'
           : mini
             ? 'px-4'
             : 'w-full px-6',
@@ -47,12 +47,7 @@ export default forwardRef<HTMLClickableElement, Props>(function Button(
       disabled={disabled || loading}
       {...props}
     >
-      <div
-        className={clsx(
-          'grid items-center justify-items-center transition-opacity',
-          loading ? 'opacity-0' : 'opacity-100',
-        )}
-      >
+      <div className={clsx('grid place-items-center transition-opacity', loading ? 'opacity-0' : 'opacity-100')}>
         {icon ? (
           children == null ? (
             icon
@@ -68,7 +63,7 @@ export default forwardRef<HTMLClickableElement, Props>(function Button(
       </div>
       <Spinner
         className={clsx(
-          'pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transition-opacity',
+          'pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 transition-opacity',
           loading ? 'opacity-100' : 'opacity-0',
         )}
       />

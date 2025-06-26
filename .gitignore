@@ -5,3 +5,4 @@ dist
 .env
 .wrangler
 tsconfig.node.tsbuildinfo
+tsconfig.tsbuildinfo

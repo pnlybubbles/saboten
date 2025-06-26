@@ -57,12 +57,12 @@ export default function RestoreFromSecretForm({
           {!validation.success &&
             isDirty &&
             validation.error.issues.map((issue) => (
-              <div key={issue.code} className="text-xs font-bold text-error">
+              <div key={issue.code} className="text-error text-xs font-bold">
                 {issue.message}
               </div>
             ))}
           {error && (
-            <div className="text-xs text-error">{`合言葉が間違っています。文字が間違っていないか確認してください。`}</div>
+            <div className="text-error text-xs">{`合言葉が間違っています。文字が間違っていないか確認してください。`}</div>
           )}
         </div>
       </div>

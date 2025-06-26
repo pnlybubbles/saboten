@@ -37,21 +37,21 @@ export default function EditUser({ ...sheet }: SheetProps) {
         {user?.secret && (
           <div className="grid gap-2">
             <div className="text-xs font-bold text-zinc-400">合言葉</div>
-            <div className="select-auto tracking-wider">{user.secret}</div>
+            <div className="tracking-wider select-auto">{user.secret}</div>
             <Tips type={Icon.KeyRound}>
               合言葉を使うことでユーザーの記録を復元することができます。この画面をスクリーンショットして合言葉を保存しておきましょう。
             </Tips>
           </div>
         )}
         <Button onClick={secretSheet.open}>ユーザー切り替え・削除</Button>
-        <UserResetSheet {...secretSheet}></UserResetSheet>
+        <UserResetSheet {...secretSheet} />
         <TextField
           label="ニックネーム"
           name="name"
           value={name}
           onChange={dirty(setName)}
           onBlur={handleSubmit}
-        ></TextField>
+         />
       </div>
     </Sheet>
   )
@@ -69,7 +69,7 @@ function UserResetSheet({ ...sheet }: SheetProps) {
     setBusy(true)
     try {
       await removeUser()
-      navigate('/')
+      void navigate('/')
     } finally {
       setBusy(false)
     }

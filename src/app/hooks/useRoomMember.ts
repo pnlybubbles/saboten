@@ -29,7 +29,7 @@ const roomMemberStore = createStore(
   },
 )
 
-export type Member = NonNullable<ReturnType<(typeof roomMemberStore)['persistCache']>>[number]
+export type Member = ReturnType<typeof transform>[number]
 
 export default function useRoomMember(roomId: string | null) {
   const [state, setState] = useStore(roomMemberStore, roomId)

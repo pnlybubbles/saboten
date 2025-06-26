@@ -20,7 +20,7 @@ export default function Start({ roomId, onProceed }: Props) {
   const aboutSheet = usePresent()
 
   return (
-    <div className="mx-auto grid max-w-screen-sm gap-6 p-8">
+    <div className="mx-auto grid max-w-(--breakpoint-sm) gap-6 p-8">
       <Logo big />
       <div>
         <div>シンプルな割り勘アプリ</div>
@@ -28,8 +28,8 @@ export default function Start({ roomId, onProceed }: Props) {
         <div>URLを共有して友達と一緒に書き込めます</div>
       </div>
       {roomId !== null && (
-        <div className="grid grid-cols-[auto_1fr] items-center gap-1 rounded-lg bg-secondary p-4 text-xs font-bold text-primary">
-          <Icon.Users size={20}></Icon.Users>
+        <div className="bg-secondary text-primary grid grid-cols-[auto_1fr] items-center gap-1 rounded-lg p-4 text-xs font-bold">
+          <Icon.Users size={20} />
           <div>{`"${roomTitle ?? '読込中...'}" に招待されました`}</div>
         </div>
       )}
@@ -49,17 +49,17 @@ export default function Start({ roomId, onProceed }: Props) {
         </>
       )}
       <Divider aster />
-      <ScreenShots></ScreenShots>
+      <ScreenShots />
       <a className="grid gap-3" href="https://note.com/pnly/n/ne276c3d6dfcc" target="_blank" rel="noreferrer">
         <div className="grid gap-1 text-xs text-zinc-400">
           <div className="font-bold">もっと知りたい</div>
           <div>このアプリを作った想いを綴りました。</div>
         </div>
-        <div className="overflow-hidden rounded-xl bg-white shadow-float">
+        <div className="shadow-float overflow-hidden rounded-xl bg-white">
           <img
             src="/assets/note-thumb.webp"
             alt="sabotenを開いているiPhoneの画像"
-            className="aspect-[1200/630] object-cover"
+            className="aspect-1200/630 object-cover"
           />
           <div className="grid gap-2 p-4">
             <div className="text-sm">N番煎じの割り勘アプリを作った話｜pnly</div>
@@ -74,8 +74,8 @@ export default function Start({ roomId, onProceed }: Props) {
         </div>
       </a>
       <div className="grid justify-center">
-        <Button variant="transparent" onClick={aboutSheet.open} icon={<Icon.TrafficCone size={20} />}></Button>
-        <AboutSheet {...aboutSheet}></AboutSheet>
+        <Button variant="transparent" onClick={aboutSheet.open} icon={<Icon.TrafficCone size={20} />} />
+        <AboutSheet {...aboutSheet} />
       </div>
     </div>
   )

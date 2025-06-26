@@ -52,7 +52,7 @@ export default function EventSheet({
 }: Props) {
   const [user] = useUser()
   const [members, { getMemberName }] = useRoomMember(roomId)
-  const userMemberId = user ? members?.find((v) => v.user?.id === user.id)?.id ?? null : null
+  const userMemberId = user ? (members?.find((v) => v.user?.id === user.id)?.id ?? null) : null
 
   const [roomCurrency] = useRoomCurrency(roomId)
   const defaultCurrency = defaultValue?.currency ?? roomCurrency ?? DEFAULT_PRIMARY_CURRENCY
@@ -106,8 +106,8 @@ export default function EventSheet({
     const currencyDigits = cc.code(currency)?.digits
     if (currencyDigits === undefined) return null
     if (amount === '') return null
-    const amountNumeric = parseFloat(amount)
-    if (isNaN(amountNumeric) || amountNumeric === 0) return null
+    const amountNumeric = Number.parseFloat(amount)
+    if (Number.isNaN(amountNumeric) || amountNumeric === 0) return null
     // 通貨単位によって有効な少数桁数をチェックする
     const dot = amount.indexOf('.')
     if (dot !== -1) {
@@ -247,7 +247,7 @@ export default function EventSheet({
             onChange={dirty(setTab)}
             disabled={archived}
             className="w-20"
-          ></Tab>
+           />
         )}
         <TextField label="イベントの名前" name="label" value={label} onChange={dirty(setLabel)} disabled={archived} />
         <div className="grid grid-cols-[auto_1fr] gap-3">
@@ -255,7 +255,7 @@ export default function EventSheet({
             roomId={roomId}
             value={currency}
             onChange={setCurrency}
-            className="grid h-18 grid-flow-row content-between rounded-xl bg-surface px-5 pb-2.5 pt-[0.85rem] text-start transition disabled:opacity-40 aria-expanded:shadow-focus"
+            className="bg-surface aria-expanded:shadow-focus grid h-18 grid-flow-row content-between rounded-xl px-5 pt-[0.85rem] pb-2.5 text-start transition disabled:opacity-40"
             disabled={archived}
           >
             <div className="text-xs font-bold text-zinc-400">通貨</div>
@@ -272,7 +272,7 @@ export default function EventSheet({
             className="group"
           >
             <div className="flex">
-              <div className={clsx('w-4 bg-gradient-to-l from-surface', memberOverflowed && 'hidden')}></div>
+              <div className={clsx('from-surface w-4 bg-linear-to-l', memberOverflowed && 'hidden')} />
               <div
                 onClick={(e) => {
                   if (!memberOverflowed || !paidByMemberEditMode) return
@@ -281,14 +281,14 @@ export default function EventSheet({
                   setPaidByMemberEditMode(false)
                 }}
                 className={clsx(
-                  'z-[1] flex p-0 transition-transform',
+                  'z-1 flex p-0 transition-transform',
                   memberOverflowed
                     ? [
                         '-mr-1 flex-wrap',
                         paidByMemberEditMode &&
-                          '-mr-3 max-w-[14.75rem] translate-y-2 rounded-[1.875rem] bg-white p-2 shadow-float',
+                          'shadow-float -mr-3 max-w-59 translate-y-2 rounded-[1.875rem] bg-white p-2',
                       ]
-                    : '-mr-1 bg-surface',
+                    : 'bg-surface -mr-1',
                 )}
               >
                 {members ? (
@@ -308,7 +308,7 @@ export default function EventSheet({
                               'border-zinc-900',
                             )}
                           >
-                            <Avatar mini noNegative name={null}></Avatar>
+                            <Avatar mini noNegative name={null} />
                           </Clickable>,
                         ]
                       : []),
@@ -341,13 +341,13 @@ export default function EventSheet({
                           'group-aria-disabled:border-transparent',
                         )}
                       >
-                        <Avatar mini noNegative name={getMemberName(member)}></Avatar>
+                        <Avatar mini noNegative name={getMemberName(member)} />
                       </Clickable>
                     )),
                   ]
                 ) : (
                   <div className="rounded-full border-2 border-zinc-900 p-[2px]">
-                    <Avatar mini noNegative name={user.name}></Avatar>
+                    <Avatar mini noNegative name={user.name} />
                   </div>
                 )}
               </div>
@@ -355,7 +355,7 @@ export default function EventSheet({
           </TextField>
         </div>
         <div
-          className="group relative grid gap-3 rounded-xl bg-surface px-5 py-4 aria-disabled:pointer-events-none aria-disabled:opacity-40"
+          className="group bg-surface relative grid gap-3 rounded-xl px-5 py-4 aria-disabled:pointer-events-none aria-disabled:opacity-40"
           aria-disabled={archived}
         >
           <div className="text-xs font-bold text-zinc-400">
@@ -399,13 +399,13 @@ export default function EventSheet({
                       }
                     }}
                   >
-                    <Avatar mini noNegative name={getMemberName(member)}></Avatar>
+                    <Avatar mini noNegative name={getMemberName(member)} />
                   </Clickable>
                 ),
             ) ??
               (tab === 'transfer' ? null : (
                 <div className="rounded-full border-2 border-zinc-900 p-[2px]">
-                  <Avatar mini noNegative name={user.name}></Avatar>
+                  <Avatar mini noNegative name={user.name} />
                 </div>
               ))}
             <div className="ml-[4px] hidden h-12 items-center rounded-xl border-2 border-dotted border-zinc-400 px-4 text-xs text-zinc-400 first:grid">
@@ -415,7 +415,7 @@ export default function EventSheet({
         </div>
         <div className={clsx('grid gap-2', onRemove && !archived && 'grid-cols-[auto_1fr]')}>
           {onRemove && !archived && (
-            <Button onClick={onRemove} icon={<Icon.Trash2 size={20} />} variant="danger"></Button>
+            <Button onClick={onRemove} icon={<Icon.Trash2 size={20} />} variant="danger" />
           )}
           <Button
             onClick={handleSubmit}

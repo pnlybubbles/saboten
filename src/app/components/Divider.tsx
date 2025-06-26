@@ -8,6 +8,6 @@ export default function Divider({ aster = false }: { aster?: boolean }) {
       </div>
     )
   } else {
-    return <div className="border-b border-dashed border-zinc-400"></div>
+    return <div className="border-b border-dashed border-zinc-400" />
   }
 }

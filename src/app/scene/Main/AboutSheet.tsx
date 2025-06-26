@@ -19,7 +19,7 @@ export default function AboutSheet({ ...present }: SheetProps) {
             className="grid grid-flow-col items-center justify-start gap-2"
             rel="noreferrer"
           >
-            <Icon.Instagram size={16}></Icon.Instagram>
+            <Icon.Instagram size={16} />
             <span>instagram.com/pnly</span>
           </a>
           <a
@@ -28,7 +28,7 @@ export default function AboutSheet({ ...present }: SheetProps) {
             className="grid grid-flow-col items-center justify-start gap-2"
             rel="noreferrer"
           >
-            <Icon.Twitter size={16}></Icon.Twitter>
+            <Icon.Twitter size={16} />
             <span>x.com/pnly_tar</span>
           </a>
         </div>
@@ -40,7 +40,7 @@ export default function AboutSheet({ ...present }: SheetProps) {
             className="grid grid-flow-col items-center justify-start gap-2"
             rel="noreferrer"
           >
-            <Icon.Github size={16}></Icon.Github>
+            <Icon.Github size={16} />
             <span>github.com/pnlybubbles/saboten</span>
           </a>
         </div>
