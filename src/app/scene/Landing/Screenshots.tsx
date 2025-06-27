@@ -1,6 +1,6 @@
 export default function ScreenShots() {
   return (
-    <div className="-mx-8 grid grid-flow-col gap-4 overflow-x-scroll px-8 pb-12">
+    <div className="relative mx-[calc((100%-100vw)/2)] grid grid-flow-col gap-4 overflow-x-scroll px-[calc((100vw-100%)/2)] pb-12">
       <div className="grid gap-3">
         <div className="grid gap-1 px-2 text-xs text-zinc-400">
           <div className="font-bold">支払いを記録</div>
@@ -9,7 +9,7 @@ export default function ScreenShots() {
         <img
           src="/ss/1.webp"
           alt="支払いの記録が一覧できる画面"
-          className="shadow-float h-[137vw] w-[70vw] max-w-none overflow-hidden rounded-xl object-cover object-[0_81%]"
+          className="shadow-float w-[70vw] max-w-[320px] overflow-hidden rounded-xl object-cover object-[0_81%]"
         />
       </div>
       <div className="grid gap-3">
@@ -20,7 +20,7 @@ export default function ScreenShots() {
         <img
           src="/ss/2.webp"
           alt="イベントを追加する画面"
-          className="shadow-float h-[137vw] w-[70vw] max-w-none overflow-hidden rounded-xl object-cover object-[0_81%]"
+          className="shadow-float w-[70vw] max-w-[320px] overflow-hidden rounded-xl object-cover object-[0_81%]"
         />
       </div>
       <div className="grid gap-3">
@@ -31,7 +31,7 @@ export default function ScreenShots() {
         <img
           src="/ss/3.webp"
           alt="メンバーを追加したり管理する画面"
-          className="shadow-float h-[137vw] w-[70vw] max-w-none overflow-hidden rounded-xl object-cover object-[0_81%]"
+          className="shadow-float w-[70vw] max-w-[320px] overflow-hidden rounded-xl object-cover object-[0_81%]"
         />
       </div>
       <div className="grid gap-3">
@@ -42,7 +42,7 @@ export default function ScreenShots() {
         <img
           src="/ss/4.webp"
           alt="最適な生産方法を提示している画面"
-          className="shadow-float h-[137vw] w-[70vw] max-w-none overflow-hidden rounded-xl object-cover object-[0_81%]"
+          className="shadow-float w-[70vw] max-w-[320px] overflow-hidden rounded-xl object-cover object-[0_81%]"
         />
       </div>
       <div className="grid gap-3">
@@ -53,7 +53,7 @@ export default function ScreenShots() {
         <img
           src="/ss/5.webp"
           alt="いままでの記録を参照する画面"
-          className="shadow-float h-[137vw] w-[70vw] max-w-none overflow-hidden rounded-xl object-cover object-[0_81%]"
+          className="shadow-float w-[70vw] max-w-[320px] overflow-hidden rounded-xl object-cover object-[0_81%]"
         />
       </div>
       <div className="grid gap-3">
@@ -64,7 +64,7 @@ export default function ScreenShots() {
         <img
           src="/ss/6.webp"
           alt="複数の通貨が混ざっている支払い記録の画面"
-          className="shadow-float h-[137vw] w-[70vw] max-w-none overflow-hidden rounded-xl object-cover object-[0_81%]"
+          className="shadow-float w-[70vw] max-w-[320px] overflow-hidden rounded-xl object-cover object-[0_81%]"
         />
       </div>
     </div>
