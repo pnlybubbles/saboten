@@ -12,6 +12,7 @@ import clsx from 'clsx'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import ScreenShots from './Screenshots'
+import useDocumentTitle from '@app/hooks/useDocumentTitle'
 
 export default function Join({ roomId }: { roomId: string }) {
   const [roomTitle] = useRoomTitle(roomId)
@@ -21,6 +22,8 @@ export default function Join({ roomId }: { roomId: string }) {
   const [user, { setUser }] = useUser()
   const [busy, setBusy] = useState(false)
   const navigate = useNavigate()
+
+  useDocumentTitle(roomTitle ? `${roomTitle}に参加` : undefined)
 
   const join = async () => {
     if (selectedMember === undefined) {

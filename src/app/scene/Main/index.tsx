@@ -23,6 +23,7 @@ import * as Icon from 'lucide-react'
 import AboutSheet from './AboutSheet'
 import useRoomArchived from '@app/hooks/useRoomArchive'
 import ActionMenu from './ActionMenu'
+import useDocumentTitle from '@app/hooks/useDocumentTitle'
 
 interface Props {
   roomId: string | null
@@ -40,6 +41,8 @@ export default function Main({ roomId }: Props) {
   const drawer = usePresent()
   const [archived] = useRoomArchived(roomId)
   const [unarchiveTips, setUnarchiveTips] = useState(false)
+
+  useDocumentTitle(title)
 
   useEffect(() => {
     if (drawer.isPresent) {
@@ -73,7 +76,7 @@ export default function Main({ roomId }: Props) {
               onClick={aboutSheet.open}
               icon={<Icon.TrafficCone size={20} />}
               className="mr-[-13px]"
-             />
+            />
             <EditUser {...editUserSheet} />
             <AboutSheet {...aboutSheet} />
           </div>
@@ -113,14 +116,14 @@ export default function Main({ roomId }: Props) {
                     <Icon.Menu
                       size={20}
                       className={clsx('absolute top-0 left-0', !drawer.isPresent ? 'opacity-100' : 'opacity-0')}
-                     />
+                    />
                     <Icon.X
                       size={20}
                       className={clsx('absolute top-0 left-0', drawer.isPresent ? 'opacity-100' : 'opacity-0')}
-                     />
+                    />
                   </div>
                 }
-               />
+              />
               <div className="flex justify-end">
                 <Button onClick={editMemberSheet.open} icon={<Icon.Users size={20} />} />
                 <ActionMenu roomId={roomId} />
@@ -157,7 +160,7 @@ export default function Main({ roomId }: Props) {
             id={roomId ?? undefined}
             onSubmit={addEvent}
             submitLabel="追加"
-           />
+          />
           <div className="p-8">
             {roomId === null ? <RecentRooms className="md:hidden" /> : <Events roomId={roomId} />}
           </div>
@@ -166,7 +169,7 @@ export default function Main({ roomId }: Props) {
               <>
                 <div
                   className={clsx('h-12 w-full bg-linear-to-t from-zinc-50 transition', !unarchiveTips && 'opacity-0')}
-                 />
+                />
                 <div
                   className={clsx(
                     'grid justify-items-center gap-2 pt-2 pb-8 transition',
@@ -236,10 +239,7 @@ function RecentRooms({ className, ...props }: { onEnter?: () => void; className?
         className="mt-6 mb-4 -ml-1 grid grid-flow-col items-center justify-start gap-1 text-xs font-bold transition first:mt-2 active:scale-90"
         onClick={() => archive.onPresent((v) => !v)}
       >
-        <Icon.ChevronRight
-          size={16}
-          className={clsx('transition', archive.isPresent && 'rotate-90')}
-         />
+        <Icon.ChevronRight size={16} className={clsx('transition', archive.isPresent && 'rotate-90')} />
         <div>アーカイブ</div>
       </Clickable>
       {archive.isPresent &&
