@@ -55,10 +55,9 @@ export default function EventSheet({
   const [members, { getMemberName }] = useRoomMember(roomId)
   const userMemberId = user ? (members?.find((v) => v.user?.id === user.id)?.id ?? null) : null
 
-  const [roomCurrency] = useRoomCurrency(roomId)
   const [events] = useEvents(roomId)
   const latestEventCurrency = useMemo(() => events?.[0]?.payments?.[0]?.currency, [events])
-  const defaultCurrency = defaultValue?.currency ?? roomCurrency ?? latestEventCurrency ?? DEFAULT_PRIMARY_CURRENCY
+  const defaultCurrency = defaultValue?.currency ?? latestEventCurrency ?? DEFAULT_PRIMARY_CURRENCY
   const defaultCurrencyDigits = cc.code(defaultCurrency)?.digits ?? 0
   const eventMembersCandidate = useMemo(() => members?.map((v) => v.id).filter(isNonNullable) ?? [], [members])
   const defaultEventMembersTmp =
