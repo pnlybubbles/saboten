@@ -100,7 +100,7 @@ function Item({ id, label, payments, members, roomId, createdAt }: Event & Props
             }
             await updateEvent({ ...v, id })
           }}
-          onRemove={() => confirm('イベントを削除しますか？') && removeEvent(id)}
+          onRemove={() => confirm('支払いを削除しますか？') && removeEvent(id)}
           submitLabel="保存"
           {...sheet}
         />

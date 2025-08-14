@@ -273,7 +273,7 @@ export default function Remburse({ roomId, balances, primaryCurrency, rateMissin
         />
         {tab === 'party' && (
           <Tips type={Icon.HelpCircle}>
-            支払いをしてもらっている相手との間で精算します。貸し借り内訳をイベントごとに確認できます。
+            支払いをしてもらっている相手との間で精算します。貸し借り内訳を支払いごとに確認できます。
           </Tips>
         )}
         {transactionIncludesRateMissingCurrency && (

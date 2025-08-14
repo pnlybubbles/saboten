@@ -180,7 +180,7 @@ export default function Main({ roomId }: Props) {
                     type={Icon.FlagTriangleRight}
                     className={clsx('text-zinc-400 transition', !unarchiveTips && 'translate-y-4 opacity-0')}
                   >
-                    アーカイブを解除するとイベントを追加できます
+                    アーカイブを解除すると支払いを追加できます
                   </Tips>
                   <Clickable
                     className="shadow-float pointer-events-auto grid w-max grid-flow-col gap-[2px] rounded-full bg-white px-4 py-2 text-xs font-bold text-zinc-400 transition active:scale-90"
@@ -196,7 +196,7 @@ export default function Main({ roomId }: Props) {
                 <div className={clsx('grid justify-items-center gap-2 pt-2 pb-8', noEvent && 'bg-zinc-50')}>
                   {noEvent && (
                     <Tips type={Icon.PawPrint} className="text-zinc-400">
-                      最初のイベントを追加しよう！
+                      最初の支払いを記録しよう！
                     </Tips>
                   )}
                   <Clickable

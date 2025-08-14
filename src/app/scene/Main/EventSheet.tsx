@@ -252,7 +252,13 @@ export default function EventSheet({
             className="w-20"
           />
         )}
-        <TextField label="イベントの名前" name="label" value={label} onChange={dirty(setLabel)} disabled={archived} />
+        <TextField
+          label={`${tab === 'payment' ? '支払い' : '送金'}の内容`}
+          name="label"
+          value={label}
+          onChange={dirty(setLabel)}
+          disabled={archived}
+        />
         <div className="grid grid-cols-[auto_1fr] gap-3">
           <CurrencyPicker
             roomId={roomId}

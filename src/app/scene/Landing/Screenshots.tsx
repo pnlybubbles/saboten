@@ -14,12 +14,12 @@ export default function ScreenShots() {
       </div>
       <div className="grid gap-3">
         <div className="grid gap-1 px-2 text-xs text-zinc-400">
-          <div className="font-bold">イベントを追加</div>
+          <div className="font-bold">割り勘の入力</div>
           <div>誰が支払って、誰と割り勘したか、を記録できます。</div>
         </div>
         <img
           src="/ss/2.webp"
-          alt="イベントを追加する画面"
+          alt="割り勘を追加する画面"
           className="shadow-float w-[70vw] max-w-[320px] overflow-hidden rounded-xl object-cover object-[0_81%]"
         />
       </div>
