@@ -22,6 +22,7 @@ import Tips from '@app/components/Tips'
 import CurrencyPicker from '@app/components/CurrencyPicker'
 import useRoomCurrency from '@app/hooks/useRoomCurrency'
 import { DEFAULT_PRIMARY_CURRENCY } from './CurrencySettingSheet'
+import useEvents from '@app/hooks/useEvents'
 
 type EventPayloadDefault =
   | (Omit<Extract<EventPayload, { type: 'payment' }>, 'paidByMemberId'> & { paidByMemberId: string | null })
@@ -55,7 +56,9 @@ export default function EventSheet({
   const userMemberId = user ? (members?.find((v) => v.user?.id === user.id)?.id ?? null) : null
 
   const [roomCurrency] = useRoomCurrency(roomId)
-  const defaultCurrency = defaultValue?.currency ?? roomCurrency ?? DEFAULT_PRIMARY_CURRENCY
+  const [events] = useEvents(roomId)
+  const latestEventCurrency = useMemo(() => events?.[0]?.payments?.[0]?.currency, [events])
+  const defaultCurrency = defaultValue?.currency ?? roomCurrency ?? latestEventCurrency ?? DEFAULT_PRIMARY_CURRENCY
   const defaultCurrencyDigits = cc.code(defaultCurrency)?.digits ?? 0
   const eventMembersCandidate = useMemo(() => members?.map((v) => v.id).filter(isNonNullable) ?? [], [members])
   const defaultEventMembersTmp =
@@ -247,7 +250,7 @@ export default function EventSheet({
             onChange={dirty(setTab)}
             disabled={archived}
             className="w-20"
-           />
+          />
         )}
         <TextField label="イベントの名前" name="label" value={label} onChange={dirty(setLabel)} disabled={archived} />
         <div className="grid grid-cols-[auto_1fr] gap-3">
@@ -414,9 +417,7 @@ export default function EventSheet({
           </div>
         </div>
         <div className={clsx('grid gap-2', onRemove && !archived && 'grid-cols-[auto_1fr]')}>
-          {onRemove && !archived && (
-            <Button onClick={onRemove} icon={<Icon.Trash2 size={20} />} variant="danger" />
-          )}
+          {onRemove && !archived && <Button onClick={onRemove} icon={<Icon.Trash2 size={20} />} variant="danger" />}
           <Button
             onClick={handleSubmit}
             disabled={
