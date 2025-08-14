@@ -270,7 +270,7 @@ export default function Remburse({ roomId, balances, primaryCurrency, rateMissin
           value={tab}
           onChange={setTab}
           disabled={archived}
-         />
+        />
         {tab === 'party' && (
           <Tips type={Icon.HelpCircle}>
             支払いをしてもらっている相手との間で精算します。貸し借り内訳をイベントごとに確認できます。
@@ -436,15 +436,12 @@ function TxDetailItem({ detail, roomId }: { detail: TransactionDetail; roomId: s
 
   return (
     <>
-      <Avatar
-        mini="xs"
-        name={payload?.paidByMemberId ? (getMemberName(payload.paidByMemberId) ?? null) : null}
-       />
+      <Avatar mini="xs" name={payload?.paidByMemberId ? (getMemberName(payload.paidByMemberId) ?? null) : null} />
       <div className="text-xs font-bold">{detail.event.label}</div>
       <div className="justify-self-end text-xs text-zinc-400">
         <CurrencyText
           {...(payload ? displayCurrency(payload) : displayCurrency({ currency: DEFAULT_PRIMARY_CURRENCY, amount: 0 }))}
-         />
+        />
         {payload?.type !== 'transfer' && (
           <>
             <span className="text-zinc-400"> / </span>

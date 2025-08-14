@@ -119,19 +119,17 @@ function CurrencyRateItem({
           <CurrencyText
             {...displayCurrency({ amount: 10 ** currencyDigits, currency })}
             className="text-xs font-bold text-zinc-400"
-           />
+          />
           <span className="text-xs font-bold text-zinc-400">{` = `}</span>
           {rate ? (
             <CurrencyText
               {...displayCurrency({ amount: rate * 10 ** currencyDigits, currency: toCurrency }, undefined, true)}
-             />
+            />
           ) : (
             <span>?</span>
           )}
         </div>
-        {rate === undefined && (
-          <Icon.AlertCircle size={20} className="text-error inline-block self-center" />
-        )}
+        {rate === undefined && <Icon.AlertCircle size={20} className="text-error inline-block self-center" />}
       </Clickable>
       <CurrencyRateSheet
         currency={currency}
@@ -140,7 +138,7 @@ function CurrencyRateItem({
         roomId={roomId}
         removable
         {...currencyRateSheet}
-       />
+      />
     </>
   )
 }

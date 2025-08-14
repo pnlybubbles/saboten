@@ -45,13 +45,7 @@ export default function EditUser({ ...sheet }: SheetProps) {
         )}
         <Button onClick={secretSheet.open}>ユーザー切り替え・削除</Button>
         <UserResetSheet {...secretSheet} />
-        <TextField
-          label="ニックネーム"
-          name="name"
-          value={name}
-          onChange={dirty(setName)}
-          onBlur={handleSubmit}
-         />
+        <TextField label="ニックネーム" name="name" value={name} onChange={dirty(setName)} onBlur={handleSubmit} />
       </div>
     </Sheet>
   )

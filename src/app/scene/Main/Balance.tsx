@@ -184,25 +184,18 @@ export default function Balance({ roomId }: Props) {
             <CurrencyText
               className="text-3xl font-bold"
               {...displayCurrencySum(rateConvertibleTotalCurrencyValue, primaryCurrency)}
-             />
+            />
             {rateMissingTotalCurrencyValue.length > 0 && <span className="mr-2 ml-1 text-3xl font-bold">+</span>}
             <span className="mt-1 inline-block">
               {rateMissingTotalCurrencyValue.map(({ currency, amount }) => (
-                <CurrencyText
-                  key={currency}
-                  className="not-last:mr-2"
-                  {...displayCurrency({ amount, currency })}
-                 />
+                <CurrencyText key={currency} className="not-last:mr-2" {...displayCurrency({ amount, currency })} />
               ))}
             </span>
           </div>
           {totalCurrencyValue.length > 0 && (
             <div className="grid grid-flow-col items-center gap-2 text-zinc-400">
               {/* <div className="text-xs">{showDetail ? '閉じる' : '詳細'}</div> */}
-              <Icon.ChevronDown
-                size={20}
-                className={clsx('transition', showDetail ? 'rotate-180' : '')}
-               />
+              <Icon.ChevronDown size={20} className={clsx('transition', showDetail ? 'rotate-180' : '')} />
             </div>
           )}
         </Clickable>
@@ -227,7 +220,7 @@ export default function Balance({ roomId }: Props) {
                           .filter((v) => availableCurrency.includes(v.currency)),
                         primaryCurrency,
                       )}
-                     />
+                    />
                     <CurrencyText
                       color
                       className="font-bold"
@@ -237,7 +230,7 @@ export default function Balance({ roomId }: Props) {
                           .filter((v) => availableCurrency.includes(v.currency)),
                         primaryCurrency,
                       )}
-                     />
+                    />
                   </React.Fragment>,
                   // 通貨ごとの内訳 (表示用通貨に変換可能なもの)
                   ...Object.entries(balanceByCurrency)
@@ -252,13 +245,13 @@ export default function Balance({ roomId }: Props) {
                             className="text-xs opacity-70"
                             signSize={12}
                             {...displayCurrency({ amount: balance.paid, currency })}
-                           />
+                          />
                           <CurrencyText
                             color
                             className="text-xs opacity-70"
                             signSize={12}
                             {...displayCurrency({ amount: balance.assets, currency })}
-                           />
+                          />
                         </React.Fragment>
                       ),
                     ),
@@ -269,15 +262,12 @@ export default function Balance({ roomId }: Props) {
                     .map(([currency, balance]) => (
                       <React.Fragment key={`${memberId}_${currency}`}>
                         <div className="text-sm font-bold opacity-0">{getMemberName(memberId)}</div>
-                        <CurrencyText
-                          className="text-right"
-                          {...displayCurrency({ amount: balance.paid, currency })}
-                         />
+                        <CurrencyText className="text-right" {...displayCurrency({ amount: balance.paid, currency })} />
                         <CurrencyText
                           color
                           className="font-bold"
                           {...displayCurrency({ amount: balance.assets, currency })}
-                         />
+                        />
                       </React.Fragment>
                     )),
                 ])}
@@ -308,7 +298,7 @@ export default function Balance({ roomId }: Props) {
             toggleTip()
           }}
           icon={<Icon.HelpCircle size={16} />}
-         />
+        />
         {members && members.length > 1 && (
           <Button
             mini
@@ -347,7 +337,7 @@ export default function Balance({ roomId }: Props) {
             balances={balances}
             primaryCurrency={primaryCurrency}
             rateMissingCurrency={rateMissingCurrency}
-           />
+          />
         )}
       </div>
     </div>

@@ -82,7 +82,7 @@ export default function CurrencyRateSheet({
           inputMode="decimal"
           value={inputRate}
           onChange={dirty(setInputRate)}
-         />
+        />
         <div className={clsx('grid gap-2', removable && 'grid-cols-[auto_1fr]')}>
           {removable && <Button onClick={handleRemove} icon={<Icon.Trash2 size={20} />} variant="danger" />}
           <Button onClick={handleUpdate} disabled={inputRate === ''}>

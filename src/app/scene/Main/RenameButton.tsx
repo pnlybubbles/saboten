@@ -66,7 +66,7 @@ function RenameButtonInternal({ roomId, memberId, ...rest }: { roomId: string; m
               ]}
               value={mode}
               onChange={setMode}
-             />
+            />
           )}
           {mode === 'rename' ? (
             <TextField label="新しい名前" value={name} onChange={setName} />

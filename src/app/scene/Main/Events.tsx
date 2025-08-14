@@ -52,19 +52,13 @@ function Item({ id, label, payments, members, roomId, createdAt }: Event & Props
                   'pointer-events-none text-zinc-400 transition-[margin,opacity]',
                   id === null ? 'mr-2 opacity-100' : 'mr-[-20px] opacity-0',
                 )}
-               />
-              <Avatar
-                mini
-                name={payload?.paidByMemberId ? (getMemberName(payload.paidByMemberId) ?? null) : null}
-               />
+              />
+              <Avatar mini name={payload?.paidByMemberId ? (getMemberName(payload.paidByMemberId) ?? null) : null} />
             </div>
             {payload?.type === 'transfer' && (
               <>
                 <Icon.ChevronsRight size={20} className="text-zinc-400" />
-                <Avatar
-                  mini
-                  name={payload.transferToMemberId ? getMemberName(payload.transferToMemberId) : null}
-                 />
+                <Avatar mini name={payload.transferToMemberId ? getMemberName(payload.transferToMemberId) : null} />
               </>
             )}
           </div>
@@ -78,7 +72,7 @@ function Item({ id, label, payments, members, roomId, createdAt }: Event & Props
             {...(payload
               ? displayCurrency({ currency: payload.currency, amount: payload.amount })
               : displayCurrency({ currency: DEFAULT_PRIMARY_CURRENCY, amount: 0 }))}
-           />
+          />
           {payload?.type !== 'transfer' && (
             <>
               <span className="text-zinc-400"> / </span>
@@ -109,7 +103,7 @@ function Item({ id, label, payments, members, roomId, createdAt }: Event & Props
           onRemove={() => confirm('イベントを削除しますか？') && removeEvent(id)}
           submitLabel="保存"
           {...sheet}
-         />
+        />
       )}
     </>
   )

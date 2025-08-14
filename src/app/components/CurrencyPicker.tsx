@@ -45,7 +45,7 @@ export default function CurrencyPicker({ roomId, value, onChange, className, dis
                 code={code}
                 onClick={() => handleSelectCurrency(code)}
                 active={value === code}
-               />
+              />
             ))}
           </div>
           <div className="text-xs font-bold">すべて</div>
@@ -56,7 +56,7 @@ export default function CurrencyPicker({ roomId, value, onChange, className, dis
                 code={code}
                 onClick={() => handleSelectCurrency(code)}
                 active={value === code}
-               />
+              />
             ))}
           </div>
         </div>
