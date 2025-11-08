@@ -46,7 +46,7 @@ export default function RestoreFromSecretForm({
       </Tips>
       <div className="grid gap-2">
         <TextField
-          label="合言葉"
+          label="ログインキーワード"
           name="secret"
           value={secret}
           onChange={setSecret}
@@ -62,7 +62,7 @@ export default function RestoreFromSecretForm({
               </div>
             ))}
           {error && (
-            <div className="text-error text-xs">{`合言葉が間違っています。文字が間違っていないか確認してください。`}</div>
+            <div className="text-error text-xs">{`ログインキーワードが間違っています。文字が間違っていないか確認してください。`}</div>
           )}
         </div>
       </div>

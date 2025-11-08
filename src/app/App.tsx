@@ -52,7 +52,7 @@ function Routing() {
     if (!userMigrationProcedure) return
     const secret = COMPRESSED_UUID_SCHEMA.safeParse(s)
     const fail = () => {
-      alert('ユーザー移行に失敗しました。旧URLで合言葉をコピーして手動で移行してください。')
+      alert('ユーザー移行に失敗しました。旧URLでログインキーワードをコピーして手動で移行してください。')
       location.href = `${OLD_URL}/${roomId ?? ''}`
     }
     // sパラメータが不正

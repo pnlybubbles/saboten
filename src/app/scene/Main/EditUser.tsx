@@ -36,14 +36,14 @@ export default function EditUser({ ...sheet }: SheetProps) {
       <div className="grid gap-4">
         {user?.secret && (
           <div className="grid gap-2">
-            <div className="text-xs font-bold text-zinc-400">合言葉</div>
+            <div className="text-xs font-bold text-zinc-400">ログインキーワード</div>
             <div className="tracking-wider select-auto">{user.secret}</div>
             <Tips type={Icon.KeyRound}>
-              合言葉を使うことでユーザーの記録を復元することができます。この画面をスクリーンショットして合言葉を保存しておきましょう。
+              ログインキーワードを使うことで支払いの記録を復元することができます。この画面をスクリーンショットしてログインキーワードを保存しておきましょう。
             </Tips>
           </div>
         )}
-        <Button onClick={secretSheet.open}>ユーザー切り替え・削除</Button>
+        <Button onClick={secretSheet.open}>ログイン・ユーザー管理</Button>
         <UserResetSheet {...secretSheet} />
         <TextField label="ニックネーム" name="name" value={name} onChange={dirty(setName)} onBlur={handleSubmit} />
       </div>
@@ -79,11 +79,11 @@ function UserResetSheet({ ...sheet }: SheetProps) {
         <Button variant="danger" onClick={leave} loading={busy}>
           削除
         </Button>
-        <div className="font-bold">ユーザー切り替え</div>
+        <div className="font-bold">ユーザーにログイン</div>
         <Tips type="warning">
-          ユーザーを切り替えた後に、もとのユーザーに戻す場合には合言葉が必要です。合言葉を忘れてしまった場合は復元することはできません。
+          他のユーザーにログインした後、現在のユーザーに再びログインするにはログインキーワードが必要になります。ログインキーワードを忘れてしまった場合は復元することはできません。
         </Tips>
-        <RestoreFromSecretForm submitLabel="切り替え" submitVariant="danger" onRestore={() => sheet.onPresent(false)} />
+        <RestoreFromSecretForm submitLabel="ログイン" submitVariant="danger" onRestore={() => sheet.onPresent(false)} />
       </div>
     </Sheet>
   )
