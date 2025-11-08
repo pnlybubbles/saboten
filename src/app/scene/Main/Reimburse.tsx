@@ -265,16 +265,32 @@ export default function Remburse({ roomId, balances, primaryCurrency, rateMissin
         <Tab
           options={[
             { label: '最小回数で精算', value: 'minimum' },
-            { label: '単純な精算', value: 'party' },
+            { label: '貸し借り', value: 'party' },
           ]}
           value={tab}
           onChange={setTab}
           disabled={archived}
         />
-        {tab === 'party' && (
-          <Tips type={Icon.HelpCircle}>
-            支払いをしてもらっている相手との間で精算します。貸し借り内訳を支払いごとに確認できます。
-          </Tips>
+        {tab === 'minimum' ? (
+          <div className="flex justify-between rounded-xl py-1 text-xs font-bold text-zinc-900">
+            <div className="flex items-center gap-2">
+              <div className="rounded-lg bg-zinc-900 px-2 py-1 text-white">返す人</div>
+              <Icon.ArrowBigRight size={16} />
+              <div className="rounded-lg bg-zinc-900 px-2 py-1 text-white">貰う人</div>
+            </div>
+            <div className="rounded-lg bg-zinc-900 px-2 py-1 text-white">精算する金額</div>
+          </div>
+        ) : tab === 'party' ? (
+          <div className="flex justify-between rounded-xl py-1 text-xs font-bold text-zinc-900">
+            <div className="flex items-center gap-2">
+              <div className="rounded-lg bg-zinc-900 px-2 py-1 text-white">貸してる人</div>
+              <Icon.ArrowBigRight size={16} />
+              <div className="rounded-lg bg-zinc-900 px-2 py-1 text-white">借りてる人</div>
+            </div>
+            <div className="rounded-lg bg-zinc-900 px-2 py-1 text-white">貸し借りの金額</div>
+          </div>
+        ) : (
+          unreachable(tab)
         )}
         {transactionIncludesRateMissingCurrency && (
           <Tips>
@@ -287,7 +303,7 @@ export default function Remburse({ roomId, balances, primaryCurrency, rateMissin
               <div className="grid grid-cols-[auto_auto_auto_1fr] items-center gap-x-[6px] gap-y-2">
                 {transactions.map((tx) => (
                   <Fragment key={tx.id}>
-                    <div className="grid grid-flow-col items-center justify-start gap-2 pl-1">
+                    <div className="grid grid-flow-col items-center justify-start gap-2 pl-0.5">
                       <span className="text-sm font-bold">{getMemberName(tx.from)}</span>
                       {isMe(tx.from) && <span className="text-xs text-zinc-400">自分</span>}
                     </div>
@@ -310,17 +326,17 @@ export default function Remburse({ roomId, balances, primaryCurrency, rateMissin
                 ))}
               </div>
             ) : tab === 'party' ? (
-              <div className="grid grid-cols-[auto_auto_auto_1fr] items-center gap-x-[6px] gap-y-2">
+              <div className="grid grid-cols-[auto_auto_auto_1fr] items-center gap-x-1.5 gap-y-1">
                 {transactionsByParty.map((tx) => (
                   <Fragment key={tx.id}>
-                    <div className="grid grid-flow-col items-center justify-start gap-2 pl-1">
-                      <span className="text-sm font-bold">{getMemberName(tx.from)}</span>
-                      {isMe(tx.from) && <span className="text-xs text-zinc-400">自分</span>}
+                    <div className="grid grid-flow-col items-center justify-start gap-2 pl-0.5">
+                      <span className="text-sm font-bold">{getMemberName(tx.to)}</span>
+                      {isMe(tx.to) && <span className="text-xs text-zinc-400">自分</span>}
                     </div>
                     <Icon.ArrowBigRight size={20} className="text-zinc-400" />
                     <div className="grid grid-flow-col items-center justify-start gap-2">
-                      <span className="text-sm font-bold">{getMemberName(tx.to)}</span>
-                      {isMe(tx.to) && <span className="text-xs text-zinc-400">自分</span>}
+                      <span className="text-sm font-bold">{getMemberName(tx.from)}</span>
+                      {isMe(tx.from) && <span className="text-xs text-zinc-400">自分</span>}
                     </div>
                     <div className="grid justify-end">
                       <Clickable
@@ -333,7 +349,7 @@ export default function Remburse({ roomId, balances, primaryCurrency, rateMissin
                       </Clickable>
                     </div>
                     <Clickable
-                      className="col-span-full -mx-1 flex flex-wrap gap-1 overflow-hidden pb-1 pl-1 text-xs text-zinc-400"
+                      className="col-span-full -mx-1 flex flex-wrap gap-1 overflow-hidden pb-2.5 pl-1 text-xs text-zinc-400"
                       onClick={() => (setTxDetail(tx), txDetailPresent.open())}
                     >
                       {tx.details.slice(0, 10).map(({ event }) => (
@@ -400,16 +416,16 @@ export default function Remburse({ roomId, balances, primaryCurrency, rateMissin
       {txDetail && (
         <Sheet {...txDetailPresent}>
           <div className="grid gap-4">
-            <div className="text-xs font-bold text-zinc-400">精算の内訳</div>
+            <div className="text-xs font-bold text-zinc-400">貸し借りの内訳</div>
             <div className="grid grid-cols-[auto_auto_auto_1fr] items-center gap-x-[6px] gap-y-2">
-              <div className="grid grid-flow-col items-center justify-start gap-2">
-                <span className="text-sm font-bold">{getMemberName(txDetail.from)}</span>
-                {isMe(txDetail.from) && <span className="text-xs text-zinc-400">自分</span>}
-              </div>
-              <Icon.ArrowBigRight size={20} className="text-zinc-400" />
               <div className="grid grid-flow-col items-center justify-start gap-2">
                 <span className="text-sm font-bold">{getMemberName(txDetail.to)}</span>
                 {isMe(txDetail.to) && <span className="text-xs text-zinc-400">自分</span>}
+              </div>
+              <Icon.ArrowBigRight size={20} className="text-zinc-400" />
+              <div className="grid grid-flow-col items-center justify-start gap-2">
+                <span className="text-sm font-bold">{getMemberName(txDetail.from)}</span>
+                {isMe(txDetail.from) && <span className="text-xs text-zinc-400">自分</span>}
               </div>
               <div className="grid justify-end">
                 <div className="grid grid-flow-col items-center gap-1 transition active:scale-90 disabled:active:scale-100">
@@ -422,6 +438,13 @@ export default function Remburse({ roomId, balances, primaryCurrency, rateMissin
                 <TxDetailItem key={event.event.id} detail={event} roomId={roomId} />
               ))}
             </div>
+            <Tips type={Icon.HelpCircle} className="mt-2">
+              <span className="font-bold text-lime-600">プラス</span>の支払いは"
+              <span className="font-bold">{getMemberName(txDetail.to)}</span>
+              "さんが貸している分、
+              <span className="font-bold text-rose-500">マイナス</span>の支払いは"
+              <span className="font-bold">{getMemberName(txDetail.to)}</span>"さんが借りている分です。
+            </Tips>
           </div>
         </Sheet>
       )}
