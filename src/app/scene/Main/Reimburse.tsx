@@ -275,7 +275,7 @@ export default function Remburse({ roomId, balances, primaryCurrency, rateMissin
           <div className="flex justify-between rounded-xl py-1 text-xs font-bold text-white">
             <div className="flex items-center gap-2">
               <div className="rounded-lg bg-zinc-900 px-2 py-1">返す人</div>
-              <Icon.ArrowBigRight size={20} className="text-zinc-400" />
+              <Icon.ArrowBigRight size={18} className="text-zinc-900" />
               <div className="rounded-lg bg-zinc-900 px-2 py-1">貰う人</div>
             </div>
             <div className="rounded-lg bg-zinc-900 px-2 py-1">精算する金額</div>
@@ -284,7 +284,7 @@ export default function Remburse({ roomId, balances, primaryCurrency, rateMissin
           <div className="flex justify-between rounded-xl py-1 text-xs font-bold text-white">
             <div className="flex items-center gap-2">
               <div className="rounded-lg bg-zinc-900 px-2 py-1">貸してる人</div>
-              <Icon.ArrowBigRight size={20} className="text-zinc-400" />
+              <Icon.ArrowBigRight size={18} className="text-zinc-900" />
               <div className="rounded-lg bg-zinc-900 px-2 py-1">借りてる人</div>
             </div>
             <div className="rounded-lg bg-zinc-900 px-2 py-1">貸し借りの金額</div>
@@ -300,14 +300,14 @@ export default function Remburse({ roomId, balances, primaryCurrency, rateMissin
         {transactions && transactionsByParty && transactions.length > 0 ? (
           <>
             {tab === 'minimum' ? (
-              <div className="grid grid-cols-[auto_auto_auto_1fr] items-center gap-x-[6px] gap-y-2">
+              <div className="grid grid-cols-[auto_auto_auto_1fr] items-center gap-x-2 gap-y-2">
                 {transactions.map((tx) => (
                   <Fragment key={tx.id}>
                     <div className="grid grid-flow-col items-center justify-start gap-2 pl-0.5">
                       <span className="text-sm font-bold">{getMemberName(tx.from)}</span>
                       {isMe(tx.from) && <span className="text-xs text-zinc-400">自分</span>}
                     </div>
-                    <Icon.ArrowBigRight size={20} className="text-zinc-400" />
+                    <Icon.ArrowBigRight size={18} className="text-zinc-900" />
                     <div className="grid grid-flow-col items-center justify-start gap-2">
                       <span className="text-sm font-bold">{getMemberName(tx.to)}</span>
                       {isMe(tx.to) && <span className="text-xs text-zinc-400">自分</span>}
@@ -326,14 +326,14 @@ export default function Remburse({ roomId, balances, primaryCurrency, rateMissin
                 ))}
               </div>
             ) : tab === 'party' ? (
-              <div className="grid grid-cols-[auto_auto_auto_1fr] items-center gap-x-1.5 gap-y-1">
+              <div className="grid grid-cols-[auto_auto_auto_1fr] items-center gap-x-2 gap-y-1">
                 {transactionsByParty.map((tx) => (
                   <Fragment key={tx.id}>
                     <div className="grid grid-flow-col items-center justify-start gap-2 pl-0.5">
                       <span className="text-sm font-bold">{getMemberName(tx.to)}</span>
                       {isMe(tx.to) && <span className="text-xs text-zinc-400">自分</span>}
                     </div>
-                    <Icon.ArrowBigRight size={20} className="text-zinc-400" />
+                    <Icon.ArrowBigRight size={18} className="text-zinc-900" />
                     <div className="grid grid-flow-col items-center justify-start gap-2">
                       <span className="text-sm font-bold">{getMemberName(tx.from)}</span>
                       {isMe(tx.from) && <span className="text-xs text-zinc-400">自分</span>}
@@ -422,7 +422,7 @@ export default function Remburse({ roomId, balances, primaryCurrency, rateMissin
                 <span className="text-sm font-bold">{getMemberName(txDetail.to)}</span>
                 {isMe(txDetail.to) && <span className="text-xs text-zinc-400">自分</span>}
               </div>
-              <Icon.ArrowBigRight size={20} className="text-zinc-400" />
+              <Icon.ArrowBigRight size={18} className="text-zinc-400" />
               <div className="grid grid-flow-col items-center justify-start gap-2">
                 <span className="text-sm font-bold">{getMemberName(txDetail.from)}</span>
                 {isMe(txDetail.from) && <span className="text-xs text-zinc-400">自分</span>}
