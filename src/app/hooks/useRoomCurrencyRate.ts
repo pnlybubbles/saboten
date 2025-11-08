@@ -209,7 +209,7 @@ const formatDisplayCurrencyValue = (
   const negative = raw < 0
 
   // -0 の場合は 0 として表示
-  const value = formatCurrencyNumber(raw === -0 ? 0 : negative ? -raw : raw, displayAsCurrency, forceFraction)
+  const value = formatCurrencyNumber(raw === 0 ? 0 : negative ? -raw : raw, displayAsCurrency, forceFraction)
 
   return {
     value,
