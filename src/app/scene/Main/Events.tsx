@@ -24,7 +24,9 @@ export default function Events({ roomId }: Props) {
 
   return (
     <div className="grid gap-6">
-      {events?.map((event) => <Item key={event.id ?? event.tmpId} {...event} roomId={roomId} />)}
+      {events?.map((event) => (
+        <Item key={event.id ?? event.tmpId} {...event} roomId={roomId} />
+      ))}
     </div>
   )
 }
@@ -68,11 +70,15 @@ function Item({ id, label, payments, members, roomId, createdAt }: Event & Props
           </div>
         </div>
         <div>
-          <CurrencyText
-            {...(payload
-              ? displayCurrency({ currency: payload.currency, amount: payload.amount })
-              : displayCurrency({ currency: DEFAULT_PRIMARY_CURRENCY, amount: 0 }))}
-          />
+          {payload?.amount === 0 ? (
+            <span className="text-error text-sm">未入力</span>
+          ) : (
+            <CurrencyText
+              {...(payload
+                ? displayCurrency({ currency: payload.currency, amount: payload.amount })
+                : displayCurrency({ currency: DEFAULT_PRIMARY_CURRENCY, amount: 0 }))}
+            />
+          )}
           {payload?.type !== 'transfer' && (
             <>
               <span className="text-zinc-400"> / </span>
