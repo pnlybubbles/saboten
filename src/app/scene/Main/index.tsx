@@ -63,7 +63,7 @@ export default function Main({ roomId }: Props) {
           drawer.isPresent && 'translate-x-full',
         )}
       >
-        <div className="grid gap-6 p-8">
+        <div className="flex min-h-full flex-col gap-6 p-8">
           <div className="grid grid-cols-[auto_1fr_auto] items-center justify-start gap-4">
             <Clickable onClick={editUserSheet.open} className="transition active:scale-90">
               <Avatar name={user?.name ?? null} />
@@ -86,6 +86,14 @@ export default function Main({ roomId }: Props) {
             </Button>
           </Link>
           <RecentRooms onEnter={drawer.close} />
+          <div className="grid grow content-end">
+            <Clickable
+              className="bg-surface w-max rounded-xl p-3 transition active:scale-95"
+              onClick={editUserSheet.open}
+            >
+              <Tips>ログインキーワードを確認しよう</Tips>
+            </Clickable>
+          </div>
         </div>
       </div>
       <Clickable
