@@ -287,7 +287,7 @@ export default function Remburse({ roomId, balances, primaryCurrency, rateMissin
               <Icon.ArrowBigRight size={18} className="text-zinc-900" />
               <div className="rounded-lg bg-zinc-900 px-2 py-1">借りてる人</div>
             </div>
-            <div className="rounded-lg bg-zinc-900 px-2 py-1">貸し借りの金額</div>
+            <div className="rounded-lg bg-zinc-900 px-2 py-1">貸している金額</div>
           </div>
         ) : (
           unreachable(tab)
@@ -367,26 +367,28 @@ export default function Remburse({ roomId, balances, primaryCurrency, rateMissin
             ) : (
               unreachable(tab)
             )}
-            <div className="grid justify-end">
-              <Button
-                mini
-                variant="secondary"
-                icon={copied ? <Icon.Check size={16} /> : <Icon.Copy size={14} className="mx-px" />}
-                onClick={() => {
-                  const reimburseText = (
-                    tab === 'minimum' ? transactions : tab === 'party' ? transactionsByParty : unreachable(tab)
-                  )
-                    .map((tx) => `${getMemberName(tx.from)} → ${getMemberName(tx.to)} ${displayCurrency(tx).value}`)
-                    .join('\n')
-                  void navigator.clipboard.writeText(reimburseText).then(() => {
-                    if (copied) clearTimeout(copied)
-                    setCopied(setTimeout(() => setCopied(null), 3000))
-                  })
-                }}
-              >
-                精算方法をコピー
-              </Button>
-            </div>
+            {tab === 'minimum' && (
+              <div className="grid justify-end">
+                <Button
+                  mini
+                  variant="secondary"
+                  icon={copied ? <Icon.Check size={16} /> : <Icon.Copy size={14} className="mx-px" />}
+                  onClick={() => {
+                    const reimburseText = (
+                      tab === 'minimum' ? transactions : tab === 'party' ? transactionsByParty : unreachable(tab)
+                    )
+                      .map((tx) => `${getMemberName(tx.from)} → ${getMemberName(tx.to)} ${displayCurrency(tx).value}`)
+                      .join('\n')
+                    void navigator.clipboard.writeText(reimburseText).then(() => {
+                      if (copied) clearTimeout(copied)
+                      setCopied(setTimeout(() => setCopied(null), 3000))
+                    })
+                  }}
+                >
+                  精算方法をコピー
+                </Button>
+              </div>
+            )}
           </>
         ) : (
           <div className="ml-[4px] grid h-12 grid-flow-col items-center justify-start gap-1 rounded-xl border-2 border-dotted border-zinc-400 px-4 text-xs text-zinc-400">
@@ -422,7 +424,7 @@ export default function Remburse({ roomId, balances, primaryCurrency, rateMissin
                 <span className="text-sm font-bold">{getMemberName(txDetail.to)}</span>
                 {isMe(txDetail.to) && <span className="text-xs text-zinc-400">自分</span>}
               </div>
-              <Icon.ArrowBigRight size={18} className="text-zinc-400" />
+              <Icon.ArrowBigRight size={18} className="text-zinc-900" />
               <div className="grid grid-flow-col items-center justify-start gap-2">
                 <span className="text-sm font-bold">{getMemberName(txDetail.from)}</span>
                 {isMe(txDetail.from) && <span className="text-xs text-zinc-400">自分</span>}
