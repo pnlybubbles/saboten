@@ -272,22 +272,22 @@ export default function Remburse({ roomId, balances, primaryCurrency, rateMissin
           disabled={archived}
         />
         {tab === 'minimum' ? (
-          <div className="flex justify-between rounded-xl py-1 text-xs font-bold text-zinc-900">
+          <div className="flex justify-between rounded-xl py-1 text-xs font-bold text-white">
             <div className="flex items-center gap-2">
-              <div className="rounded-lg bg-zinc-900 px-2 py-1 text-white">返す人</div>
-              <Icon.ArrowBigRight size={16} />
-              <div className="rounded-lg bg-zinc-900 px-2 py-1 text-white">貰う人</div>
+              <div className="rounded-lg bg-zinc-900 px-2 py-1">返す人</div>
+              <Icon.ArrowBigRight size={20} className="text-zinc-400" />
+              <div className="rounded-lg bg-zinc-900 px-2 py-1">貰う人</div>
             </div>
-            <div className="rounded-lg bg-zinc-900 px-2 py-1 text-white">精算する金額</div>
+            <div className="rounded-lg bg-zinc-900 px-2 py-1">精算する金額</div>
           </div>
         ) : tab === 'party' ? (
-          <div className="flex justify-between rounded-xl py-1 text-xs font-bold text-zinc-900">
+          <div className="flex justify-between rounded-xl py-1 text-xs font-bold text-white">
             <div className="flex items-center gap-2">
-              <div className="rounded-lg bg-zinc-900 px-2 py-1 text-white">貸してる人</div>
-              <Icon.ArrowBigRight size={16} />
-              <div className="rounded-lg bg-zinc-900 px-2 py-1 text-white">借りてる人</div>
+              <div className="rounded-lg bg-zinc-900 px-2 py-1">貸してる人</div>
+              <Icon.ArrowBigRight size={20} className="text-zinc-400" />
+              <div className="rounded-lg bg-zinc-900 px-2 py-1">借りてる人</div>
             </div>
-            <div className="rounded-lg bg-zinc-900 px-2 py-1 text-white">貸し借りの金額</div>
+            <div className="rounded-lg bg-zinc-900 px-2 py-1">貸し借りの金額</div>
           </div>
         ) : (
           unreachable(tab)
