@@ -20,7 +20,6 @@ import Tab from '@app/components/Tab'
 import useRoomArchived from '@app/hooks/useRoomArchive'
 import Tips from '@app/components/Tips'
 import CurrencyPicker from '@app/components/CurrencyPicker'
-import useRoomCurrency from '@app/hooks/useRoomCurrency'
 import { DEFAULT_PRIMARY_CURRENCY } from './CurrencySettingSheet'
 import useEvents from '@app/hooks/useEvents'
 
