@@ -62,14 +62,6 @@
     overflow: hidden;
   }
 
-  .sheet-popup[data-nested-drawer-open] .sheet-content {
-    opacity: 0;
-  }
-
-  .sheet-popup[data-nested-drawer-open][data-nested-drawer-swiping] .sheet-content {
-    opacity: 1;
-  }
-
   .sheet-content {
     overscroll-behavior: contain;
     transition: opacity 300ms;
