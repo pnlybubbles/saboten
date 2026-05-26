@@ -1,37 +1,30 @@
-import { type PropsWithChildren, createContext, useContext } from 'react'
-import { Drawer } from 'vaul'
+import type { PropsWithChildren } from 'react'
+import { Drawer } from '@base-ui/react/drawer'
 
 export type SheetProps = {
   isPresent: boolean
   onPresent: (value: boolean) => void
 }
 
-const NestedContext = createContext({ nested: false })
-
 export default function Sheet({ isPresent, onPresent, children }: PropsWithChildren<SheetProps>) {
-  const { nested } = useContext(NestedContext)
-
-  const inner = (
-    <Drawer.Portal>
-      <Drawer.Overlay className="fixed inset-0 bg-black/40" />
-      <Drawer.Content className="text-main fixed inset-x-0 bottom-0 mx-auto flex max-h-[96%] w-full max-w-(--breakpoint-sm) flex-col rounded-t-[44px] bg-white">
-        <div className="pointer-events-none absolute z-1 h-[44px] w-full overflow-hidden rounded-t-[44px]">
-          <div className="bg-linear-to-b from-white via-white to-transparent py-4">
-            <div className="mx-auto -mb-2 h-2 w-12 shrink-0 -translate-y-1/2 rounded-full bg-zinc-200" />
-          </div>
-        </div>
-        <div className="mt-4 self-stretch overflow-scroll px-8 pt-4 pb-8">{children}</div>
-      </Drawer.Content>
-    </Drawer.Portal>
-  )
-
-  return nested ? (
-    <Drawer.NestedRoot open={isPresent} onOpenChange={onPresent} shouldScaleBackground>
-      <NestedContext.Provider value={{ nested: true }}>{inner}</NestedContext.Provider>
-    </Drawer.NestedRoot>
-  ) : (
-    <Drawer.Root open={isPresent} onOpenChange={onPresent} shouldScaleBackground>
-      <NestedContext.Provider value={{ nested: true }}>{inner}</NestedContext.Provider>
+  return (
+    <Drawer.Root open={isPresent} onOpenChange={(open) => onPresent(open)} swipeDirection="down">
+      <Drawer.Portal>
+        <Drawer.Backdrop forceRender className="sheet-backdrop" />
+        <Drawer.Viewport className="sheet-viewport">
+          <Drawer.Popup aria-label="シート" className="sheet-popup">
+            <div className="pointer-events-none absolute z-1 h-[44px] w-full overflow-hidden rounded-t-[44px]">
+              <div className="bg-linear-to-b from-white via-white to-transparent py-4">
+                <div className="mx-auto -mb-2 h-2 w-12 shrink-0 -translate-y-1/2 rounded-full bg-zinc-200" />
+              </div>
+            </div>
+            <Drawer.Content className="sheet-content mt-4 self-stretch overflow-scroll px-8 pt-4 pb-8">
+              <Drawer.Title className="sr-only">シート</Drawer.Title>
+              {children}
+            </Drawer.Content>
+          </Drawer.Popup>
+        </Drawer.Viewport>
+      </Drawer.Portal>
     </Drawer.Root>
   )
 }
