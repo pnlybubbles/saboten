@@ -284,7 +284,7 @@ export default function Remburse({ roomId, balances, primaryCurrency, rateMissin
           <div className="flex justify-between rounded-xl py-1 text-xs font-bold text-white">
             <div className="flex items-center gap-2">
               <div className="rounded-lg bg-zinc-900 px-2 py-1">貸してる人</div>
-              <Icon.ArrowBigRight size={18} className="text-zinc-900" />
+              <Icon.Redo size={18} className="-translate-y-1 text-zinc-900" />
               <div className="rounded-lg bg-zinc-900 px-2 py-1">借りてる人</div>
             </div>
             <div className="rounded-lg bg-zinc-900 px-2 py-1">貸している金額</div>
@@ -333,7 +333,7 @@ export default function Remburse({ roomId, balances, primaryCurrency, rateMissin
                       <span className="text-sm font-bold">{getMemberName(tx.to)}</span>
                       {isMe(tx.to) && <span className="text-xs text-zinc-400">自分</span>}
                     </div>
-                    <Icon.ArrowBigRight size={18} className="text-zinc-900" />
+                    <Icon.Redo size={18} className="-translate-y-1 text-zinc-900" />
                     <div className="grid grid-flow-col items-center justify-start gap-2">
                       <span className="text-sm font-bold">{getMemberName(tx.from)}</span>
                       {isMe(tx.from) && <span className="text-xs text-zinc-400">自分</span>}
@@ -424,7 +424,7 @@ export default function Remburse({ roomId, balances, primaryCurrency, rateMissin
                 <span className="text-sm font-bold">{getMemberName(txDetail.to)}</span>
                 {isMe(txDetail.to) && <span className="text-xs text-zinc-400">自分</span>}
               </div>
-              <Icon.ArrowBigRight size={18} className="text-zinc-900" />
+              <Icon.Redo size={18} className="-translate-y-1 text-zinc-900" />
               <div className="grid grid-flow-col items-center justify-start gap-2">
                 <span className="text-sm font-bold">{getMemberName(txDetail.from)}</span>
                 {isMe(txDetail.from) && <span className="text-xs text-zinc-400">自分</span>}
