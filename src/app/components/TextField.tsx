@@ -15,7 +15,7 @@ type Props = Omit<
 }
 
 export default forwardRef<HTMLInputElement, Props>(function TextField(
-  { onChange, className, onClick, disabled, label, children, value, type = 'text', ...props },
+  { onChange, className, onClick, onBlur, disabled, label, children, value, type = 'text', ...props },
   ref,
 ) {
   const [inputError, setInputError] = useState<string | null>(null)
@@ -72,9 +72,10 @@ export default forwardRef<HTMLInputElement, Props>(function TextField(
     setInputValue(e.currentTarget.value)
   }
 
-  const handleBlur = () => {
+  const handleBlur: React.FocusEventHandler<HTMLInputElement> = (e) => {
     setInputError(null)
     setInputValue(corrector)
+    onBlur?.(e)
   }
 
   useEffect(() => {
