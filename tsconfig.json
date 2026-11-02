@@ -22,6 +22,7 @@
   "references": [
     { "path": "./tsconfig.node.json" },
     { "path": "./src/api" },
+    { "path": "./pages" },
     { "path": "./src/app" },
     { "path": "./src/db" },
     { "path": "./src/util" }

@@ -1,0 +1,8 @@
+name = "saboten"
+pages_build_output_dir = "../dist"
+compatibility_date = "2023-12-18"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "saboten"
+database_id = "71c42205-323c-4602-9f3a-72d2deea4823"

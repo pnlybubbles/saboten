@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "include": ["/*"],
+  "exclude": [
+    "/",
+    "/index.html",
+    "/api",
+    "/api/*",
+    "/assets/*",
+    "/icon/*",
+    "/ss/*",
+    "/og.png",
+    "/android-chrome-192x192.png",
+    "/android-chrome-512x512.png"
+  ]
+}

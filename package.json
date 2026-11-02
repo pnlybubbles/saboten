@@ -61,7 +61,7 @@
     "deploy": "run-s 'deploy:*'",
     "deploy:db": "wrangler d1 migrations apply saboten --remote",
     "deploy:worker": "wrangler deploy",
-    "deploy:app": "vite build && wrangler pages deploy --project-name saboten dist",
+    "deploy:app": "vite build && wrangler pages deploy --cwd pages --project-name saboten",
     "fmt": "run-p 'fmt:*'",
     "fmt:prettier": "prettier --write .",
     "fmt:oxlint": "oxlint --fix",
@@ -72,6 +72,7 @@
     "typecheck:node": "tsc -p tsconfig.node.json",
     "typecheck:app": "tsc -p src/app",
     "typecheck:worker": "tsc -p src/api",
+    "typecheck:pages": "tsc -p pages",
     "typecheck:db": "tsc -p src/db",
     "typecheck:util": "tsc -p src/util"
   }
